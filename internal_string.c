@@ -56,7 +56,7 @@ SvvInternalAction(SvvInternalString, GetLength, int)
 
 SvvInternalCreator(SvvInternalStringIterator)
 {
-	return SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalStringIterator*));
+	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalStringIterator*)));
 };
 
 SvvInternalAction(SvvInternalString, GetFirst, SvvInternalStringIterator)
@@ -70,13 +70,51 @@ SvvInternalAction(SvvInternalString, GetFirst, SvvInternalStringIterator)
 
 SvvInternalAction(SvvInternalStringIterator, Destroy, void)
 {
-	
+	SvvInternalListIterator_Destroy(Receiver->iterator);
+	SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(Receiver));
 };
 
-SvvInternalAction(SvvInternalStringIterator, GetNext, void);
-SvvInternalAction(SvvInternalStringIterator, GetPrev, void);
-SvvInternalAction(SvvInternalStringIterator, GetString, void);
-SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar);
-SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar);
-SvvInternalAction(SvvInternalStringIterator, GetPosition, void);
-SvvInternalAction(SvvInternalStringIterator, SetPosition, void);
+SvvInternalAction(SvvInternalStringIterator, GetNext, void)
+{
+	SvvInternalListIterator_GetNext(Receiver->iterator);
+	Receiver->position++;
+};
+
+SvvInternalAction(SvvInternalStringIterator, GetPrev, void)
+{
+	SvvInternalListIterator_GetPrev(Receiver->iterator);
+	Receiver->position--;
+
+};
+
+SvvInternalAction(SvvInternalStringIterator, GetString, void)
+{
+	return Receiver->object;
+};
+
+SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar)
+{
+	return SvvInternalListIterator_GetData(Receiver->iterator);
+};
+
+SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar Char)
+{
+	SvvInternalList_SetData(Receiver->data, Char);
+};
+
+SvvInternalAction(SvvInternalStringIterator, GetPosition, int)
+{
+	return Receiver->position;
+};
+
+SvvInternalAction(SvvInternalStringIterator, SetPosition, void, int Position)
+{
+	while(SvvInternalStringIterator_GetPosition(Receiver) > Position)
+	{
+		SvvInternalStringIterator_GetNext(Receiver);
+	};
+	while(SvvInternalStringIterator_GetPosition(Receiver) < Position)
+	{
+		SvvInternalStringIterator_GetPrev(Receiver);
+	};
+};
