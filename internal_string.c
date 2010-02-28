@@ -87,19 +87,19 @@ SvvInternalAction(SvvInternalStringIterator, GetPrev, void)
 
 };
 
-SvvInternalAction(SvvInternalStringIterator, GetString, void)
+SvvInternalAction(SvvInternalStringIterator, GetString, SvvInternalString)
 {
 	return Receiver->object;
 };
 
 SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar)
 {
-	return SvvInternalListIterator_GetData(Receiver->iterator);
+	return OBJECT_AS_CHAR(SvvInternalListIterator_GetData(Receiver->iterator));
 };
 
 SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar Char)
 {
-	SvvInternalList_SetData(Receiver->data, Char);
+	SvvInternalListIterator_SetData(Receiver->iterator, CHAR_AS_OBJECT(Char));
 };
 
 SvvInternalAction(SvvInternalStringIterator, GetPosition, int)

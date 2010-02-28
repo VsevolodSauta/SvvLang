@@ -32,5 +32,5 @@ SvvInternalAction(SvvInternalStringIterator, GetPrev, void);
 SvvInternalAction(SvvInternalStringIterator, GetString, SvvInternalString);
 SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar);
 SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar);
-SvvInternalAction(SvvInternalStringIterator, GetPosition, void);
+SvvInternalAction(SvvInternalStringIterator, GetPosition, int);
 SvvInternalAction(SvvInternalStringIterator, SetPosition, void, int);
