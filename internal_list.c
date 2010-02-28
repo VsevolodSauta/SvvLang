@@ -38,6 +38,22 @@ SvvInternalAction(SvvInternalList, Destroy, void)
 };
 
 
+SvvInternalAction(SvvInternalList, Clean, void)
+{
+	// Caution: this function relays on iterator and list implementation
+	SvvInternalListIterator iterator = SvvInternalList_GetFirst(Receiver);
+	while(!SvvInternalListIterator_EndReached(iterator))
+	{
+		SvvInternalListNode node = iterator->data;
+		SvvInternalListIterator_GetNext(iterator);
+		SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(node));
+	};
+	SvvInternalListIterator_Destroy(iterator);
+	Receiver->head->next = Receiver->tail;
+	Receiver->tail->prev = Receiver->head;
+};
+
+
 SvvInternalAction(SvvInternalList, Append, void, SvvInternalObject Object)
 {
 	SvvInternalListIterator_AddAfter(SvvInternalList_GetLast(Receiver), Object);
@@ -165,6 +181,21 @@ SvvInternalAction(SvvInternalList, SearchPositions, SvvInternalList, SvvInternal
 	SvvInternalListIterator_Destroy(iterator);
 	return list;
 };
+
+SvvInternalAction(SvvInternalList, Clone, SvvInternalList)
+{
+	SvvInternalListIterator iterator = SvvInternalList_GetFirst(Receiver);
+	SvvInternalList list = SvvInternalList_Create();
+	while(!SvvInternalListIterator_EndReached(iterator))
+	{
+		SvvInternalObject object = SvvInternalListIterator_GetData(iterator);
+		SvvInternalList_PushBack(list, object);
+		SvvInternalListIterator_GetNext(iterator);
+	};
+	SvvInternalListIterator_Destroy(iterator);
+	return list;
+};
+
 
 SvvInternalAction(SvvInternalList, GetFirst, SvvInternalListIterator)
 {

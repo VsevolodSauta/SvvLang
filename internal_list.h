@@ -23,10 +23,10 @@ SvvInternalCreator(SvvInternalListNode);
 
 SvvInternalCreator(SvvInternalList); // O(1)
 SvvInternalAction(SvvInternalList, Destroy, void); // O(n)
-SvvInternalAction(SvvInternalList, Append, void, SvvInternalObject Object); // O(n)
+SvvInternalAction(SvvInternalList, Append, void, SvvInternalObject Object); // O(1)
 SvvInternalAction(SvvInternalList, AddAfterPosition, void, int Position, SvvInternalObject Object); // O(n)
 SvvInternalAction(SvvInternalList, RemoveFirst, void, SvvInternalObject Object); // O(n)
-SvvInternalAction(SvvInternalList, GetLast, SvvInternalListIterator); // O(n)
+SvvInternalAction(SvvInternalList, GetLast, SvvInternalListIterator); // O(1)
 SvvInternalAction(SvvInternalList, GetIteratorFromPosition, SvvInternalListIterator, int Position); // O(n)
 SvvInternalAction(SvvInternalList, GetCreatingIteratorFromPosition, SvvInternalListIterator, int Position); // O(n)
 SvvInternalAction(SvvInternalList, GetFirst, SvvInternalListIterator); // O(1)
@@ -34,6 +34,8 @@ SvvInternalAction(SvvInternalList, Search, SvvInternalList, SvvInternalObject Ob
 SvvInternalAction(SvvInternalList, SearchPositions, SvvInternalList, SvvInternalObject Object); // O(n)
 SvvInternalAction(SvvInternalList, GetSublistBetweenPositions, SvvInternalList, int PositionFrom, int PositionTo); // O(n)
 SvvInternalAction(SvvInternalList, GetSublistBetweenIterators, SvvInternalList, SvvInternalListIterator PositionFrom, SvvInternalListIterator PositionTo); // O(n)
+SvvInternalAction(SvvInternalList, Clean, void);
+SvvInternalAction(SvvInternalList, Clone, SvvInternalList);
 
 SvvInternalAction(SvvInternalListIterator, GetNext, void); // O(1)
 SvvInternalAction(SvvInternalListIterator, GetPrev, void); // O(1)
