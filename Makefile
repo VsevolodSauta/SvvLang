@@ -3,7 +3,7 @@ COMPILE=gcc -c
 all: internals externals
 	ld *.o -lm -o SvvLanguage
 	
-internals: internal_object.o internal_nothing.o internal_allocator.o internal_mmu.o internal_string.o internal_list.o internal_set.o internal_map.o 
+internals: internal_object.o internal_nothing.o internal_allocator.o internal_mmu.o internal_list.o internal_stack.o internal_queue.o internal_string.o internal_set.o internal_map.o 
 
 
 internal_nothing.o: internal_nothing.c
@@ -14,6 +14,12 @@ internal_object.o: internal_object.c
 	
 internal_list.o: internal_list.c internal_list.h
 	$(COMPILE) internal_list.c -o internal_list.o
+
+internal_queue.o: internal_queue.c internal_queue.h
+	$(COMPILE) internal_queue.c -o internal_queue.o
+
+internal_stack.o: internal_stack.c internal_stack.h
+	$(COMPILE) internal_stack.c -o internal_stack.o
 	
 internal_allocator.o: internal_allocator.c internal_allocator.h
 	$(COMPILE) internal_allocator.c -o internal_allocator.o
