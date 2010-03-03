@@ -13,4 +13,4 @@ SvvInternalAction(SvvInternalStack, Pop, SvvInternalObject);
 SvvInternalAction(SvvInternalStack, Peek, SvvInternalObject);
 SvvInternalAction(SvvInternalStack, Clean, void);
 SvvInternalAction(SvvInternalStack, Clone, SvvInternalStack);
-
+SvvInternalAction(SvvInternalStack, IsEmpty, int);

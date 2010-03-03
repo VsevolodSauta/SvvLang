@@ -1,47 +1,17 @@
-COMPILE=gcc -c
+COMPILE=gcc-4.4 -c -g -Wall
 
-all: internals externals
-	ld *.o -lm -o SvvLanguage
+all: internals.a
+#	ld *.o -lm -o SvvLanguage
 	
-internals: internal_object.o internal_nothing.o internal_allocator.o internal_mmu.o internal_list.o internal_stack.o internal_queue.o internal_string.o internal_set.o internal_map.o 
+internals.a: internal_object.o internal_nothing.o internal_allocator.o internal_mmu.o internal_list.o internal_stack.o internal_queue.o internal_string.o internal_set.o
+	if [ -f $@ ] ; then rm $@ ; fi
+	ar r $@ $^
 
-
-internal_nothing.o: internal_nothing.c
-	$(COMPILE) internal_nothing.c -o internal_nothing.o
+%.o: %.c
+	$(COMPILE) $^ -o $@
 	
-internal_object.o: internal_object.c
-	$(COMPILE) internal_object.c -o internal_object.o
-	
-internal_list.o: internal_list.c internal_list.h
-	$(COMPILE) internal_list.c -o internal_list.o
-
-internal_queue.o: internal_queue.c internal_queue.h
-	$(COMPILE) internal_queue.c -o internal_queue.o
-
-internal_stack.o: internal_stack.c internal_stack.h
-	$(COMPILE) internal_stack.c -o internal_stack.o
-	
-internal_allocator.o: internal_allocator.c internal_allocator.h
-	$(COMPILE) internal_allocator.c -o internal_allocator.o
-	
-internal_set.o: internal_set.c internal_set.h
-	$(COMPILE) internal_set.c -o internal_set.o
-
-internal_map.o: internal_map.c internal_map.h
-	$(COMPILE) internal_map.c -o internal_map.o
-
-internal_string.o: internal_string.c internal_string.h
-	$(COMPILE) internal_string.c -o internal_string.o
-
-internal_mmu.o: internal_mmu.c internal_mmu.h
-	$(COMPILE) internal_mmu.c -o internal_mmu.o
-
-externals: external_object.o
-
-external_object.o: external_object.c external_object.h
-	$(COMPILE) external_object.c -o external_object.o
 
 clean:
-	rm -f *.o
+	rm -f *.o internals.a
 	
 PHONY: internals externals clean all

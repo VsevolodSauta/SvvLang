@@ -1,3 +1,3 @@
 #include "internal_object.h"
 
-SvvInternalObject SvvInternalNothing = (SvvInternalObject) 0;
+SvvInternalObject SvvInternalNothing = INT_AS_OBJECT(0);

@@ -4,7 +4,7 @@
 
 SvvInternalAction(SvvInternalMachine, Create, SvvInternalMachine)
 {
-	SvvInternalMachine machine = SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalMachine*));
+	SvvInternalMachine machine = SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalMachine));
 	machine->objects = SvvInternalList_New(Receiver);
 	return machine;
 };

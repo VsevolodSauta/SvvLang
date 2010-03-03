@@ -4,13 +4,13 @@
 #include "internal_actions.h"
 
 typedef union {
-	void* ptr_data;
-	int int_data;
-	SvvInternalChar char_data;
+	void*		ptr_data;
+	long int		int_data;
+	SvvInternalChar	char_data;
 } SvvInternalObject;
 
 #define LINK_AS_OBJECT(a) ((SvvInternalObject) (void*) (a))
-#define INT_AS_OBJECT(a) ((SvvInternalObject) (int) (a))
+#define INT_AS_OBJECT(a) ((SvvInternalObject) (long int) (a))
 #define CHAR_AS_OBJECT(a) ((SvvInternalObject) (SvvInternalChar) (a))
 #define OBJECT_AS_LINK(a) ((a).ptr_data)
 #define OBJECT_AS_CHAR(a) ((a).char_data)

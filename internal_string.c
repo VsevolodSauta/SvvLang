@@ -7,7 +7,7 @@
 
 SvvInternalCreator(SvvInternalString)
 {
-	SvvInternalString string = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalString*)));
+	SvvInternalString string = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalString)));
 	string->length = 0;
 	string->data = SvvInternalList_Create();
 	return string;
@@ -21,8 +21,10 @@ SvvInternalAction(SvvInternalString, Delete, void)
 
 SvvInternalAction(SvvInternalString, Concatenate, void, SvvInternalString String)
 {
-	SvvInternalList_AddListAfter(SvvInternalList_GetLast(Receiver->data), String->data);
+	SvvInternalListIterator iterator = SvvInternalList_GetLast(Receiver->data);
+	SvvInternalListIterator_AddListAfter(iterator, String->data);
 	Receiver->length += String->length;
+	SvvInternalListIterator_Destroy(iterator);
 };
 
 SvvInternalAction(SvvInternalString, GetAt, SvvInternalChar, int Position)
@@ -56,7 +58,7 @@ SvvInternalAction(SvvInternalString, GetLength, int)
 
 SvvInternalCreator(SvvInternalStringIterator)
 {
-	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalStringIterator*)));
+	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalStringIterator)));
 };
 
 SvvInternalAction(SvvInternalString, GetFirst, SvvInternalStringIterator)

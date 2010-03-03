@@ -46,6 +46,7 @@ SvvInternalAction(SvvInternalSetIterator, EndReached, int);
 SvvInternalAction(SvvInternalSetIterator, GetData, SvvInternalObject);
 SvvInternalAction(SvvInternalSetIterator, Destroy, void);
 SvvInternalAction(SvvInternalSetIterator, Clone, SvvInternalSetIterator);
+SvvInternalAction(SvvInternalSetIterator, AddCurrentNodeChildren, void);
 
 SvvInternalCreator(SvvInternalSet);
 SvvInternalAction(SvvInternalSet, Destroy, void);

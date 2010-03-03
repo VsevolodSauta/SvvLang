@@ -14,16 +14,18 @@ typedef struct SvvInternalList {
 	SvvInternalListNode		tail;
 } *SvvInternalList;
 
-typedef struct {
+typedef struct SvvInternalListIterator {
 	SvvInternalListNode	data;
 	SvvInternalList		list;
 } *SvvInternalListIterator;
 
 SvvInternalCreator(SvvInternalListNode);
+SvvInternalAction(SvvInternalListNode, Destroy, void);
 
 SvvInternalCreator(SvvInternalList); // O(1)
 SvvInternalAction(SvvInternalList, Destroy, void); // O(n)
-SvvInternalAction(SvvInternalList, Append, void, SvvInternalObject Object); // O(1)
+SvvInternalAction(SvvInternalList, PushBack, void, SvvInternalObject Object); // O(1)
+SvvInternalAction(SvvInternalList, PushFront, void, SvvInternalObject Object); // O(1)
 SvvInternalAction(SvvInternalList, AddAfterPosition, void, int Position, SvvInternalObject Object); // O(n)
 SvvInternalAction(SvvInternalList, RemoveFirst, void, SvvInternalObject Object); // O(n)
 SvvInternalAction(SvvInternalList, GetLast, SvvInternalListIterator); // O(1)

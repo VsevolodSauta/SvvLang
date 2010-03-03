@@ -5,18 +5,22 @@
 
 SvvInternalAction(SvvInternalAllocator, New, SvvInternalObject, int Size)
 {
-	return (SvvInternalObject) malloc(Size);
+	void* ptr = malloc(Size);
+	return LINK_AS_OBJECT(ptr);
 };
 
 SvvInternalAction(SvvInternalAllocator, Resize, SvvInternalObject, SvvInternalObject Object, int Size)
 {
-	return (SvvInternalObject) realloc(Object.ptr_data, Size);
+	void* ptr = realloc(Object.ptr_data, Size);
+	return LINK_AS_OBJECT(ptr);
+	
 };
 
 
 SvvInternalAction(SvvInternalAllocator, Delete, void, SvvInternalObject Object)
 {
-	free(Object.ptr_data);
+	void* ptr = OBJECT_AS_LINK(Object);
+	free(ptr);
 };
 
 SvvInternalAllocator SvvDefaultAllocator;

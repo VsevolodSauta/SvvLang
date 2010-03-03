@@ -5,6 +5,7 @@
 #include "internal_set.h"
 #include "internal_allocator.h"
 #include "internal_globals.h"
+#include "internal_nothing.h"
 
 // SvvInternalSetNode
 
@@ -12,7 +13,7 @@
 
 SvvInternalCreator(SvvInternalSetNode)
 {
-	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalSetNode*)));
+	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalSetNode)));
 };
 
 SvvInternalAction(SvvInternalSetNode, Init, void, SvvInternalObject Object)
@@ -113,7 +114,7 @@ SvvInternalAction(SvvInternalSetNode, Destroy, void)
 
 SvvInternalCreator(SvvInternalSet)
 {
-	SvvInternalSet set = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalSet*)));
+	SvvInternalSet set = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalSet)));
 	set->root = SvvInternalSetNode_Create();
 	SvvInternalSetNode_DeInit(set->root);
 	return set;
@@ -158,9 +159,10 @@ SvvInternalAction(SvvInternalSet, GetList, SvvInternalList)
 	{
 		SvvInternalObject object = SvvInternalSetIterator_GetData(iterator);
 		SvvInternalList_PushBack(list, object);
-		SvvInternalInterator_GetNext(iterator);
+		SvvInternalSetIterator_GetNext(iterator);
 	};
 	SvvInternalSetIterator_Destroy(iterator);
+	return list;
 };
 
 SvvInternalAction(SvvInternalSet, AddList, void, SvvInternalList List)
@@ -180,9 +182,9 @@ SvvInternalAction(SvvInternalSet, GetIterator, SvvInternalSetIterator)
 	SvvInternalSetIterator iterator = SvvInternalSetIterator_Create();
 	if(SvvInternalSetNode_Inited(Receiver->root))
 	{
-		SvvInternalStack_Push(iterator->path, LINK_AS_OBJECT(Receiver->root));
+		iterator->node = Receiver->root;
+		SvvInternalSetIterator_AddCurrentNodeChildren(iterator);
 	};
-	iterator->node = Receiver->root;
 	
 	return iterator;
 };
@@ -191,14 +193,13 @@ SvvInternalAction(SvvInternalSet, GetIterator, SvvInternalSetIterator)
 
 SvvInternalCreator(SvvInternalSetIterator)
 {
-	SvvInternalSetIterator iterator = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(SvvInternalSetIterator*)));
+	SvvInternalSetIterator iterator = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalSetIterator)));
 	iterator->path = SvvInternalStack_Create();
 	return iterator;
 };
 
-SvvInternalAction(SvvInternalSetIterator, GetNext, void)
+SvvInternalAction(SvvInternalSetIterator, AddCurrentNodeChildren, void)
 {
-	Receiver->node = OBJECT_AS_LINK(SvvInternalStack_Pop(Receiver->path));
 	if(SvvInternalSetNode_Inited(Receiver->node->right))
 	{
 		SvvInternalStack_Push(Receiver->path, LINK_AS_OBJECT(Receiver->node->right));
@@ -207,11 +208,23 @@ SvvInternalAction(SvvInternalSetIterator, GetNext, void)
 	{
 		SvvInternalStack_Push(Receiver->path, LINK_AS_OBJECT(Receiver->node->left));
 	};
+
+};
+
+SvvInternalAction(SvvInternalSetIterator, GetNext, void)
+{
+	if(SvvInternalStack_IsEmpty(Receiver->path))
+	{
+		Receiver->node = OBJECT_AS_LINK(SvvInternalNothing);
+	} else {
+		Receiver->node = OBJECT_AS_LINK(SvvInternalStack_Pop(Receiver->path));
+		SvvInternalSetIterator_AddCurrentNodeChildren(Receiver);
+	};
 };
 
 SvvInternalAction(SvvInternalSetIterator, EndReached, int)
 {
-	return SvvInternalStack_IsEmpty(Receiver->path);
+	return IS_NOTHING(Receiver->node);
 };
 
 SvvInternalAction(SvvInternalSetIterator, GetData, SvvInternalObject)

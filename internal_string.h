@@ -4,12 +4,12 @@
 #include "internal_char.h"
 #include "internal_list.h"
 
-typedef struct {
+typedef struct SvvInternalString {
 	SvvInternalList data;
 	int length;
 } *SvvInternalString;
 
-typedef struct {
+typedef struct SvvInternalStringIterator {
 	SvvInternalString object;
 	SvvInternalListIterator iterator;
 	int position;

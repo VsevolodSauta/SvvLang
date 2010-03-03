@@ -3,7 +3,7 @@
 #include "internal_action.h"
 #include "internal_list.h"
 
-typedef struct {
+typedef struct SvvInternalMachine {
 	SvvInternalList		objects;
 } *SvvInternalMachine;
 
