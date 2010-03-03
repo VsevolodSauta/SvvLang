@@ -38,7 +38,7 @@ SvvInternalAction(SvvInternalSetNode, CleanSubTree, void);
 SvvInternalAction(SvvInternalSetNode, DeInit, void);
 SvvInternalAction(SvvInternalSetNode, Inited, int);
 SvvInternalAction(SvvInternalSetNode, Destroy, void);
-
+SvvInternalAction(SvvInternalSetNode, GetData, SvvInternalObject);
 
 SvvInternalCreator(SvvInternalSetIterator);
 SvvInternalAction(SvvInternalSetIterator, GetNext, void);

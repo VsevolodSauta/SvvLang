@@ -64,6 +64,11 @@ SvvInternalAction(SvvInternalMapNode, Remove, void)
 				Receiver->right = node_to_delete->right;
 				Receiver->left = node_to_delete->left;
 				Receiver->left->parent = Receiver->right->parent = Receiver;
+
+
+				Receiver->key = node_to_delete->key;
+				Receiver->value = node_to_delete->value;
+				SvvInternalMapNode_Destroy(node_to_delete);
 				return;
 			case 2:
 				node_to_delete = Receiver->left;
@@ -72,6 +77,10 @@ SvvInternalAction(SvvInternalMapNode, Remove, void)
 				Receiver->right = node_to_delete->right;
 				Receiver->left = node_to_delete->left;
 				Receiver->left->parent = Receiver->right->parent = Receiver;
+
+				Receiver->key = node_to_delete->key;
+				Receiver->value = node_to_delete->value;
+				SvvInternalMapNode_Destroy(node_to_delete);
 				return;
 			case 3:
 				node_to_delete = Receiver->left;
@@ -79,6 +88,7 @@ SvvInternalAction(SvvInternalMapNode, Remove, void)
 				{
 					node_to_delete = node_to_delete->right;
 				};
+
 				Receiver->key = node_to_delete->key;
 				Receiver->value = node_to_delete->value;
 		};
@@ -146,7 +156,7 @@ SvvInternalAction(SvvInternalMap, Add, void, SvvInternalObject Key, SvvInternalO
 	};
 };
 
-SvvInternalAction(SvvInternalMap, RemoveByKey, void, SvvInternalObject Key)
+SvvInternalAction(SvvInternalMap, RemoveKey, void, SvvInternalObject Key)
 {
 	SvvInternalMapNode node = SvvInternalMapNode_GetNodeForKey(Receiver->root, Key);
 	if(SvvInternalMapNode_Inited(node))

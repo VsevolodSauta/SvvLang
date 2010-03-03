@@ -1,6 +1,6 @@
 MAIN_DIRECTORY=../../..
 INTERNALS=$(MAIN_DIRECTORY)/internals.a
-COMPILE=gcc -I$(MAIN_DIRECTORY)
+COMPILE=gcc -I$(MAIN_DIRECTORY) -g
 
 all: test
 

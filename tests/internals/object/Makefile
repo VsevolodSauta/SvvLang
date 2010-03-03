@@ -5,8 +5,8 @@ COMPILE=gcc -I$(MAIN_DIRECTORY)
 all: test
 
 
-%.elf: %.c
-	$(COMPILE) $^ $(INTERNALS) -o $@
+%.elf: %.c $(INTERNALS)
+	$(COMPILE) $^ -o $@
 
 test: test1.elf test2.elf
 	./test1.elf

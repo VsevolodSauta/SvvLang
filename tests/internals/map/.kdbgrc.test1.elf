@@ -1,0 +1,24 @@
+[Breakpoint 0]
+Enabled=true
+File=test1.c
+Line=15
+Temporary=false
+
+[Breakpoint 1]
+Enabled=true
+File=test1.c
+Line=23
+Temporary=false
+
+[General]
+DebuggerCmdStr=
+DriverName=GDB
+FileVersion=1
+OptionsSelected=
+ProgramArgs=
+TTYLevel=7
+WorkingDirectory=
+
+[Memory]
+ColumnWidths=80,0
+NumExprs=0

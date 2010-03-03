@@ -18,16 +18,13 @@ SvvInternalCreator(SvvInternalSetNode)
 
 SvvInternalAction(SvvInternalSetNode, Init, void, SvvInternalObject Object)
 {
-	if(!SvvInternalSetNode_Inited(Receiver))
-	{
-		Receiver->data = Object;
-		Receiver->left = SvvInternalSetNode_Create();
-		Receiver->right = SvvInternalSetNode_Create();
-		SvvInternalSetNode_DeInit(Receiver->left);
-		SvvInternalSetNode_DeInit(Receiver->right);
-		Receiver->left->parent = Receiver->right->parent = Receiver;
-		Receiver->flags |= INITED_FLAG;
-	};
+	Receiver->data = Object;
+	Receiver->left = SvvInternalSetNode_Create();
+	Receiver->right = SvvInternalSetNode_Create();
+	SvvInternalSetNode_DeInit(Receiver->left);
+	SvvInternalSetNode_DeInit(Receiver->right);
+	Receiver->left->parent = Receiver->right->parent = Receiver;
+	Receiver->flags |= INITED_FLAG;
 };
 
 SvvInternalAction(SvvInternalSetNode, GetNodeForData, SvvInternalSetNode, SvvInternalObject Object)
@@ -47,41 +44,48 @@ SvvInternalAction(SvvInternalSetNode, GetNodeForData, SvvInternalSetNode, SvvInt
 
 SvvInternalAction(SvvInternalSetNode, Remove, void)
 {
-	int children = (SvvInternalSetNode_Inited(Receiver->left) << 2) + SvvInternalSetNode_Inited(Receiver->right);
-	SvvInternalSetNode node_to_delete;
-	
-	switch(children)
+	while(1)
 	{
-		case 0:
-			SvvInternalSetNode_DeInit(Receiver);
-			SvvInternalSetNode_Destroy(Receiver->right);
-			SvvInternalSetNode_Destroy(Receiver->left);
-			break;
-		case 1:
-			node_to_delete = Receiver->right;
-			SvvInternalSetNode_Destroy(Receiver->left);
-			
+		int children = (SvvInternalSetNode_Inited(Receiver->left) << 2) + SvvInternalSetNode_Inited(Receiver->right);
+		SvvInternalSetNode node_to_delete;
+		
+		switch(children)
+		{
+			case 0:
+				SvvInternalSetNode_DeInit(Receiver);
+				SvvInternalSetNode_Destroy(Receiver->right);
+				SvvInternalSetNode_Destroy(Receiver->left);
+				return;
+			case 1:
+				node_to_delete = Receiver->right;
+				SvvInternalSetNode_Destroy(Receiver->left);
+				
+				Receiver->right = node_to_delete->right;
+				Receiver->left = node_to_delete->left;
+				Receiver->left->parent = Receiver->right->parent = Receiver;
+				
+				Receiver->data = node_to_delete->data;
+				SvvInternalSetNode_Destroy(node_to_delete);
+				return;
+			case 2:
+				node_to_delete = Receiver->left;
+				SvvInternalSetNode_Destroy(Receiver->right);
+				
 			Receiver->right = node_to_delete->right;
-			Receiver->left = node_to_delete->left;
-			Receiver->left->parent = Receiver->right->parent = Receiver;
-			break;
-		case 2:
-			node_to_delete = Receiver->left;
-			SvvInternalSetNode_Destroy(Receiver->right);
-			
-			Receiver->right = node_to_delete->right;
-			Receiver->left = node_to_delete->left;
-			Receiver->left->parent = Receiver->right->parent = Receiver;
-			break;
-		case 3:
-			node_to_delete = Receiver->left;
-			while(SvvInternalSetNode_Inited(node_to_delete->right))
-			{
-				node_to_delete = node_to_delete->right;
-			};
-			Receiver->data = node_to_delete->data;
-			SvvInternalSetNode_Remove(node_to_delete);
-			break;
+				Receiver->left = node_to_delete->left;
+				Receiver->left->parent = Receiver->right->parent = Receiver;
+				
+				Receiver->data = node_to_delete->data;
+				SvvInternalSetNode_Destroy(node_to_delete);
+				return;
+			case 3:
+				node_to_delete = Receiver->left;
+				while(SvvInternalSetNode_Inited(node_to_delete->right))
+				{
+					node_to_delete = node_to_delete->right;
+				};
+				Receiver->data = node_to_delete->data;
+		};
 	};
 };
 
@@ -110,6 +114,11 @@ SvvInternalAction(SvvInternalSetNode, Destroy, void)
 	SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(Receiver));
 };
 
+SvvInternalAction(SvvInternalSetNode, GetData, SvvInternalObject)
+{
+	return Receiver->data;
+};
+
 // SvvInternalSet
 
 SvvInternalCreator(SvvInternalSet)
@@ -129,13 +138,19 @@ SvvInternalAction(SvvInternalSet, Destroy, void)
 SvvInternalAction(SvvInternalSet, Add, void, SvvInternalObject Object)
 {
 	SvvInternalSetNode node = SvvInternalSetNode_GetNodeForData(Receiver->root, Object);
-	SvvInternalSetNode_Init(node, Object);
+	if(!SvvInternalSetNode_Inited(node))
+	{
+		SvvInternalSetNode_Init(node, Object);
+	};
 };
 
 SvvInternalAction(SvvInternalSet, Remove, void, SvvInternalObject Object)
 {
 	SvvInternalSetNode node = SvvInternalSetNode_GetNodeForData(Receiver->root, Object);
-	SvvInternalSetNode_Remove(node);
+	if(SvvInternalSetNode_Inited(node))
+	{
+		SvvInternalSetNode_Remove(node);
+	};
 };
 
 SvvInternalAction(SvvInternalSet, Clean, void)

@@ -1,7 +1,6 @@
 #include "internal_allocator.h"
 #include "internal_object.h"
 #include "internal_globals.h"
-#include <unistd.h>
 
 #define OBJECTS 10000000
 #define TIMES 10
