@@ -168,6 +168,23 @@ SvvInternalAction(SvvInternalMap, RemoveKey, void, SvvInternalObject Key)
 	};
 };
 
+SvvInternalAction(SvvInternalMap, RemoveValue, void, SvvInternalObject Value)
+{
+	SvvInternalMapIterator iterator = SvvInternalMap_GetIterator(Receiver);
+	while(!SvvInternalMapIterator_EndReached(iterator))
+	{
+		if(SvvInternalObject_Compare(SvvInternalMapIterator_GetValue(iterator), Value) == 0)
+		{
+			SvvInternalMapNode node = SvvInternalMapIterator_GetNode(iterator);
+			SvvInternalMapIterator_Destroy(iterator);
+			SvvInternalMapNode_Remove(node);
+			return;
+		};
+	};
+	SvvInternalMapIterator_Destroy(iterator);
+	return;
+};
+
 SvvInternalAction(SvvInternalMap, Clean, void)
 {
 	SvvInternalMapNode_CleanSubTree(Receiver->root);
@@ -299,5 +316,10 @@ SvvInternalAction(SvvInternalMapIterator, Clone, SvvInternalMapIterator)
 	iterator->path = SvvInternalStack_Clone(Receiver->path);
 	iterator->node = Receiver->node;
 	return iterator;
+};
+
+SvvInternalAction(SvvInternalMapIterator, GetNode, SvvInternalMapNode)
+{
+	return Receiver->node;
 };
 
