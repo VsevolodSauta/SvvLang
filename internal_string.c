@@ -56,6 +56,23 @@ SvvInternalAction(SvvInternalString, GetLength, int)
 	return Receiver->length;
 };
 
+SvvInternalAction(SvvInternalString, Clone, SvvInternalString)
+{
+	SvvInternalString string = SvvInternalString_Create();
+	string->length = Receiver->length;
+	string->data = SvvInternalList_Clone(Receiver->data);
+	return string;
+};
+
+SvvInternalAction(SvvInternalString, AppendChar, void, SvvInternalChar Char)
+{
+	Receiver->length++;
+	SvvInternalList_PushBack(Receiver->data, CHAR_AS_OBJECT(Char));
+};
+
+
+
+
 SvvInternalCreator(SvvInternalStringIterator)
 {
 	return OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalStringIterator)));
@@ -68,6 +85,25 @@ SvvInternalAction(SvvInternalString, GetFirst, SvvInternalStringIterator)
 	iterator->position = 0;
 	iterator->iterator = SvvInternalList_GetFirst(Receiver->data);
 	return iterator;
+};
+
+SvvInternalAction(SvvInternalString, GetLast, SvvInternalStringIterator)
+{
+	SvvInternalStringIterator iterator = SvvInternalStringIterator_Create();
+	iterator->object = Receiver;
+	iterator->position = Receiver->length - 1;
+	iterator->iterator = SvvInternalList_GetLast(Receiver->data);
+	return iterator;
+};
+
+SvvInternalAction(SvvInternalStringIterator, EndReached, int)
+{
+	return SvvInternalListIterator_EndReached(Receiver->iterator);
+};
+
+SvvInternalAction(SvvInternalStringIterator, BeginReached, int)
+{
+	return SvvInternalListIterator_BeginReached(Receiver->iterator);
 };
 
 SvvInternalAction(SvvInternalStringIterator, Destroy, void)
@@ -119,4 +155,13 @@ SvvInternalAction(SvvInternalStringIterator, SetPosition, void, int Position)
 	{
 		SvvInternalStringIterator_GetPrev(Receiver);
 	};
+};
+
+SvvInternalAction(SvvInternalStringIterator, Clone, SvvInternalStringIterator)
+{
+	SvvInternalStringIterator iterator = SvvInternalStringIterator_Create();
+	iterator->object = Receiver->object;
+	iterator->iterator = SvvInternalListIterator_Clone(Receiver->iterator);
+	iterator->position = Receiver->position;
+	return iterator;
 };
