@@ -24,6 +24,7 @@ typedef struct SvvInternalMapNode {
 
 typedef struct SvvInternalMap {
 	SvvInternalMapNode		root;
+	int				capacity;
 } *SvvInternalMap;
 
 typedef struct SvvInternalMapIterator {
@@ -61,3 +62,4 @@ SvvInternalAction(SvvInternalMap, GetValue, SvvInternalObject, SvvInternalObject
 SvvInternalAction(SvvInternalMap, GetList, SvvInternalList);
 SvvInternalAction(SvvInternalMap, AddList, void, SvvInternalList List);
 SvvInternalAction(SvvInternalMap, GetIterator, SvvInternalMapIterator);
+SvvInternalAction(SvvInternalMap, GetCapacity, int);

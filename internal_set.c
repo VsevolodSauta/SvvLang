@@ -125,6 +125,7 @@ SvvInternalCreator(SvvInternalSet)
 {
 	SvvInternalSet set = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalSet)));
 	set->root = SvvInternalSetNode_Create();
+	set->capacity = 0;
 	SvvInternalSetNode_DeInit(set->root);
 	return set;
 };
@@ -141,6 +142,7 @@ SvvInternalAction(SvvInternalSet, Add, void, SvvInternalObject Object)
 	if(!SvvInternalSetNode_Inited(node))
 	{
 		SvvInternalSetNode_Init(node, Object);
+		Receiver->capacity++;
 	};
 };
 
@@ -150,6 +152,7 @@ SvvInternalAction(SvvInternalSet, Remove, void, SvvInternalObject Object)
 	if(SvvInternalSetNode_Inited(node))
 	{
 		SvvInternalSetNode_Remove(node);
+		Receiver->capacity--;
 	};
 };
 
@@ -157,6 +160,7 @@ SvvInternalAction(SvvInternalSet, Clean, void)
 {
 	SvvInternalSetNode_CleanSubTree(Receiver->root);
 	Receiver->root = SvvInternalSetNode_Create();
+	Receiver->capacity = 0;
 	SvvInternalSetNode_DeInit(Receiver->root);
 };
 
@@ -203,6 +207,12 @@ SvvInternalAction(SvvInternalSet, GetIterator, SvvInternalSetIterator)
 	
 	return iterator;
 };
+
+SvvInternalAction(SvvInternalSet, GetCapacity, int)
+{
+	return Receiver->capacity;
+};
+
 
 // SvvInternalSetIterator
 

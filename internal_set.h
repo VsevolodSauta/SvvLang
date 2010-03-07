@@ -23,6 +23,7 @@ typedef struct SvvInternalSetNode {
 
 typedef struct SvvInternalSet {
 	SvvInternalSetNode		root;
+	int				capacity;
 } *SvvInternalSet;
 
 typedef struct SvvInternalSetIterator {
@@ -57,3 +58,5 @@ SvvInternalAction(SvvInternalSet, Exists, int, SvvInternalObject Object);
 SvvInternalAction(SvvInternalSet, GetList, SvvInternalList);
 SvvInternalAction(SvvInternalSet, AddList, void, SvvInternalList List);
 SvvInternalAction(SvvInternalSet, GetIterator, SvvInternalSetIterator);
+SvvInternalAction(SvvInternalSet, GetCapacity, int);
+
