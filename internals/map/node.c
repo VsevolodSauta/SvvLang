@@ -118,6 +118,11 @@ SvvInternalAction(SvvInternalMapNode, GetValue, SvvInternalObject)
 	return Receiver->value;
 };
 
+SvvInternalAction(SvvInternalMapNode, SetValue, void, SvvInternalObject Object)
+{
+	Receiver->value = Object;
+};
+
 SvvInternalAction(SvvInternalMapNode, GetKey, SvvInternalObject)
 {
 	return Receiver->key;

@@ -20,7 +20,6 @@ SvvInternalCreator(SvvInternalMap);
 SvvInternalAction(SvvInternalMap, Destroy, void);
 SvvInternalAction(SvvInternalMap, Add, void, SvvInternalObject Key, SvvInternalObject Value);
 SvvInternalAction(SvvInternalMap, RemoveKey, void, SvvInternalObject Key);
-SvvInternalAction(SvvInternalMap, RemoveValue, void, SvvInternalObject Value);
 SvvInternalAction(SvvInternalMap, Clean, void);
 SvvInternalAction(SvvInternalMap, ExistsKey, int, SvvInternalObject Key);
 SvvInternalAction(SvvInternalMap, GetValue, SvvInternalObject, SvvInternalObject Key);

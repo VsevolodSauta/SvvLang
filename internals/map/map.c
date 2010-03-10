@@ -24,6 +24,8 @@ SvvInternalAction(SvvInternalMap, Add, void, SvvInternalObject Key, SvvInternalO
 	{
 		SvvInternalMapNode_Init(node, Key, Value);
 		Receiver->capacity++;
+	} else {
+		SvvInternalMapNode_SetValue(node, Value);
 	};
 };
 
@@ -35,23 +37,6 @@ SvvInternalAction(SvvInternalMap, RemoveKey, void, SvvInternalObject Key)
 		SvvInternalMapNode_Remove(node);
 		Receiver->capacity--;
 	};
-};
-
-SvvInternalAction(SvvInternalMap, RemoveValue, void, SvvInternalObject Value)
-{
-	SvvInternalMapIterator iterator = SvvInternalMap_GetIterator(Receiver);
-	while(!SvvInternalMapIterator_EndReached(iterator))
-	{
-		if(SvvInternalObject_Compare(SvvInternalMapIterator_GetValue(iterator), Value) == 0)
-		{
-			SvvInternalMapNode node = SvvInternalMapIterator_GetNode(iterator);
-			SvvInternalMapIterator_Destroy(iterator);
-			SvvInternalMapNode_Remove(node);
-			return;
-		};
-	};
-	SvvInternalMapIterator_Destroy(iterator);
-	return;
 };
 
 SvvInternalAction(SvvInternalMap, Clean, void)

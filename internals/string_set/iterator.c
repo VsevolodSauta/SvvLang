@@ -3,7 +3,7 @@
 #include "internals/string_set/node.h"
 
 #include "internals/stack/interface.h"
-#include "internals/map/interface.h"
+#include "internals/injection/interface.h"
 #include "internals/string/interface.h"
 
 
@@ -29,17 +29,17 @@ SvvInternalAction(SvvInternalStringSetIterator, GetNext, void)
 			break;
 		} else {
 			Receiver->element = OBJECT_AS_LINK(SvvInternalStack_Pop(Receiver->path));
-			SvvInternalMapIterator iterator = SvvInternalMap_GetIterator(Receiver->element->node->next_char);
-			while(!SvvInternalMapIterator_EndReached(iterator))
+			SvvInternalInjectionIterator iterator = SvvInternalInjection_GetIterator(Receiver->element->node->next_char);
+			while(!SvvInternalInjectionIterator_EndReached(iterator))
 			{
 				SvvInternalStringSetIteratorElement element = SvvInternalStringSetIteratorElement_Create();
-				element->node = OBJECT_AS_LINK(SvvInternalMapIterator_GetValue(iterator));
+				element->node = OBJECT_AS_LINK(SvvInternalInjectionIterator_GetValue(iterator));
 				element->string = SvvInternalString_Clone(Receiver->element->string);
-				SvvInternalString_AppendChar(element->string, OBJECT_AS_CHAR(SvvInternalMapIterator_GetKey(iterator)));
+				SvvInternalString_AppendChar(element->string, OBJECT_AS_CHAR(SvvInternalInjectionIterator_GetKey(iterator)));
 				SvvInternalStack_Push(Receiver->path, LINK_AS_OBJECT(element));
-				SvvInternalMapIterator_GetNext(iterator);
+				SvvInternalInjectionIterator_GetNext(iterator);
 			};
-			SvvInternalMapIterator_Destroy(iterator);
+			SvvInternalInjectionIterator_Destroy(iterator);
 			if(SvvInternalStringSetNode_IsSet(Receiver->element->node))
 			{
 				break;

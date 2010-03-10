@@ -1,12 +1,12 @@
 #pragma once
 
 #include "internals/basics.h"
-#include "internals/map/interface.h"
+#include "internals/injection/interface.h"
 #include "internals/string/interface.h"
 
 typedef struct SvvInternalStringSetNode {
 	struct SvvInternalStringSetNode*	parent;
-	SvvInternalMap				next_char;
+	SvvInternalInjection			next_char;
 	int					flags;
 } *SvvInternalStringSetNode;
 
@@ -18,4 +18,3 @@ SvvInternalAction(SvvInternalStringSetNode, IsSet, int);
 SvvInternalAction(SvvInternalStringSetNode, Set, void);
 SvvInternalAction(SvvInternalStringSetNode, UnSet, void);
 SvvInternalAction(SvvInternalStringSetNode, Destroy, void);
-

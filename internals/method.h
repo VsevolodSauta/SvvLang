@@ -1,5 +1,5 @@
 #pragma once
 
-#include "internal_object.h"
+#include "internals/object/interface.h"
 
 typedef SvvInternalObject SvvInternalMethod;

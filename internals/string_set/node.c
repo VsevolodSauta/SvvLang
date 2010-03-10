@@ -1,7 +1,7 @@
 #include "internals/basics.h"
 #include "internals/string_set/node.h"
 
-#include "internals/map/interface.h"
+#include "internals/injection/interface.h"
 #include "internals/string/interface.h"
 
 #define SET_FLAG 1
@@ -9,7 +9,7 @@
 SvvInternalCreator(SvvInternalStringSetNode)
 {
 	SvvInternalStringSetNode node = OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalStringSetNode)));
-	node->next_char = SvvInternalMap_Create();
+	node->next_char = SvvInternalInjection_Create();
 	node->flags = 0;
 	return node;
 };
@@ -27,13 +27,13 @@ SvvInternalAction(SvvInternalStringSetNode, Set, void)
 SvvInternalAction(SvvInternalStringSetNode, UnSet, void)
 {
 	Receiver->flags &= ~SET_FLAG;
-	while((!SvvInternalStringSetNode_IsSet(Receiver)) && (SvvInternalMap_GetCapacity(Receiver->next_char) == 0))
+	while((!SvvInternalStringSetNode_IsSet(Receiver)) && (SvvInternalInjection_GetCapacity(Receiver->next_char) == 0))
 	{
 		SvvInternalStringSetNode node = Receiver->parent;
 		if(!IS_NOTHING(node))
 		{
 			SvvInternalStringSetNode_Destroy(Receiver);
-			SvvInternalMap_RemoveValue(node->next_char, LINK_AS_OBJECT(Receiver));
+			SvvInternalInjection_RemoveValue(node->next_char, LINK_AS_OBJECT(Receiver));
 		};
 	};
 };
@@ -45,9 +45,9 @@ SvvInternalAction(SvvInternalStringSetNode, GetNodeForData, SvvInternalStringSet
 	{
 		SvvInternalChar current_char = SvvInternalStringIterator_GetChar(Iterator);
 		SvvInternalStringIterator_GetNext(Iterator);
-		if(SvvInternalMap_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
+		if(SvvInternalInjection_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
 		{
-			Receiver = OBJECT_AS_LINK(SvvInternalMap_GetValue(Receiver->next_char, CHAR_AS_OBJECT(current_char)));
+			Receiver = OBJECT_AS_LINK(SvvInternalInjection_GetValue(Receiver->next_char, CHAR_AS_OBJECT(current_char)));
 		} else {
 			return OBJECT_AS_LINK(SvvInternalNothing);
 		};
@@ -62,12 +62,12 @@ SvvInternalAction(SvvInternalStringSetNode, GetCreatingNodeForData, SvvInternalS
 	{
 		SvvInternalChar current_char = SvvInternalStringIterator_GetChar(Iterator);
 		SvvInternalStringIterator_GetNext(Iterator);
-		if(SvvInternalMap_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
+		if(SvvInternalInjection_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
 		{
-			Receiver = OBJECT_AS_LINK(SvvInternalMap_GetValue(Receiver->next_char, CHAR_AS_OBJECT(current_char)));
+			Receiver = OBJECT_AS_LINK(SvvInternalInjection_GetValue(Receiver->next_char, CHAR_AS_OBJECT(current_char)));
 		} else {
 			SvvInternalStringSetNode node = SvvInternalStringSetNode_Create();
-			SvvInternalMap_Add(Receiver->next_char, CHAR_AS_OBJECT(current_char), LINK_AS_OBJECT(node));
+			SvvInternalInjection_Add(Receiver->next_char, CHAR_AS_OBJECT(current_char), LINK_AS_OBJECT(node));
 			Receiver = node;
 		};
 	};
@@ -77,14 +77,14 @@ SvvInternalAction(SvvInternalStringSetNode, GetCreatingNodeForData, SvvInternalS
 
 SvvInternalAction(SvvInternalStringSetNode, CleanSubTree, void)
 {
-	SvvInternalMapIterator iterator = SvvInternalMap_GetIterator(Receiver->next_char);
-	while(!SvvInternalMapIterator_EndReached(iterator))
+	SvvInternalInjectionIterator iterator = SvvInternalInjection_GetIterator(Receiver->next_char);
+	while(!SvvInternalInjectionIterator_EndReached(iterator))
 	{
-		SvvInternalStringSetNode_CleanSubTree(OBJECT_AS_LINK(SvvInternalMapIterator_GetValue(iterator)));
-		SvvInternalMapIterator_GetNext(iterator);
+		SvvInternalStringSetNode_CleanSubTree(OBJECT_AS_LINK(SvvInternalInjectionIterator_GetValue(iterator)));
+		SvvInternalInjectionIterator_GetNext(iterator);
 	};
-	SvvInternalMapIterator_Destroy(iterator);
-	SvvInternalMap_Destroy(Receiver->next_char);
+	SvvInternalInjectionIterator_Destroy(iterator);
+	SvvInternalInjection_Destroy(Receiver->next_char);
 	SvvInternalStringSetNode_Destroy(Receiver);
 };
 

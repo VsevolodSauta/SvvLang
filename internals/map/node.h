@@ -21,4 +21,6 @@ SvvInternalAction(SvvInternalMapNode, Inited, int);
 SvvInternalAction(SvvInternalMapNode, Destroy, void);
 SvvInternalAction(SvvInternalMapNode, GetKey, SvvInternalObject);
 SvvInternalAction(SvvInternalMapNode, GetValue, SvvInternalObject);
+SvvInternalAction(SvvInternalMapNode, SetValue, void, SvvInternalObject Object);
+
 
