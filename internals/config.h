@@ -1,0 +1,3 @@
+#pragma once
+
+// #define CONFIG_INTERNAL_STRING_GRANULARITY 4

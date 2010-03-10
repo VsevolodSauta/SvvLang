@@ -1,0 +1,5 @@
+project(Object)
+cmake_minimum_required(VERSION 2.6)
+add_library(Object SHARED object.c)
+target_link_libraries(Object Allocator MMU Nothing)
+add_subdirectory(tests)

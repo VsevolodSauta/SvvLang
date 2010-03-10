@@ -1,0 +1,6 @@
+project(SvvLanguage)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+enable_testing()
+cmake_minimum_required(VERSION 2.6)
+add_subdirectory(internals)
+# add_subdirectory(externals)
