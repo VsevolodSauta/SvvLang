@@ -31,7 +31,7 @@ SvvInternalAction(SvvInternalStringSet, Remove, void, SvvInternalString String)
 	SvvInternalStringIterator iterator = SvvInternalString_GetFirst(String);
 	SvvInternalStringSetNode node = SvvInternalStringSetNode_GetNodeForData(Receiver->root, iterator);
 	SvvInternalStringIterator_Destroy(iterator);
-	if((!IS_NOTHING(node)) && (SvvInternalStringSetNode_IsSet(node)))
+	if(!IS_NOTHING(node))
 	{
 		SvvInternalStringSetNode_UnSet(node);
 	};
@@ -48,7 +48,7 @@ SvvInternalAction(SvvInternalStringSet, Exists, int, SvvInternalString String)
 	SvvInternalStringIterator iterator = SvvInternalString_GetFirst(String);
 	SvvInternalStringSetNode node = SvvInternalStringSetNode_GetNodeForData(Receiver->root, iterator);
 	SvvInternalStringIterator_Destroy(iterator);
-	return (!IS_NOTHING(node)) && (SvvInternalStringSetNode_IsSet(node));
+	return !IS_NOTHING(node);
 };
 
 SvvInternalAction(SvvInternalStringSet, GetList, SvvInternalList)
