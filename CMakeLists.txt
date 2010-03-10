@@ -1,5 +1,7 @@
 project(SvvLanguage)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+set(Library SHARED)
+# set(CMAKE_C_FLAGS "-g -pg -p -O0")
 enable_testing()
 cmake_minimum_required(VERSION 2.6)
 add_subdirectory(internals)

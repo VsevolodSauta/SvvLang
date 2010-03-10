@@ -1,4 +1,4 @@
 project(Nothing)
 cmake_minimum_required(VERSION 2.6)
-add_library(Nothing SHARED nothing.c)
+add_library(Nothing ${Library} nothing.c)
 
