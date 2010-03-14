@@ -96,4 +96,14 @@ SvvInternalAction(SvvInternalSet, GetCapacity, int)
 	return Receiver->capacity;
 };
 
-
+SvvInternalAction(SvvInternalSet, Dump, void)
+{
+	SvvInternalSet iterator = SvvInternalSet_GetIterator(Receiver);
+	while(!SvvInternalSetIterator_EndReached(iterator))
+	{
+		DEBUG("%li ", OBJECT_AS_INT(SvvInternalSetIterator_GetData(iterator)));
+		SvvInternalSetIterator_GetNext(iterator);
+	};
+	SvvInternalSetIterator_Destroy(iterator);
+	DEBUG("\n");
+};

@@ -39,6 +39,26 @@ SvvInternalAction(SvvInternalListIterator, Remove, void)
 	SvvInternalListIterator_Destroy(iterator);
 };
 
+SvvInternalAction(SvvInternalListIterator, NextRemove, void)
+{
+	SvvInternalListIterator iterator = SvvInternalListIterator_Clone(Receiver);
+	SvvInternalListIterator_GetNext(iterator);
+	iterator->data->prev->next = iterator->data->next;
+	iterator->data->next->prev = iterator->data->prev;
+	SvvInternalListNode_Destroy(iterator->data);
+	SvvInternalListIterator_Destroy(iterator);
+};
+
+SvvInternalAction(SvvInternalListIterator, PrevRemove, void)
+{
+	SvvInternalListIterator iterator = SvvInternalListIterator_Clone(Receiver);
+	SvvInternalListIterator_GetPrev(iterator);
+	iterator->data->prev->next = iterator->data->next;
+	iterator->data->next->prev = iterator->data->prev;
+	SvvInternalListNode_Destroy(iterator->data);
+	SvvInternalListIterator_Destroy(iterator);
+};
+
 SvvInternalAction(SvvInternalListIterator, GetNext, void)
 {
 	Receiver->data = Receiver->data->next;
@@ -79,9 +99,29 @@ SvvInternalAction(SvvInternalListIterator, GetData, SvvInternalObject)
 	return Receiver->data->data;
 };
 
+SvvInternalAction(SvvInternalListIterator, NextGetData, SvvInternalObject)
+{
+	return Receiver->data->next->data;
+};
+
+SvvInternalAction(SvvInternalListIterator, PrevGetData, SvvInternalObject)
+{
+	return Receiver->data->prev->data;
+};
+
 SvvInternalAction(SvvInternalListIterator, SetData, void, SvvInternalObject Object)
 {
 	Receiver->data->data = Object;
+};
+
+SvvInternalAction(SvvInternalListIterator, PrevSetData, void, SvvInternalObject Object)
+{
+	Receiver->data->prev->data = Object;
+};
+
+SvvInternalAction(SvvInternalListIterator, NextSetData, void, SvvInternalObject Object)
+{
+	Receiver->data->next->data = Object;
 };
 
 SvvInternalCreator(SvvInternalListIterator)
@@ -125,6 +165,7 @@ SvvInternalAction(SvvInternalListIterator, AddBefore, void, SvvInternalObject Ob
 	saved_prev->next = adding_element;
 };
 
+
 SvvInternalAction(SvvInternalListIterator, BeginReached, int)
 {
 	return IS_NOTHING(Receiver->data->prev);
@@ -133,6 +174,17 @@ SvvInternalAction(SvvInternalListIterator, BeginReached, int)
 SvvInternalAction(SvvInternalListIterator, EndReached, int)
 {
 	return IS_NOTHING(Receiver->data->next);
+};
+
+
+SvvInternalAction(SvvInternalListIterator, PrevBeginReached, int)
+{
+	return IS_NOTHING(Receiver->data->prev->prev);
+};
+
+SvvInternalAction(SvvInternalListIterator, NextEndReached, int)
+{
+	return IS_NOTHING(Receiver->data->next->next);
 };
 
 

@@ -6,8 +6,8 @@ SvvInternalCreator(SvvInternalList); // O(1)
 SvvInternalAction(SvvInternalList, Destroy, void); // O(n)
 */
 
-#define LISTS 100000
-#define TIMES 100
+#define LISTS 100
+#define TIMES 1
 
 int main(void)
 {

@@ -40,7 +40,7 @@ SvvInternalAction(SvvInternalStringMapIterator, GetNext, void)
 				SvvInternalInjectionIterator_GetNext(iterator);
 			};
 			SvvInternalInjectionIterator_Destroy(iterator);
-			if(SvvInternalStringMapNode_IsMap(Receiver->element->node))
+			if(SvvInternalStringMapNode_IsMapped(Receiver->element->node))
 			{
 				break;
 			};

@@ -41,7 +41,7 @@ SvvInternalAction(SvvInternalMapNode, Remove, void)
 	{
 		int children = (SvvInternalMapNode_Inited(Receiver->left) << 2) + SvvInternalMapNode_Inited(Receiver->right);
 		SvvInternalMapNode node_to_delete;
-	
+
 		switch(children)
 		{
 			case 0:

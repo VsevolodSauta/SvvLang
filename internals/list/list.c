@@ -177,3 +177,42 @@ SvvInternalAction(SvvInternalList, GetFirst, SvvInternalListIterator)
 	iterator->list = Receiver;
 	return iterator;
 };
+
+SvvInternalAction(SvvInternalList, Sort, void)
+{
+	SvvInternalListIterator iterator = SvvInternalList_GetFirst(Receiver);
+	
+	while(!SvvInternalListIterator_NextEndReached(iterator))
+	{
+		SvvInternalObject next_object = SvvInternalListIterator_NextGetData(iterator);
+		if(SvvInternalObject_Compare(SvvInternalListIterator_GetData(iterator), next_object) <= 0)
+		{
+			SvvInternalListIterator_GetNext(iterator);
+		} else {
+			SvvInternalListIterator_NextRemove(iterator);
+			while(!SvvInternalListIterator_PrevBeginReached(iterator))
+			{
+				if(SvvInternalObject_Compare(SvvInternalListIterator_PrevGetData(iterator), next_object) <= 0)
+				{
+					break;
+				} else {
+					SvvInternalListIterator_GetPrev(iterator);
+				};
+			};
+			SvvInternalListIterator_AddBefore(iterator, next_object);
+		};
+	};
+	SvvInternalListIterator_Destroy(iterator);
+};
+
+SvvInternalAction(SvvInternalList, Dump, void)
+{
+	SvvInternalListIterator iterator = SvvInternalList_GetFirst(Receiver);
+	while(!SvvInternalListIterator_EndReached(iterator))
+	{
+		DEBUG("%li ", OBJECT_AS_INT(SvvInternalListIterator_GetData(iterator)));
+		SvvInternalListIterator_GetNext(iterator);
+	};
+	SvvInternalListIterator_Destroy(iterator);
+	DEBUG("\n");
+};

@@ -34,4 +34,4 @@ SvvInternalAction(SvvInternalSet, GetList, SvvInternalList);
 SvvInternalAction(SvvInternalSet, AddList, void, SvvInternalList List);
 SvvInternalAction(SvvInternalSet, GetIterator, SvvInternalSetIterator);
 SvvInternalAction(SvvInternalSet, GetCapacity, int);
-
+SvvInternalAction(SvvInternalSet, Dump, void);

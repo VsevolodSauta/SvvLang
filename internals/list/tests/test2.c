@@ -16,8 +16,8 @@ SvvInternalAction(SvvInternalListIterator, BeginReached, int); // O(1)
 SvvInternalAction(SvvInternalListIterator, EndReached, int); // O(1)
 */
 
-#define NODES 100000
-#define TIMES 100
+#define NODES 100
+#define TIMES 1
 
 int main(void)
 {

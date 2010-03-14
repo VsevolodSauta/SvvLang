@@ -8,8 +8,8 @@ SvvInternalAction(SvvInternalList, PushBack, void, SvvInternalObject Object); //
 SvvInternalAction(SvvInternalList, PushFront, void, SvvInternalObject Object); // O(1)
 */
 
-#define NODES 100000
-#define TIMES 100
+#define NODES 100
+#define TIMES 1
 
 int main(void)
 {

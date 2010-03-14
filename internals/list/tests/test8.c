@@ -9,7 +9,10 @@ SvvInternalAction(SvvInternalList, PushFront, void, SvvInternalObject Object); /
 SvvInternalAction(SvvInternalList, GetFirst, SvvInternalListIterator); // O(1)
 SvvInternalAction(SvvInternalList, GetLast, SvvInternalListIterator); // O(1)
 SvvInternalAction(SvvInternalList, Clean, void);
-
+SvvInternalAction(SvvInternalList, GetSublistBetweenPositions, SvvInternalList, int. int);
+SvvInternalAction(SvvInternalList, GetSublistBetweenIterators, SvvInternalList, SvvInternalListIterator, SvvInternalListIterator);
+SvvInternalAction(SvvInternalListIterator, AddListBefore, void, SvvInternalList);
+SvvInternalAction(SvvInternalListIterator, AddListAfter, void, SvvInternalList);
 SvvInternalAction(SvvInternalListIterator, GetNext, void); // O(1)
 SvvInternalAction(SvvInternalListIterator, GetPrev, void); // O(1)
 SvvInternalAction(SvvInternalListIterator, BeginReached, int); // O(1)
@@ -21,42 +24,29 @@ SvvInternalAction(SvvInternalListIterator, EndReached, int); // O(1)
 
 int main(void)
 {
-	int i, j;
+	int i;
 	SvvInternalList list = SvvInternalList_Create();
+	SvvInternalListIterator iterator;
 	
-	for(j = 0; j < TIMES; j++)
+	
+	for(i = 0; i < NODES; i++)
 	{
-		SvvInternalListIterator front, back;
-		for(i = 0; i < NODES; i++)
-		{
-			if(i & 1)
-			{
-				SvvInternalList_PushBack(list, INT_AS_OBJECT(i));
-			} else {
-				SvvInternalList_PushFront(list, INT_AS_OBJECT(i));
-			};
-		};
-		
-		front = SvvInternalList_GetFirst(list);
-		back = SvvInternalList_GetLast(list);
-		
-		for(i = 0; i < NODES / 2; i++)
-		{
-			if(OBJECT_AS_INT(SvvInternalListIterator_GetData(front)) != OBJECT_AS_INT(SvvInternalListIterator_GetData(back)) - 1)
-			{
-				DEBUG("Got %li and %li.\n", OBJECT_AS_INT(SvvInternalListIterator_GetData(front)), OBJECT_AS_INT(SvvInternalListIterator_GetData(back)));
-				return 1;
-			};
-			SvvInternalListIterator_GetNext(front);
-			SvvInternalListIterator_GetPrev(back);
-		};
-		
-		
-		SvvInternalListIterator_Destroy(front);
-		SvvInternalListIterator_Destroy(back);
-		
-		SvvInternalList_Clean(list);
+		SvvInternalList_PushFront(list, INT_AS_OBJECT(i));
 	};
+	
+	SvvInternalList_Sort(list);
+	
+	;
+	for(iterator = SvvInternalList_GetFirst(list), i = 0; !SvvInternalListIterator_EndReached(iterator); SvvInternalListIterator_GetNext(iterator), i++)
+	{
+		if(OBJECT_AS_INT(SvvInternalListIterator_GetData(iterator)) != i)
+		{
+			DEBUG("Got %li, but %li expected.\n", OBJECT_AS_INT(SvvInternalListIterator_GetData(iterator)), i);
+			return 1;
+		};
+	};
+	SvvInternalListIterator_Destroy(iterator);
+	
 	SvvInternalList_Destroy(list);
 	return 0;
 };
