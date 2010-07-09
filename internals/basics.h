@@ -5,4 +5,5 @@
 #include "internals/mmu/interface.h"
 #include "internals/config.h"
 #include "internals/globals.h"
+#include "internals/flags.h"
 #include "internals/debugger.h"
