@@ -1,4 +1,6 @@
 project(Internals)
+cmake_minimum_required(VERSION 2.6)
+
 add_subdirectory(char)
 add_subdirectory(object)
 add_subdirectory(allocator)
@@ -13,3 +15,4 @@ add_subdirectory(map)
 add_subdirectory(injection)
 add_subdirectory(string_set)
 add_subdirectory(string_map)
+add_subdirectory(uarray)

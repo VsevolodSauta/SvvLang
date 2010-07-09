@@ -1,4 +1,5 @@
 project(Queue)
+cmake_minimum_required(VERSION 2.6)
 add_library(Queue ${Library} queue.c)
 target_link_libraries(Queue List Allocator)
 add_subdirectory(tests)
