@@ -35,7 +35,7 @@ SvvInternalAction(SvvInternalStringMapIterator, GetNext, void)
 				SvvInternalStringMapIteratorElement element = SvvInternalStringMapIteratorElement_Create();
 				element->node = OBJECT_AS_LINK(SvvInternalInjectionIterator_GetValue(iterator));
 				element->string = SvvInternalString_Clone(Receiver->element->string);
-				SvvInternalString_AppendChar(element->string, OBJECT_AS_CHAR(SvvInternalInjectionIterator_GetKey(iterator)));
+				SvvInternalString_CharAppend(element->string, OBJECT_AS_CHAR(SvvInternalInjectionIterator_GetKey(iterator)));
 				SvvInternalStack_Push(Receiver->path, LINK_AS_OBJECT(element));
 				SvvInternalInjectionIterator_GetNext(iterator);
 			};

@@ -4,3 +4,4 @@ find -name Testing -exec rm -rf {} +
 find -name Makefile -exec rm {} +
 find -name CMakeCache.txt -exec rm {} +
 find -name CTestTestfile.cmake -exec rm {} +
+rm $(find | grep \.so)

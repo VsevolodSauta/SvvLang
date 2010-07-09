@@ -13,7 +13,6 @@ SvvInternalAction(SvvInternalAllocator, Resize, SvvInternalObject, SvvInternalOb
 {
 	void* ptr = realloc(Object.ptr_data, Size);
 	return LINK_AS_OBJECT(ptr);
-	
 };
 
 

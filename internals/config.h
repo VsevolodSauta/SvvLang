@@ -1,3 +1,3 @@
 #pragma once
 
-// #define CONFIG_INTERNAL_STRING_GRANULARITY 4
+#define ARRAY_GRANULARITY 16

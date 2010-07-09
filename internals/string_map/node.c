@@ -56,7 +56,7 @@ SvvInternalAction(SvvInternalStringMapNode, GetNodeForData, SvvInternalStringMap
 {
 	while(!SvvInternalStringIterator_EndReached(Iterator))
 	{
-		SvvInternalChar current_char = SvvInternalStringIterator_GetChar(Iterator);
+		SvvInternalChar current_char = SvvInternalStringIterator_CharGet(Iterator);
 		SvvInternalStringIterator_GetNext(Iterator);
 		if(SvvInternalInjection_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
 		{
@@ -73,7 +73,7 @@ SvvInternalAction(SvvInternalStringMapNode, GetCreatingNodeForData, SvvInternalS
 {
 	while(!SvvInternalStringIterator_EndReached(Iterator))
 	{
-		SvvInternalChar current_char = SvvInternalStringIterator_GetChar(Iterator);
+		SvvInternalChar current_char = SvvInternalStringIterator_CharGet(Iterator);
 		SvvInternalStringIterator_GetNext(Iterator);
 		if(SvvInternalInjection_ExistsKey(Receiver->next_char, CHAR_AS_OBJECT(current_char)))
 		{
