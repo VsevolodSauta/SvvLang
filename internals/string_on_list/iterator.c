@@ -1,6 +1,5 @@
 #include "internals/basics.h"
 #include "internals/string/interface.h"
-
 #include "internals/list/interface.h"
 
 SvvInternalCreator(SvvInternalStringIterator)
@@ -42,12 +41,12 @@ SvvInternalAction(SvvInternalStringIterator, GetString, SvvInternalString)
 	return Receiver->object;
 };
 
-SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar)
+SvvInternalAction(SvvInternalStringIterator, CharGet, SvvInternalChar)
 {
 	return OBJECT_AS_CHAR(SvvInternalListIterator_GetData(Receiver->iterator));
 };
 
-SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar Char)
+SvvInternalAction(SvvInternalStringIterator, CharSet, void, SvvInternalChar Char)
 {
 	SvvInternalListIterator_SetData(Receiver->iterator, CHAR_AS_OBJECT(Char));
 };

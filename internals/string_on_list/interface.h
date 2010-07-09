@@ -21,22 +21,23 @@ SvvInternalAction(SvvInternalStringIterator, Destroy, void);
 SvvInternalAction(SvvInternalStringIterator, GetNext, void);
 SvvInternalAction(SvvInternalStringIterator, GetPrev, void);
 SvvInternalAction(SvvInternalStringIterator, GetString, SvvInternalString);
-SvvInternalAction(SvvInternalStringIterator, GetChar, SvvInternalChar);
-SvvInternalAction(SvvInternalStringIterator, SetChar, void, SvvInternalChar);
+SvvInternalAction(SvvInternalStringIterator, CharGet, SvvInternalChar);
+SvvInternalAction(SvvInternalStringIterator, CharSet, void, SvvInternalChar);
 SvvInternalAction(SvvInternalStringIterator, GetPosition, int);
 SvvInternalAction(SvvInternalStringIterator, SetPosition, void, int);
 SvvInternalAction(SvvInternalStringIterator, Clone, SvvInternalStringIterator);
 
 SvvInternalCreator(SvvInternalString);
-SvvInternalAction(SvvInternalString, Delete, void);
+SvvInternalAction(SvvInternalString, Destroy, void);
 SvvInternalAction(SvvInternalString, Concatenate, void, SvvInternalString String);
-SvvInternalAction(SvvInternalString, GetAt, SvvInternalChar, int Position);
-SvvInternalAction(SvvInternalString, SetAt, void, int Position, SvvInternalChar);
+SvvInternalAction(SvvInternalString, CharGetAt, SvvInternalChar, int Position);
+SvvInternalAction(SvvInternalString, CharSetAt, void, int Position, SvvInternalChar);
 SvvInternalAction(SvvInternalString, SubString, SvvInternalString, int PositionFrom, int PositionTo);
 SvvInternalAction(SvvInternalString, Remove, void, int PositionFrom, int PositionTo);
 SvvInternalAction(SvvInternalString, GetLength, int);
 SvvInternalAction(SvvInternalString, Clone, SvvInternalString);
-SvvInternalAction(SvvInternalString, AppendChar, void, SvvInternalChar);
+SvvInternalAction(SvvInternalString, CharAppend, void, SvvInternalChar);
 
 SvvInternalAction(SvvInternalString, GetFirst, SvvInternalStringIterator);
 SvvInternalAction(SvvInternalString, GetLast, SvvInternalStringIterator);
+

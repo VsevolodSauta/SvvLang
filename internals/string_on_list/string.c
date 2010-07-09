@@ -1,6 +1,5 @@
 #include "internals/basics.h"
 #include "internals/string/interface.h"
-
 #include "internals/list/interface.h"
 
 SvvInternalCreator(SvvInternalString)
@@ -11,7 +10,7 @@ SvvInternalCreator(SvvInternalString)
 	return string;
 };
 
-SvvInternalAction(SvvInternalString, Delete, void)
+SvvInternalAction(SvvInternalString, Destroy, void)
 {
 	SvvInternalList_Destroy(Receiver->data);
 	SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(Receiver));
@@ -25,14 +24,19 @@ SvvInternalAction(SvvInternalString, Concatenate, void, SvvInternalString String
 	SvvInternalListIterator_Destroy(iterator);
 };
 
-SvvInternalAction(SvvInternalString, GetAt, SvvInternalChar, int Position)
+SvvInternalAction(SvvInternalString, CharGetAt, SvvInternalChar, int Position)
 {
-	return OBJECT_AS_CHAR(SvvInternalListIterator_GetData(SvvInternalList_GetIteratorFromPosition(Receiver->data, Position)));
+	SvvInternalListIterator iterator = SvvInternalList_GetIteratorFromPosition(Receiver->data, Position);
+	SvvInternalChar to_return = OBJECT_AS_CHAR(SvvInternalListIterator_GetData(iterator));
+	SvvInternalListIterator_Destroy(iterator);
+	return to_return;
 };
 
 SvvInternalAction(SvvInternalString, SetAt, void, int Position, SvvInternalChar Char)
 {
-	SvvInternalListIterator_SetData(SvvInternalList_GetIteratorFromPosition(Receiver->data, Position), CHAR_AS_OBJECT(Char));
+	SvvInternalListIterator iterator = SvvInternalList_GetIteratorFromPosition(Receiver->data, Position);
+	SvvInternalListIterator_SetData(iterator, CHAR_AS_OBJECT(Char));
+	SvvInternalListIterator_Destroy(iterator);
 };
 
 SvvInternalAction(SvvInternalString, SubString, SvvInternalString, int PositionFrom, int PositionTo)
@@ -62,7 +66,7 @@ SvvInternalAction(SvvInternalString, Clone, SvvInternalString)
 	return string;
 };
 
-SvvInternalAction(SvvInternalString, AppendChar, void, SvvInternalChar Char)
+SvvInternalAction(SvvInternalString, CharAppend, void, SvvInternalChar Char)
 {
 	Receiver->length++;
 	SvvInternalList_PushBack(Receiver->data, CHAR_AS_OBJECT(Char));
@@ -88,3 +92,4 @@ SvvInternalAction(SvvInternalString, GetLast, SvvInternalStringIterator)
 	iterator->iterator = SvvInternalList_GetLast(Receiver->data);
 	return iterator;
 };
+
