@@ -1,13 +1,25 @@
 #pragma once
 
 #include "internals/actions.h"
+#include "internals/char/unicode.h"
 
 typedef struct {
 	char bytes[4];
 } SvvInternalChar;
 
-SvvInternalAction(SvvInternalChar, LengthInBytes, int);
+SvvInternalAction(SvvInternalChar, GetLengthInBytes, int);
 SvvInternalAction(SvvInternalChar, CharFromPtr, SvvInternalChar, void*);
+SvvInternalAction(SvvInternalChar, Compare, int, SvvInternalChar Char);
+SvvInternalAction(SvvInternalChar, GetCode, int);
+
+#define IsSomething(smth) \
+	static inline SvvInternalAction(SvvInternalChar, Is ##smth, int) \
+	{ \
+		return SvvInternalUnicodeCode_Is ##smth( \
+			SvvInternalChar_GetCode(Receiver) \
+		); \
+	};
+
 
 static inline SvvInternalAction(char, GetLengthInBytes, int)
 {
@@ -20,3 +32,10 @@ static inline SvvInternalAction(char, GetLengthInBytes, int)
 	if((Receiver & 0x80) == 0x00) return 1;
 	return -1;
 };
+
+static inline SvvInternalAction(char, IsInRange, int, char LeftBound, char RightBound)
+{
+	return ((Receiver >= LeftBound) && (Receiver <= RightBound));
+};
+
+

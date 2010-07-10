@@ -1,31 +1,18 @@
 #include "internals/actions.h"
 #include "internals/char/interface.h"
+#include "internals/number/interface.h"
+#include "internals/char/unicode.h"
 
-SvvInternalAction(SvvInternalChar, LengthInBytes, int)
+SvvInternalAction(SvvInternalChar, GetLengthInBytes, int)
 {
-	if((Receiver.bytes[0] & 0xE0) == 0xE0)
-	{
-		if(Receiver.bytes[0] & 0x10)
-		{
-			return 4;
-		} else {
-			return 3;
-		};
-	} else {
-		if((Receiver.bytes[0] & 0xC0) == 0xC0)
-		{
-			return 2;
-		} else {
-			return 1;
-		};
-	};
+	return char_GetLengthInBytes(Receiver.bytes[0]);
 };
 
 SvvInternalAction(SvvInternalChar, CharFromPtr, SvvInternalChar, void* Ptr)
 {
 	SvvInternalChar *Buffer = Ptr;
 	SvvInternalChar ch = *Buffer;
-	int i, len = SvvInternalChar_LengthInBytes(ch);
+	int i, len = SvvInternalChar_GetLengthInBytes(ch);
 
 	for(i = sizeof(SvvInternalChar) - 1; i >= len; i--)
 	{
@@ -34,3 +21,42 @@ SvvInternalAction(SvvInternalChar, CharFromPtr, SvvInternalChar, void* Ptr)
 	
 	return ch;
 };
+
+SvvInternalAction(SvvInternalChar, GetCode, int)
+{
+	int length = SvvInternalChar_GetLengthInBytes(Receiver);
+	if(length > 0)
+	{
+		int to_return = ~(-(1 << (8 - length))) & Receiver.bytes[0];
+		int i;
+		
+		for(i = 1; i < length; i++)
+		{
+			to_return <<= 6;
+			to_return |= Receiver.bytes[i] & 0x3F;
+		};
+
+		return to_return;
+	} else {
+		if(length == 0)
+		{
+			return Receiver.bytes[0];
+		} else {
+			return -1;
+		};
+	};
+};
+
+SvvInternalAction(SvvInternalChar, Compare, int, SvvInternalChar Char)
+{
+	// TODO: Optimize.
+	int code0 = SvvInternalChar_GetCode(Receiver);
+	int code1 = SvvInternalChar_GetCode(Char);
+
+	if(code0 > code1)
+		return 1;
+	if(code0 < code1)
+		return -1;
+	return 0;
+};
+
