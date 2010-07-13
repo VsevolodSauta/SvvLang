@@ -27,13 +27,13 @@ SvvInternalAction(SvvInternalChar, GetCode, int)
 	int length = SvvInternalChar_GetLengthInBytes(Receiver);
 	if(length > 0)
 	{
-		int to_return = ~(-(1 << (8 - length))) & Receiver.bytes[0];
+		int to_return = BITMASK_TO_RIGHT(8 - length) & Receiver.bytes[0];
 		int i;
 		
 		for(i = 1; i < length; i++)
 		{
 			to_return <<= 6;
-			to_return |= Receiver.bytes[i] & 0x3F;
+			to_return |= Receiver.bytes[i] & BITMASK_TO_RIGHT(5);
 		};
 
 		return to_return;

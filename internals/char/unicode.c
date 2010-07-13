@@ -37,7 +37,7 @@ SvvInternalAction(SvvInternalUnicodeCode, IsLatin, int)
  		SvvInternalUnicodeCode_IsInTable(Receiver, Sinology_Latin_Table);	
 };
 
-SvvInternalAction(SvvInternalUnicodeCode, IsCyrilic, int)
+SvvInternalAction(SvvInternalUnicodeCode, IsCyrillic, int)
 {
 	return	SvvInternalUnicodeCode_IsInTable(Receiver, BasicRussian_Cyrillic_Table) ||
 		SvvInternalUnicodeCode_IsInTable(Receiver, Extensions_Cyrillic_1_Table) ||

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "internals/actions.h"
+#include "internals/mask_builder.h"
 #include "internals/char/unicode.h"
 
 typedef struct {
@@ -21,15 +22,30 @@ SvvInternalAction(SvvInternalChar, GetCode, int);
 	};
 
 
+IsSomething(ASCII);
+IsSomething(Latin);
+IsSomething(Cyrillic);
+IsSomething(Digit);
+IsSomething(HexDigit);
+IsSomething(BasicPunctOrSym);
+IsSomething(BasicControl);
+
+#undef IsSomething
+
 static inline SvvInternalAction(char, GetLengthInBytes, int)
 {
-	if((Receiver & 0xFE) == 0xFC) return 6;
-	if((Receiver & 0xFC) == 0xF8) return 5;
-	if((Receiver & 0xF8) == 0xF0) return 4;
-	if((Receiver & 0xF0) == 0xE0) return 3;
-	if((Receiver & 0xE0) == 0xC0) return 2;
-	if((Receiver & 0xC0) == 0x80) return 0;
-	if((Receiver & 0x80) == 0x00) return 1;
+	if((Receiver & BITMASK_TO_LEFT(7)) == 0x00) return 1;
+	if((Receiver & BITMASK_TO_LEFT(6)) == BITMASK_TO_LEFT(7)) return 0;
+	
+	int i;
+	for(i = 5; i >= 0; i--)
+	{
+		if((Receiver & BITMASK_TO_LEFT(i)) == BITMASK_TO_LEFT(i + 1))
+		{
+			return 7 - i;
+		};
+	};
+	
 	return -1;
 };
 
