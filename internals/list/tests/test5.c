@@ -24,8 +24,8 @@ SvvInternalAction(SvvInternalListIterator, EndReached, int); // O(1)
 
 int main(void)
 {
-	int i, j;
-	int l = 10, r = 5;
+	long int i;
+	long int l = 10, r = 5;
 	SvvInternalList list = SvvInternalList_Create();
 	SvvInternalList list2 = SvvInternalList_Create();
 	SvvInternalList temp_list;

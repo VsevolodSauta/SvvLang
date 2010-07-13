@@ -4,7 +4,7 @@
 SvvInternalSet set1;
 SvvInternalSetIterator iterator;
 
-int DumpTree(void)
+void DumpTree(void)
 {
 	iterator = SvvInternalSet_GetIterator(set1);
 	while(!SvvInternalSetIterator_EndReached(iterator))

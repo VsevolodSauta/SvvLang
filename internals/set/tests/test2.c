@@ -6,7 +6,6 @@ int main(void)
 {
 	SvvInternalSet set1;
 	SvvInternalList list1;
-	SvvInternalSetIterator iterator;
 
 	set1 = SvvInternalSet_Create();
 	SvvInternalSet_Add(set1, INT_AS_OBJECT(500));

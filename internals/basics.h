@@ -1,3 +1,4 @@
+#include "internals/mask_builder.h"
 #include "internals/actions.h"
 #include "internals/object/interface.h"
 #include "internals/nothing/interface.h"

@@ -138,7 +138,7 @@ SvvInternalAction(SvvInternalListIterator, Destroy, void)
 SvvInternalAction(SvvInternalListIterator, Clone, SvvInternalListIterator)
 {
 	SvvInternalListIterator iterator = SvvInternalListIterator_Create();
-	SvvInternalMMU_Copy(SvvDefaultAllocator, LINK_AS_OBJECT(iterator), LINK_AS_OBJECT(Receiver), sizeof(SvvInternalListIterator*));
+	SvvInternalMMU_Copy(SvvDefaultMMU, LINK_AS_OBJECT(iterator), LINK_AS_OBJECT(Receiver), sizeof(SvvInternalListIterator*));
 	return iterator;
 };
 

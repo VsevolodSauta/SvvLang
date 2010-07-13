@@ -63,7 +63,7 @@ SvvInternalAction(SvvInternalSetNode, Remove, void)
 				node_to_delete = Receiver->left;
 				SvvInternalSetNode_Destroy(Receiver->right);
 				
-			Receiver->right = node_to_delete->right;
+				Receiver->right = node_to_delete->right;
 				Receiver->left = node_to_delete->left;
 				Receiver->left->parent = Receiver->right->parent = Receiver;
 				
@@ -110,4 +110,3 @@ SvvInternalAction(SvvInternalSetNode, GetData, SvvInternalObject)
 {
 	return Receiver->data;
 };
-

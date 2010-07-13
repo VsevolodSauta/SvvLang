@@ -112,7 +112,10 @@ SvvInternalAction(SvvInternalUArray, Sort, void)
 
 SvvInternalAction(SvvInternalUArray, Compare, int, SvvInternalUArray Array)
 {
-	int comparation_result = memcmp(Receiver->data, Array->data, min(Receiver->size, Array->size));
+	int comparation_result = SvvInternalMMU_Compare(SvvDefaultMMU, 
+		LINK_AS_OBJECT(&(Receiver->data)), 
+		LINK_AS_OBJECT(&(Array->data)),
+		min(Receiver->size, Array->size));
 	if(comparation_result)
 	{
 		return comparation_result;

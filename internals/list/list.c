@@ -216,3 +216,17 @@ SvvInternalAction(SvvInternalList, Dump, void)
 	SvvInternalListIterator_Destroy(iterator);
 	DEBUG("\n");
 };
+
+SvvInternalAction(SvvInternalList, GetSize, int)
+{
+	SvvInternalListIterator iterator = SvvInternalList_GetFirst(Receiver);
+	int to_return = 0;
+	
+	while(!SvvInternalListIterator_EndReached(iterator))
+	{
+		to_return++;
+		SvvInternalListIterator_GetNext(iterator);
+	};
+	
+	return to_return;
+};

@@ -6,7 +6,6 @@ int main(void)
 	SvvInternalObject obj1 = SvvInternalAllocator_New(SvvDefaultAllocator, 10);
 	SvvInternalObject obj2 = SvvInternalAllocator_New(SvvDefaultAllocator, 10);
 	SvvInternalObject obj3 = SvvInternalAllocator_New(SvvDefaultAllocator, 10);
-	SvvInternalObject obj4 = SvvInternalAllocator_New(SvvDefaultAllocator, 10);
 	
 	SvvInternalSet set1 = SvvInternalSet_Create();
 	SvvInternalSetIterator iterator;

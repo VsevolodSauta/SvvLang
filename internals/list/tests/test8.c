@@ -24,7 +24,7 @@ SvvInternalAction(SvvInternalListIterator, EndReached, int); // O(1)
 
 int main(void)
 {
-	int i;
+	long int i;
 	SvvInternalList list = SvvInternalList_Create();
 	SvvInternalListIterator iterator;
 	
