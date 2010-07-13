@@ -31,12 +31,11 @@ SvvInternalAction(SvvInternalStringIterator, GetNext, void)
 		Receiver->real_position = 0;
 		Receiver->flags &= ~FLAG_ITERATOR_BEGIN_REACHED;
 	} else {
-		if(Receiver->real_position == Receiver->object->length)
+		Receiver->user_position++;
+		Receiver->real_position += char_GetLengthInBytes(SvvInternalUArray_ByteGetAt(Receiver->object->data, Receiver->real_position));
+		if(Receiver->user_position == Receiver->object->length)
 		{
 			Receiver->flags |= FLAG_ITERATOR_END_REACHED;
-		} else {
-			Receiver->user_position++;
-			Receiver->real_position += char_GetLengthInBytes(SvvInternalUArray_ByteGetAt(Receiver->object->data, Receiver->real_position));
 		};
 	};
 };

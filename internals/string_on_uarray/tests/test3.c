@@ -24,7 +24,7 @@ int main(void)
 	
 	SvvInternalUArray array = SvvInternalString_GetUArray(string);
 	void* buffer = SvvInternalUArray_GetBuffer(array);
-	TEST("Testing data", memcmp(buffer, "ababaabcba\0", 11) == 0);
+	TEST("Testing data", SvvInternalMMU_Compare(SvvDefaultMMU, LINK_AS_OBJECT(buffer), LINK_AS_OBJECT("ababaabcba\0"), 11) == 0);
 	SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(buffer));
 	SvvInternalUArray_Destroy(array);
 	SvvInternalString_Destroy(string);
