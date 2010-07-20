@@ -54,6 +54,7 @@ SvvInternalAction(SvvInternalList, Clone, SvvInternalList);
 SvvInternalAction(SvvInternalList, Sort, void);
 SvvInternalAction(SvvInternalList, Dump, void);
 SvvInternalAction(SvvInternalList, GetSize, int);
+SvvInternalAction(SvvInternalList, Concatenate, void, SvvInternalList List);
 
 SvvInternalAction(SvvInternalList, GetLast, SvvInternalListIterator); // O(1)
 SvvInternalAction(SvvInternalList, GetIteratorFromPosition, SvvInternalListIterator, int Position); // O(n)

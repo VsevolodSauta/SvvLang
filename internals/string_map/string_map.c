@@ -63,14 +63,21 @@ SvvInternalAction(SvvInternalStringMap, GetValue, SvvInternalObject, SvvInternal
 	SvvInternalStringIterator iterator = SvvInternalString_GetFirst(Key);
 	SvvInternalStringMapNode node = SvvInternalStringMapNode_GetNodeForData(Receiver->root, iterator);
 	SvvInternalStringIterator_Destroy(iterator);
-#if 0
+	return SvvInternalStringMapNode_GetValue(node);
+};
+
+
+SvvInternalAction(SvvInternalStringMap, GetValueIfKeyExists, SvvInternalObject, SvvInternalString Key)
+{
+	SvvInternalStringIterator iterator = SvvInternalString_GetFirst(Key);
+	SvvInternalStringMapNode node = SvvInternalStringMapNode_GetNodeForData(Receiver->root, iterator);
+	SvvInternalStringIterator_Destroy(iterator);
 	if((!IS_NOTHING(node)) && (SvvInternalStringMapNode_IsMapped(node)))
 	{
 		return SvvInternalStringMapNode_GetValue(node);
+	} else {
+		return SvvInternalNothing;
 	};
-#endif
-	
-	return SvvInternalStringMapNode_GetValue(node);
 };
 
 

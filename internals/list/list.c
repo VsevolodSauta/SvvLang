@@ -230,3 +230,10 @@ SvvInternalAction(SvvInternalList, GetSize, int)
 	
 	return to_return;
 };
+
+SvvInternalAction(SvvInternalList, Concatenate, void, SvvInternalList List)
+{
+	SvvInternalListIterator iterator = SvvInternalList_GetLast(Receiver);
+	SvvInternalListIterator_AddListAfter(iterator, List);
+	SvvInternalListIterator_Destroy(iterator);
+};

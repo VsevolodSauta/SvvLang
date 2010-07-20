@@ -23,7 +23,8 @@ SvvInternalAction(SvvInternalMapNode, Init, void, SvvInternalObject Key, SvvInte
 SvvInternalAction(SvvInternalMapNode, GetNodeForKey, SvvInternalMapNode, SvvInternalObject Key)
 {
 	int comparation_result;
-	while(SvvInternalMapNode_Inited(Receiver) && (comparation_result = SvvInternalObject_Compare(Key, Receiver->key) != 0))
+	while(SvvInternalMapNode_Inited(Receiver) && 
+		(comparation_result = SvvInternalObject_Compare(Key, Receiver->key) != 0))
 	{
 		if(comparation_result > 0)
 		{

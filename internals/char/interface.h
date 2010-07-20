@@ -32,7 +32,7 @@ IsSomething(BasicControl);
 
 #undef IsSomething
 
-static inline SvvInternalAction(char, GetLengthInBytes, int)
+SvvInternalRoutine(char, GetLengthInBytes, int)
 {
 	if((Receiver & BITMASK_TO_LEFT(7)) == 0x00) return 1;
 	if((Receiver & BITMASK_TO_LEFT(6)) == BITMASK_TO_LEFT(7)) return 0;
@@ -49,7 +49,7 @@ static inline SvvInternalAction(char, GetLengthInBytes, int)
 	return -1;
 };
 
-static inline SvvInternalAction(char, IsInRange, int, char LeftBound, char RightBound)
+SvvInternalRoutine(char, IsInRange, int, char LeftBound, char RightBound)
 {
 	return ((Receiver >= LeftBound) && (Receiver <= RightBound));
 };

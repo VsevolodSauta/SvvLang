@@ -37,3 +37,4 @@ SvvInternalAction(SvvInternalMapIterator, Destroy, void);
 SvvInternalAction(SvvInternalMapIterator, Clone, SvvInternalMapIterator);
 SvvInternalAction(SvvInternalMapIterator, AddCurrentNodeChildren, void);
 SvvInternalAction(SvvInternalMapIterator, GetNode, SvvInternalMapNode);
+
