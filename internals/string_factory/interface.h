@@ -5,6 +5,6 @@
 
 typedef SvvInternalObject SvvInternalStringFactory;
 
-extern SvvInternalStringFactory SvvDefaultStringFactory;
-
 SvvInternalAction(SvvInternalStringFactory, GetFromASCIIString, SvvInternalString, char* AsciiString);
+
+extern SvvInternalStringFactory SvvDefaultStringFactory;

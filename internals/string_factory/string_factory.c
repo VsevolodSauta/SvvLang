@@ -9,7 +9,7 @@ SvvInternalAction(SvvInternalStringFactory, GetFromASCIIString, SvvInternalStrin
 	while(AsciiString[i] != 0)
 	{
 		SvvInternalString_CharAppend(to_return,
-			SvvInternalCharFactory_CharGetFromCode(SvvDefaultCharFactory, AsciiString[i]));
+			SvvInternalCharFactory_CharGetFromCode(SvvDefaultCharFactory, AsciiString[i++]));
 	};
 	
 	return to_return;
