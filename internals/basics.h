@@ -8,3 +8,4 @@
 #include "internals/globals.h"
 #include "internals/flags.h"
 #include "internals/debugger.h"
+#include "internals/interlocks.h"
