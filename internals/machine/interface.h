@@ -7,7 +7,7 @@
 #include "externals/object/interface.h"
 
 typedef struct SvvInternalMachine {
-	SvvExternalObject		prototype;
+	SvvExternalObject		base;
 } *SvvInternalMachine;
 
 SvvInternalCreator(SvvInternalMachine);

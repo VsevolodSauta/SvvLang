@@ -3,18 +3,20 @@
 #include "internals/string/interface.h"
 #include "internals/list/interface.h"
 #include "internals/set/interface.h"
-#include "internals/string_map/interface.h"
-#include "internals/pair_map/interface.h"
-#include "internals/lexer/token.h"
+#include "internals/token/interface.h"
+#include "internals/token_factory/interface.h"
 
 SvvInternalCreator(SvvInternalLexer)
 {
 	SvvInternalLexer lexer = 
 		OBJECT_AS_LINK(SvvInternalAllocator_New(SvvDefaultAllocator, sizeof(struct SvvInternalLexer)));
 	lexer->delimiters_set = SvvInternalSet_Create();
-	lexer->keywords_map = SvvInternalStringMap_Create();
-	lexer->brackets_map = SvvInternalPairMap_Create();
 	return lexer;
+};
+
+SvvInternalAction(SvvInternalLexer, SetTokenFactory, void, SvvInternalTokenFactory Factory)
+{
+	Receiver->token_factory = Factory;
 };
 
 SvvInternalAction(SvvInternalLexer, AddDelimiter, void, SvvInternalChar Char)
@@ -22,62 +24,16 @@ SvvInternalAction(SvvInternalLexer, AddDelimiter, void, SvvInternalChar Char)
 	SvvInternalSet_Add(Receiver->delimiters_set, CHAR_AS_OBJECT(Char));
 };
 
-SvvInternalAction(SvvInternalLexer, SetKeywordType, void, SvvInternalString Keyword, int Type)
-{
-	SvvInternalStringMap_Add(Receiver->keywords_map, Keyword, INT_AS_OBJECT(Type));
-};
-
-SvvInternalAction(SvvInternalLexer, SetBracketsType, void, SvvInternalChar Left, SvvInternalChar Right, int Type)
-{
-	SvvInternalPairMap_Add(Receiver->brackets_map, CHAR_AS_OBJECT(Left), CHAR_AS_OBJECT(Right), INT_AS_OBJECT(Type));
-};
-
-SvvInternalAction(SvvInternalLexer, SetDefaultType, void, int Type)
-{
-	Receiver->default_type = Type;
-};
-
 SvvInternalAction(SvvInternalLexer, Destroy, void)
 {
 	SvvInternalSet_Destroy(Receiver->delimiters_set);
-	SvvInternalStringMap_Destroy(Receiver->keywords_map);
-	SvvInternalPairMap_Destroy(Receiver->brackets_map);
 	SvvInternalAllocator_Delete(SvvDefaultAllocator, LINK_AS_OBJECT(Receiver));
-};
-
-SvvInternalRoutine(SvvInternalLexer, DetermineType, void, SvvInternalLexerToken token)
-{
-	if(SvvInternalStringMap_ExistsKey(Receiver->keywords_map, token->string))
-	{
-		token->type = OBJECT_AS_INT(SvvInternalStringMap_GetValue(Receiver->keywords_map, token->string));
-		return;
-	};
-
-	SvvInternalStringIterator first_position = SvvInternalString_GetFirst(token->string);
-	SvvInternalStringIterator last_position = SvvInternalString_GetLast(token->string);
-	int first_char_code = SvvInternalChar_GetCode(SvvInternalStringIterator_CharGet(first_position));
-	int last_char_code = SvvInternalChar_GetCode(SvvInternalStringIterator_CharGet(last_position));
-	
-	SvvInternalStringIterator_Destroy(first_position);
-	SvvInternalStringIterator_Destroy(last_position);
-	
-	if(SvvInternalPairMap_ExistsKey(Receiver->brackets_map, INT_AS_OBJECT(first_char_code), INT_AS_OBJECT(last_char_code)))
-	{
-		token->type = OBJECT_AS_INT(SvvInternalPairMap_GetValue(Receiver->brackets_map, 
-			INT_AS_OBJECT(first_char_code), INT_AS_OBJECT(last_char_code)));
-		return;
-	};
-
-	token->type = LEXER_TOKEN_TYPE_FIELD_NAME;
-	return;
 };
 
 
 SvvInternalRoutine(SvvInternalLexer, AddToken, void)
 {
-	SvvInternalLexerToken token = SvvInternalLexerToken_Create();
-	token->string = Receiver->to_add;
-	SvvInternalLexer_DetermineType(Receiver, token);
+	SvvInternalToken token = SvvInternalTokenFactory_GetTokenFromString(Receiver->token_factory, Receiver->to_add);
 	SvvInternalList_PushBack(Receiver->to_return, LINK_AS_OBJECT(token));
 };
 
@@ -130,6 +86,8 @@ SvvInternalRoutine(SvvInternalLexer, OnEndOfString, void)
 SvvInternalRoutine(SvvInternalLexer, ProcessChar, void)
 {
 	SvvInternalLexer_DetermineCharType(Receiver);
+//	DEBUG("Char '%c', type %i, state %i.\n", Receiver->being_processed_char.bytes[0], 
+//		Receiver->being_processed_char_type, Receiver->state);
 	switch(Receiver->state)
 	{
 		case LEXER_STATE_DELIMITER_MET:
@@ -145,7 +103,7 @@ SvvInternalAction(SvvInternalLexer, Analyze, SvvInternalList, SvvInternalString 
 {
 	Receiver->to_return = SvvInternalList_Create();
 	SvvInternalStringIterator iterator = SvvInternalString_GetFirst(String);
-	Receiver->state = LEXER_STATE_END_OF_SENTENCE_MET;
+	Receiver->state = LEXER_STATE_DELIMITER_MET;
 	while(!SvvInternalStringIterator_EndReached(iterator))
 	{
 		Receiver->being_processed_char = SvvInternalStringIterator_CharGet(iterator);
