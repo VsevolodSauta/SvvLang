@@ -1,8 +1,9 @@
 project(Internals)
 cmake_minimum_required(VERSION 2.6)
 
-add_subdirectory(char)
 add_subdirectory(object)
+add_subdirectory(number)
+add_subdirectory(char)
 add_subdirectory(allocator)
 add_subdirectory(mmu)
 add_subdirectory(nothing)

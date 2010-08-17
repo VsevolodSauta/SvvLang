@@ -1,66 +1,53 @@
 #pragma once
 
 #include "internals/actions.h"
-#include "internals/char/interface.h"
 
-#define OBJECT_ID_NOTHING 0
-#define OBJECT_ID_LINK 1
-#define OBJECT_ID_INT 2
-#define OBJECT_ID_CHAR 4
-
-
-typedef struct {
-	long			id;
-	union {
-		void*		ptr_data;
-		long int	int_data;
-		SvvInternalChar	char_data;
-	};
-} SvvInternalObject;
-
-inline static SvvInternalObject LINK_AS_OBJECT(void* Link) 
-{
-	SvvInternalObject to_return;
+/*
+	Основная идея использования этой сущности:
+	Ее можно использовать внутри других internal объектов.
+	Ее достаточно просто использовать внутри internal объектов.
 	
-	to_return.id = OBJECT_ID_LINK;
-	to_return.ptr_data = Link;
+	------------------------------------------------------------
+	Реализация:
+	1) Она непрозрачная.
 	
-	return to_return;
-};
-
-inline static SvvInternalObject INT_AS_OBJECT(long int Integer)
-{
-	SvvInternalObject to_return;
+	2) Есть метод destroy. 
+	Он принимает void*, а возвращает void. 
+	Он деинициализирует и уничтожает объект.
 	
-	to_return.id = OBJECT_ID_INT;
-	to_return.int_data = Integer;
+	3) Есть счетчик ссылок на объект links.
+	При достижении счетчиком нуля вызывается метод destroy. 
+	Есть методы управления счетчиком: Retain, Release, Autorelease.
+	retain увеличивает значение счетчика на 1.
+	release уменьшает значение счетчика на 1.
+	autorelease регестрирует объект в ближайшем AutoreleasePool.
 	
-	return to_return;
-};
+	4) При вызове Drain у AutoreleasePool он вызывает Release у всех объектов, 
+	в нем зарегестрированных, согласно кратностям их регистрации.
 
-inline static SvvInternalObject CHAR_AS_OBJECT(SvvInternalChar Char)
-{
-	SvvInternalObject to_return;
-	
-	to_return.id = OBJECT_ID_CHAR;
-	to_return.char_data = Char;
-	
-	return to_return;
-};
+	5) Правило освобождения: кто создал объект, тот вызывает в нем Release.
+	Кто не может в нем вызвать Release, тот вызывает Autorelease еще при создании.
+*/
 
-inline static void* OBJECT_AS_LINK(SvvInternalObject Object)
-{
-	return Object.ptr_data;
-};
+struct SvvInternalObject;
 
-inline static long int OBJECT_AS_INT(SvvInternalObject Object)
-{
-	return Object.int_data;
-};
+typedef void (*SvvInternalObjectDestructor)(struct SvvInternalObject*);
+typedef struct SvvInternalObject* (*SvvInternalObjectComparator)(struct SvvInternalObject*, struct SvvInternalObject*);
 
-inline static SvvInternalChar OBJECT_AS_CHAR(SvvInternalObject Object)
-{
-	return Object.char_data;
-};
+typedef struct SvvInternalObject {
+	long				gid;
+	long				links;
+	SvvInternalObjectDestructor	destroy;
+	SvvInternalObjectComparator	compare;
+	void*				entity;
+} *SvvInternalObject;
 
-SvvInternalAction(SvvInternalObject, Compare, int, SvvInternalObject Object);
+#define GET_ENTITY(object, type) ((type) (object->entity))
+#define SET_ENTITY(object, entit) (object->entity = (void*) (entit))
+
+SvvInternalAction(SvvInternalObject, Compare, SvvInternalObject object);
+SvvInternalCreator(SvvInternalObject);
+void SvvInternalObject_Destroy(SvvInternalObject Receiver);
+SvvInternalAction(SvvInternalObject, Retain);
+SvvInternalAction(SvvInternalObject, Release);
+SvvInternalAction(SvvInternalObject, Autorelease);

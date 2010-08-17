@@ -1,5 +1,5 @@
 project(Object)
 cmake_minimum_required(VERSION 2.6)
 add_library(Object ${Library} object.c)
-target_link_libraries(Object Allocator Nothing Char MMU)
-add_subdirectory(tests)
+target_link_libraries(Object Allocator)
+# add_subdirectory(tests)

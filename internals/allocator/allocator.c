@@ -1,25 +1,17 @@
 #include <stdlib.h>
-#include "internals/actions.h"
-#include "internals/object/interface.h"
 #include "internals/allocator/interface.h"
 
-SvvInternalAction(SvvInternalAllocator, New, SvvInternalObject, int Size)
+void* SvvInternalAllocator_New(SvvInternalObject Receiver, int Size)
 {
-	void* ptr = malloc(Size);
-	return LINK_AS_OBJECT(ptr);
+	return malloc(Size);
 };
 
-SvvInternalAction(SvvInternalAllocator, Resize, SvvInternalObject, SvvInternalObject Object, int Size)
+void* SvvInternalAllocator_Resize(SvvInternalObject Receiver, void* ToResize, int Size)
 {
-	void* ptr = realloc(OBJECT_AS_LINK(Object), Size);
-	return LINK_AS_OBJECT(ptr);
+	return realloc(ToResize, Size);
 };
 
-
-SvvInternalAction(SvvInternalAllocator, Delete, void, SvvInternalObject Object)
+void SvvInternalAllocator_Delete(SvvInternalObject Receiver, void* ToDelete)
 {
-	void* ptr = OBJECT_AS_LINK(Object);
-	free(ptr);
+	free(ToDelete);
 };
-
-SvvInternalAllocator SvvDefaultAllocator;
