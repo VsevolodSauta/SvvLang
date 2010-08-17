@@ -3,56 +3,58 @@
 #include "internals/comparation/interface.h"
 #include "internals/globals.h"
 
-SvvInternalAction(SvvInternalObject, Compare, SvvInternalObject Object)
+#define Object_GID 0x20
+
+Action(Object, Compare, Object object)
 {
-	if(Object->gid > Receiver->gid)
+	if(object->gid > receiver->gid)
 	{
-		return UncomparableLess;
+		return uncomparableLess;
 	} else {
-		if(Object->gid < Receiver->gid)
+		if(object->gid < receiver->gid)
 		{
-			return UncomparableGreater;
+			return uncomparableGreater;
 		} else {
-			return (Receiver->compare)(Receiver, Object);
+			return (receiver->compare)(receiver, object);
 		};
 	};
 };
 
-static SvvInternalObject SvvInternalObject_EmptyComparator(SvvInternalObject first, SvvInternalObject second)
+static Object Object_EmptyComparator(Object first, Object second)
 {
-	return Equal;
+	return equal;
 };
 
-SvvInternalCreator(SvvInternalObject)
+Creator(Object)
 {
-	SvvInternalObject toReturn = SvvInternalAllocator_New(Allocator, sizeof(struct SvvInternalObject));
+	Object toReturn = Allocator_New(allocator, sizeof(struct Object));
 	toReturn->links = 1;
-	toReturn->compare = &SvvInternalObject_EmptyComparator;
-	toReturn->destroy = &SvvInternalObject_Destroy;
+	toReturn->compare = &Object_EmptyComparator;
+	toReturn->destroy = &Object_Destroy;
 	return toReturn;
 };
 
-SvvInternalAction(SvvInternalObject, Retain)
+Action(Object, Retain)
 {
-	Receiver->links++;
-	return Receiver;
+	receiver->links++;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalObject, Release)
+Action(Object, release)
 {
-	if(!(Receiver->links--))
+	if(!(receiver->links--))
 	{
-		Receiver->destroy(Receiver);
+		receiver->destroy(receiver);
 	};
-	return Receiver;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalObject, Autorelease)
+Action(Object, Autorelease)
 {
-	return Receiver;
+	return receiver;
 };
 
-void SvvInternalObject_Destroy(SvvInternalObject Receiver)
+void Object_Destroy(Object receiver)
 {
-	SvvInternalAllocator_Delete(Allocator, Receiver);
+	Allocator_Delete(allocator, receiver);
 };

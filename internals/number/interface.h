@@ -3,34 +3,35 @@
 #include "internals/actions.h"
 #include "internals/object/interface.h"
 
-#define SvvInternalNumber_GID 0x100
+#define Number_GID 0x100
 
-SvvInternalRoutine(int, IsInRange, int, int LeftBound, int RightBound)
+Routine(int, IsInRange, int, int leftBound, int rightBound)
 {
-	return ((Receiver >= LeftBound) && (Receiver <= RightBound));
+	return ((receiver >= leftBound) && (receiver <= rightBound));
 };
 
-typedef struct SvvInternalNumber {
+typedef struct Number {
 	long		entity;
-} *SvvInternalNumber;
+} *Number;
 
-SvvInternalCreator(SvvInternalNumber);
-SvvInternalAction(SvvInternalNumber, Init);
-SvvInternalAction(SvvInternalNumber, Add, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, Sub, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, Mul, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, Div, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, AddInPlace, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, SubInPlace, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, MulInPlace, SvvInternalObject Arg);
-SvvInternalAction(SvvInternalNumber, DivInPlace, SvvInternalObject Arg);
+Creator(Number);
+Action(Number, Init);
+Action(Number, Add, Object arg);
+Action(Number, Sub, Object arg);
+Action(Number, Mul, Object arg);
+Action(Number, Div, Object arg);
+Action(Number, AddInPlace, Object arg);
+Action(Number, SubInPlace, Object arg);
+Action(Number, MulInPlace, Object arg);
+Action(Number, DivInPlace, Object arg);
 
-static inline long SvvInternalNumber_GetLong(SvvInternalObject Receiver)
+static inline long Number_GetLong(Object receiver)
 {
-	return GET_ENTITY(Receiver, SvvInternalNumber)->entity;
+	return GET_ENTITY(receiver, Number)->entity;
 };
 
-static inline void SvvInternalNumber_SetLong(SvvInternalObject Receiver, long ToSet)
+static inline void Number_SetLong(Object receiver, long toSet)
 {
-	GET_ENTITY(Receiver, SvvInternalNumber)->entity = ToSet;
+	GET_ENTITY(receiver, Number)->entity = toSet;
 };
+

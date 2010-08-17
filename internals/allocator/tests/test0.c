@@ -2,9 +2,9 @@
 
 int main(void)
 {
-	SvvInternalObject obj = SvvInternalAllocator_New(SvvDefaultAllocator, 10);
+	Object obj = Allocator_New(allocator, 10);
 	DEBUG("Allocated...");
-	SvvInternalAllocator_Delete(SvvDefaultAllocator, obj);
+	Allocator_Delete(allocator, obj);
 	DEBUG(" deleted.\n");
 	return 0;
 };

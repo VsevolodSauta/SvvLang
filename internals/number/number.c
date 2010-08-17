@@ -2,78 +2,80 @@
 #include "internals/allocator/interface.h"
 #include "internals/globals.h"
 
-SvvInternalDefaultCreator(SvvInternalNumber);
+#define Number_GID 0x30
 
-SvvInternalAction(SvvInternalNumber, Init)
+DefaultCreator(Number);
+
+Action(Number, Init)
 {
-	return Receiver;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalNumber, Add, SvvInternalObject Arg)
+Action(Number, Add, Object arg)
 {
-	SvvInternalObject toReturn = SvvInternalNumber_Create();
-	SvvInternalObject_Autorelease(toReturn);
-	GET_ENTITY(toReturn, SvvInternalNumber)->entity = 
-		GET_ENTITY(Receiver, SvvInternalNumber)->entity +
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	GET_ENTITY(toReturn, Number)->entity = 
+		GET_ENTITY(receiver, Number)->entity +
+		GET_ENTITY(arg, Number)->entity;
 	return toReturn;
 };
 
-SvvInternalAction(SvvInternalNumber, Sub, SvvInternalObject Arg)
+Action(Number, Sub, Object arg)
 {
-	SvvInternalObject toReturn = SvvInternalNumber_Create();
-	SvvInternalObject_Autorelease(toReturn);
-	GET_ENTITY(toReturn, SvvInternalNumber)->entity = 
-		GET_ENTITY(Receiver, SvvInternalNumber)->entity -
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	GET_ENTITY(toReturn, Number)->entity = 
+		GET_ENTITY(receiver, Number)->entity -
+		GET_ENTITY(arg, Number)->entity;
 	return toReturn;
 };
 
-SvvInternalAction(SvvInternalNumber, Mul, SvvInternalObject Arg)
+Action(Number, Mul, Object arg)
 {
-	SvvInternalObject toReturn = SvvInternalNumber_Create();
-	SvvInternalObject_Autorelease(toReturn);
-	GET_ENTITY(toReturn, SvvInternalNumber)->entity = 
-		GET_ENTITY(Receiver, SvvInternalNumber)->entity *
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	GET_ENTITY(toReturn, Number)->entity = 
+		GET_ENTITY(receiver, Number)->entity *
+		GET_ENTITY(arg, Number)->entity;
 	return toReturn;
 };
 
-SvvInternalAction(SvvInternalNumber, Div, SvvInternalObject Arg)
+Action(Number, Div, Object arg)
 {
-	SvvInternalObject toReturn = SvvInternalNumber_Create();
-	SvvInternalObject_Autorelease(toReturn);
-	GET_ENTITY(toReturn, SvvInternalNumber)->entity = 
-		GET_ENTITY(Receiver, SvvInternalNumber)->entity /
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	GET_ENTITY(toReturn, Number)->entity = 
+		GET_ENTITY(receiver, Number)->entity /
+		GET_ENTITY(arg, Number)->entity;
 	return toReturn;
 };
 
-SvvInternalAction(SvvInternalNumber, AddInPlace, SvvInternalObject Arg)
+Action(Number, AddInPlace, Object arg)
 {
-	GET_ENTITY(Receiver, SvvInternalNumber)->entity += 
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
-	return Receiver;
+	GET_ENTITY(receiver, Number)->entity += 
+		GET_ENTITY(arg, Number)->entity;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalNumber, SubInPlace, SvvInternalObject Arg)
+Action(Number, SubInPlace, Object arg)
 {
-	GET_ENTITY(Receiver, SvvInternalNumber)->entity -= 
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
-	return Receiver;
+	GET_ENTITY(receiver, Number)->entity -= 
+		GET_ENTITY(arg, Number)->entity;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalNumber, MulInPlace, SvvInternalObject Arg)
+Action(Number, MulInPlace, Object arg)
 {
-	GET_ENTITY(Receiver, SvvInternalNumber)->entity *= 
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
-	return Receiver;
+	GET_ENTITY(receiver, Number)->entity *= 
+		GET_ENTITY(arg, Number)->entity;
+	return receiver;
 };
 
-SvvInternalAction(SvvInternalNumber, DivInPlace, SvvInternalObject Arg)
+Action(Number, DivInPlace, Object arg)
 {
-	GET_ENTITY(Receiver, SvvInternalNumber)->entity /= 
-		GET_ENTITY(Arg, SvvInternalNumber)->entity;
-	return Receiver;
+	GET_ENTITY(receiver, Number)->entity /= 
+		GET_ENTITY(arg, Number)->entity;
+	return receiver;
 };
 

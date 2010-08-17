@@ -5,18 +5,18 @@
 
 int main(void)
 {
-	SvvInternalObject obj[OBJECTS];
+	Object obj[OBJECTS];
 	int i, j;
 	DEBUG("Starting...");
 	for(j = 0; j < TIMES; j++)
 	{
 		for(i = 0; i < OBJECTS; i++)
 		{
-			obj[i] = SvvInternalAllocator_New(SvvDefaultAllocator, 16);
+			obj[i] = Allocator_New(allocator, 16);
 		};
 		for(i = 0; i < OBJECTS; i++)
 		{
-			SvvInternalAllocator_Delete(SvvDefaultAllocator, obj[i]);
+			Allocator_Delete(allocator, obj[i]);
 		};
 	};
 	DEBUG("Finishing.\n");

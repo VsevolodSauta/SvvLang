@@ -1,17 +1,19 @@
 #include <stdlib.h>
 #include "internals/allocator/interface.h"
 
-void* SvvInternalAllocator_New(SvvInternalObject Receiver, int Size)
+#define Allocator_GID 0x10
+
+void* Allocator_New(Object receiver, int size)
 {
-	return malloc(Size);
+	return malloc(size);
 };
 
-void* SvvInternalAllocator_Resize(SvvInternalObject Receiver, void* ToResize, int Size)
+void* Allocator_Resize(Object receiver, void* toResize, int size)
 {
-	return realloc(ToResize, Size);
+	return realloc(toResize, size);
 };
 
-void SvvInternalAllocator_Delete(SvvInternalObject Receiver, void* ToDelete)
+void Allocator_Delete(Object receiver, void* toDelete)
 {
 	free(ToDelete);
 };

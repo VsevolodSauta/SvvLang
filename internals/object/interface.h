@@ -29,25 +29,25 @@
 	Кто не может в нем вызвать Release, тот вызывает Autorelease еще при создании.
 */
 
-struct SvvInternalObject;
+struct Object;
 
-typedef void (*SvvInternalObjectDestructor)(struct SvvInternalObject*);
-typedef struct SvvInternalObject* (*SvvInternalObjectComparator)(struct SvvInternalObject*, struct SvvInternalObject*);
+typedef void (*ObjectDestructor)(struct Object*);
+typedef struct Object* (*ObjectComparator)(struct Object*, struct Object*);
 
-typedef struct SvvInternalObject {
+typedef struct Object {
 	long				gid;
 	long				links;
-	SvvInternalObjectDestructor	destroy;
-	SvvInternalObjectComparator	compare;
+	ObjectDestructor		destroy;
+	ObjectComparator		compare;
 	void*				entity;
-} *SvvInternalObject;
+} *Object;
 
 #define GET_ENTITY(object, type) ((type) (object->entity))
 #define SET_ENTITY(object, entit) (object->entity = (void*) (entit))
 
-SvvInternalAction(SvvInternalObject, Compare, SvvInternalObject object);
-SvvInternalCreator(SvvInternalObject);
-void SvvInternalObject_Destroy(SvvInternalObject Receiver);
-SvvInternalAction(SvvInternalObject, Retain);
-SvvInternalAction(SvvInternalObject, Release);
-SvvInternalAction(SvvInternalObject, Autorelease);
+Action(Object, Compare, Object object);
+Creator(Object);
+void Object_Destroy(Object receiver);
+Action(Object, Retain);
+Action(Object, Release);
+Action(Object, Autorelease);
