@@ -2,7 +2,16 @@
 
 #include "internals/object/interface.h"
 
-extern SvvInternalObject Nothing;
-extern SvvInternalObject Allocator;
-extern SvvInternalObject MMU;
-extern SvvInternalObject CharFactory;
+extern Object nothing;
+extern Object allocator;
+extern Object mmu;
+extern Object charFactory;
+extern Object stringFactory;
+extern Object numberFactory;
+
+extern Object uncomparableGreater;
+extern Object uncomparableLess;
+extern Object greater;
+extern Object less;
+extern Object equal;
+

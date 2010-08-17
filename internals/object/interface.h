@@ -42,7 +42,7 @@ typedef struct Object {
 	void*				entity;
 } *Object;
 
-#define GET_ENTITY(object, type) ((type) (object->entity))
+#define ENTITY(object, type) ((type) (object->entity))
 #define SET_ENTITY(object, entit) (object->entity = (void*) (entit))
 
 Action(Object, Compare, Object object);

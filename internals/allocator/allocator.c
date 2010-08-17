@@ -15,5 +15,5 @@ void* Allocator_Resize(Object receiver, void* toResize, int size)
 
 void Allocator_Delete(Object receiver, void* toDelete)
 {
-	free(ToDelete);
+	free(toDelete);
 };

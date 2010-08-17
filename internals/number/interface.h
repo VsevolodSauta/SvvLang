@@ -3,8 +3,6 @@
 #include "internals/actions.h"
 #include "internals/object/interface.h"
 
-#define Number_GID 0x100
-
 Routine(int, IsInRange, int, int leftBound, int rightBound)
 {
 	return ((receiver >= leftBound) && (receiver <= rightBound));
@@ -13,6 +11,8 @@ Routine(int, IsInRange, int, int leftBound, int rightBound)
 typedef struct Number {
 	long		entity;
 } *Number;
+
+#define LONG(receiver) (ENTITY(receiver, Number)->entity)
 
 Creator(Number);
 Action(Number, Init);
@@ -27,11 +27,11 @@ Action(Number, DivInPlace, Object arg);
 
 static inline long Number_GetLong(Object receiver)
 {
-	return GET_ENTITY(receiver, Number)->entity;
+	return LONG(receiver);
 };
 
 static inline void Number_SetLong(Object receiver, long toSet)
 {
-	GET_ENTITY(receiver, Number)->entity = toSet;
+	LONG(receiver) = toSet;
 };
 
