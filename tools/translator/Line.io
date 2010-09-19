@@ -38,10 +38,27 @@ Line getLevel := lazySlot(
 	)
 )
 
-Line putMethodSignature := method(
-	DestinationFile write("Method")
+Line translateMethodSignature := method(
+	TableOfSymbols popFrame pushFrame
+	toPut := "Object #{class}_#{name}(#{parameters})"
+	class := tokens at(0)
+	name := tokens at(1)
+	parameters := "Object self" asMutable
+	TableOfSymbols setActorType("self", class)
+	typeOfParameter := "Object"
+	tokens foreach(index, token, 
+		if(index < 2, continue)
+		if(token isCreator,
+			typeOfParameter = token outOfBrackets
+			continue
+		)
+		TableOfSymbols setActorType(token, typeOfParameter)
+		typeOfParameter = "Object"
+		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
+	)
+	DestinationFile write(toPut interpolate)
 )
 
-Line putMethodEntryLine := method(
+Line translateMethodEntryLine := method(
 	DestinationFile write(tokens join)
 )

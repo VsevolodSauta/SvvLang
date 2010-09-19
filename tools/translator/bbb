@@ -1,4 +1,4 @@
-Method
+Object List_Search(Object self, Object object)
 {
 	iterator=self.iterator
 	iteratorToBegin
@@ -14,7 +14,7 @@ Method
 }
 
 
-Method
+Object List_Size(Object self)
 {
 	self.iteratorToBegin
 	toReturn=0
@@ -28,7 +28,7 @@ Method
 }
 
 
-Method
+Object List_Concatenate(Object self, Object list)
 {
 	self.iteratorToEnd
 	self.iteratorAddListAfterlist
@@ -37,7 +37,7 @@ Method
 }
 
 
-Method
+Object List_SublistBetweenIterators(Object self, Object positionFrom, Object positionTo)
 {
 	iterator=positionFromClone
 	list=<List>
@@ -50,4 +50,3 @@ Method
 	returnlist
 }
 
-Method

@@ -13,11 +13,13 @@ Translator putNLevels := method(n,
 
 Translator putLevel := method(
 	if(currentLevel > previousLevel,
+		TableOfSymbols pushFrame
 		putNLevels(previousLevel)
 		DestinationFile write("{\n")
 		previousLevel = currentLevel
 	)
 	if(currentLevel < previousLevel,
+		TableOfSymbols popFrame
 		putNLevels(currentLevel)
 		DestinationFile write("}\n")
 		previousLevel = currentLevel
@@ -28,14 +30,15 @@ Translator putLevel := method(
 Translator putLine := method(
 	if(line tokens ?size == 0, return)
 	if(currentLevel == 0,
-		line putMethodSignature,
-		line putMethodEntryLine
+		line translateMethodSignature,
+		line translateMethodEntryLine
 	)
 )
 
+TableOfSymbols pushFrame
 loop(
-	if(SourceFile isAtEnd, break)
 	Translator line = SourceFile getLine
+	if(Translator line string isNil, break)
 	Translator currentLevel = Translator line getLevel
 	Translator putLevel
 	Translator putLine
