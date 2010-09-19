@@ -1,0 +1,53 @@
+Method
+{
+	iterator=self.iterator
+	iteratorToBegin
+	list=<List>
+	listAutorelease
+	iteratorSearchFirstobject
+	whileiteratorNotThisEnd
+	{
+		listPushBack(iteratorTempClone)
+		iteratorSearchFirstobject
+	}
+	returnlist
+}
+
+
+Method
+{
+	self.iteratorToBegin
+	toReturn=0
+	whileself.iteratorNotThisEnd
+	{
+		toReturnInc
+		self.iteratornext
+	}
+	self.iteratorHide
+	returntoReturn
+}
+
+
+Method
+{
+	self.iteratorToEnd
+	self.iteratorAddListAfterlist
+	self.iteratorHide
+	returnself
+}
+
+
+Method
+{
+	iterator=positionFromClone
+	list=<List>
+	whileiterator!=positionTo
+	{
+		listPushBackiterator.node.data
+		iteratorNext
+	}
+	iteratorRelease
+	returnlist
+}
+
+Method

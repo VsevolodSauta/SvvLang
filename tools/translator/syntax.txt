@@ -1,0 +1,38 @@
+List Search object										// Action(List, Search, Object object)
+	iterator = self.iterator								// { Object iterator = ENTITY(receiver, List)->iterator;
+	iterator ToBegin									// ListIterator_ToBegin(iterator);
+	list = <List>										// Object list = List_Create();
+	list Autorelease									// Object_Autorelease(list);
+	iterator SearchFirst object								// ListIterator_SearchFirst(ITERATOR(receiver), object);
+	while iterator NotThisEnd								// while(ListIterator_ThisEnd(ITERATOR(receiver)) == false)
+		list PushBack (iterator TempClone)						// { List_PushBack(list, Object_TempClone(ITERATOR(receiver)));
+		iterator SearchFirst object							// ListIterator_SearchFirst(ITERATOR(receiver), object);
+	return list										// } return list;
+												// }
+
+List Size 											// Action(List, Size)
+	self.iterator ToBegin									// { ListIterator_ToBegin(ITERATOR(receiver));
+	toReturn = 0										// Object toReturn = NumberFactory_FromLong(numberFactory, 0);
+	while self.iterator NotThisEnd								// while(ListIterator_ThisEnd(ITERATOR(receiver)) == false)
+		toReturn Inc									// { Number_Inc(toReturn);
+		self.iterator next								// ListIterator_Next(ITERATOR(receiver));
+	self.iterator Hide									// } ListIterator_Hide(ITERATOR(receiver));
+	return toReturn										// return toReturn;
+												// }
+
+List Concatenate list										// Action(List, Concatenate, Object list)
+	self.iterator ToEnd									// { ListIterator_ToEnd(ITERATOR(receiver));
+	self.iterator AddListAfter list								// ListIterator_AddListAfter(ITERATOR(receiver), list);
+	self.iterator Hide									// ListIterator_Hide(ITERATOR(receiver));
+	return self										// return receiver;
+												// }
+
+List SublistBetweenIterators <ListIterator> positionFrom <ListIterator> positionTo 		// Action(List, SublistBetweenIterators, Object positionFrom, Object positionTo)
+	iterator = positionFrom Clone								// { Object iterator = Object_Clone(positionFrom);
+	list = <List>										// Object list = List_Create();
+	while iterator != positionTo								// while(Object_Compare(iterator, positionTo) != equal)
+		list PushBack iterator.node.data						// { List_PushBack(list, DATA(NODE(iterator)));
+		iterator Next									// ListIterator_Next(iterator);
+	iterator Release									// } Object_Release(iterator);
+	return list										// return list;
+												// }
