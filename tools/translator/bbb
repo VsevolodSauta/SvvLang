@@ -1,52 +1,57 @@
 Object List_Search(Object self, Object object)
 {
-	iterator=self.iterator
-	iteratorToBegin
-	list=<List>
-	listAutorelease
-	iteratorSearchFirstobject
-	whileiteratorNotThisEnd
+	Object iterator;
+	Object self.iterator;
+	iterator = self.iterator;
+	Object_ToBegin(iterator);
+	Object list;
+	list = List_Create();
+	Object_Autorelease(list);
+	Object_SearchFirst(iterator, object);
+	while
 	{
-		listPushBack(iteratorTempClone)
-		iteratorSearchFirstobject
+		Object_PushBack(list, Object_TempClone(iterator));
+		Object_SearchFirst(iterator, object);
 	}
-	returnlist
+	return
 }
 
 
 Object List_Size(Object self)
 {
-	self.iteratorToBegin
-	toReturn=0
-	whileself.iteratorNotThisEnd
+	Object_ToBegin(self.iterator);
+	Object toReturn;
+	Object 0;
+	toReturn = 0;
+	while
 	{
-		toReturnInc
-		self.iteratornext
+		Object_Inc(toReturn);
+		Object_next(self.iterator);
 	}
-	self.iteratorHide
-	returntoReturn
+	Object_Hide(self.iterator);
+	return
 }
 
 
 Object List_Concatenate(Object self, Object list)
 {
-	self.iteratorToEnd
-	self.iteratorAddListAfterlist
-	self.iteratorHide
-	returnself
+	Object_ToEnd(self.iterator);
+	Object_AddListAfter(self.iterator, list);
+	Object_Hide(self.iterator);
+	return
 }
 
 
 Object List_SublistBetweenIterators(Object self, Object positionFrom, Object positionTo)
 {
-	iterator=positionFromClone
-	list=<List>
-	whileiterator!=positionTo
+	iterator = Object_Clone(positionFrom);
+	list = List_Create();
+	while
 	{
-		listPushBackiterator.node.data
-		iteratorNext
+		Object_PushBack(list, iterator.node.data);
+		Object_Next(iterator);
 	}
-	iteratorRelease
-	returnlist
+	Object_Release(iterator);
+	return
 }
 

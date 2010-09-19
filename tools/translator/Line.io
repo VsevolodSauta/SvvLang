@@ -2,19 +2,25 @@ Line := Object clone
 Line string := nil
 
 Line withString := method(argument,
+	if(argument isNil, return nil)
 	toReturn := Line clone
-	toReturn string = argument 
+	toReturn string = argument
 	toReturn removeComments
+	toReturn separateBrackets
 	toReturn
 )
 
+Line separateBrackets := method(
+	string copy(string asMutable replaceSeq("(", "( ") replaceSeq(")", " )"))
+)
+
 Line removeComments := method(
-	string = string ?beforeSeq("//")
+	string = string beforeSeq("//")
 )
 
 tokens := lazySlot(
 	toReturn := self string ?splitNoEmpties
-	toReturn ?foreach(token, token appendProto(Token))
+	toReturn foreach(token, token appendProto(Token))
 	toReturn
 )
 
@@ -59,6 +65,62 @@ Line translateMethodSignature := method(
 	DestinationFile write(toPut interpolate)
 )
 
+Line currentTokenNumber := 0
+
+Line toNextToken := method(
+	currentTokenNumber = (currentTokenNumber + 1)
+)
+
+Line getCurrentToken := method(
+	tokens at(currentTokenNumber)
+)
+
+Line getParameters := method(
+	toReturn := "" asMutable
+	while(currentTokenNumber < (tokens size),
+		token := getCurrentToken
+		if(token endsNewAction, 
+			toNextToken
+			return toReturn
+		)
+		if(token beginsNewAction, 
+			toNextToken
+			toReturn appendSeq(", ") appendSeq(getAction)
+			continue
+		)
+		toReturn appendSeq(", ") appendSeq(token)
+		toNextToken
+	)
+	toReturn
+)
+
+Line getAction := method(
+	toReturn := "#{actionType}_#{action}(#{actor}#{parameters})"
+	actor := getCurrentToken asActor
+	toNextToken
+	action := getCurrentToken ?asAction
+	if(action isNil, return actor)
+	if(action endsNewAction, 
+		toNextToken
+		return actor
+	)
+	parameters := ""
+	action switch(
+		"=",
+			toNextToken
+			toReturn = "#{actor} = #{getAction}",
+		
+		toNextToken
+		actionType := action getActionType(actor)
+		parameters := getParameters
+	)
+	toReturn interpolate
+)
+
 Line translateMethodEntryLine := method(
-	DestinationFile write(tokens join)
+	first := getCurrentToken
+	if(first isKeyword,
+		first processKeyword(self),
+		DestinationFile write(getAction .. ";")
+	)
 )

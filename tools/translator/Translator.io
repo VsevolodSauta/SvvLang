@@ -35,10 +35,15 @@ Translator putLine := method(
 	)
 )
 
+Translator insertDeclaration := method(name,
+	DestinationFile write("Object #{name};\n" interpolate)
+	putLevel
+)
+
 TableOfSymbols pushFrame
 loop(
 	Translator line = SourceFile getLine
-	if(Translator line string isNil, break)
+	if(Translator line isNil, break)
 	Translator currentLevel = Translator line getLevel
 	Translator putLevel
 	Translator putLine
