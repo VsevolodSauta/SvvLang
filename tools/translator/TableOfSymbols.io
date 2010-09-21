@@ -2,7 +2,7 @@ TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "return")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols currentActorTypesMap)
-TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release")
+TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
 
 TableOfSymbols setActorType := method(actor, actorType,
 	currentActorTypesMap atPut(actor, actorType)
@@ -33,4 +33,8 @@ TableOfSymbols isKeyword := method(token,
 
 TableOfSymbols isObjectsMethod := method(methodName,
 	objectsMethods contains(methodName)
+)
+
+TableOfSymbols actorActionReturnedType := method(actor, action,
+	Actor unnamedActor("Object")
 )

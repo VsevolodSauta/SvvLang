@@ -85,7 +85,7 @@ Line getParameters := method(
 		)
 		if(token beginsNewAction, 
 			toNextToken
-			toReturn appendSeq(", ") appendSeq(getAction)
+			toReturn appendSeq(", ") appendSeq(getActor actorName)
 			continue
 		)
 		toReturn appendSeq(", ") appendSeq(token)
@@ -95,32 +95,56 @@ Line getParameters := method(
 )
 
 Line getAction := method(
-	toReturn := "#{actionType}_#{action}(#{actor}#{parameters})"
-	actor := getCurrentToken asActor
+	toReturn := getCurrentToken asAction
 	toNextToken
-	action := getCurrentToken ?asAction
-	if(action isNil, return actor)
-	if(action endsNewAction, 
+	toReturn
+)
+
+Line getActor := method(
+	toReturn := Actor clone
+	toReturn actorName = "#{actionType actorType}_#{action actionName}(#{actor actorName}#{parameters})" asMutable
+	toReturn actorType = "Object"
+	
+	if(getCurrentToken beginsNewAction,
+		toNextToken
+		actor := getActor,
+		
+		actor := getCurrentToken asActor
+		toNextToken
+	)
+	actor actorName println
+	
+	if(getCurrentToken isNil,
+		return actor
+	)
+	
+	if(getCurrentToken endsNewAction,
 		toNextToken
 		return actor
 	)
-	parameters := ""
-	action switch(
-		"=",
-			toNextToken
-			toReturn = "#{actor} = #{getAction}",
-		
-		toNextToken
+	
+	action := getAction
+	action actionName println
+	if(action actionName == "=",
+		actor2 := getActor
+		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
+		TableOfSymbols setActorType(actor actorName, actor2 actorType)
+		toReturn actorType = actor2 actorType,
+	
 		actionType := action getActionType(actor)
+		actionResult := actionType getReturnedType(action)
 		parameters := getParameters
+		// toReturn actorName interpolateInPlace
+		toReturn actorType = actionResult actorType
 	)
-	toReturn interpolate
+	toReturn actorName interpolateInPlace
+	toReturn
 )
 
 Line translateMethodEntryLine := method(
 	first := getCurrentToken
 	if(first isKeyword,
 		first processKeyword(self),
-		DestinationFile write(getAction .. ";")
+		DestinationFile write((getActor actorName) .. ";")
 	)
 )

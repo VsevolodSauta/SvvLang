@@ -23,7 +23,7 @@ Token processKeyword := method(line,
 )
 
 Token asAction := method(
-	self appendProto(Action)
+	Action with(self)
 )
 
 Token asActor := method(
