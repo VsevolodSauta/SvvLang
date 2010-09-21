@@ -18,13 +18,13 @@ Line removeComments := method(
 	string = string beforeSeq("//")
 )
 
-tokens := lazySlot(
+Line tokens := lazySlot(
 	toReturn := self string ?splitNoEmpties
 	toReturn foreach(token, token appendProto(Token))
 	toReturn
 )
 
-tokenz := lazySlot(
+Line tokenz := lazySlot(
 	self string ?split
 )
 
@@ -42,27 +42,6 @@ Line getLevel := lazySlot(
 		level,
 		0
 	)
-)
-
-Line translateMethodSignature := method(
-	TableOfSymbols popFrame pushFrame
-	toPut := "Object #{class}_#{name}(#{parameters})"
-	class := tokens at(0)
-	name := tokens at(1)
-	parameters := "Object self" asMutable
-	TableOfSymbols setActorType("self", class)
-	typeOfParameter := "Object"
-	tokens foreach(index, token, 
-		if(index < 2, continue)
-		if(token isCreator,
-			typeOfParameter = token outOfBrackets
-			continue
-		)
-		TableOfSymbols setActorType(token, typeOfParameter)
-		typeOfParameter = "Object"
-		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
-	)
-	DestinationFile write(toPut interpolate)
 )
 
 Line currentTokenNumber := 0
@@ -112,7 +91,6 @@ Line getActor := method(
 		actor := getCurrentToken asActor
 		toNextToken
 	)
-	actor actorName println
 	
 	if(getCurrentToken isNil,
 		return actor
@@ -124,11 +102,10 @@ Line getActor := method(
 	)
 	
 	action := getAction
-	action actionName println
 	if(action actionName == "=",
 		actor2 := getActor
 		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
-		TableOfSymbols setActorType(actor actorName, actor2 actorType)
+		TableOfSymbols updateActorType(actor actorName, actor2 actorType)
 		toReturn actorType = actor2 actorType,
 	
 		actionType := action getActionType(actor)
@@ -147,4 +124,43 @@ Line translateMethodEntryLine := method(
 		first processKeyword(self),
 		DestinationFile write((getActor actorName) .. ";")
 	)
+)
+
+Line translateMethodSignature := method(
+	TableOfSymbols pushFrame
+	toPut := "Object #{class}_#{name}(#{parameters})"
+	class := tokens at(0)
+	name := tokens at(1)
+	parameters := "Object self" asMutable
+	TableOfSymbols setActorType("self", class)
+	typeOfParameter := "Object"
+	tokens foreach(index, token, 
+		if(index < 2, continue)
+		if(token isCreator,
+			typeOfParameter = token outOfBrackets
+			continue
+		)
+		TableOfSymbols setActorType(token, typeOfParameter)
+		typeOfParameter = "Object"
+		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
+	)
+	DestinationFile write(toPut interpolate)
+)
+
+Line translateObjectSignature := method(
+	toPut := "struct #{objectName} {\n#{fields}} *#{objectName};\n"
+	objectName := tokens at(0) outOfBrackets
+	fields := "" asMutable
+	typeOfParameter := "Object"
+	tokens foreach(index, token, 
+		if(index < 1, continue)
+		if(token isCreator,
+			typeOfParameter = token outOfBrackets
+			continue
+		)
+		TableOfSymbols setFieldType(objectName, token, typeOfParameter)
+		typeOfParameter = "Object"
+		fields appendSeq("\tObject #{token};\n" asMutable interpolateInPlace)
+	)
+	DestinationFile write(toPut interpolate)
 )

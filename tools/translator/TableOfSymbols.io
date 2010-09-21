@@ -3,14 +3,26 @@ TableOfSymbols keywords := list("while", "if", "return")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols currentActorTypesMap)
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
+TableOfSymbols classFields := Map clone
 
-TableOfSymbols setActorType := method(actor, actorType,
-	currentActorTypesMap atPut(actor, actorType)
+TableOfSymbols updateActorType := method(actorName, actorType,
+	actorTypesStack foreach(map,
+		actorType := map at(actorName)
+		if(actorType isTrue,
+			map atPut(actorName, actorType)
+			return
+		)
+	)
+	currentActorTypesMap atPut(actorName, actorType)
 )
 
-TableOfSymbols getActorType := method(actor,
+TableOfSymbols setActorType := method(actorName, actorType,
+	currentActorTypesMap atPut(actorName, actorType)
+)
+
+TableOfSymbols getActorType := method(actorName,
 	actorTypesStack foreach(map,
-		actorType := map at(actor)
+		actorType := map at(actorName)
 		if(actorType isTrue, return actorType)
 	)
 	nil
@@ -37,4 +49,14 @@ TableOfSymbols isObjectsMethod := method(methodName,
 
 TableOfSymbols actorActionReturnedType := method(actor, action,
 	Actor unnamedActor("Object")
+)
+
+TableOfSymbols setFieldType := method(class, field, fieldType,
+	if(classFields at(class) isNil, classFields atPut(class, Map clone))
+	classFields at(class) atPut(field, fieldType)
+	self
+)
+
+TableOfSymbols getFieldType := method(class, field,
+	classField at(class) at(field)
 )

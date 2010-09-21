@@ -2,7 +2,7 @@ Action := Object clone
 Action actionName := Token clone
 
 Action clone := method(
-	toReturn := Object clone appendProto(Action)
+	toReturn := Object super(clone)
 	toReturn actionName := Action actionName clone
 	toReturn
 )

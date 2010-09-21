@@ -3,7 +3,7 @@ Actor actorType := "Object" asMutable clone
 Actor actorName := Token clone
 
 Actor clone := method(
-	toReturn := Object clone appendProto(Actor)
+	toReturn := Object super(clone) // appendProto(Actor)
 	toReturn actorType := Actor actorType clone
 	toReturn actorName := Actor actorName clone
 	toReturn
