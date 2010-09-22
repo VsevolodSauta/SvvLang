@@ -37,3 +37,7 @@ Token endsNewAction := method(
 	self == ")"
 )
 
+Token isNumber := method(
+	self foreach(elem, if((elem < 48) or (elem > 57), return false))
+	true
+)

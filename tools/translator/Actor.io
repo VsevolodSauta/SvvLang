@@ -28,23 +28,30 @@ Actor with := method(name,
 	
 	if(name isCreator,
 		toReturn actorType = name outOfBrackets
-		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate),
+		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate)
+		return toReturn
+	)
 	
-		listOfFields := name split(".")
-		listOfFields foreach(index, field,
-			if(index == 0,
-				toReturn actorName copy(field)
-				toReturn actorType = TableOfSymbols getActorType(field)
-				if(toReturn actorType isNil,
-					if(listOfFields size != 1, Exception raise("No fields in object Object found."))
-					toReturn actorType = "Object"
-					TableOfSymbols setActorType(toReturn)
-					Translator insertDeclaration(field)
-				),
-				
-				toReturn actorName prependSeq("ENTITY(") appendSeq(", #{toReturn actorType})->#{field}" interpolate)
-				toReturn actorType = TableOfSymbols getFieldType(toReturn actorType, field)
-			)
+	if(name isNumber,
+		toReturn actorType = "Number"
+		toReturn actorName copy("NumberFactory_FromLong(numberFactory, #{name})" interpolate)
+		return toReturn
+	)
+			
+	listOfFields := name split(".")
+	listOfFields foreach(index, field,
+		if(index == 0,
+			toReturn actorName copy(field)
+			toReturn actorType = TableOfSymbols getActorType(field)
+			if(toReturn actorType isNil,
+				if(listOfFields size != 1, Exception raise("No fields in object Object found."))
+				toReturn actorType = "Object"
+				TableOfSymbols setActorType(toReturn)
+				Translator insertDeclaration(field)
+			),
+			
+			toReturn actorName prependSeq("ENTITY(") appendSeq(", #{toReturn actorType})->#{field}" interpolate)
+			toReturn actorType = TableOfSymbols getFieldType(toReturn actorType, field)
 		)
 	)
 	toReturn

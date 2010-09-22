@@ -57,7 +57,7 @@ Action process := method(actor, line, isComparation,
 		if(isComparation,
 			toReturn actorType = "[int]",
 			
-			toReturn actorName copy("LogicFactory_FromInt(#{toReturn actorName})" interpolate)
+			toReturn actorName copy("LogicFactory_FromInt(logicFactory, #{toReturn actorName})" interpolate)
 			toReturn actorType = "Logic"
 		)
 		return toReturn
