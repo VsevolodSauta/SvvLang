@@ -38,4 +38,3 @@ Token endsNewAction := method(
 	self == ")"
 )
 
-"Token read." println

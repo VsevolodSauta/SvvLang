@@ -5,19 +5,19 @@ TableOfSymbols actorTypesStack := list(TableOfSymbols currentActorTypesMap)
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
 TableOfSymbols classFields := Map clone
 
-TableOfSymbols updateActorType := method(actorName, actorType,
+TableOfSymbols updateActorType := method(actor,
 	actorTypesStack foreach(map,
-		actorType := map at(actorName)
+		actorType := map at(actor actorName)
 		if(actorType isTrue,
-			map atPut(actorName, actorType)
+			map atPut(actor actorName, actor actorType)
 			return
 		)
 	)
-	currentActorTypesMap atPut(actorName, actorType)
+	currentActorTypesMap atPut(actor actorName, actor actorType)
 )
 
-TableOfSymbols setActorType := method(actorName, actorType,
-	currentActorTypesMap atPut(actorName, actorType)
+TableOfSymbols setActorType := method(actor,
+	currentActorTypesMap atPut(actor actorName, actor actorType)
 )
 
 TableOfSymbols getActorType := method(actorName,
@@ -48,7 +48,14 @@ TableOfSymbols isObjectsMethod := method(methodName,
 )
 
 TableOfSymbols actorActionReturnedType := method(actor, action,
-	Actor unnamedActor("Object")
+	if(isObjectsMethod(action actionName),
+		toReturn := Actor unnamedActor(actor actorType),
+		
+		toReturn := Actor unnamedActor("Object")
+	)
+	"Type of action #{action actionName} on #{actor actorName} of #{actor actorType} type: " interpolate print
+	toReturn actorType println
+	toReturn
 )
 
 TableOfSymbols setFieldType := method(class, field, fieldType,
@@ -58,5 +65,9 @@ TableOfSymbols setFieldType := method(class, field, fieldType,
 )
 
 TableOfSymbols getFieldType := method(class, field,
-	classField at(class) at(field)
+	classMap := classFields at(class) 
+	if(classMap isNil, Exception raise("Undefined class name #{class}." interpolate))
+	fieldType := classMap at(field)
+	if(fieldType isNil, Exception raise("Unknown class field #{field} in class #{class}." interpolate))
+	fieldType
 )

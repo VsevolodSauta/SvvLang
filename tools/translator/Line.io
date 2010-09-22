@@ -105,13 +105,13 @@ Line getActor := method(
 	if(action actionName == "=",
 		actor2 := getActor
 		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
-		TableOfSymbols updateActorType(actor actorName, actor2 actorType)
-		toReturn actorType = actor2 actorType,
-	
+		toReturn actorType = actor2 actorType
+		actor actorType = actor2 actorType
+		TableOfSymbols updateActorType(actor),
+		
 		actionType := action getActionType(actor)
-		actionResult := actionType getReturnedType(action)
+		actionResult := actor getReturnedType(action)
 		parameters := getParameters
-		// toReturn actorName interpolateInPlace
 		toReturn actorType = actionResult actorType
 	)
 	toReturn actorName interpolateInPlace
@@ -132,7 +132,7 @@ Line translateMethodSignature := method(
 	class := tokens at(0)
 	name := tokens at(1)
 	parameters := "Object self" asMutable
-	TableOfSymbols setActorType("self", class)
+	TableOfSymbols setActorType(Actor fullActor("self", class))
 	typeOfParameter := "Object"
 	tokens foreach(index, token, 
 		if(index < 2, continue)
@@ -140,7 +140,7 @@ Line translateMethodSignature := method(
 			typeOfParameter = token outOfBrackets
 			continue
 		)
-		TableOfSymbols setActorType(token, typeOfParameter)
+		TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
 		typeOfParameter = "Object"
 		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
 	)
