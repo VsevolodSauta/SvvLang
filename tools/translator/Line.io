@@ -79,11 +79,7 @@ Line getAction := method(
 	toReturn
 )
 
-Line getActor := method(
-	toReturn := Actor clone
-	toReturn actorName = "#{actionType actorType}_#{action actionName}(#{actor actorName}#{parameters})" asMutable
-	toReturn actorType = "Object"
-	
+Line getActor := method(isComparation,
 	if(getCurrentToken beginsNewAction,
 		toNextToken
 		actor := getActor,
@@ -101,28 +97,23 @@ Line getActor := method(
 		return actor
 	)
 	
-	action := getAction
-	if(action actionName == "=",
-		actor2 := getActor
-		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
-		toReturn actorType = actor2 actorType
-		actor actorType = actor2 actorType
-		TableOfSymbols updateActorType(actor),
-		
-		actionType := action getActionType(actor)
-		actionResult := actor getReturnedType(action)
-		parameters := getParameters
-		toReturn actorType = actionResult actorType
+	getAction process(actor, self, isComparation)
+)
+
+Line getCondition := method(
+	actor := getActor(true)
+	if(actor actorType != "[int],
+		Exception raise("""Actor #{actor actorName} has #{actor actorType} type, but [int] expected.""" interpolate)
 	)
-	toReturn actorName interpolateInPlace
-	toReturn
+	
+	actor actorName
 )
 
 Line translateMethodEntryLine := method(
 	first := getCurrentToken
 	if(first isKeyword,
-		first processKeyword(self),
-		DestinationFile write((getActor actorName) .. ";")
+		first asKeyword process(self),
+		DestinationFile write((getActor(false) actorName) .. ";")
 	)
 )
 

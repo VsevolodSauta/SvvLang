@@ -17,9 +17,8 @@ Token isKeyword := method(
 	TableOfSymbols isKeyword(self)
 )
 
-Token processKeyword := method(line,
-	DestinationFile write(self)
-	self
+Token asKeyword := method(
+	Keyword with(self)
 )
 
 Token asAction := method(
