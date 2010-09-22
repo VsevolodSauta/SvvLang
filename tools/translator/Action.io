@@ -63,6 +63,12 @@ Action process := method(actor, line, isComparation,
 		return toReturn
 	)
 	
+	if(actionName beginsWithSeq("As"),
+		toReturn actorName copy(actor actorName)
+		toReturn actorType copy(actionName exclusiveSlice(2))
+		return toReturn
+	)
+	
 	if(actionName beginsWithSeq("Not"),
 		actionName copy(actionName exclusiveSlice(3))
 		if(isComparation,

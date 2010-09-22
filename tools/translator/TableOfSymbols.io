@@ -1,7 +1,7 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "return")
 TableOfSymbols currentActorTypesMap := Map clone
-TableOfSymbols actorTypesStack := list(TableOfSymbols currentActorTypesMap)
+TableOfSymbols actorTypesStack := List clone
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
@@ -30,13 +30,14 @@ TableOfSymbols getActorType := method(actorName,
 )
 
 TableOfSymbols pushFrame := method(
-	currentActorTypesMap := Map clone
+	currentActorTypesMap = Map clone
 	actorTypesStack prepend(currentActorTypesMap)
 	self
 )
 
 TableOfSymbols popFrame := method(
 	actorTypesStack removeFirst
+	currentActorTypesMap = actorTypesStack first
 	self
 )
 
@@ -55,8 +56,6 @@ TableOfSymbols getActorActionReturnedType := method(actor, action,
 		toReturn := classMethods at(actor actorType) ?at(action actionName)
 		if(toReturn isNil, toReturn := Actor unnamedActor("Object"))
 	)
-	"Type of action #{action actionName} on #{actor actorName} of #{actor actorType} type: " interpolate print
-	toReturn actorType println
 	toReturn
 )
 

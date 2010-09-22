@@ -44,7 +44,7 @@ Actor with := method(name,
 			toReturn actorName copy(field)
 			toReturn actorType = TableOfSymbols getActorType(field)
 			if(toReturn actorType isNil,
-				if(listOfFields size != 1, Exception raise("No fields in object Object found."))
+				if(listOfFields size != 1, Exception raise("No fields in object #{field} of Object type found." interpolate))
 				toReturn actorType = "Object"
 				TableOfSymbols setActorType(toReturn)
 				Translator insertDeclaration(field)

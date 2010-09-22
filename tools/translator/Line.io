@@ -149,7 +149,7 @@ Line translateMethodSignature := method(
 )
 
 Line translateObjectSignature := method(
-	toPut := "struct #{objectName} {\n#{fields}} *#{objectName};\n"
+	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName};\n"
 	objectName := tokens at(0) outOfBrackets
 	fields := "" asMutable
 	typeOfParameter := "Object"

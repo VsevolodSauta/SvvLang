@@ -13,6 +13,7 @@ Keyword process := method(line,
 )
 
 Keyword returnProcess := method(line,
+	line toNextToken
 	DestinationFile write("return #{line getActor actorName};" interpolate)
 )
 
