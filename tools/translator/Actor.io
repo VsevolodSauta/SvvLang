@@ -28,6 +28,7 @@ Actor with := method(name,
 	
 	if(name isCreator,
 		toReturn actorType = name outOfBrackets
+		TableOfSymbols ensureKnownClass(toReturn actorType)
 		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate)
 		return toReturn
 	)
@@ -50,7 +51,7 @@ Actor with := method(name,
 				Translator insertDeclaration(field)
 			),
 			
-			toReturn actorName prependSeq("ENTITY(") appendSeq(", #{toReturn actorType})->#{field}" interpolate)
+			toReturn actorName copy("(((#{toReturn actorType}) (#{toReturn actorName}->entity))->#{field})" interpolate)
 			toReturn actorType = TableOfSymbols getFieldType(toReturn actorType, field)
 		)
 	)

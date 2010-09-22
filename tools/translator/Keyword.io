@@ -26,3 +26,10 @@ Keyword ifProcess := method(line,
 	line toNextToken
 	DestinationFile write("if(#{line getCondition})" interpolate)
 )
+
+Keyword CProcess := method(line,
+	line tokens foreach(index, token,
+		if(index == 0, continue)
+		DestinationFile write(token .. " ")
+	)
+)

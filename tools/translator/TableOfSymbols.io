@@ -1,10 +1,12 @@
 TableOfSymbols := Object clone
-TableOfSymbols keywords := list("while", "if", "return")
+TableOfSymbols keywords := list("while", "if", "return", "C")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := List clone
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
+TableOfSymbols listOfBeingImportedObjects := List clone
+TableOfSymbols basicClasses := list("[int]", "Object", "Number")
 
 TableOfSymbols updateActorType := method(actor,
 	actorTypesStack foreach(map,
@@ -76,4 +78,23 @@ TableOfSymbols getFieldType := method(class, field,
 	fieldType := classMap at(field)
 	if(fieldType isNil, Exception raise("Unknown class field #{field} in class #{class}." interpolate))
 	fieldType
+)
+
+TableOfSymbols import := method(objectType,
+	listOfBeingImportedObjects push(objectType)
+)
+
+TableOfSymbols imported := method(
+	listOfBeingImportedObjects pop
+)
+
+TableOfSymbols importing := method(objectType,
+	listOfBeingImportedObjects contains(objectType)
+)
+
+TableOfSymbols ensureKnownClass := method(objectType,
+	if(basicClasses contains(objectType), return)
+	if(classFields at(objectType) isNil,
+		Translator importObjectType(objectType)
+	)
 )

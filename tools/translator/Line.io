@@ -123,7 +123,8 @@ Line translateMethodSignature := method(
 	class := tokens at(0)
 	second := tokens at(1)
 	if(second isCreator,
-		returnType := second
+		returnType := second outOfBrackets
+		TableOfSymbols ensureKnownClass(returnType)
 		name := tokens at(2)
 		parametersBeginAt := 3,
 		
@@ -139,6 +140,7 @@ Line translateMethodSignature := method(
 		if(index < parametersBeginAt, continue)
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
+			TableOfSymbols ensureKnownClass(typeOfParameter)
 			continue
 		)
 		TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
@@ -151,12 +153,15 @@ Line translateMethodSignature := method(
 Line translateObjectSignature := method(
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName};\n"
 	objectName := tokens at(0) outOfBrackets
+	if(objectName != (Translator beingProcessedObject), toPut = "")
+	
 	fields := "" asMutable
 	typeOfParameter := "Object"
 	tokens foreach(index, token, 
 		if(index < 1, continue)
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
+			TableOfSymbols ensureKnownClass(typeOfParameter)
 			continue
 		)
 		TableOfSymbols setFieldType(objectName, token, typeOfParameter)
