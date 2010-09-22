@@ -4,6 +4,7 @@ TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols currentActorTypesMap)
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
 TableOfSymbols classFields := Map clone
+TableOfSymbols classMethods := Map clone
 
 TableOfSymbols updateActorType := method(actor,
 	actorTypesStack foreach(map,
@@ -47,15 +48,21 @@ TableOfSymbols isObjectsMethod := method(methodName,
 	objectsMethods contains(methodName)
 )
 
-TableOfSymbols actorActionReturnedType := method(actor, action,
+TableOfSymbols getActorActionReturnedType := method(actor, action,
 	if(isObjectsMethod(action actionName),
 		toReturn := Actor unnamedActor(actor actorType),
 		
-		toReturn := Actor unnamedActor("Object")
+		toReturn := classMethods at(actor actorType) ?at(action actionName)
+		if(toReturn isNil, toReturn := Actor unnamedActor("Object"))
 	)
 	"Type of action #{action actionName} on #{actor actorName} of #{actor actorType} type: " interpolate print
 	toReturn actorType println
 	toReturn
+)
+
+TableOfSymbols setClassActionReturnedType := method(className, action, returnedActor,
+	if(classMethods at(className) isNil, classMethods atPut(className, Map clone))
+	classMethods at(className) atPut(action actionName, returnedActor)
 )
 
 TableOfSymbols setFieldType := method(class, field, fieldType,

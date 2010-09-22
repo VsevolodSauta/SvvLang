@@ -67,7 +67,7 @@ Line getParameters := method(
 			toReturn appendSeq(", ") appendSeq(getActor actorName)
 			continue
 		)
-		toReturn appendSeq(", ") appendSeq(token)
+		toReturn appendSeq(", ") appendSeq(token asActor actorName)
 		toNextToken
 	)
 	toReturn
@@ -130,12 +130,22 @@ Line translateMethodSignature := method(
 	TableOfSymbols pushFrame
 	toPut := "Object #{class}_#{name}(#{parameters})"
 	class := tokens at(0)
-	name := tokens at(1)
+	second := tokens at(1)
+	if(second isCreator,
+		returnType := second
+		name := tokens at(2)
+		parametersBeginAt := 3,
+		
+		name := second
+		returnType := class
+		parametersBeginAt := 2
+	)
+	TableOfSymbols setClassActionReturnedType(class, Action with(name), Actor unnamedActor(returnType))
 	parameters := "Object self" asMutable
 	TableOfSymbols setActorType(Actor fullActor("self", class))
 	typeOfParameter := "Object"
 	tokens foreach(index, token, 
-		if(index < 2, continue)
+		if(index < parametersBeginAt, continue)
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
 			continue

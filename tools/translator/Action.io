@@ -19,4 +19,3 @@ Action getActionType := method(actor,
 		return Actor unnamedActor(actor actorType)
 	)
 )
-

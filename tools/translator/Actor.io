@@ -51,6 +51,5 @@ Actor with := method(name,
 )
 
 Actor getReturnedType := method(action,
-	TableOfSymbols actorActionReturnedType(self, action)
+	TableOfSymbols getActorActionReturnedType(self, action)
 )
-
