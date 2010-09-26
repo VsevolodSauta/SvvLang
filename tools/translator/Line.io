@@ -112,14 +112,14 @@ Line getCondition := method(
 Line translateMethodEntryLine := method(
 	first := getCurrentToken
 	if(first isKeyword,
-		first asKeyword process(self),
-		DestinationFile write((getActor(false) actorName) .. ";")
+		return first asKeyword process(self),
+		return DestinationFile write((getActor(false) actorName) .. ";")
 	)
 )
 
 Line translateMethodSignature := method(
 	TableOfSymbols pushFrame
-	toPut := "Object #{class}_#{name}(#{parameters})"
+	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
 	class := tokens at(0)
 	second := tokens at(1)
 	if(second isCreator,
@@ -147,7 +147,9 @@ Line translateMethodSignature := method(
 		typeOfParameter = "Object"
 		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
 	)
-	DestinationFile write(toPut interpolate)
+	toPut interpolateInPlace
+	DestinationFile write(toPut)
+	DestinationFile addMethodSignature(toPut)
 )
 
 Line translateObjectSignature := method(

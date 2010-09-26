@@ -1,12 +1,12 @@
 TableOfSymbols := Object clone
-TableOfSymbols keywords := list("while", "if", "return", "C")
+TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := List clone
-TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone")
+TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash")
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
 TableOfSymbols listOfBeingImportedObjects := List clone
-TableOfSymbols basicClasses := list("[int]", "Object", "Number")
+TableOfSymbols basicClasses := list("[int]", "Object", "Number", "Logic", "Comparation")
 
 TableOfSymbols updateActorType := method(actor,
 	actorTypesStack foreach(map,

@@ -1,11 +1,9 @@
-#include "internals/mask_builder.h"
-#include "internals/actions.h"
-#include "internals/object/interface.h"
-#include "internals/nothing/interface.h"
-#include "internals/allocator/interface.h"
-#include "internals/mmu/interface.h"
-#include "internals/config.h"
+#pragma once
+
+#include "internals/Object/interface.h"
+#include "internals/Number/interface.h"
+#include "internals/Allocator/interface.h"
+#include "internals/Logic/interface.h"
+#include "internals/Comparations/interface.h"
+
 #include "internals/globals.h"
-#include "internals/flags.h"
-#include "internals/debugger.h"
-#include "internals/interlocks.h"

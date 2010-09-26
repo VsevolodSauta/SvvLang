@@ -13,20 +13,28 @@ Translator putNLevels := method(n,
 	)
 )
 
+Translator putCurrentLevels := method(delta,
+	if(delta isNil,
+		putNLevels(previousLevel),
+		
+		putNLevels(previousLevel + delta)
+	)
+)
+
 Translator putLevel := method(
 	while(currentLevel > previousLevel,
-		if(previousLevel != 0, 
-			TableOfSymbols pushFrame
-		)
-		putNLevels(previousLevel)
+		BlockDelegatesHandling blockWillBegin
+		putCurrentLevels
 		DestinationFile write("{\n")
 		previousLevel = previousLevel + 1
+		BlockDelegatesHandling blockDidBegin
 	)
 	while(currentLevel < previousLevel,
-		TableOfSymbols popFrame
+		BlockDelegatesHandling blockWillEnd
 		previousLevel = previousLevel - 1
-		putNLevels(previousLevel)
+		putCurrentLevels()
 		DestinationFile write("}\n")
+		BlockDelegatesHandling blockDidEnd
 	)
 	putNLevels(currentLevel)
 )
@@ -81,14 +89,18 @@ Translator importObjectType := method(objectName,
 	TableOfSymbols imported
 )
 
+BlockDelegatesHandling init
 System args foreach(index, objectClassName,
 	if(index == 0, continue)
 	Translator beingProcessedObject = objectClassName
 	SourceFile openObjectClass(objectClassName)
 	DestinationFile openObjectClass(objectClassName)
 	
+	DestinationFile ignoreBlockingLevelForImport = true
+	Translator importObjectType(objectClassName)
+	DestinationFile ignoreBlockingLevelForImport = false
 	DestinationFile write("#include \"internals/basics.h\"\n")
-	DestinationFile write("#include \"internals/#{Translator beingProcessedObject}/interface.h\"\n" interpolate)
+//	DestinationFile write("#include \"internals/#{Translator beingProcessedObject}/interface.h\"\n" interpolate)
 	DestinationFile write("#include \"internals/#{Translator beingProcessedObject}/imports.h\"\n" interpolate)
 	DestinationFile write("\n")
 	Translator translateMainObject

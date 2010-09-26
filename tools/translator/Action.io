@@ -53,7 +53,7 @@ Action process := method(actor, line, isComparation,
 	)
 	
 	if(comparationOperationsList contains(actionName),
-		toReturn actorName = "Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationTypeMap at(actionName)} #{comparationValueMap at(actionName)}" interpolate
+		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationTypeMap at(actionName)} #{comparationValueMap at(actionName)}" interpolate)
 		if(isComparation,
 			toReturn actorType = "[int]",
 			
@@ -66,6 +66,7 @@ Action process := method(actor, line, isComparation,
 	if(actionName beginsWithSeq("As"),
 		toReturn actorName copy(actor actorName)
 		toReturn actorType copy(actionName exclusiveSlice(2))
+		line getParameters
 		return toReturn
 	)
 	

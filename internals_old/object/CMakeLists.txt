@@ -1,0 +1,5 @@
+project(Object)
+cmake_minimum_required(VERSION 2.6)
+add_library(Object ${Library} object.c)
+target_link_libraries(Object Allocator Comparison Logic AutoreleasePoolsStack)
+# add_subdirectory(tests)

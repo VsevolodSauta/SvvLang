@@ -3,7 +3,7 @@
 SourceFile := File clone
 
 SourceFile openObjectClass := method(objectClassName,
-	openForReading("sources/" .. objectClassName .. ".q")
+	openForReading("../../internals_sources/" .. objectClassName .. ".q")
 )
 
 SourceFile with := method(objectClassName,

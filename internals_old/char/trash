@@ -1,0 +1,23 @@
+Routine(char, GetLengthInBytes, int)
+{
+	if((Receiver & BITMASK_TO_LEFT(7)) == 0x00) return 1;
+	if((Receiver & BITMASK_TO_LEFT(6)) == BITMASK_TO_LEFT(7)) return 0;
+	
+	int i;
+	for(i = 5; i >= 0; i--)
+	{
+		if((Receiver & BITMASK_TO_LEFT(i)) == BITMASK_TO_LEFT(i + 1))
+		{
+			return 7 - i;
+		};
+	};
+	
+	return -1;
+};
+
+Routine(char, IsInRange, int, char LeftBound, char RightBound)
+{
+	return ((Receiver >= LeftBound) && (Receiver <= RightBound));
+};
+
+

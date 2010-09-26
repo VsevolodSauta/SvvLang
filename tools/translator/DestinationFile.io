@@ -7,11 +7,13 @@ DestinationFile importsFile := File clone
 DestinationFile interfacesFile := File clone
 
 DestinationFile blockingLevel := 0
+DestinationFile ignoreBlockingLevelForImport := false
 
 DestinationFile openObjectClass := method(objectClassName,
-	codeFile = File clone openForUpdating("internals/#{objectClassName}/code.c" interpolate)
-	importsFile = File clone openForUpdating("internals/#{objectClassName}/imports.h" interpolate)
-	interfacesFile = File clone openForUpdating("internals/#{objectClassName}/interface.h" interpolate)
+	Directory directoryNamed("../../internals/#{objectClassName}" interpolate) createIfAbsent
+	codeFile = File clone openForUpdating("../../internals/#{objectClassName}/code.c" interpolate)
+	importsFile = File clone openForUpdating("../../internals/#{objectClassName}/imports.h" interpolate)
+	interfacesFile = File clone openForUpdating("../../internals/#{objectClassName}/interface.h" interpolate)
 	blockingLevel = 0
 	codeFile truncateToSize(0)
 	importsFile truncateToSize(0)
@@ -38,7 +40,7 @@ DestinationFile addMethodSignature := method(methodSignature,
 )
 
 DestinationFile addImport := method(usedObject,
-	if(blockingLevel == 0,
+	if((blockingLevel == 0) or (ignoreBlockingLevelForImport),
 		importsFile write("#include \"internals/#{usedObject}/interface.h\"\n" interpolate)
 	)
 )
