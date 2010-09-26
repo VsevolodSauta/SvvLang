@@ -1,6 +1,16 @@
 #include "internals/basics.h"
 #include "internals/List/imports.h"
 
+Object List_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct List));
+	Object_SetComparator(toReturn, &List_Compare);
+	Object_SetDestructor(toReturn, &List_Destroy);
+	Object_SetCloner(toReturn, &List_Clone);
+	toReturn = List_Init(toReturn);
+	return toReturn;
+}
 
 
 Object List_Init(Object self)
@@ -170,7 +180,7 @@ Object List_SystemIterator(Object self)
 Object List_DataFromPosition(Object self, Object position)
 {
 	ListIterator_ToPosition((((List) (self->entity))->iterator), position);
-	Object def = List_ThisData(self);
+	Object def = ListIterator_ThisData((((List) (self->entity))->iterator));
 	ListIterator_Hide((((List) (self->entity))->iterator));
 	return def;
 }

@@ -103,7 +103,7 @@ List <ListIterator> SystemIterator
 
 List <Object> DataFromPosition <Number> position
 	self.iterator ToPosition position
-	def self ThisData
+	def self.iterator ThisData
 	self.iterator Hide
 
 List Search object

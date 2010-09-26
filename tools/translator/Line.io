@@ -171,4 +171,18 @@ Line translateObjectSignature := method(
 		fields appendSeq("\tObject #{token};\n" asMutable interpolateInPlace)
 	)
 	DestinationFile addSignature(toPut interpolate)
+	
+	DestinationFile addSignature("Object #{objectName}_Create(void)" interpolate)
+	DestinationFile write("Object #{objectName}_Create(void)\n" interpolate);
+	DestinationFile write("{\n" interpolate);
+	DestinationFile write("\tObject toReturn = Object_Create();\n" interpolate);
+	DestinationFile write("\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{objectName}));\n" interpolate);
+	DestinationFile write("\tObject_SetComparator(toReturn, &#{objectName}_Compare);\n" interpolate);
+	DestinationFile write("\tObject_SetDestructor(toReturn, &#{objectName}_Destroy);\n" interpolate);
+	DestinationFile write("\tObject_SetCloner(toReturn, &#{objectName}_Clone);\n" interpolate);
+	if(TableOfSymbols actorHasAction(Actor unnamedActor(objectName), Action with("Init")),
+		DestinationFile write("\ttoReturn = #{objectName}_Init(toReturn);\n" interpolate)
+	)
+	DestinationFile write("\treturn toReturn;\n")
+	DestinationFile write("}\n")
 )

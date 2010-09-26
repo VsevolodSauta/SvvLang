@@ -60,6 +60,13 @@ TableOfSymbols isObjectsMethod := method(methodName,
 	objectsMethods contains(methodName)
 )
 
+TableOfSymbols actorHasAction := method(actor, action,
+	if(classMethods at(actor actorType) ?at(action actionName) isNil,
+		false,
+		true
+	)
+)
+
 TableOfSymbols getActorActionReturnedType := method(actor, action,
 	if(isObjectsMethod(action actionName),
 		toReturn := Actor unnamedActor(actor actorType),
