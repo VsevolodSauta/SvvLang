@@ -23,7 +23,7 @@ ListIterator InitWithNodeAndList <List> list <ListNode> node
 	self.node = node
 	return self
 
-ListIterator ResetNode
+ListIterator ResetNode <ListNode> node
 	node Retain
 	self.node Release
 	self.node = node
@@ -41,7 +41,7 @@ ListIterator Prev
 ListIterator ToBegin
 	return self ResetNode self.list.head.next
 
-ListIterator ToBegin
+ListIterator ToEnd
 	return self ResetNode self.list.tail.prev
 
 ListIterator ToPosition <Number> position
@@ -60,7 +60,7 @@ ListIterator ToPosition <Number> position
 	return self
 
 ListIterator FromPositionToPosition <Number> positionFrom <Number> positionTo
-	quantity = positionTo - positionFrom
+	quantity = positionTo Sub positionFrom
 	while quantity < 0
 		self Prev
 		quantity Inc
@@ -71,7 +71,7 @@ ListIterator FromPositionToPosition <Number> positionFrom <Number> positionTo
 
 ListIterator SearchForward object
 	while self NotThisEnd
-		if self ThisData == object
+		if (self ThisData) == object
 			break
 		self Next
 	return self

@@ -44,7 +44,7 @@ Translator putLine := method(
 	if(currentLevel == 0,
 		if(line tokens at(0) isCreator,
 			line translateObjectSignature,
-			line translateMethodSignature
+			line translateMethodSignature(true)
 		),
 		
 		line translateMethodEntryLine
@@ -63,6 +63,7 @@ Translator translateMainObject := method(
 		if(line isNil, break)
 		currentLevel = line getLevel
 		putLevel
+//		line string println
 		putLine
 		DestinationFile write("\n")
 	)
@@ -82,7 +83,7 @@ Translator importObjectType := method(objectName,
 		if(currentLevel != 0, continue)
 		if(line tokens at(0) isCreator,
 			line translateObjectSignature,
-			line translateMethodSignature
+			line translateMethodSignature(false)
 		)
 	)
 	DestinationFile unblockOutput

@@ -36,11 +36,11 @@ Keyword ifProcess := method(line,
 )
 
 Keyword continueProcess := method(line,
-	DestinationFile write("continue")
+	DestinationFile write("continue;")
 )
 
 Keyword breakProcess := method(line,
-	DestinationFile write("break")
+	DestinationFile write("break;")
 )
 
 Keyword defProcess := method(line,
@@ -54,7 +54,7 @@ Keyword CProcess := method(line,
 		if(index == 0, continue)
 		DestinationFile write(token .. " ")
 	)
-)#!/usr/local/bin/io
+)
 
 KeywordDefHandler := Object clone
 

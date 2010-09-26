@@ -112,7 +112,7 @@ List Search object
 	self.iterator SearchForward object
 	while self.iterator NotThisEnd
 		list PushBack (self.iterator TempClone)
-		self.iterator SearchForward
+		self.iterator SearchForward object
 	return list
 
 List <ListIterator> IteratorFromPosition <Number> position
@@ -135,7 +135,7 @@ List SearchPositions object
 	self.iterator ToBegin
 	position = 0
 	while self.iterator NotThisEnd
-		if list.iterator ThisData == object
+		if (list.iterator ThisData) == object
 			list PushBack (position TempClone)
 		position Inc
 		self.iterator Next

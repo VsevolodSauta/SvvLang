@@ -1,6 +1,6 @@
 #pragma once
 
-#include "internals/object/interface.h"
+#include "internals/Object/interface.h"
 
 extern Object nothing;
 extern Object nil;
@@ -10,6 +10,7 @@ extern Object allocator;
 extern Object charFactory;
 extern Object stringFactory;
 extern Object numberFactory;
+extern Object logicFactory;
 
 extern Object uncomparableGreater;
 extern Object uncomparableLess;

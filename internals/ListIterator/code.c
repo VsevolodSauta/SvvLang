@@ -1,10 +1,6 @@
 #include "internals/basics.h"
 #include "internals/ListIterator/imports.h"
 
-typedef struct ListIterator {
-	Object list;
-	Object node;
-} *ListIterator;
 
 
 Object ListIterator_Compare(Object self, Object iterator)
@@ -39,7 +35,7 @@ Object ListIterator_InitWithNodeAndList(Object self, Object list, Object node)
 	return self;
 }
 
-Object ListIterator_ResetNode(Object self)
+Object ListIterator_ResetNode(Object self, Object node)
 {
 	Object_Retain(node);
 	Object_Release((((ListIterator) (self->entity))->node));
@@ -67,7 +63,7 @@ Object ListIterator_ToBegin(Object self)
 	return ListIterator_ResetNode(self, (((ListNode) ((((List) ((((ListIterator) (self->entity))->list)->entity))->head)->entity))->next));
 }
 
-Object ListIterator_ToBegin(Object self)
+Object ListIterator_ToEnd(Object self)
 {
 	return ListIterator_ResetNode(self, (((ListNode) ((((List) ((((ListIterator) (self->entity))->list)->entity))->tail)->entity))->prev));
 }
@@ -100,7 +96,7 @@ Object ListIterator_ToPosition(Object self, Object position)
 Object ListIterator_FromPositionToPosition(Object self, Object positionFrom, Object positionTo)
 {
 	Object quantity;
-	quantity = Number_-(positionTo, positionFrom);
+	quantity = Number_Sub(positionTo, positionFrom);
 	while(Object_Compare(quantity, NumberFactory_FromLong(numberFactory, 0)) == less)
 	{
 		ListIterator_Prev(self);
@@ -118,10 +114,9 @@ Object ListIterator_SearchForward(Object self, Object object)
 {
 	while(ListIterator_ThisEnd(self) == false)
 	{
-		Object ==;
-		if(ListIterator_ThisData(self, ==, object) != false)
+		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
 		{
-			break
+			break;
 		}
 		ListIterator_Next(self);
 	}
@@ -136,10 +131,12 @@ Object ListIterator_SearchForwardOffset(Object self, Object object)
 	{
 		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
 		{
+			Object position;
 			return position;
 		}
 		ListIterator_Next(self);
-		Number_Inc(position);
+		Object position;
+		Object_Inc(position);
 	}
 	return NumberFactory_FromLong(numberFactory, -1);
 }

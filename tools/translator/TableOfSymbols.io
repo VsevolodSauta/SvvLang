@@ -9,6 +9,7 @@ TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols basicClasses := list("[int]", "Object", "Number", "Logic", "Comparation")
 
 TableOfSymbols updateActorType := method(actor,
+//	"[Update actor type] #{actor actorName} #{actor actorType}" interpolate println
 	actorTypesStack foreach(map,
 		actorType := map at(actor actorName)
 		if(actorType isTrue,
@@ -20,6 +21,7 @@ TableOfSymbols updateActorType := method(actor,
 )
 
 TableOfSymbols setActorType := method(actor,
+//	"[Set actor type] #{actor actorName} #{actor actorType}" interpolate println
 	currentActorTypesMap atPut(actor actorName, actor actorType)
 )
 
@@ -32,12 +34,19 @@ TableOfSymbols getActorType := method(actorName,
 )
 
 TableOfSymbols pushFrame := method(
+//	"[Push frame]" println
 	currentActorTypesMap = Map clone
 	actorTypesStack prepend(currentActorTypesMap)
 	self
 )
 
 TableOfSymbols popFrame := method(
+/*
+	"[Pop frame]" println
+	actorTypesStack first foreach(name, type,
+		"\t#{name}\t#{type}" interpolate println
+	)
+*/
 	actorTypesStack removeFirst
 	currentActorTypesMap = actorTypesStack first
 	self
@@ -82,10 +91,12 @@ TableOfSymbols getFieldType := method(class, field,
 
 TableOfSymbols import := method(objectType,
 	listOfBeingImportedObjects push(objectType)
+	pushFrame
 )
 
 TableOfSymbols imported := method(
 	listOfBeingImportedObjects pop
+	popFrame
 )
 
 TableOfSymbols importing := method(objectType,

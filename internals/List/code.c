@@ -1,11 +1,6 @@
 #include "internals/basics.h"
 #include "internals/List/imports.h"
 
-typedef struct List {
-	Object iterator;
-	Object head;
-	Object tail;
-} *List;
 
 
 Object List_Init(Object self)
@@ -22,6 +17,7 @@ Object List_Init(Object self)
 
 Object List_Destroy(Object self)
 {
+	Object node;
 	node = (((List) (self->entity))->head);
 	Object nil;
 	while(Object_Compare(node, nil) != equal)
@@ -37,6 +33,7 @@ Object List_Destroy(Object self)
 Object List_Clone(Object self)
 {
 	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	Object list;
 	list = List_Create();
 	while(ListIterator_ThisEnd((((List) (self->entity))->iterator)) == false)
 	{
@@ -88,6 +85,7 @@ Object List_Compare(Object self, Object list)
 
 Object List_Clean(Object self)
 {
+	Object node;
 	node = (((ListNode) ((((List) (self->entity))->head)->entity))->next);
 	while(Object_Compare(node, (((List) (self->entity))->tail)) != equal)
 	{
@@ -147,6 +145,7 @@ Object List_RemoveFirst(Object self, Object object)
 
 Object List_Last(Object self)
 {
+	Object iterator;
 	iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(iterator, self, (((ListNode) ((((List) (self->entity))->tail)->entity))->prev));
 	return iterator;
@@ -154,6 +153,7 @@ Object List_Last(Object self)
 
 Object List_First(Object self)
 {
+	Object iterator;
 	iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(iterator, self, (((ListNode) ((((List) (self->entity))->head)->entity))->next));
 	return iterator;
@@ -161,6 +161,7 @@ Object List_First(Object self)
 
 Object List_SystemIterator(Object self)
 {
+	Object iterator;
 	iterator = ListIterator_Create();
 	ListIterator_InitWithListAndNode(iterator, self, (((List) (self->entity))->head));
 	return iterator;
@@ -177,12 +178,13 @@ Object List_DataFromPosition(Object self, Object position)
 Object List_Search(Object self, Object object)
 {
 	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	Object list;
 	list = Object_Autorelease(List_Create());
 	ListIterator_SearchForward((((List) (self->entity))->iterator), object);
 	while(ListIterator_ThisEnd((((List) (self->entity))->iterator)) == false)
 	{
 		List_PushBack(list, Object_TempClone((((List) (self->entity))->iterator)));
-		ListIterator_SearchForward((((List) (self->entity))->iterator));
+		ListIterator_SearchForward((((List) (self->entity))->iterator), object);
 	}
 	return list;
 }
@@ -194,6 +196,7 @@ Object List_IteratorFromPosition(Object self, Object position)
 
 Object List_CreatingIteratorFromPosition(Object self, Object position)
 {
+	Object iterator;
 	iterator = List_First(self);
 	Object currentPosition;
 	currentPosition = NumberFactory_FromLong(numberFactory, 0);
@@ -216,13 +219,14 @@ Object List_CreatingIteratorFromPosition(Object self, Object position)
 
 Object List_SearchPositions(Object self, Object object)
 {
+	Object list;
 	list = List_Create();
 	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	Object position;
 	position = NumberFactory_FromLong(numberFactory, 0);
 	while(ListIterator_ThisEnd((((List) (self->entity))->iterator)) == false)
 	{
-		Object ==;
-		if(ListIterator_ThisData((((List) (list->entity))->iterator), ==, object) != false)
+		if(Object_Compare(ListIterator_ThisData((((List) (list->entity))->iterator)), object) == equal)
 		{
 			List_PushBack(list, Object_TempClone(position));
 		}
@@ -236,7 +240,9 @@ Object List_SearchPositions(Object self, Object object)
 Object List_SublistBetweenPositions(Object self, Object positionFrom, Object positionTo)
 {
 	ListIterator_ToPosition((((List) (self->entity))->iterator), positionFrom);
+	Object list;
 	list = Object_Autorelease(List_Create());
+	Object position;
 	position = Object_Clone(positionFrom);
 	while(Object_Compare(position, positionTo) != greater)
 	{
@@ -251,7 +257,9 @@ Object List_SublistBetweenPositions(Object self, Object positionFrom, Object pos
 
 Object List_SublistBetweenIterators(Object self, Object positionFrom, Object positionTo)
 {
+	Object iterator;
 	iterator = Object_Clone(positionFrom);
+	Object list;
 	list = List_Create();
 	while(Object_Compare(iterator, positionTo) != equal)
 	{

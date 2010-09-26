@@ -1,13 +1,17 @@
+typedef struct ListIterator {
+	Object list;
+	Object node;
+} *ListIterator;
 Object ListIterator_Compare(Object self, Object iterator);
 Object ListIterator_Destroy(Object self);
 Object ListIterator_Clone(Object self);
 Object ListIterator_InitWithNodeAndList(Object self, Object list, Object node);
-Object ListIterator_ResetNode(Object self);
+Object ListIterator_ResetNode(Object self, Object node);
 Object ListIterator_Hide(Object self);
 Object ListIterator_Next(Object self);
 Object ListIterator_Prev(Object self);
 Object ListIterator_ToBegin(Object self);
-Object ListIterator_ToBegin(Object self);
+Object ListIterator_ToEnd(Object self);
 Object ListIterator_ToPosition(Object self, Object position);
 Object ListIterator_FromPositionToPosition(Object self, Object positionFrom, Object positionTo);
 Object ListIterator_SearchForward(Object self, Object object);

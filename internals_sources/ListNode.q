@@ -11,7 +11,7 @@ ListNode Clone
 ListNode <Comparation> Compare listNode
 	return (self Hash) Compare (listNode Hash)
 
-ListNoe <Object> Destroy
+ListNode <Object> Destroy
 	self.data Release
 	return (self AsObject) Destroy
 

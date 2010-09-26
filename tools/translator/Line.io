@@ -117,8 +117,8 @@ Line translateMethodEntryLine := method(
 	)
 )
 
-Line translateMethodSignature := method(
-	TableOfSymbols pushFrame
+Line translateMethodSignature := method(pushFrame,
+	if(pushFrame, TableOfSymbols pushFrame)
 	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
 	class := tokens at(0)
 	second := tokens at(1)
@@ -149,11 +149,11 @@ Line translateMethodSignature := method(
 	)
 	toPut interpolateInPlace
 	DestinationFile write(toPut)
-	DestinationFile addMethodSignature(toPut)
+	DestinationFile addSignature(toPut)
 )
 
 Line translateObjectSignature := method(
-	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName};\n"
+	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
 	objectName := tokens at(0) outOfBrackets
 	if(objectName != (Translator beingProcessedObject), toPut = "")
 	
@@ -170,5 +170,5 @@ Line translateObjectSignature := method(
 		typeOfParameter = "Object"
 		fields appendSeq("\tObject #{token};\n" asMutable interpolateInPlace)
 	)
-	DestinationFile write(toPut interpolate)
+	DestinationFile addSignature(toPut interpolate)
 )

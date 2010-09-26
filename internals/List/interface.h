@@ -1,3 +1,8 @@
+typedef struct List {
+	Object iterator;
+	Object head;
+	Object tail;
+} *List;
 Object List_Init(Object self);
 Object List_Destroy(Object self);
 Object List_Clone(Object self);

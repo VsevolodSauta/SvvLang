@@ -26,3 +26,5 @@ Object Object_TempClone(Object receiver);
 Object Object_SetComparator(Object receiver, ObjectComparator);
 Object Object_SetCloner(Object receiver, ObjectCloner);
 Object Object_SetDestructor(Object receiver, ObjectDestructor);
+Object Object_Hash(Object receiver);
+Object Object_EmptyComparator(Object receiver, Object object);
