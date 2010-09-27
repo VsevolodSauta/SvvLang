@@ -132,6 +132,19 @@ Object ListIterator_SearchForward(Object self, Object object)
 	return self;
 }
 
+Object ListIterator_SearchBackward(Object self, Object object)
+{
+	while(ListIterator_ThisBegin(self) == false)
+	{
+		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
+		{
+			break;
+		}
+		ListIterator_Prev(self);
+	}
+	return self;
+}
+
 Object ListIterator_SearchForwardOffset(Object self, Object object)
 {
 	Object toReturn;

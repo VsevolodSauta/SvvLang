@@ -76,6 +76,13 @@ ListIterator SearchForward object
 		self Next
 	return self
 
+ListIterator SearchBackward object
+	while self NotThisBegin
+		if (self ThisData) == object
+			break
+		self Prev
+	return self
+
 ListIterator <Number> SearchForwardOffset object
 	toReturn = 0
 	while self NotThisEnd

@@ -109,6 +109,14 @@ Object List_Clean(Object self)
 	return self;
 }
 
+Object List_PushFront(Object self, Object object)
+{
+	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	ListIterator_AddBefore((((List) (self->entity))->iterator), object);
+	List_Hide(self);
+	return self;
+}
+
 Object List_PushBack(Object self, Object object)
 {
 	ListIterator_ToEnd((((List) (self->entity))->iterator));
@@ -117,12 +125,38 @@ Object List_PushBack(Object self, Object object)
 	return self;
 }
 
-Object List_PushFront(Object self, Object object)
+Object List_PeekFront(Object self)
 {
 	ListIterator_ToBegin((((List) (self->entity))->iterator));
-	ListIterator_AddBefore((((List) (self->entity))->iterator), object);
-	List_Hide(self);
-	return self;
+	Object def = ListIterator_ThisData((((List) (self->entity))->iterator));
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return def;
+}
+
+Object List_PeekBack(Object self)
+{
+	ListIterator_ToEnd((((List) (self->entity))->iterator));
+	Object def = ListIterator_ThisData((((List) (self->entity))->iterator));
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return def;
+}
+
+Object List_PopFront(Object self)
+{
+	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	Object def = ListIterator_ThisData((((List) (self->entity))->iterator));
+	ListIterator_ThisRemove((((List) (self->entity))->iterator));
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return def;
+}
+
+Object List_PopBack(Object self)
+{
+	ListIterator_ToEnd((((List) (self->entity))->iterator));
+	Object def = ListIterator_ThisData((((List) (self->entity))->iterator));
+	ListIterator_ThisRemove((((List) (self->entity))->iterator));
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return def;
 }
 
 Object List_AddAfterPosition(Object self, Object position, Object object)
@@ -141,6 +175,15 @@ Object List_AddBeforePosition(Object self, Object position, Object object)
 	return self;
 }
 
+Object List_Contains(Object self, Object object)
+{
+	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	ListIterator_SearchForward((((List) (self->entity))->iterator), object);
+	Object def = Logic_Not(ListIterator_ThisEnd((((List) (self->entity))->iterator)));
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return def;
+}
+
 Object List_RemoveFirst(Object self, Object object)
 {
 	ListIterator_ToBegin((((List) (self->entity))->iterator));
@@ -148,6 +191,31 @@ Object List_RemoveFirst(Object self, Object object)
 	if(ListIterator_ThisEnd((((List) (self->entity))->iterator)) == false)
 	{
 		ListIterator_ThisRemove((((List) (self->entity))->iterator));
+	}
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return self;
+}
+
+Object List_RemoveLast(Object self, Object object)
+{
+	ListIterator_ToEnd((((List) (self->entity))->iterator));
+	ListIterator_SearchBackward((((List) (self->entity))->iterator), object);
+	if(ListIterator_ThisBegin((((List) (self->entity))->iterator)) == false)
+	{
+		ListIterator_ThisRemove((((List) (self->entity))->iterator));
+	}
+	ListIterator_Hide((((List) (self->entity))->iterator));
+	return self;
+}
+
+Object List_RemoveEvery(Object self, Object object)
+{
+	ListIterator_ToBegin((((List) (self->entity))->iterator));
+	ListIterator_SearchForward((((List) (self->entity))->iterator), object);
+	while(ListIterator_ThisEnd((((List) (self->entity))->iterator)) == false)
+	{
+		ListIterator_ThisRemove((((List) (self->entity))->iterator));
+		ListIterator_SearchForward((((List) (self->entity))->iterator), object);
 	}
 	ListIterator_Hide((((List) (self->entity))->iterator));
 	return self;
@@ -299,6 +367,11 @@ Object List_Concatenate(Object self, Object list)
 	ListIterator_ToEnd((((List) (self->entity))->iterator));
 	ListIterator_AddListAfter((((List) (self->entity))->iterator), list);
 	ListIterator_Hide((((List) (self->entity))->iterator));
+	return self;
+}
+
+Object List_Sort(Object self)
+{
 	return self;
 }
 

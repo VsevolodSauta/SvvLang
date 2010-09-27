@@ -76,7 +76,7 @@ Action process := method(actor, line, isComparation,
 			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}) == false" asMutable
 			toReturn actorType = "[int]",
 			
-			toReturn actorName = "Logic_Invert(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
+			toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
 			toReturn actorType = "Logic"
 		),
 		

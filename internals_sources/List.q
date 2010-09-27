@@ -54,17 +54,39 @@ List Clean
 	self.tail.prev = self.head
 	return self
 
+List PushFront object
+	self.iterator ToBegin
+	self.iterator AddBefore object
+	self Hide
+	return self
+
 List PushBack object
 	self.iterator ToEnd
 	self.iterator AddAfter object
 	self.iterator Hide
 	return self
 
-List PushFront object
+List <Object> PeekFront
 	self.iterator ToBegin
-	self.iterator AddBefore object
-	self Hide
-	return self
+	def self.iterator ThisData
+	self.iterator Hide
+
+List <Object> PeekBack
+	self.iterator ToEnd
+	def self.iterator ThisData
+	self.iterator Hide
+
+List <Object> PopFront
+	self.iterator ToBegin
+	def self.iterator ThisData
+	self.iterator ThisRemove
+	self.iterator Hide
+
+List <Object> PopBack
+	self.iterator ToEnd
+	def self.iterator ThisData
+	self.iterator ThisRemove
+	self.iterator Hide
 
 List AddAfterPosition <Number> position object
 	self.iterator ToPosition position
@@ -78,11 +100,34 @@ List AddBeforePosition <Number> position object
 	self.iterator Hide
 	return self
 
+List <Logic> Contains object
+	self.iterator ToBegin
+	self.iterator SearchForward object
+	def self.iterator NotThisEnd
+	self.iterator Hide
+
 List RemoveFirst object
 	self.iterator ToBegin
 	self.iterator SearchForward object
 	if self.iterator NotThisEnd
 		self.iterator ThisRemove
+	self.iterator Hide
+	return self
+
+List RemoveLast object
+	self.iterator ToEnd
+	self.iterator SearchBackward object
+	if self.iterator NotThisBegin
+		self.iterator ThisRemove
+	self.iterator Hide
+	return self
+
+List RemoveEvery object
+	self.iterator ToBegin
+	self.iterator SearchForward object
+	while self.iterator NotThisEnd
+		self.iterator ThisRemove
+		self.iterator SearchForward object
 	self.iterator Hide
 	return self
 
@@ -176,5 +221,8 @@ List Concatenate <List> list
 	self.iterator ToEnd
 	self.iterator AddListAfter list
 	self.iterator Hide
+	return self
+
+List Sort
 	return self
 
