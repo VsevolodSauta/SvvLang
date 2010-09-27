@@ -1,16 +1,6 @@
 #include "internals/basics.h"
 #include "internals/ListIterator/imports.h"
 
-Object ListIterator_Create(void)
-{
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct ListIterator));
-	Object_SetComparator(toReturn, &ListIterator_Compare);
-	Object_SetDestructor(toReturn, &ListIterator_Destroy);
-	Object_SetCloner(toReturn, &ListIterator_Clone);
-	return toReturn;
-}
-
 
 Object ListIterator_Compare(Object self, Object iterator)
 {
@@ -262,25 +252,21 @@ Object ListIterator_AddBefore(Object self, Object object)
 
 Object ListIterator_ThisBegin(Object self)
 {
-	Object nothing;
 	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev), nothing) == equal);
 }
 
 Object ListIterator_ThisEnd(Object self)
 {
-	Object nothing;
 	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next), nothing) == equal);
 }
 
 Object ListIterator_PrevBegin(Object self)
 {
-	Object nothing;
 	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->prev), nothing) == equal);
 }
 
 Object ListIterator_NextEnd(Object self)
 {
-	Object nothing;
 	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->next), nothing) == equal);
 }
 
@@ -324,4 +310,3 @@ Object ListIterator_RemoveCount(Object self, Object count)
 	(((ListNode) (savedPrev->entity))->next) = (((ListIterator) (self->entity))->node);
 	return self;
 }
-

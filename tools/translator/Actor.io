@@ -61,3 +61,27 @@ Actor with := method(name,
 Actor getReturnedType := method(action,
 	TableOfSymbols getActorActionReturnedType(self, action)
 )
+
+Actor getCreatorSignature := method(actor,
+	"Object #{actor actorName}_Create(void)" interpolate
+)
+
+Actor getCreatorBody := method(actor,
+	toReturn := list(
+		"{\n",
+		"\tObject toReturn = Object_Create();\n",
+		"\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{actor actorName}));\n" interpolate,
+		"\tObject_SetComparator(toReturn, &#{actor actorName}_Compare);\n" interpolate,
+		"\tObject_SetDestructor(toReturn, &#{actor actorName}_Destroy);\n" interpolate,
+		"\tObject_SetCloner(toReturn, &#{actor actorName}_Clone);\n" interpolate
+	)
+	if(TableOfSymbols actorHasAction(Actor unnamedActor(actor actorName), Action with("Init")),
+		toReturn push("\ttoReturn = #{actor actorName}_Init(toReturn);\n" interpolate)
+	)
+	toReturn push(
+		"\treturn toReturn;\n",
+		"}\n"
+	)
+	
+	toReturn join
+)

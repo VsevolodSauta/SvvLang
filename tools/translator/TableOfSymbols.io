@@ -2,9 +2,19 @@ TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def")
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash")
 TableOfSymbols basicClasses := list("[int]", "Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory")
+TableOfSymbols globalObjects := Map with(
+	"nil", "Object", "nothing", "Object",
+	"allocator", "Allocator",
+	"true", "Logic", "false", "Logic", "yes", "Logic", "no", "Logic",
+	"less", "Comparable", "greater", "Comparable", "equal", "Comparable", "uncomparableLess", "Comparable", "uncomparableGreater",
+	"numberFactory", "NumberFactory",
+	"logicFactory", "LogicFactory",
+	"charFactory", "Object",
+	"stringFactory", "Object"
+)
 
 TableOfSymbols currentActorTypesMap := Map clone
-TableOfSymbols actorTypesStack := List clone
+TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
 TableOfSymbols listOfBeingImportedObjects := List clone
@@ -116,4 +126,18 @@ TableOfSymbols ensureKnownClass := method(objectType,
 	if(classFields at(objectType) isNil,
 		Translator importObjectType(objectType)
 	)
+)
+
+TableOfSymbols newObjectProcessing := method(
+	self
+)
+
+TableOfSymbols blockWillBegin := method(
+	BlockDelegatesHandling afterBlockEnds(TableOfSymbols, 0)
+	BlockDelegatesHandling beforeEachBlockBegins(TableOfSymbols, 5)
+	pushFrame
+)
+
+TableOfSymbols blockDidEnd := method(
+	popFrame
 )

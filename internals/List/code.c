@@ -1,17 +1,6 @@
 #include "internals/basics.h"
 #include "internals/List/imports.h"
 
-Object List_Create(void)
-{
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct List));
-	Object_SetComparator(toReturn, &List_Compare);
-	Object_SetDestructor(toReturn, &List_Destroy);
-	Object_SetCloner(toReturn, &List_Clone);
-	toReturn = List_Init(toReturn);
-	return toReturn;
-}
-
 
 Object List_Init(Object self)
 {
@@ -19,7 +8,6 @@ Object List_Init(Object self)
 	(((List) (self->entity))->tail) = ListNode_Create();
 	(((ListNode) ((((List) (self->entity))->head)->entity))->next) = (((List) (self->entity))->tail);
 	(((ListNode) ((((List) (self->entity))->tail)->entity))->prev) = (((List) (self->entity))->head);
-	Object nil;
 	(((ListNode) ((((List) (self->entity))->tail)->entity))->next) = (((ListNode) ((((List) (self->entity))->head)->entity))->prev) = nil;
 	(((List) (self->entity))->iterator) = List_SystemIterator(self);
 	return self;
@@ -29,7 +17,6 @@ Object List_Destroy(Object self)
 {
 	Object node;
 	node = (((List) (self->entity))->head);
-	Object nil;
 	while(Object_Compare(node, nil) != equal)
 	{
 		Object nextNode;
@@ -64,23 +51,19 @@ Object List_Compare(Object self, Object list)
 		{
 			if(ListIterator_ThisEnd((((List) (list->entity))->iterator)) != false)
 			{
-				Object equal;
 				return equal;
 			}
 			else
 			{
-				Object less;
 				return less;
 			}
 		}
 		if(ListIterator_ThisEnd((((List) (list->entity))->iterator)) != false)
 		{
-			Object greater;
 			return greater;
 		}
 		Object candidateForReturning;
 		candidateForReturning = Object_Compare(ListIterator_ThisData((((List) (self->entity))->iterator)), ListIterator_ThisData((((List) (list->entity))->iterator)));
-		Object equal;
 		if(Object_Compare(candidateForReturning, equal) == equal)
 		{
 			ListIterator_Next((((List) (list->entity))->iterator));
@@ -283,7 +266,6 @@ Object List_CreatingIteratorFromPosition(Object self, Object position)
 		Number_Inc(currentPosition);
 		if(ListIterator_ThisEnd(iterator) != false)
 		{
-			Object nil;
 			ListIterator_AddBefore(iterator, nil);
 		}
 		else
@@ -374,4 +356,3 @@ Object List_Sort(Object self)
 {
 	return self;
 }
-

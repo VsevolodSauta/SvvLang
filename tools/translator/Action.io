@@ -44,7 +44,7 @@ Action getActionType := method(actor,
 Action process := method(actor, line, isComparation,
 	toReturn := Actor clone
 	if(actionName == "=",
-		actor2 := line getActor
+		actor2 := line getActor(isComparation)
 		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
 		toReturn actorType = actor2 actorType
 		actor actorType = actor2 actorType
@@ -74,26 +74,26 @@ Action process := method(actor, line, isComparation,
 		actionName copy(actionName exclusiveSlice(3))
 		if(isComparation,
 			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}) == false" asMutable
-			toReturn actorType = "[int]",
+			toReturn actorType = "[int]" asMutable,
 			
 			toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
-			toReturn actorType = "Logic"
+			toReturn actorType = "Logic" asMutable
 		),
 		
 		if(isComparation,
 			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}) != false" asMutable
-			toReturn actorType = "[int]",
+			toReturn actorType = "[int]" asMutable,
 			
 			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters})" asMutable
-			toReturn actorType = "Object"
+			toReturn actorType = "#{actionResult actorType}" asMutable
 		)
 	)
 	
 	actionType := getActionType(actor)
 	actionResult := actor getReturnedType(self)
 	parameters := line getParameters
-	toReturn actorType = actionResult actorType
-
+	
+	toReturn actorType interpolateInPlace
 	toReturn actorName interpolateInPlace
 	toReturn
 )

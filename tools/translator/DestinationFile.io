@@ -32,9 +32,17 @@ DestinationFile write := method(string,
 	self
 )
 
-DestinationFile addSignature := method(signature,
+DestinationFile putObjectSignature := method(signature,
+	if(blockingLevel == 0,
+		interfacesFile write(signature .. ";\n\n")
+	)
+	self
+)
+
+DestinationFile putMethodSignature := method(signature,
 	if(blockingLevel == 0,
 		interfacesFile write(signature .. ";\n")
+		self write("\n" .. signature .. "\n")
 	)
 	self
 )

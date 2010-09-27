@@ -102,7 +102,7 @@ Line getActor := method(isComparation,
 
 Line getCondition := method(
 	actor := getActor(true)
-	if(actor actorType != "[int],
+	if(actor actorType != "[int]",
 		Exception raise("""Actor #{actor actorName} has #{actor actorType} type, but [int] expected.""" interpolate)
 	)
 	
@@ -113,12 +113,11 @@ Line translateMethodEntryLine := method(
 	first := getCurrentToken
 	if(first isKeyword,
 		return first asKeyword process(self),
-		return DestinationFile write((getActor(false) actorName) .. ";")
+		return getActor(false) actorName .. ";"
 	)
 )
 
-Line translateMethodSignature := method(pushFrame,
-	if(pushFrame, TableOfSymbols pushFrame)
+Line translateMethodSignature := method(
 	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
 	class := tokens at(0)
 	second := tokens at(1)
@@ -148,8 +147,6 @@ Line translateMethodSignature := method(pushFrame,
 		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
 	)
 	toPut interpolateInPlace
-	DestinationFile write(toPut)
-	DestinationFile addSignature(toPut)
 )
 
 Line translateObjectSignature := method(
@@ -168,21 +165,7 @@ Line translateObjectSignature := method(
 		)
 		TableOfSymbols setFieldType(objectName, token, typeOfParameter)
 		typeOfParameter = "Object"
-		fields appendSeq("\tObject #{token};\n" asMutable interpolateInPlace)
+		fields appendSeq("\tObject #{token};\n" interpolate)
 	)
-	DestinationFile addSignature(toPut interpolate)
-	
-	DestinationFile addSignature("Object #{objectName}_Create(void)" interpolate)
-	DestinationFile write("Object #{objectName}_Create(void)\n" interpolate);
-	DestinationFile write("{\n" interpolate);
-	DestinationFile write("\tObject toReturn = Object_Create();\n" interpolate);
-	DestinationFile write("\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{objectName}));\n" interpolate);
-	DestinationFile write("\tObject_SetComparator(toReturn, &#{objectName}_Compare);\n" interpolate);
-	DestinationFile write("\tObject_SetDestructor(toReturn, &#{objectName}_Destroy);\n" interpolate);
-	DestinationFile write("\tObject_SetCloner(toReturn, &#{objectName}_Clone);\n" interpolate);
-	if(TableOfSymbols actorHasAction(Actor unnamedActor(objectName), Action with("Init")),
-		DestinationFile write("\ttoReturn = #{objectName}_Init(toReturn);\n" interpolate)
-	)
-	DestinationFile write("\treturn toReturn;\n")
-	DestinationFile write("}\n")
+	toPut interpolate
 )

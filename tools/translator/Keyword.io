@@ -14,46 +14,48 @@ Keyword process := method(line,
 
 Keyword returnProcess := method(line,
 	line toNextToken
-	DestinationFile write("return #{line getActor(false) actorName};" interpolate)
+	"return #{line getActor(false) actorName};" interpolate
 )
 
 Keyword loopProcess := method(line,
-	DestinationFile write("while(1)")
+	"while(1)"
 )
 
 Keyword elseProcess := method(line,
-	DestinationFile write("else")
+	"else"
 )
 
 Keyword whileProcess := method(line,
 	line toNextToken
-	DestinationFile write("while(#{line getCondition})" interpolate)
+	"while(#{line getCondition})" interpolate
 )
 
 Keyword ifProcess := method(line,
 	line toNextToken
-	DestinationFile write("if(#{line getCondition})" interpolate)
+	"if(#{line getCondition})" interpolate
 )
 
 Keyword continueProcess := method(line,
-	DestinationFile write("continue;")
+	"continue;"
 )
 
 Keyword breakProcess := method(line,
-	DestinationFile write("break;")
+	"break;"
 )
 
 Keyword defProcess := method(line,
 	line toNextToken
-	DestinationFile write("Object def = #{line getActor(false) actorName};" interpolate)
 	BlockDelegatesHandling beforeBlockEnds(KeywordDefHandler, 5)
+	"Object def = #{line getActor(false) actorName};" interpolate
 )
 
 Keyword CProcess := method(line,
+	toReturn := "" asMutable
 	line tokens foreach(index, token,
 		if(index == 0, continue)
-		DestinationFile write(token .. " ")
+		toReturn appendSeq(token, " ")
 	)
+	toReturn
 )
 
 KeywordDefHandler := Object clone

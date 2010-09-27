@@ -10,62 +10,59 @@ BlockDelegatesHandling delegatesBeforeBlockEnds := List clone
 BlockDelegatesHandling delegatesAfterBlockEnds := List clone
 
 BlockDelegatesHandling beforeEachBlockBegins := method(delegate, prio,
-	delegatesBeforeEachBlockBegins last at(prio) push(delegate)
+	delegatesBeforeEachBlockBegins first at(prio) push(delegate)
 )
 
 BlockDelegatesHandling beforeOneBlockBegins := method(delegate, prio,
-	delegatesBeforeOneBlockBegins last at(prio) push(delegate)
+	delegatesBeforeOneBlockBegins first at(prio) push(delegate)
 )
 
 BlockDelegatesHandling beforeBlockEnds := method(delegate, prio,
-	delegatesBeforeBlockEnds last at(prio) push(delegate)
+	delegatesBeforeBlockEnds first at(prio) push(delegate)
 )
 
 BlockDelegatesHandling afterOneBlockBegins := method(delegate, prio,
-	delegatesAfterEachBlockBegins last at(prio) push(delegate)
+	delegatesAfterEachBlockBegins first at(prio) push(delegate)
 )
 
 BlockDelegatesHandling afterEachBlockBegins := method(delegate, prio,
-	delegatesAfterEachBlockBegins last at(prio) push(delegate)
+	delegatesAfterEachBlockBegins first at(prio) push(delegate)
 )
 
 BlockDelegatesHandling afterBlockEnds := method(delegate, prio,
-	delegatesAfterBlockEnds last at(prio) push(delegate)
+	delegatesAfterBlockEnds first at(prio) push(delegate)
 )
 
-BlockDelegatesHandling handleWithListAndName := method(delegatesList, name, remove,
-	if(remove,
-		delegatesList pop reverseForeach(list,
-			list foreach(delegate,
-				delegate performWithArgList(name, list())
-			)
-		),
-		
-		delegatesList last reverseForeach(list,
-			list foreach(delegate,
-				delegate performWithArgList(name, list())
-			)
+BlockDelegatesHandling poppingHandleWithListAndName := method(delegatesList, name, offset,
+	delegatesList removeAt(offset) reverseForeach(list,
+		list foreach(delegate,
+			delegate performWithArgList(name, list())
+		)
+	)
+)
+
+BlockDelegatesHandling peekingHandleWithListAndName := method(delegatesList, name, offset,
+	delegatesList at(offset) reverseForeach(list,
+		list foreach(delegate,
+			delegate performWithArgList(name, list())
 		)
 	)
 )
 
 BlockDelegatesHandling blockWillBegin := method(
-	delegatesBeforeBlockEnds push(list(list(), list(), list(), list(), list(), list()))
-	delegatesAfterBlockEnds push(list(list(), list(), list(), list(), list(), list()))
-	handleWithListAndName(delegatesBeforeOneBlockBegins, "blockWillBegin", true)
-	delegatesBeforeOneBlockBegins push(list(list(), list(), list(), list(), list(), list()))
-	handleWithListAndName(delegatesBeforeEachBlockBegins, "blockWillBegin", false)
-	delegatesBeforeEachBlockBegins push(list(list(), list(), list(), list(), list(), list()))
-	if(Translator previousLevel != 0,
-		TableOfSymbols pushFrame
-	)
+	delegatesBeforeBlockEnds prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesAfterBlockEnds prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesBeforeOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesBeforeEachBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesAfterOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesAfterEachBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	poppingHandleWithListAndName(delegatesBeforeOneBlockBegins, "blockWillBegin", 1)
+	peekingHandleWithListAndName(delegatesBeforeEachBlockBegins, "blockWillBegin", 1)
 )
 
 BlockDelegatesHandling blockDidBegin := method(
-	handleWithListAndName(delegatesAfterOneBlockBegins, "blockDidBegin", true)
-	delegatesAfterOneBlockBegins push(list(list(), list(), list(), list(), list(), list()))
-	handleWithListAndName(delegatesAfterEachBlockBegins, "blockDidBegin", false)
-	delegatesAfterEachBlockBegins push(list(list(), list(), list(), list(), list(), list()))
+	poppingHandleWithListAndName(delegatesAfterOneBlockBegins, "blockDidBegin", 1)
+	peekingHandleWithListAndName(delegatesAfterEachBlockBegins, "blockDidBegin", 1)
 )
 
 BlockDelegatesHandling blockWillEnd := method(
@@ -73,12 +70,11 @@ BlockDelegatesHandling blockWillEnd := method(
 	delegatesBeforeEachBlockBegins pop
 	delegatesAfterOneBlockBegins pop
 	delegatesAfterEachBlockBegins pop
-	handleWithListAndName(delegatesBeforeBlockEnds, "blockWillEnd", true)
-	delegatesBeforeOneBlockBegins push(list(list(), list(), list(), list(), list(), list()))
-	delegatesAfterOneBlockBegins push(list(list(), list(), list(), list(), list(), list()))
+	delegatesBeforeOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	delegatesAfterOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
+	poppingHandleWithListAndName(delegatesBeforeBlockEnds, "blockWillEnd", 0)
 )
 
 BlockDelegatesHandling blockDidEnd := method(
-	TableOfSymbols popFrame
-	handleWithListAndName(delegatesAfterBlockEnds, "blockDidEnd", true)
+	poppingHandleWithListAndName(delegatesAfterBlockEnds, "blockDidEnd", 0)
 )
