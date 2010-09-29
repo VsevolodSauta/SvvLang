@@ -2,6 +2,7 @@ typedef struct Stack {
 	Object list;
 } *Stack;
 
+Object Stack_Create(void);
 Object Stack_Init(Object self);
 Object Stack_Push(Object self, Object object);
 Object Stack_Pop(Object self);

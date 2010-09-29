@@ -152,6 +152,7 @@ Line translateMethodSignature := method(contextObject,
 Line translateObjectSignature := method(contextObject, 
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
 	objectName := tokens at(0) outOfBrackets
+	TableOfSymbols setClassId(objectName, ((objectName hash) mod (Number longMax)) asString(20, 0))
 	
 	fields := "" asMutable
 	typeOfParameter := "Object"

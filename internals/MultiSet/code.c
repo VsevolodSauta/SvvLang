@@ -2,6 +2,18 @@
 #include "internals/MultiSet/imports.h"
 
 
+Object MultiSet_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct MultiSet));
+	toReturn->gid =  8253887558225682432;
+	Object_SetComparator(toReturn, &MultiSet_Compare);
+	Object_SetDestructor(toReturn, &MultiSet_Destroy);
+	Object_SetCloner(toReturn, &MultiSet_Clone);
+	toReturn = MultiSet_Init(toReturn);
+	return toReturn;
+}
+
 Object MultiSet_Init(Object self)
 {
 	(((MultiSet) (self->entity))->list) = List_Create();

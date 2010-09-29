@@ -76,7 +76,11 @@ Translator translateClass := method(objectClassName,
 		if(line tokens ?size == 0, continue)
 		if(currentLevel == 0,
 			if(line tokens first isCreator,
-				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName)),
+				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName))
+				actor := Actor unnamedActor(line tokens first outOfBrackets)
+				DestinationFile putMethodSignature(actor getCreatorSignature)
+				DestinationFile write(actor getCreatorBody),
+				
 				DestinationFile putMethodSignature(line translateMethodSignature(objectClassName))
 				BlockDelegatesHandling blockDidBegin
 			),

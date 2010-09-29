@@ -2,6 +2,18 @@
 #include "internals/List/imports.h"
 
 
+Object List_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct List));
+	toReturn->gid =  3732711262168886272;
+	Object_SetComparator(toReturn, &List_Compare);
+	Object_SetDestructor(toReturn, &List_Destroy);
+	Object_SetCloner(toReturn, &List_Clone);
+	toReturn = List_Init(toReturn);
+	return toReturn;
+}
+
 Object List_Init(Object self)
 {
 	(((List) (self->entity))->head) = ListNode_Create();

@@ -2,6 +2,18 @@
 #include "internals/Queue/imports.h"
 
 
+Object Queue_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct Queue));
+	toReturn->gid =  5026058259973625856;
+	Object_SetComparator(toReturn, &Queue_Compare);
+	Object_SetDestructor(toReturn, &Queue_Destroy);
+	Object_SetCloner(toReturn, &Queue_Clone);
+	toReturn = Queue_Init(toReturn);
+	return toReturn;
+}
+
 Object Queue_Init(Object self)
 {
 	(((Queue) (self->entity))->list) = List_Create();

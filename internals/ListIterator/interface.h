@@ -3,6 +3,7 @@ typedef struct ListIterator {
 	Object node;
 } *ListIterator;
 
+Object ListIterator_Create(void);
 Object ListIterator_Compare(Object self, Object iterator);
 Object ListIterator_Destroy(Object self);
 Object ListIterator_Clone(Object self);

@@ -62,21 +62,22 @@ Actor getReturnedType := method(action,
 	TableOfSymbols getActorActionReturnedType(self, action)
 )
 
-Actor getCreatorSignature := method(actor,
-	"Object #{actor actorName}_Create(void)" interpolate
+Actor getCreatorSignature := method(
+	"Object #{self actorType}_Create(void)" interpolate
 )
 
-Actor getCreatorBody := method(actor,
+Actor getCreatorBody := method(
 	toReturn := list(
 		"{\n",
 		"\tObject toReturn = Object_Create();\n",
-		"\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{actor actorName}));\n" interpolate,
-		"\tObject_SetComparator(toReturn, &#{actor actorName}_Compare);\n" interpolate,
-		"\tObject_SetDestructor(toReturn, &#{actor actorName}_Destroy);\n" interpolate,
-		"\tObject_SetCloner(toReturn, &#{actor actorName}_Clone);\n" interpolate
+		"\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{self actorType}));\n" interpolate,
+		"\ttoReturn->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
+		"\tObject_SetComparator(toReturn, &#{self actorType}_Compare);\n" interpolate,
+		"\tObject_SetDestructor(toReturn, &#{self actorType}_Destroy);\n" interpolate,
+		"\tObject_SetCloner(toReturn, &#{self actorType}_Clone);\n" interpolate
 	)
-	if(TableOfSymbols actorHasAction(Actor unnamedActor(actor actorName), Action with("Init")),
-		toReturn push("\ttoReturn = #{actor actorName}_Init(toReturn);\n" interpolate)
+	if(TableOfSymbols actorHasAction(Actor unnamedActor(self actorType), Action with("Init")),
+		toReturn push("\ttoReturn = #{self actorType}_Init(toReturn);\n" interpolate)
 	)
 	toReturn push(
 		"\treturn toReturn;\n",

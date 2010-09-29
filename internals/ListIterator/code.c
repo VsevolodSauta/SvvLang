@@ -2,6 +2,17 @@
 #include "internals/ListIterator/imports.h"
 
 
+Object ListIterator_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct ListIterator));
+	toReturn->gid =   807984642922801280;
+	Object_SetComparator(toReturn, &ListIterator_Compare);
+	Object_SetDestructor(toReturn, &ListIterator_Destroy);
+	Object_SetCloner(toReturn, &ListIterator_Clone);
+	return toReturn;
+}
+
 Object ListIterator_Compare(Object self, Object iterator)
 {
 	return Object_Compare((((ListIterator) (self->entity))->node), (((ListIterator) (iterator->entity))->node));

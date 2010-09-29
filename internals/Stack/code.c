@@ -2,6 +2,18 @@
 #include "internals/Stack/imports.h"
 
 
+Object Stack_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct Stack));
+	toReturn->gid =  6822298517081180160;
+	Object_SetComparator(toReturn, &Stack_Compare);
+	Object_SetDestructor(toReturn, &Stack_Destroy);
+	Object_SetCloner(toReturn, &Stack_Clone);
+	toReturn = Stack_Init(toReturn);
+	return toReturn;
+}
+
 Object Stack_Init(Object self)
 {
 	(((Stack) (self->entity))->list) = List_Create();

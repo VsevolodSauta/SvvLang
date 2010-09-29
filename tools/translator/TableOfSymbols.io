@@ -20,6 +20,7 @@ TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
 TableOfSymbols listOfBeingImportedObjects := List clone
+TableOfSymbols mapOfGids := Map clone
 
 TableOfSymbols updateActorType := method(actor,
 //	"[Update actor type] #{actor actorName} #{actor actorType}" interpolate println
@@ -108,6 +109,14 @@ TableOfSymbols getFieldType := method(class, field,
 	fieldType
 )
 
+TableOfSymbols setClassId := method(class, id,
+	mapOfGids atPut(class, id)
+)
+
+TableOfSymbols getClassId := method(class,
+	mapOfGids at(class)
+)
+
 TableOfSymbols import := method(objectType,
 	listOfBeingImportedObjects push(objectType)
 	pushFrame
@@ -153,7 +162,7 @@ TableOfSymbols importStringForClass := method(objectType,
 //	toReturn := "#include \"internals/#{objectType}/interface.h\"\n" asMutable interpolateInPlace
 	toReturn := "" asMutable
 	tableOfImports at(objectType) foreach(importElement,
-		toReturn appendSeq("#include \"internals/#{importElement}/interface.h\n" interpolate)
+		toReturn appendSeq("#include \"internals/#{importElement}/interface.h\"\n" interpolate)
 	)
 	toReturn
 )

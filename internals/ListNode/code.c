@@ -2,6 +2,17 @@
 #include "internals/ListNode/imports.h"
 
 
+Object ListNode_Create(void)
+{
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(allocator, sizeof(struct ListNode));
+	toReturn->gid =  1592307763146065920;
+	Object_SetComparator(toReturn, &ListNode_Compare);
+	Object_SetDestructor(toReturn, &ListNode_Destroy);
+	Object_SetCloner(toReturn, &ListNode_Clone);
+	return toReturn;
+}
+
 Object ListNode_Clone(Object self)
 {
 	Object toReturn;
