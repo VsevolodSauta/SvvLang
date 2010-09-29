@@ -13,6 +13,8 @@ TableOfSymbols globalObjects := Map with(
 	"stringFactory", "Object"
 )
 
+TableOfSymbols tableOfImports := Map clone
+
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
@@ -94,7 +96,6 @@ TableOfSymbols setClassActionReturnedType := method(className, action, returnedA
 )
 
 TableOfSymbols setFieldType := method(class, field, fieldType,
-	if(classFields at(class) isNil, classFields atPut(class, Map clone))
 	classFields at(class) atPut(field, fieldType)
 	self
 )
@@ -121,10 +122,16 @@ TableOfSymbols importing := method(objectType,
 	listOfBeingImportedObjects contains(objectType)
 )
 
-TableOfSymbols ensureKnownClass := method(objectType,
-	if(basicClasses contains(objectType), return)
-	if(classFields at(objectType) isNil,
-		Translator importObjectType(objectType)
+TableOfSymbols ensureKnownClassForClass := method(importingType, contextType,
+	if(basicClasses contains(importingType), return)
+	if(classFields at(importingType) isNil,
+		classFields atPut(importingType, Map clone)
+		tableOfImports atPut(importingType, List clone)
+		Translator importObjectType(importingType)
+	)
+	if(basicClasses contains(contextType), return)
+	if(tableOfImports at(contextType) contains(importingType) not,
+		tableOfImports at(contextType) push(importingType)
 	)
 )
 
@@ -140,4 +147,17 @@ TableOfSymbols blockWillBegin := method(
 
 TableOfSymbols blockDidEnd := method(
 	popFrame
+)
+
+TableOfSymbols importStringForClass := method(objectType,
+//	toReturn := "#include \"internals/#{objectType}/interface.h\"\n" asMutable interpolateInPlace
+	toReturn := "" asMutable
+	tableOfImports at(objectType) foreach(importElement,
+		toReturn appendSeq("#include \"internals/#{importElement}/interface.h\n" interpolate)
+	)
+	toReturn
+)
+
+TableOfSymbols importListForClass := method(objectType,
+	tableOfImports at(objectType)
 )

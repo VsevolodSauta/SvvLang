@@ -4,8 +4,6 @@ Translator := Object clone
 Translator previousLevel := 0
 Translator currentLevel := 0
 Translator line := nil
-Translator beingProcessedObject := Sequence clone
-Translator beingProcessedObject = System args at(1)
 
 Translator putNLevels := method(n,
 	n repeat(
@@ -35,7 +33,7 @@ Translator blockDidEnd := method(
 	DestinationFile write("}\n")
 )
 
-Translator putLevel := method(
+Translator translateLevel := method(
 	if((currentLevel == 0) and (Translator line ?tokens ?size != 0),
 		if(line tokens first isCreator not,
 			BlockDelegatesHandling blockWillBegin
@@ -52,19 +50,6 @@ Translator putLevel := method(
 	)
 )
 
-Translator putLine := method(
-	if(line tokens ?size == 0, return)
-	if(currentLevel == 0,
-		if(line tokens first isCreator,
-			DestinationFile putObjectSignature(line translateObjectSignature),
-			DestinationFile putMethodSignature(line translateMethodSignature)
-			BlockDelegatesHandling blockDidBegin
-		),
-		
-		putMethodEntryLine(line translateMethodEntryLine)
-	)
-)
-
 Translator putMethodEntryLine := method(string,
 	putCurrentLevels
 	DestinationFile write(string .. "\n")
@@ -74,25 +59,35 @@ Translator insertDeclaration := method(name,
 	putMethodEntryLine("Object #{name};" interpolate)
 )
 
-Translator translateMainObject := method(
-	notBlockingImportObjectType(objectClassName)
+Translator translateClass := method(objectClassName,
+	"=============== #{objectClassName alignCenter(20)} ===============" interpolate println
+	SourceFile = SourceFile with(objectClassName)
+	DestinationFile openObjectClass(objectClassName)
 	
 	DestinationFile write("#include \"internals/basics.h\"\n")
-	DestinationFile write("#include \"internals/#{beingProcessedObject}/imports.h\"\n" interpolate)
+	DestinationFile write("#include \"internals/#{objectClassName}/imports.h\"\n" interpolate)
 	DestinationFile write("\n")
 	TableOfSymbols pushFrame
 	loop(
 		line = SourceFile getLine
 		if(line isNil, break)
 		currentLevel = line getLevel
-		putLevel
-		putLine
+		translateLevel
+		if(line tokens ?size == 0, continue)
+		if(currentLevel == 0,
+			if(line tokens first isCreator,
+				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName)),
+				DestinationFile putMethodSignature(line translateMethodSignature(objectClassName))
+				BlockDelegatesHandling blockDidBegin
+			),
+			putMethodEntryLine(line translateMethodEntryLine(objectClassName))
+		)
 	)
 )
 
-Translator notBlockingImportObjectType := method(objectName,
-	TableOfSymbols import(objectName)
-	fileToImport := SourceFile with(objectName)
+Translator importObjectType := method(objectClassNameToImport,
+	TableOfSymbols import(objectClassNameToImport)
+	fileToImport := SourceFile with(objectClassNameToImport)
 	loop(
 		line := fileToImport getLine
 		if(line isNil, break)
@@ -100,28 +95,28 @@ Translator notBlockingImportObjectType := method(objectName,
 		if(line tokens ?size == 0, continue)
 		if(currentLevel != 0, continue)
 		if(line tokens at(0) isCreator,
-			line translateObjectSignature,
-			line translateMethodSignature
+			line translateObjectSignature(objectClassName),
+			line translateMethodSignature(objectClassName)
 		)
 	)
 	TableOfSymbols imported
 )
 
-Translator importObjectType := method(objectName,
-	if(TableOfSymbols importing(objectName), return)
-	DestinationFile addImport(objectName)
-	DestinationFile blockOutput
-	notBlockingImportObjectType(objectName)
-	DestinationFile unblockOutput
-)
-
 BlockDelegatesHandling beforeEachBlockBegins(TableOfSymbols, 5)
 BlockDelegatesHandling afterEachBlockBegins(Translator, 5)
-System args foreach(index, objectClassName,
+if(System args size == 1,
+	toProcessList := List clone
+	Directory with("../../internals_sources") files foreach(file,
+		toProcessList push(file baseName)
+	),
+	
+	toProcessList := System args
+)
+
+toProcessList foreach(index, objectClassName,
 	if(index == 0, continue)
-	Translator beingProcessedObject = objectClassName
+	TableOfSymbols ensureKnownClassForClass(objectClassName, "Object")
 	TableOfSymbols newObjectProcessing
-	SourceFile openObjectClass(objectClassName)
-	DestinationFile openObjectClass(objectClassName)
-	Translator translateMainObject
+	Translator translateClass(objectClassName)
+	DestinationFile writeImport(TableOfSymbols importStringForClass(objectClassName))
 )

@@ -49,8 +49,12 @@ DestinationFile putMethodSignature := method(signature,
 
 DestinationFile addImport := method(usedObject,
 	if((blockingLevel == 0) or (ignoreBlockingLevelForImport),
-		importsFile write("#include \"internals/#{usedObject}/interface.h\"\n" interpolate)
+		writeImport("#include \"internals/#{usedObject}/interface.h\"\n" interpolate)
 	)
+)
+
+DestinationFile writeImport := method(string,
+	importsFile write(string)
 )
 
 DestinationFile blockOutput := method(

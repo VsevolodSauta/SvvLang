@@ -1,17 +1,6 @@
 #include "internals/basics.h"
 #include "internals/Queue/imports.h"
 
-Object Queue_Create(void)
-{
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct Queue));
-	Object_SetComparator(toReturn, &Queue_Compare);
-	Object_SetDestructor(toReturn, &Queue_Destroy);
-	Object_SetCloner(toReturn, &Queue_Clone);
-	toReturn = Queue_Init(toReturn);
-	return toReturn;
-}
-
 
 Object Queue_Init(Object self)
 {
@@ -59,4 +48,3 @@ Object Queue_Clone(Object self)
 	(((Queue) (toReturn->entity))->list) = Object_Clone((((Queue) (self->entity))->list));
 	return toReturn;
 }
-

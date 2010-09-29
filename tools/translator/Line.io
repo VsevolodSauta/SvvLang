@@ -117,13 +117,13 @@ Line translateMethodEntryLine := method(
 	)
 )
 
-Line translateMethodSignature := method(
+Line translateMethodSignature := method(contextObject, 
 	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
 	class := tokens at(0)
 	second := tokens at(1)
 	if(second isCreator,
 		returnType := second outOfBrackets
-		TableOfSymbols ensureKnownClass(returnType)
+		TableOfSymbols ensureKnownClassForClass(returnType, contextObject)
 		name := tokens at(2)
 		parametersBeginAt := 3,
 		
@@ -139,7 +139,7 @@ Line translateMethodSignature := method(
 		if(index < parametersBeginAt, continue)
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
-			TableOfSymbols ensureKnownClass(typeOfParameter)
+			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
 			continue
 		)
 		TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
@@ -149,10 +149,9 @@ Line translateMethodSignature := method(
 	toPut interpolateInPlace
 )
 
-Line translateObjectSignature := method(
+Line translateObjectSignature := method(contextObject, 
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
 	objectName := tokens at(0) outOfBrackets
-	if(objectName != (Translator beingProcessedObject), toPut = "")
 	
 	fields := "" asMutable
 	typeOfParameter := "Object"
@@ -160,7 +159,7 @@ Line translateObjectSignature := method(
 		if(index < 1, continue)
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
-			TableOfSymbols ensureKnownClass(typeOfParameter)
+			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
 			continue
 		)
 		TableOfSymbols setFieldType(objectName, token, typeOfParameter)

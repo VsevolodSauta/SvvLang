@@ -28,7 +28,7 @@ Actor with := method(name,
 	
 	if(name isCreator,
 		toReturn actorType = name outOfBrackets
-		TableOfSymbols ensureKnownClass(toReturn actorType)
+		TableOfSymbols ensureKnownClassForClass(toReturn actorType, "Object")
 		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate)
 		return toReturn
 	)

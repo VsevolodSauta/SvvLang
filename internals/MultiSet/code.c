@@ -1,17 +1,6 @@
 #include "internals/basics.h"
 #include "internals/MultiSet/imports.h"
 
-Object MultiSet_Create(void)
-{
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct MultiSet));
-	Object_SetComparator(toReturn, &MultiSet_Compare);
-	Object_SetDestructor(toReturn, &MultiSet_Destroy);
-	Object_SetCloner(toReturn, &MultiSet_Clone);
-	toReturn = MultiSet_Init(toReturn);
-	return toReturn;
-}
-
 
 Object MultiSet_Init(Object self)
 {
@@ -61,4 +50,3 @@ Object MultiSet_RemoveEvery(Object self, Object object)
 	List_RemoveEvery((((MultiSet) (self->entity))->list), object);
 	return self;
 }
-

@@ -1,7 +1,7 @@
 typedef struct Queue {
 	Object list;
 } *Queue;
-Object Queue_Create(void);
+
 Object Queue_Init(Object self);
 Object Queue_Push(Object self, Object object);
 Object Queue_Pop(Object self);

@@ -1,7 +1,7 @@
 typedef struct MultiSet {
 	Object list;
 } *MultiSet;
-Object MultiSet_Create(void);
+
 Object MultiSet_Init(Object self);
 Object MultiSet_Destroy(Object self);
 Object MultiSet_Clone(Object self);
