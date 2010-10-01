@@ -1,11 +1,10 @@
 #include "internals/basics.h"
 
-#define Number_GID 0x30
-
 Object Number_Create(void)
 {
 	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct Number));
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct Number));
+	toReturn->gid = 15425740279749906432ull;
 	Object_SetComparator(toReturn, &Number_Compare);
 	Object_SetDestructor(toReturn, &Number_Destroy);
 	Object_SetCloner(toReturn, &Number_Clone);
@@ -22,15 +21,14 @@ Object Number_Clone(Object receiver)
 Object Number_Compare(Object receiver, Object number)
 {
 	if(((Number) (receiver->entity))->entity > ((Number) (number->entity))->entity)
-		return greater;
+		return _greater;
 	if(((Number) (receiver->entity))->entity < ((Number) (number->entity))->entity)
-		return less;
-	return equal;
+		return _less;
+	return _equal;
 }
 
 Object Number_Destroy(Object receiver)
 {
-	Allocator_Delete(allocator, receiver->entity);
 	return Object_Destroy(receiver);
 }
 
@@ -117,20 +115,55 @@ Object Number_Dec(Object receiver)
 	return receiver;
 }
 
+Object Number_Min(Object receiver, Object arg)
+{
+	Object toReturn;
+	if(((Number) (receiver->entity))->entity < ((Number) (arg->entity))->entity)
+	{
+		toReturn = receiver;
+	} else {
+		toReturn = arg;
+	}
+	return Object_TempClone(toReturn);
+}
+
+Object Number_Max(Object receiver, Object arg)
+{
+	Object toReturn;
+	if(((Number) (receiver->entity))->entity > ((Number) (arg->entity))->entity)
+	{
+		toReturn = receiver;
+	} else {
+		toReturn = arg;
+	}
+	return Object_TempClone(toReturn);
+}
+
+Object Number_Abs(Object receiver)
+{
+	if(((Number) (receiver->entity))->entity > 0)
+	{
+		return Object_TempClone(receiver);
+	} else {
+		return Number_Inv(receiver);
+	}
+}
+
+Object Number_Inv(Object receiver)
+{
+	Object toReturn = Object_TempClone(receiver);
+	((Number) (toReturn->entity))->entity = -((Number) (toReturn->entity))->entity;
+	return toReturn;
+}
+
 Object Number_IsOdd(Object receiver)
 {
-	return (((Number) (receiver->entity))->entity & 1) ? true : false;
+	return (((Number) (receiver->entity))->entity & 1) ? _true : _false;
 }
 
 Object Number_IsEven(Object receiver)
 {
-	return (((Number) (receiver->entity))->entity & 1) == 0 ? true : false;
-}
-
-Object Number_Dump(Object receiver)
-{
-	DEBUG("%li\n", ((Number) (receiver->entity))->entity);
-	return receiver;
+	return !(((Number) (receiver->entity))->entity & 1) ? _true : _false;
 }
 
 Object Number_Set(Object receiver, Object arg)

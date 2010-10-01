@@ -8,4 +8,4 @@ Object NumberFactory_FromLong(Object receiver, long arg)
 	return toReturn;
 };
 
-Object numberFactory;
+Object _numberFactory;

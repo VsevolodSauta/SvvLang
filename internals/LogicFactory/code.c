@@ -1,6 +1,8 @@
 #include "internals/basics.h"
 
+Object _logicFactory;
+
 Object LogicFactory_FromLong(Object receiver, long arg)
 {
-	return arg ? true : false;
+	return arg ? _true : _false;
 }

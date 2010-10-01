@@ -1,7 +1,7 @@
 #include "internals/Object/interface.h"
 
-Object less;
-Object greater;
-Object equal;
-Object uncomparableLess;
-Object uncomparableGreater;
+Object _less;
+Object _greater;
+Object _equal;
+Object _uncomparableLess;
+Object _uncomparableGreater;

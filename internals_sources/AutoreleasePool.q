@@ -22,8 +22,8 @@ AutoreleasePool <Object> Destroy
 	return (self AsObject) Destroy
 
 AutoreleasePool <Comparation> Compare <AutoreleasePool> autoreleasePool
-	return (self.stack Hash) Compare (autoreleasePool.stack Hash)			// Nobody needs this function
+	return self.stack Compare autoreleasePool.stack					// Nobody needs this function
 
 AutoreleasePool Clone
-	return <AutoreleasePool>							// Nobody needs this function
+	return self									// Nobody needs this function
 

@@ -5,32 +5,42 @@
 Object ListNode_Create(void)
 {
 	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct ListNode));
-	toReturn->gid =  1592307763146065920;
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct ListNode));
+	toReturn->gid =  1592307763146065920ull;
 	Object_SetComparator(toReturn, &ListNode_Compare);
 	Object_SetDestructor(toReturn, &ListNode_Destroy);
 	Object_SetCloner(toReturn, &ListNode_Clone);
 	return toReturn;
 }
 
-Object ListNode_Clone(Object self)
+Object ListNode_Clone(Object _self)
 {
-	Object toReturn;
-	toReturn = ListNode_Create();
-	(((ListNode) (toReturn->entity))->next) = (((ListNode) (self->entity))->next);
-	(((ListNode) (toReturn->entity))->prev) = (((ListNode) (self->entity))->prev);
-	(((ListNode) (toReturn->entity))->data) = (((ListNode) (self->entity))->data);
-	Object_Retain((((ListNode) (toReturn->entity))->data));
-	return toReturn;
+	Object _toReturn;
+	_toReturn = ListNode_Create();
+	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
+	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
+	(((ListNode) (_toReturn->entity))->_data) = (((ListNode) (_self->entity))->_data);
+	Object_Retain((((ListNode) (_toReturn->entity))->_data));
+	return _toReturn;
 }
 
-Object ListNode_Compare(Object self, Object listNode)
+Object ListNode_Compare(Object _self, Object _listNode)
 {
-	return Object_Compare(Object_Hash(self), Object_Hash(listNode));
+	Object _candidate;
+	_candidate = Object_Compare((((ListNode) (_self->entity))->_data), (((ListNode) (_listNode->entity))->_data));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
+	{
+		return _candidate;
+	}
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(Object_Hash((((ListNode) (_self->entity))->_next)), Object_Hash((((ListNode) (_listNode->entity))->_next))) == _equal)) != _false)
+	{
+		return Object_Compare(Object_Hash((((ListNode) (_self->entity))->_prev)), Object_Hash((((ListNode) (_listNode->entity))->_prev)));
+	}
+	return Object_Compare(Object_Hash((((ListNode) (_self->entity))->_next)), Object_Hash((((ListNode) (_listNode->entity))->_next)));
 }
 
-Object ListNode_Destroy(Object self)
+Object ListNode_Destroy(Object _self)
 {
-	Object_Release((((ListNode) (self->entity))->data));
-	return Object_Destroy(self);
+	Object_Release((((ListNode) (_self->entity))->_data));
+	return Object_Destroy(_self);
 }

@@ -18,15 +18,13 @@ List Destroy
 	return (self AsObject) Destroy
 
 List Clone
-	self.iterator ToBegin
 	list = <List>
-	while self.iterator NotThisEnd
-		list PushBack (self.iterator ThisData)
-		self.iterator Next
-	self.iterator Hide
+	list.iterator ToEnd
+	list.iterator AddListAfter self
+	list.iterator Hide
 	return list
 
-List Compare <List> list
+List <Comparation> Compare <List> list
 	self.iterator ToBegin
 	list.iterator ToBegin
 	loop
@@ -57,12 +55,20 @@ List Clean
 List PushFront object
 	self.iterator ToBegin
 	self.iterator AddBefore object
-	self Hide
+	self.iterator Hide
 	return self
 
 List PushBack object
 	self.iterator ToEnd
 	self.iterator AddAfter object
+	self.iterator Hide
+	return self
+
+List PushSorted object
+	self.iterator ToBegin
+	while (self.iterator NotThisEnd) And ((self.iterator ThisData) < (object))
+		self.iterator Next
+	self.iterator AddBefore object
 	self.iterator Hide
 	return self
 
@@ -223,6 +229,5 @@ List Concatenate <List> list
 	self.iterator Hide
 	return self
 
-List Sort
+List SortInPlace
 	return self
-

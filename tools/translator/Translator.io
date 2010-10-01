@@ -87,6 +87,10 @@ Translator translateClass := method(objectClassName,
 			putMethodEntryLine(line translateMethodEntryLine(objectClassName))
 		)
 	)
+	while(0 < previousLevel,
+		BlockDelegatesHandling blockWillEnd
+		BlockDelegatesHandling blockDidEnd
+	)
 )
 
 Translator importObjectType := method(objectClassNameToImport,
@@ -114,11 +118,10 @@ if(System args size == 1,
 		toProcessList push(file baseName)
 	),
 	
-	toProcessList := System args
+	toProcessList := System args slice(1)
 )
 
 toProcessList foreach(index, objectClassName,
-	if(index == 0, continue)
 	TableOfSymbols ensureKnownClassForClass(objectClassName, "Object")
 	TableOfSymbols newObjectProcessing
 	Translator translateClass(objectClassName)

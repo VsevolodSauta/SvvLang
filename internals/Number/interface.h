@@ -23,9 +23,13 @@ Object Number_SubInPlace(Object receiver, Object arg);
 Object Number_MulInPlace(Object receiver, Object arg);
 Object Number_DivInPlace(Object receiver, Object arg);
 Object Number_ModInPlace(Object receiver, Object arg);
+Object Number_Min(Object receiver, Object arg);
+Object Number_Max(Object receiver, Object arg);
+Object Number_Abs(Object receiver);
+Object Number_Inv(Object receiver);
+
 Object Number_IsOdd(Object receiver);
 Object Number_IsEven(Object receiver);
-Object Number_Dump(Object receiver);
 Object Number_Set(Object receiver, Object arg);
 
 static inline long Number_GetLong(Object receiver)

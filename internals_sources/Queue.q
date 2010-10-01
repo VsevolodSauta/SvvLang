@@ -4,7 +4,7 @@ Queue Init
 	self.list = <List>
 	return self
 
-Queue Push object
+Queue Push (Add Insert) object
 	self.list PushBack object
 	return self
 
@@ -15,7 +15,7 @@ Queue <Object> Peek
 	return self.list PeekFront
 
 Queue <Comparation> Compare <Queue> queue
-	return (self.list Hash) Compare (queue.list Hash)
+	return (self.list) Compare (queue.list)
 
 Queue <Object> Destroy
 	self.list Destroy

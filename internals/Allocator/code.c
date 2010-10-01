@@ -16,7 +16,7 @@ void* Allocator_Resize(Object receiver, void* toResize, int size)
 Object Allocator_Delete(Object receiver, void* toDelete)
 {
 	free(toDelete);
-	return nothing;
+	return _nothing;
 }
 
 void* Allocator_GetUndeletable(Object receiver)
@@ -24,6 +24,6 @@ void* Allocator_GetUndeletable(Object receiver)
 	return NULL;
 }
 
-Object allocator;
-Object nothing;
-Object nil;
+Object _allocator;
+Object _nothing;
+Object _nil;

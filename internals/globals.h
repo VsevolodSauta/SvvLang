@@ -2,26 +2,27 @@
 
 #include "internals/Object/interface.h"
 
-extern Object nothing;
-extern Object nil;
+extern Object _nothing;
+extern Object _nil;
 
-extern Object allocator;
+extern Object _allocator;
 
-extern Object charFactory;
-extern Object stringFactory;
-extern Object numberFactory;
-extern Object logicFactory;
+extern Object _autoreleasePool;
 
-extern Object uncomparableGreater;
-extern Object uncomparableLess;
-extern Object greater;
-extern Object less;
-extern Object equal;
-extern Object uncomparable;
+extern Object _charFactory;
+extern Object _stringFactory;
+extern Object _numberFactory;
+extern Object _logicFactory;
 
-extern Object true;
-extern Object yes;
-extern Object false;
-extern Object no;
+extern Object _uncomparableGreater;
+extern Object _uncomparableLess;
+extern Object _greater;
+extern Object _less;
+extern Object _equal;
+extern Object _uncomparable;
 
-extern Object autoreleasePoolsStack;
+extern Object _true;
+extern Object _yes;
+extern Object _false;
+extern Object _no;
+

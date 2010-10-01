@@ -1,15 +1,15 @@
 #include "internals/basics.h"
-
-#define Object_GID 0x20
+#include "internals/AutoreleasePool/interface.h"
 
 Object Object_Create(void)
 {
-	Object toReturn = Allocator_New(allocator, sizeof(struct Object));
+	Object toReturn = Allocator_New(_allocator, sizeof(struct Object));
 	toReturn->links = 1;
+	toReturn->gid = 2803832687958515712ull;
 	Object_SetComparator(toReturn, &Object_EmptyComparator);
 	Object_SetDestructor(toReturn, &Object_Destroy);
 	Object_SetCloner(toReturn, &Object_Clone);
-	toReturn->entity = Allocator_GetUndeletable(allocator);
+	toReturn->entity = Allocator_GetUndeletable(_allocator);
 	return toReturn;
 }
 
@@ -17,11 +17,11 @@ Object Object_Compare(Object receiver, Object object)
 {
 	if(object->gid > receiver->gid)
 	{
-		return uncomparableLess;
+		return _uncomparableLess;
 	} else {
 		if(object->gid < receiver->gid)
 		{
-			return uncomparableGreater;
+			return _uncomparableGreater;
 		} else {
 			return (receiver->compare)(receiver, object);
 		}
@@ -30,7 +30,7 @@ Object Object_Compare(Object receiver, Object object)
 
 Object Object_EmptyComparator(Object receiver, Object object)
 {
-	return equal;
+	return _equal;
 }
 
 Object Object_Retain(Object receiver)
@@ -50,13 +50,14 @@ Object Object_Release(Object receiver)
 
 Object Object_Autorelease(Object receiver)
 {
+	AutoreleasePool_Add(_autoreleasePool, receiver);
 	return receiver;
 }
 
 Object Object_Destroy(Object receiver)
 {
-	Allocator_Delete(allocator, receiver->entity);
-	return Allocator_Delete(allocator, receiver);
+	Allocator_Delete(_allocator, receiver->entity);
+	return Allocator_Delete(_allocator, receiver);
 }
 
 Object Object_Clone(Object receiver)
@@ -91,5 +92,5 @@ Object Object_SetDestructor(Object receiver, ObjectDestructor destructor)
 
 Object Object_Hash(Object receiver)
 {
-	return NumberFactory_FromLong(numberFactory, (long) (receiver->entity));
+	return NumberFactory_FromLong(_numberFactory, (long) (receiver->entity));
 }

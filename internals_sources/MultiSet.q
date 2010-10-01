@@ -14,11 +14,11 @@ MultiSet Clone
 	toReturn.list = self.list Clone
 	return toReturn
 
-MultiSet Compare <MultiSet> multiset
-	return ((self.list TempClone) Sort) Compare ((multiset.list TempClone) Sort)
+MultiSet <Comparation> Compare <MultiSet> multiset
+	return self.list Compare multiset.list
 
 MultiSet Push object
-	self.list PushBack object
+	self.list PushSorted object
 	return self
 
 MultiSet <Logic> Contains object
@@ -31,4 +31,3 @@ MultiSet RemoveOnce object
 MultiSet RemoveEvery object
 	self.list RemoveEvery object
 	return self
-

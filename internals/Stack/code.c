@@ -5,8 +5,8 @@
 Object Stack_Create(void)
 {
 	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct Stack));
-	toReturn->gid =  6822298517081180160;
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct Stack));
+	toReturn->gid =  6822298517081180160ull;
 	Object_SetComparator(toReturn, &Stack_Compare);
 	Object_SetDestructor(toReturn, &Stack_Destroy);
 	Object_SetCloner(toReturn, &Stack_Clone);
@@ -14,49 +14,49 @@ Object Stack_Create(void)
 	return toReturn;
 }
 
-Object Stack_Init(Object self)
+Object Stack_Init(Object _self)
 {
-	(((Stack) (self->entity))->list) = List_Create();
-	return self;
+	(((Stack) (_self->entity))->_list) = List_Create();
+	return _self;
 }
 
-Object Stack_Push(Object self, Object object)
+Object Stack_Push(Object _self, Object _object)
 {
-	List_PushBack((((Stack) (self->entity))->list), object);
-	return self;
+	List_PushBack((((Stack) (_self->entity))->_list), _object);
+	return _self;
 }
 
-Object Stack_Pop(Object self)
+Object Stack_Pop(Object _self)
 {
-	return List_PopBack((((Stack) (self->entity))->list));
+	return List_PopBack((((Stack) (_self->entity))->_list));
 }
 
-Object Stack_Peek(Object self)
+Object Stack_Peek(Object _self)
 {
-	return List_PeekBack((((Stack) (self->entity))->list));
+	return List_PeekBack((((Stack) (_self->entity))->_list));
 }
 
-Object Stack_Compare(Object self, Object queue)
+Object Stack_Compare(Object _self, Object _queue)
 {
-	return Object_Compare(Object_Hash((((Stack) (self->entity))->list)), Object_Hash((((Stack) (queue->entity))->list)));
+	return Object_Compare(Object_Hash((((Stack) (_self->entity))->_list)), Object_Hash((((Stack) (_queue->entity))->_list)));
 }
 
-Object Stack_Destroy(Object self)
+Object Stack_Destroy(Object _self)
 {
-	List_Destroy((((Stack) (self->entity))->list));
-	return Object_Destroy(self);
+	List_Destroy((((Stack) (_self->entity))->_list));
+	return Object_Destroy(_self);
 }
 
-Object Stack_GetList(Object self)
+Object Stack_GetList(Object _self)
 {
-	return Object_TempClone((((Stack) (self->entity))->list));
+	return Object_TempClone((((Stack) (_self->entity))->_list));
 }
 
-Object Stack_Clone(Object self)
+Object Stack_Clone(Object _self)
 {
-	Object toReturn;
-	toReturn = Stack_Create();
-	Object_Release((((Stack) (toReturn->entity))->list));
-	(((Stack) (toReturn->entity))->list) = Object_Clone((((Stack) (self->entity))->list));
-	return toReturn;
+	Object _toReturn;
+	_toReturn = Stack_Create();
+	Object_Release((((Stack) (_toReturn->entity))->_list));
+	(((Stack) (_toReturn->entity))->_list) = Object_Clone((((Stack) (_self->entity))->_list));
+	return _toReturn;
 }

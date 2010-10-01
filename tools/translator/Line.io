@@ -79,7 +79,7 @@ Line getAction := method(
 	toReturn
 )
 
-Line getActor := method(isComparation,
+Line getActor := method(
 	if(getCurrentToken beginsNewAction,
 		toNextToken
 		actor := getActor,
@@ -97,54 +97,65 @@ Line getActor := method(isComparation,
 		return actor
 	)
 	
-	getAction process(actor, self, isComparation)
+	getAction process(actor, self)
 )
 
 Line getCondition := method(
-	actor := getActor(true)
-	if(actor actorType != "[int]",
-		Exception raise("""Actor #{actor actorName} has #{actor actorType} type, but [int] expected.""" interpolate)
-	)
-	
-	actor actorName
+	"(#{getActor actorName}) != _false" interpolate
 )
 
 Line translateMethodEntryLine := method(
 	first := getCurrentToken
 	if(first isKeyword,
 		return first asKeyword process(self),
-		return getActor(false) actorName .. ";"
+		return getActor actorName .. ";"
 	)
 )
 
 Line translateMethodSignature := method(contextObject, 
 	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
-	class := tokens at(0)
-	second := tokens at(1)
-	if(second isCreator,
-		returnType := second outOfBrackets
+	class := getCurrentToken
+	returnType := class
+	toNextToken
+	while(getCurrentToken isCreator,
+		returnType = getCurrentToken outOfBrackets
 		TableOfSymbols ensureKnownClassForClass(returnType, contextObject)
-		name := tokens at(2)
-		parametersBeginAt := 3,
-		
-		name := second
-		returnType := class
-		parametersBeginAt := 2
+		toNextToken
 	)
+	name := getCurrentToken
+	toNextToken
 	TableOfSymbols setClassActionReturnedType(class, Action with(name), Actor unnamedActor(returnType))
-	parameters := "Object self" asMutable
-	TableOfSymbols setActorType(Actor fullActor("self", class))
-	typeOfParameter := "Object"
-	tokens foreach(index, token, 
-		if(index < parametersBeginAt, continue)
-		if(token isCreator,
-			typeOfParameter = token outOfBrackets
-			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
-			continue
+	
+	parameters := "Object _self" asMutable
+	TableOfSymbols setActorType(Actor fullActor("_self", class))
+	if(getCurrentToken isNil not,
+		if(getCurrentToken beginsNewAction,
+			loop(
+				toNextToken
+				
+				if(getCurrentToken endsNewAction,
+					toNextToken
+					break
+				)
+				
+				TableOfSymbols setMainActionNameForActorAndAction(name, Actor unnamedActor(class), Action with(getCurrentToken))
+			)
 		)
-		TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
-		typeOfParameter = "Object"
-		parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
+		
+		typeOfParameter := "Object"
+		while(getCurrentToken isNil not,
+			token := getCurrentToken
+			toNextToken
+			if(token isCreator,
+				typeOfParameter = token outOfBrackets
+				TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
+				continue
+			)
+			token = "_" .. token
+			TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
+			typeOfParameter = "Object"
+			parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
+		)
 	)
 	toPut interpolateInPlace
 )
@@ -152,7 +163,7 @@ Line translateMethodSignature := method(contextObject,
 Line translateObjectSignature := method(contextObject, 
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
 	objectName := tokens at(0) outOfBrackets
-	TableOfSymbols setClassId(objectName, ((objectName hash) mod (Number longMax)) asString(20, 0))
+	TableOfSymbols setClassId(objectName, ((objectName hash) mod (Number longMax)) asString(20, 0) .. "ull")
 	
 	fields := "" asMutable
 	typeOfParameter := "Object"
@@ -163,6 +174,7 @@ Line translateObjectSignature := method(contextObject,
 			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
 			continue
 		)
+		token = "_" .. token
 		TableOfSymbols setFieldType(objectName, token, typeOfParameter)
 		typeOfParameter = "Object"
 		fields appendSeq("\tObject #{token};\n" interpolate)

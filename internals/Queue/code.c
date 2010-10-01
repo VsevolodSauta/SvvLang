@@ -5,8 +5,8 @@
 Object Queue_Create(void)
 {
 	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct Queue));
-	toReturn->gid =  5026058259973625856;
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct Queue));
+	toReturn->gid =  5026058259973625856ull;
 	Object_SetComparator(toReturn, &Queue_Compare);
 	Object_SetDestructor(toReturn, &Queue_Destroy);
 	Object_SetCloner(toReturn, &Queue_Clone);
@@ -14,49 +14,49 @@ Object Queue_Create(void)
 	return toReturn;
 }
 
-Object Queue_Init(Object self)
+Object Queue_Init(Object _self)
 {
-	(((Queue) (self->entity))->list) = List_Create();
-	return self;
+	(((Queue) (_self->entity))->_list) = List_Create();
+	return _self;
 }
 
-Object Queue_Push(Object self, Object object)
+Object Queue_Push(Object _self, Object _object)
 {
-	List_PushBack((((Queue) (self->entity))->list), object);
-	return self;
+	List_PushBack((((Queue) (_self->entity))->_list), _object);
+	return _self;
 }
 
-Object Queue_Pop(Object self)
+Object Queue_Pop(Object _self)
 {
-	return List_PopFront((((Queue) (self->entity))->list));
+	return List_PopFront((((Queue) (_self->entity))->_list));
 }
 
-Object Queue_Peek(Object self)
+Object Queue_Peek(Object _self)
 {
-	return List_PeekFront((((Queue) (self->entity))->list));
+	return List_PeekFront((((Queue) (_self->entity))->_list));
 }
 
-Object Queue_Compare(Object self, Object queue)
+Object Queue_Compare(Object _self, Object _queue)
 {
-	return Object_Compare(Object_Hash((((Queue) (self->entity))->list)), Object_Hash((((Queue) (queue->entity))->list)));
+	return Object_Compare((((Queue) (_self->entity))->_list), (((Queue) (_queue->entity))->_list));
 }
 
-Object Queue_Destroy(Object self)
+Object Queue_Destroy(Object _self)
 {
-	List_Destroy((((Queue) (self->entity))->list));
-	return Object_Destroy(self);
+	List_Destroy((((Queue) (_self->entity))->_list));
+	return Object_Destroy(_self);
 }
 
-Object Queue_GetList(Object self)
+Object Queue_GetList(Object _self)
 {
-	return Object_TempClone((((Queue) (self->entity))->list));
+	return Object_TempClone((((Queue) (_self->entity))->_list));
 }
 
-Object Queue_Clone(Object self)
+Object Queue_Clone(Object _self)
 {
-	Object toReturn;
-	toReturn = Queue_Create();
-	Object_Release((((Queue) (toReturn->entity))->list));
-	(((Queue) (toReturn->entity))->list) = Object_Clone((((Queue) (self->entity))->list));
-	return toReturn;
+	Object _toReturn;
+	_toReturn = Queue_Create();
+	Object_Release((((Queue) (_toReturn->entity))->_list));
+	(((Queue) (_toReturn->entity))->_list) = Object_Clone((((Queue) (_self->entity))->_list));
+	return _toReturn;
 }

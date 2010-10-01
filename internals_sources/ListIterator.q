@@ -1,6 +1,6 @@
 <ListIterator> <List> list <ListNode> node
 
-ListIterator <Logic> Compare <ListIterator> iterator
+ListIterator <Comparation> Compare <ListIterator> iterator
 	return self.node Compare iterator.node
 
 ListIterator Destroy
@@ -16,7 +16,7 @@ ListIterator Clone
 	toReturn.node Retain
 	return toReturn
 
-ListIterator InitWithNodeAndList <List> list <ListNode> node
+ListIterator InitWithListAndNode <List> list <ListNode> node
 	list Retain
 	node Retain
 	self.list = list
@@ -84,7 +84,7 @@ ListIterator SearchBackward object
 	return self
 
 ListIterator <Number> SearchForwardOffset object
-	toReturn = 0
+	position = 0
 	while self NotThisEnd
 		if (self ThisData) == object
 			return position
@@ -191,7 +191,7 @@ ListIterator RemoveCount <Number> count
 	savedPrev = self.node.prev
 	deletedCount = 0
 	while deletedCount < count
-		self.node release
+		self.node Release
 		self Next
 		deletedCount Inc
 	self.node.prev = savedPrev

@@ -1,13 +1,13 @@
 typedef struct Queue {
-	Object list;
+	Object _list;
 } *Queue;
 
 Object Queue_Create(void);
-Object Queue_Init(Object self);
-Object Queue_Push(Object self, Object object);
-Object Queue_Pop(Object self);
-Object Queue_Peek(Object self);
-Object Queue_Compare(Object self, Object queue);
-Object Queue_Destroy(Object self);
-Object Queue_GetList(Object self);
-Object Queue_Clone(Object self);
+Object Queue_Init(Object _self);
+Object Queue_Push(Object _self, Object _object);
+Object Queue_Pop(Object _self);
+Object Queue_Peek(Object _self);
+Object Queue_Compare(Object _self, Object _queue);
+Object Queue_Destroy(Object _self);
+Object Queue_GetList(Object _self);
+Object Queue_Clone(Object _self);

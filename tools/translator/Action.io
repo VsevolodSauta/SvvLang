@@ -12,13 +12,13 @@ Action comparationTypeMap := Map with(
 )
 
 Action comparationValueMap := Map with(
-	"==", "equal", 
-	"<>", "equal", 
-	"!=", "equal",
-	">", "greater",
-	"<", "less",
-	">=", "less",
-	"<=", "greater"
+	"==", "_equal", 
+	"<>", "_equal", 
+	"!=", "_equal",
+	">", "_greater",
+	"<", "_less",
+	">=", "_less",
+	"<=", "_greater"
 )
 
 
@@ -41,10 +41,11 @@ Action getActionType := method(actor,
 	)
 )
 
-Action process := method(actor, line, isComparation,
+Action process := method(actor, line,
+	actionName copy(TableOfSymbols getMainActionNameForActorAndAction(actor, self))
 	toReturn := Actor clone
 	if(actionName == "=",
-		actor2 := line getActor(isComparation)
+		actor2 := line getActor
 		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
 		toReturn actorType = actor2 actorType
 		actor actorType = actor2 actorType
@@ -54,12 +55,8 @@ Action process := method(actor, line, isComparation,
 	
 	if(comparationOperationsList contains(actionName),
 		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationTypeMap at(actionName)} #{comparationValueMap at(actionName)}" interpolate)
-		if(isComparation,
-			toReturn actorType = "[int]",
-			
-			toReturn actorName copy("LogicFactory_FromLong(logicFactory, #{toReturn actorName})" interpolate)
-			toReturn actorType = "Logic"
-		)
+		toReturn actorName copy("LogicFactory_FromLong(_logicFactory, #{toReturn actorName})" interpolate)
+		toReturn actorType = "Logic"
 		return toReturn
 	)
 	
@@ -72,21 +69,11 @@ Action process := method(actor, line, isComparation,
 	
 	if(actionName beginsWithSeq("Not"),
 		actionName copy(actionName exclusiveSlice(3))
-		if(isComparation,
-			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}) == false" asMutable
-			toReturn actorType = "[int]" asMutable,
-			
-			toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
-			toReturn actorType = "Logic" asMutable
-		),
+		toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
+		toReturn actorType = "Logic" asMutable,
 		
-		if(isComparation,
-			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}) != false" asMutable
-			toReturn actorType = "[int]" asMutable,
-			
-			toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters})" asMutable
-			toReturn actorType = "#{actionResult actorType}" asMutable
-		)
+		toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters})" asMutable
+		toReturn actorType = "#{actionResult actorType}" asMutable
 	)
 	
 	actionType := getActionType(actor)

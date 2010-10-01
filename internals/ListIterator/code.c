@@ -5,319 +5,317 @@
 Object ListIterator_Create(void)
 {
 	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(allocator, sizeof(struct ListIterator));
-	toReturn->gid =   807984642922801280;
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct ListIterator));
+	toReturn->gid =   807984642922801280ull;
 	Object_SetComparator(toReturn, &ListIterator_Compare);
 	Object_SetDestructor(toReturn, &ListIterator_Destroy);
 	Object_SetCloner(toReturn, &ListIterator_Clone);
 	return toReturn;
 }
 
-Object ListIterator_Compare(Object self, Object iterator)
+Object ListIterator_Compare(Object _self, Object _iterator)
 {
-	return Object_Compare((((ListIterator) (self->entity))->node), (((ListIterator) (iterator->entity))->node));
+	return Object_Compare((((ListIterator) (_self->entity))->_node), (((ListIterator) (_iterator->entity))->_node));
 }
 
-Object ListIterator_Destroy(Object self)
+Object ListIterator_Destroy(Object _self)
 {
-	Object_Release((((ListIterator) (self->entity))->node));
-	Object_Release((((ListIterator) (self->entity))->list));
-	return Object_Destroy(self);
+	Object_Release((((ListIterator) (_self->entity))->_node));
+	Object_Release((((ListIterator) (_self->entity))->_list));
+	return Object_Destroy(_self);
 }
 
-Object ListIterator_Clone(Object self)
+Object ListIterator_Clone(Object _self)
 {
-	Object toReturn;
-	toReturn = ListIterator_Create();
-	(((ListIterator) (toReturn->entity))->list) = (((ListIterator) (self->entity))->list);
-	(((ListIterator) (toReturn->entity))->node) = (((ListIterator) (self->entity))->node);
-	Object_Retain((((ListIterator) (toReturn->entity))->list));
-	Object_Retain((((ListIterator) (toReturn->entity))->node));
-	return toReturn;
+	Object _toReturn;
+	_toReturn = ListIterator_Create();
+	(((ListIterator) (_toReturn->entity))->_list) = (((ListIterator) (_self->entity))->_list);
+	(((ListIterator) (_toReturn->entity))->_node) = (((ListIterator) (_self->entity))->_node);
+	Object_Retain((((ListIterator) (_toReturn->entity))->_list));
+	Object_Retain((((ListIterator) (_toReturn->entity))->_node));
+	return _toReturn;
 }
 
-Object ListIterator_InitWithNodeAndList(Object self, Object list, Object node)
+Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node)
 {
-	Object_Retain(list);
-	Object_Retain(node);
-	(((ListIterator) (self->entity))->list) = list;
-	(((ListIterator) (self->entity))->node) = node;
-	return self;
+	Object_Retain(_list);
+	Object_Retain(_node);
+	(((ListIterator) (_self->entity))->_list) = _list;
+	(((ListIterator) (_self->entity))->_node) = _node;
+	return _self;
 }
 
-Object ListIterator_ResetNode(Object self, Object node)
+Object ListIterator_ResetNode(Object _self, Object _node)
 {
-	Object_Retain(node);
-	Object_Release((((ListIterator) (self->entity))->node));
-	(((ListIterator) (self->entity))->node) = node;
-	return self;
+	Object_Retain(_node);
+	Object_Release((((ListIterator) (_self->entity))->_node));
+	(((ListIterator) (_self->entity))->_node) = _node;
+	return _self;
 }
 
-Object ListIterator_Hide(Object self)
+Object ListIterator_Hide(Object _self)
 {
-	return ListIterator_ResetNode(self, (((List) ((((ListIterator) (self->entity))->list)->entity))->head));
+	return ListIterator_ResetNode(_self, (((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head));
 }
 
-Object ListIterator_Next(Object self)
+Object ListIterator_Next(Object _self)
 {
-	return ListIterator_ResetNode(self, (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next));
+	return ListIterator_ResetNode(_self, (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next));
 }
 
-Object ListIterator_Prev(Object self)
+Object ListIterator_Prev(Object _self)
 {
-	return ListIterator_ResetNode(self, (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev));
+	return ListIterator_ResetNode(_self, (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev));
 }
 
-Object ListIterator_ToBegin(Object self)
+Object ListIterator_ToBegin(Object _self)
 {
-	return ListIterator_ResetNode(self, (((ListNode) ((((List) ((((ListIterator) (self->entity))->list)->entity))->head)->entity))->next));
+	return ListIterator_ResetNode(_self, (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head)->entity))->_next));
 }
 
-Object ListIterator_ToEnd(Object self)
+Object ListIterator_ToEnd(Object _self)
 {
-	return ListIterator_ResetNode(self, (((ListNode) ((((List) ((((ListIterator) (self->entity))->list)->entity))->tail)->entity))->prev));
+	return ListIterator_ResetNode(_self, (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_tail)->entity))->_prev));
 }
 
-Object ListIterator_ToPosition(Object self, Object position)
+Object ListIterator_ToPosition(Object _self, Object _position)
 {
-	if(Object_Compare(position, NumberFactory_FromLong(numberFactory, 0)) != less)
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_position, NumberFactory_FromLong(_numberFactory, 0)) != _less)) != _false)
 	{
-		ListIterator_ToBegin(self);
-		Object currentPosition;
-		currentPosition = NumberFactory_FromLong(numberFactory, 0);
-		while(Object_Compare(currentPosition, position) == less)
+		ListIterator_ToBegin(_self);
+		Object _currentPosition;
+		_currentPosition = NumberFactory_FromLong(_numberFactory, 0);
+		while((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentPosition, _position) == _less)) != _false)
 		{
-			ListIterator_Next(self);
-			Number_Inc(position);
+			ListIterator_Next(_self);
+			Number_Inc(_position);
 		}
-		return self;
+		return _self;
 	}
-	ListIterator_ToEnd(self);
-	Object currentPosition;
-	currentPosition = NumberFactory_FromLong(numberFactory, -1);
-	while(Object_Compare(currentPosition, position) == greater)
+	ListIterator_ToEnd(_self);
+	Object _currentPosition;
+	_currentPosition = NumberFactory_FromLong(_numberFactory, -1);
+	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentPosition, _position) == _greater)) != _false)
 	{
-		Number_Dec(currentPosition);
-		ListIterator_Prev(self);
+		Number_Dec(_currentPosition);
+		ListIterator_Prev(_self);
 	}
-	return self;
+	return _self;
 }
 
-Object ListIterator_FromPositionToPosition(Object self, Object positionFrom, Object positionTo)
+Object ListIterator_FromPositionToPosition(Object _self, Object _positionFrom, Object _positionTo)
 {
-	Object quantity;
-	quantity = Number_Sub(positionTo, positionFrom);
-	while(Object_Compare(quantity, NumberFactory_FromLong(numberFactory, 0)) == less)
+	Object _quantity;
+	_quantity = Number_Sub(_positionTo, _positionFrom);
+	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_quantity, NumberFactory_FromLong(_numberFactory, 0)) == _less)) != _false)
 	{
-		ListIterator_Prev(self);
-		Object_Inc(quantity);
+		ListIterator_Prev(_self);
+		Number_Inc(_quantity);
 	}
-	while(Object_Compare(quantity, NumberFactory_FromLong(numberFactory, 0)) == greater)
+	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_quantity, NumberFactory_FromLong(_numberFactory, 0)) == _greater)) != _false)
 	{
-		ListIterator_Next(self);
-		Object_Dec(quantity);
+		ListIterator_Next(_self);
+		Number_Dec(_quantity);
 	}
-	return self;
+	return _self;
 }
 
-Object ListIterator_SearchForward(Object self, Object object)
+Object ListIterator_SearchForward(Object _self, Object _object)
 {
-	while(ListIterator_ThisEnd(self) == false)
+	while((Logic_Not(ListIterator_ThisEnd(_self))) != _false)
 	{
-		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
-		{
-			break;
-		}
-		ListIterator_Next(self);
-	}
-	return self;
-}
-
-Object ListIterator_SearchBackward(Object self, Object object)
-{
-	while(ListIterator_ThisBegin(self) == false)
-	{
-		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_self), _object) == _equal)) != _false)
 		{
 			break;
 		}
-		ListIterator_Prev(self);
+		ListIterator_Next(_self);
 	}
-	return self;
+	return _self;
 }
 
-Object ListIterator_SearchForwardOffset(Object self, Object object)
+Object ListIterator_SearchBackward(Object _self, Object _object)
 {
-	Object toReturn;
-	toReturn = NumberFactory_FromLong(numberFactory, 0);
-	while(ListIterator_ThisEnd(self) == false)
+	while((Logic_Not(ListIterator_ThisBegin(_self))) != _false)
 	{
-		if(Object_Compare(ListIterator_ThisData(self), object) == equal)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_self), _object) == _equal)) != _false)
 		{
-			Object position;
-			return position;
+			break;
 		}
-		ListIterator_Next(self);
-		Object position;
-		Object_Inc(position);
+		ListIterator_Prev(_self);
 	}
-	return NumberFactory_FromLong(numberFactory, -1);
+	return _self;
 }
 
-Object ListIterator_ThisRemove(Object self)
+Object ListIterator_SearchForwardOffset(Object _self, Object _object)
 {
-	(((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->prev) = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next);
-	(((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->next) = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev);
-	Object_Release((((ListIterator) (self->entity))->node));
-	return ListIterator_Next(self);
-}
-
-Object ListIterator_PrevRemove(Object self)
-{
-	Object toRemove;
-	toRemove = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next);
-	(((ListNode) ((((ListNode) (toRemove->entity))->next)->entity))->prev) = (((ListNode) (toRemove->entity))->prev);
-	(((ListNode) ((((ListNode) (toRemove->entity))->prev)->entity))->next) = (((ListNode) (toRemove->entity))->next);
-	Object_Release(toRemove);
-	return self;
-}
-
-Object ListIterator_NextRemove(Object self)
-{
-	Object toRemove;
-	toRemove = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev);
-	(((ListNode) ((((ListNode) (toRemove->entity))->next)->entity))->prev) = (((ListNode) (toRemove->entity))->prev);
-	(((ListNode) ((((ListNode) (toRemove->entity))->prev)->entity))->next) = (((ListNode) (toRemove->entity))->next);
-	Object_Release(toRemove);
-	return self;
-}
-
-Object ListIterator_ThisData(Object self)
-{
-	return (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->data);
-}
-
-Object ListIterator_NextData(Object self)
-{
-	return (((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->data);
-}
-
-Object ListIterator_PrevData(Object self)
-{
-	return (((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->data);
-}
-
-Object ListIterator_ThisSetData(Object self, Object object)
-{
-	Object_Retain(object);
-	Object_Release((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->data));
-	(((ListNode) ((((ListIterator) (self->entity))->node)->entity))->data) = object;
-	return self;
-}
-
-Object ListIterator_PrevSetData(Object self, Object object)
-{
-	Object_Retain(object);
-	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->data));
-	(((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->data) = object;
-	return self;
-}
-
-Object ListIterator_NextSetData(Object self, Object object)
-{
-	Object_Retain(object);
-	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->data));
-	(((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->data) = object;
-	return self;
-}
-
-Object ListIterator_AddAfter(Object self, Object object)
-{
-	Object_Retain(object);
-	Object addingElement;
-	addingElement = ListNode_Create();
-	(((ListNode) (addingElement->entity))->data) = object;
-	Object savedNext;
-	savedNext = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next);
-	(((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next) = addingElement;
-	(((ListNode) (addingElement->entity))->prev) = (((ListIterator) (self->entity))->node);
-	(((ListNode) (addingElement->entity))->next) = savedNext;
-	(((ListNode) (savedNext->entity))->prev) = addingElement;
-	return self;
-}
-
-Object ListIterator_AddBefore(Object self, Object object)
-{
-	Object_Retain(object);
-	Object addingElement;
-	addingElement = ListNode_Create();
-	(((ListNode) (addingElement->entity))->data) = object;
-	Object savedPrev;
-	savedPrev = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev);
-	(((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev) = addingElement;
-	(((ListNode) (addingElement->entity))->next) = (((ListIterator) (self->entity))->node);
-	(((ListNode) (addingElement->entity))->prev) = savedPrev;
-	(((ListNode) (savedPrev->entity))->next) = addingElement;
-	return self;
-}
-
-Object ListIterator_ThisBegin(Object self)
-{
-	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev), nothing) == equal);
-}
-
-Object ListIterator_ThisEnd(Object self)
-{
-	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next), nothing) == equal);
-}
-
-Object ListIterator_PrevBegin(Object self)
-{
-	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev)->entity))->prev), nothing) == equal);
-}
-
-Object ListIterator_NextEnd(Object self)
-{
-	return LogicFactory_FromLong(logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (self->entity))->node)->entity))->next)->entity))->next), nothing) == equal);
-}
-
-Object ListIterator_AddListBefore(Object self, Object list)
-{
-	Object listIterator;
-	listIterator = List_First(list);
-	while(ListIterator_ThisEnd(listIterator) == false)
+	Object _position;
+	_position = NumberFactory_FromLong(_numberFactory, 0);
+	while((Logic_Not(ListIterator_ThisEnd(_self))) != _false)
 	{
-		ListIterator_AddBefore(self, ListIterator_ThisData(listIterator));
-		ListIterator_Next(listIterator);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_self), _object) == _equal)) != _false)
+		{
+			return _position;
+		}
+		ListIterator_Next(_self);
+		Number_Inc(_position);
 	}
-	return self;
+	return NumberFactory_FromLong(_numberFactory, -1);
 }
 
-Object ListIterator_AddListAfter(Object self, Object list)
+Object ListIterator_ThisRemove(Object _self)
 {
-	Object listIterator;
-	listIterator = List_Last(list);
-	while(ListIterator_ThisBegin(listIterator) == false)
-	{
-		ListIterator_AddAfter(self, ListIterator_ThisData(listIterator));
-		ListIterator_Prev(listIterator);
-	}
-	return self;
+	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_prev) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
+	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_next) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
+	Object_Release((((ListIterator) (_self->entity))->_node));
+	return ListIterator_Next(_self);
 }
 
-Object ListIterator_RemoveCount(Object self, Object count)
+Object ListIterator_PrevRemove(Object _self)
 {
-	Object savedPrev;
-	savedPrev = (((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev);
-	Object deletedCount;
-	deletedCount = NumberFactory_FromLong(numberFactory, 0);
-	while(Object_Compare(deletedCount, count) == less)
+	Object _toRemove;
+	_toRemove = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
+	(((ListNode) ((((ListNode) (_toRemove->entity))->_next)->entity))->_prev) = (((ListNode) (_toRemove->entity))->_prev);
+	(((ListNode) ((((ListNode) (_toRemove->entity))->_prev)->entity))->_next) = (((ListNode) (_toRemove->entity))->_next);
+	Object_Release(_toRemove);
+	return _self;
+}
+
+Object ListIterator_NextRemove(Object _self)
+{
+	Object _toRemove;
+	_toRemove = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
+	(((ListNode) ((((ListNode) (_toRemove->entity))->_next)->entity))->_prev) = (((ListNode) (_toRemove->entity))->_prev);
+	(((ListNode) ((((ListNode) (_toRemove->entity))->_prev)->entity))->_next) = (((ListNode) (_toRemove->entity))->_next);
+	Object_Release(_toRemove);
+	return _self;
+}
+
+Object ListIterator_ThisData(Object _self)
+{
+	return (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
+}
+
+Object ListIterator_NextData(Object _self)
+{
+	return (((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data);
+}
+
+Object ListIterator_PrevData(Object _self)
+{
+	return (((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data);
+}
+
+Object ListIterator_ThisSetData(Object _self, Object _object)
+{
+	Object_Retain(_object);
+	Object_Release((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data));
+	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data) = _object;
+	return _self;
+}
+
+Object ListIterator_PrevSetData(Object _self, Object _object)
+{
+	Object_Retain(_object);
+	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data));
+	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data) = _object;
+	return _self;
+}
+
+Object ListIterator_NextSetData(Object _self, Object _object)
+{
+	Object_Retain(_object);
+	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data));
+	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data) = _object;
+	return _self;
+}
+
+Object ListIterator_AddAfter(Object _self, Object _object)
+{
+	Object_Retain(_object);
+	Object _addingElement;
+	_addingElement = ListNode_Create();
+	(((ListNode) (_addingElement->entity))->_data) = _object;
+	Object _savedNext;
+	_savedNext = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
+	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next) = _addingElement;
+	(((ListNode) (_addingElement->entity))->_prev) = (((ListIterator) (_self->entity))->_node);
+	(((ListNode) (_addingElement->entity))->_next) = _savedNext;
+	(((ListNode) (_savedNext->entity))->_prev) = _addingElement;
+	return _self;
+}
+
+Object ListIterator_AddBefore(Object _self, Object _object)
+{
+	Object_Retain(_object);
+	Object _addingElement;
+	_addingElement = ListNode_Create();
+	(((ListNode) (_addingElement->entity))->_data) = _object;
+	Object _savedPrev;
+	_savedPrev = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
+	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev) = _addingElement;
+	(((ListNode) (_addingElement->entity))->_next) = (((ListIterator) (_self->entity))->_node);
+	(((ListNode) (_addingElement->entity))->_prev) = _savedPrev;
+	(((ListNode) (_savedPrev->entity))->_next) = _addingElement;
+	return _self;
+}
+
+Object ListIterator_ThisBegin(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev), _nothing) == _equal);
+}
+
+Object ListIterator_ThisEnd(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next), _nothing) == _equal);
+}
+
+Object ListIterator_PrevBegin(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_prev), _nothing) == _equal);
+}
+
+Object ListIterator_NextEnd(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_next), _nothing) == _equal);
+}
+
+Object ListIterator_AddListBefore(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_First(_list);
+	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
 	{
-		ListNode_release((((ListIterator) (self->entity))->node));
-		ListIterator_Next(self);
-		Number_Inc(deletedCount);
+		ListIterator_AddBefore(_self, ListIterator_ThisData(_listIterator));
+		ListIterator_Next(_listIterator);
 	}
-	(((ListNode) ((((ListIterator) (self->entity))->node)->entity))->prev) = savedPrev;
-	(((ListNode) (savedPrev->entity))->next) = (((ListIterator) (self->entity))->node);
-	return self;
+	return _self;
+}
+
+Object ListIterator_AddListAfter(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_Last(_list);
+	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
+	{
+		ListIterator_AddAfter(_self, ListIterator_ThisData(_listIterator));
+		ListIterator_Prev(_listIterator);
+	}
+	return _self;
+}
+
+Object ListIterator_RemoveCount(Object _self, Object _count)
+{
+	Object _savedPrev;
+	_savedPrev = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
+	Object _deletedCount;
+	_deletedCount = NumberFactory_FromLong(_numberFactory, 0);
+	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_deletedCount, _count) == _less)) != _false)
+	{
+		Object_Release((((ListIterator) (_self->entity))->_node));
+		ListIterator_Next(_self);
+		Number_Inc(_deletedCount);
+	}
+	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev) = _savedPrev;
+	(((ListNode) (_savedPrev->entity))->_next) = (((ListIterator) (_self->entity))->_node);
+	return _self;
 }

@@ -1,29 +1,64 @@
 TableOfSymbols := Object clone
-TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def")
+TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif")
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash")
-TableOfSymbols basicClasses := list("[int]", "Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory")
 TableOfSymbols globalObjects := Map with(
-	"nil", "Object", "nothing", "Object",
-	"allocator", "Allocator",
-	"true", "Logic", "false", "Logic", "yes", "Logic", "no", "Logic",
-	"less", "Comparable", "greater", "Comparable", "equal", "Comparable", "uncomparableLess", "Comparable", "uncomparableGreater",
-	"numberFactory", "NumberFactory",
-	"logicFactory", "LogicFactory",
-	"charFactory", "Object",
-	"stringFactory", "Object"
+	"_nil", "Object", "_nothing", "Object",
+	"_allocator", "Allocator",
+	"_autoreleasePool", "AutoreleasePool",
+	"_true", "Logic", "_false", "Logic", "_yes", "Logic", "_no", "Logic",
+	"_less", "Comparation", "_greater", "Comparation", "_equal", "Comparation", "_uncomparableLess", "Comparation", "_uncomparableGreater",
+	"_numberFactory", "NumberFactory",
+	"_logicFactory", "LogicFactory",
+	"_charFactory", "Object",
+	"_stringFactory", "Object"
 )
 
 TableOfSymbols tableOfImports := Map clone
-
+TableOfSymbols invalutiveClasses := list("Number", "Logic")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
 TableOfSymbols listOfBeingImportedObjects := List clone
-TableOfSymbols mapOfGids := Map clone
+TableOfSymbols mapOfGids := Map with(
+	"Object", "Object" hash,
+	"Number", "Number" hash
+)
+TableOfSymbols mapOfMethodAliases := Map with(
+	"Object", Map with(
+		"Copy", "Clone",
+		"?", "Compare"
+	),
+	"Number", Map with(
+		"+", "Add",
+		"-", "Sub",
+		"*", "Mul",
+		"/", "Div",
+		"%", "Mod",
+		"+=", "AddInPlace",
+		"-=", "SubInPlace",
+		"*=", "MulInPlace",
+		"/=", "DivInPlace",
+		"%=", "ModInPlace",
+		"++", "Inc",
+		"--", "Dec"
+	),
+	"Logic", Map with(
+		"&", "And",
+		"|", "Or",
+		"&&", "And",
+		"||", "Or",
+		"^", "Xor",
+		"!", "Not"
+	), 
+	"Comparation", Map clone,
+	"Allocator", Map clone,
+	"NumberFactory", Map clone,
+	"LogicFactory", Map clone
+)
 
 TableOfSymbols updateActorType := method(actor,
-//	"[Update actor type] #{actor actorName} #{actor actorType}" interpolate println
 	actorTypesStack foreach(map,
 		actorType := map at(actor actorName)
 		if(actorType isTrue,
@@ -35,7 +70,6 @@ TableOfSymbols updateActorType := method(actor,
 )
 
 TableOfSymbols setActorType := method(actor,
-//	"[Set actor type] #{actor actorName} #{actor actorType}" interpolate println
 	currentActorTypesMap atPut(actor actorName, actor actorType)
 )
 
@@ -48,19 +82,12 @@ TableOfSymbols getActorType := method(actorName,
 )
 
 TableOfSymbols pushFrame := method(
-//	"[Push frame]" println
 	currentActorTypesMap = Map clone
 	actorTypesStack prepend(currentActorTypesMap)
 	self
 )
 
 TableOfSymbols popFrame := method(
-/*
-	"[Pop frame]" println
-	actorTypesStack first foreach(name, type,
-		"\t#{name}\t#{type}" interpolate println
-	)
-*/
 	actorTypesStack removeFirst
 	currentActorTypesMap = actorTypesStack first
 	self
@@ -85,8 +112,12 @@ TableOfSymbols getActorActionReturnedType := method(actor, action,
 	if(isObjectsMethod(action actionName),
 		toReturn := Actor unnamedActor(actor actorType),
 		
-		toReturn := classMethods at(actor actorType) ?at(action actionName)
-		if(toReturn isNil, toReturn := Actor unnamedActor("Object"))
+		if(invalutiveClasses contains(actor actorType),
+			toReturn := Actor unnamedActor(actor actorType),
+			
+			toReturn := classMethods at(actor actorType) ?at(action actionName)
+			if(toReturn isNil, toReturn := Actor unnamedActor("Object"))
+		)
 	)
 	toReturn
 )
@@ -135,6 +166,7 @@ TableOfSymbols ensureKnownClassForClass := method(importingType, contextType,
 	if(basicClasses contains(importingType), return)
 	if(classFields at(importingType) isNil,
 		classFields atPut(importingType, Map clone)
+		mapOfMethodAliases atPut(importingType, Map clone)
 		tableOfImports atPut(importingType, List clone)
 		Translator importObjectType(importingType)
 	)
@@ -159,7 +191,6 @@ TableOfSymbols blockDidEnd := method(
 )
 
 TableOfSymbols importStringForClass := method(objectType,
-//	toReturn := "#include \"internals/#{objectType}/interface.h\"\n" asMutable interpolateInPlace
 	toReturn := "" asMutable
 	tableOfImports at(objectType) foreach(importElement,
 		toReturn appendSeq("#include \"internals/#{importElement}/interface.h\"\n" interpolate)
@@ -169,4 +200,21 @@ TableOfSymbols importStringForClass := method(objectType,
 
 TableOfSymbols importListForClass := method(objectType,
 	tableOfImports at(objectType)
+)
+
+TableOfSymbols getMainActionNameForActorAndAction := method(actor, action,
+	toReturn := mapOfMethodAliases at(actor actorType) at(action actionName)
+	if(toReturn isNil,
+		toReturn = mapOfMethodAliases at("Object") at(action actionName)
+		if(toReturn isNil,
+			action actionName,
+			toReturn
+		),
+		
+		toReturn
+	)
+)
+
+TableOfSymbols setMainActionNameForActorAndAction := method(mainActionName, actor, action,
+	mapOfMethodAliases at(actor actorType) atPut(action actionName, mainActionName)
 )

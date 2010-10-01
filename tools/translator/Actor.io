@@ -35,12 +35,13 @@ Actor with := method(name,
 	
 	if(name isNumber,
 		toReturn actorType = "Number"
-		toReturn actorName copy("NumberFactory_FromLong(numberFactory, #{name})" interpolate)
+		toReturn actorName copy("NumberFactory_FromLong(_numberFactory, #{name})" interpolate)
 		return toReturn
 	)
 			
 	listOfFields := name split(".")
 	listOfFields foreach(index, field,
+		field = "_" .. field
 		if(index == 0,
 			toReturn actorName copy(field)
 			toReturn actorType = TableOfSymbols getActorType(field)
@@ -70,7 +71,7 @@ Actor getCreatorBody := method(
 	toReturn := list(
 		"{\n",
 		"\tObject toReturn = Object_Create();\n",
-		"\ttoReturn->entity = Allocator_New(allocator, sizeof(struct #{self actorType}));\n" interpolate,
+		"\ttoReturn->entity = Allocator_New(_allocator, sizeof(struct #{self actorType}));\n" interpolate,
 		"\ttoReturn->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
 		"\tObject_SetComparator(toReturn, &#{self actorType}_Compare);\n" interpolate,
 		"\tObject_SetDestructor(toReturn, &#{self actorType}_Destroy);\n" interpolate,

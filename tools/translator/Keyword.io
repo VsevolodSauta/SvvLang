@@ -14,7 +14,7 @@ Keyword process := method(line,
 
 Keyword returnProcess := method(line,
 	line toNextToken
-	"return #{line getActor(false) actorName};" interpolate
+	"return #{line getActor actorName};" interpolate
 )
 
 Keyword loopProcess := method(line,
@@ -23,6 +23,10 @@ Keyword loopProcess := method(line,
 
 Keyword elseProcess := method(line,
 	"else"
+)
+
+Keyword elifProcess := method(line,
+	"else #{ifProcess(line)}" interpolate
 )
 
 Keyword whileProcess := method(line,
@@ -46,7 +50,7 @@ Keyword breakProcess := method(line,
 Keyword defProcess := method(line,
 	line toNextToken
 	BlockDelegatesHandling beforeBlockEnds(KeywordDefHandler, 5)
-	"Object def = #{line getActor(false) actorName};" interpolate
+	"Object def = #{line getActor actorName};" interpolate
 )
 
 Keyword CProcess := method(line,
