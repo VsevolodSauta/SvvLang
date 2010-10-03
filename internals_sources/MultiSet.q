@@ -1,4 +1,4 @@
-<MultiSet> <List> list
+<MultiSet> <List> [Retain] list
 
 MultiSet Init
 	self.list = <List>
@@ -10,24 +10,24 @@ MultiSet <Object> Destroy
 
 MultiSet Clone
 	toReturn = <MultiSet>
-	toReturn.list Release
 	toReturn.list = self.list Clone
 	return toReturn
 
 MultiSet <Comparation> Compare <MultiSet> multiset
 	return self.list Compare multiset.list
 
-MultiSet Push object
+MultiSet Push (Add +) object
 	self.list PushSorted object
 	return self
 
-MultiSet <Logic> Contains object
+MultiSet <Logic> Contains (Has) object
 	return self.list Contains object
 
-MultiSet RemoveOnce object
+MultiSet RemoveOnce (Remove - \) object
 	self.list RemoveFirst object
 	return self
 
-MultiSet RemoveEvery object
+MultiSet RemoveEvery (-- \\) object
 	self.list RemoveEvery object
 	return self
+

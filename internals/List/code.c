@@ -10,6 +10,9 @@ Object List_Create(void)
 	Object_SetComparator(toReturn, &List_Compare);
 	Object_SetDestructor(toReturn, &List_Destroy);
 	Object_SetCloner(toReturn, &List_Clone);
+	((List) (toReturn->entity))->_iterator = _nil;
+	((List) (toReturn->entity))->_head = _nil;
+	((List) (toReturn->entity))->_tail = _nil;
 	toReturn = List_Init(toReturn);
 	return toReturn;
 }
@@ -27,6 +30,7 @@ Object List_Init(Object _self)
 
 Object List_Destroy(Object _self)
 {
+	Object_Release((((List) (_self->entity))->_iterator));
 	Object _node;
 	_node = (((List) (_self->entity))->_head);
 	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_node, _nil) != _equal)) != _false)
@@ -244,7 +248,7 @@ Object List_SystemIterator(Object _self)
 {
 	Object _iterator;
 	_iterator = ListIterator_Create();
-	ListIterator_InitWithListAndNode(_iterator, _self, (((List) (_self->entity))->_head));
+	ListIterator_SystemInitWithListAndNode(_iterator, _self, (((List) (_self->entity))->_head));
 	return _iterator;
 }
 

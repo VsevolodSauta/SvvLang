@@ -1,0 +1,29 @@
+<ListMapNode> <Map> [Retain] nextMap <Logic> mapped [Retain] mapping
+
+ListMapNode Init
+	self.nextMap = <Map>
+	self.mapping = nil
+	self.mapped = false
+	return self
+
+ListMapNode Destroy
+	self.nextMap Release
+	self.mapping Release
+	return self Destroy
+
+ListMapNode Clone
+	toReturn = <ListMapNode>
+	toReturn.nextMap = self.nextMap Clone
+	toReturn.mapping = self.mapping
+	toReturn.mapped = self.mapped
+	return toReturn
+
+ListMapNode Compare <ListMapNode> listMapNode
+	candidate = self.mapped ? listMapNode.mapped
+	if candidate != equal
+		return candidate
+	if self.mapped
+		candidate = self.mapping ? listMapNode.mapping
+		if candidate != equal
+			return candidate
+	return self.nextMap ? listMapNode.nextMap

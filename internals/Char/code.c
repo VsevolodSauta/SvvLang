@@ -10,13 +10,14 @@ Object Char_Create(void)
 	Object_SetComparator(toReturn, &Char_Compare);
 	Object_SetDestructor(toReturn, &Char_Destroy);
 	Object_SetCloner(toReturn, &Char_Clone);
+	((Char) (toReturn->entity))->_code = _nil;
 	toReturn = Char_Init(toReturn);
 	return toReturn;
 }
 
 Object Char_Init(Object _self)
 {
-	(((Char) (_self->entity))->_code) = Object_Retain(NumberFactory_FromLong(_numberFactory, 0));
+	(((Char) (_self->entity))->_code) = NumberFactory_FromLong(_numberFactory, 0);
 	return _self;
 }
 

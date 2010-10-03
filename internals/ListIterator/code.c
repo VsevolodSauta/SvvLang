@@ -10,6 +10,8 @@ Object ListIterator_Create(void)
 	Object_SetComparator(toReturn, &ListIterator_Compare);
 	Object_SetDestructor(toReturn, &ListIterator_Destroy);
 	Object_SetCloner(toReturn, &ListIterator_Clone);
+	((ListIterator) (toReturn->entity))->_list = _nil;
+	((ListIterator) (toReturn->entity))->_node = _nil;
 	return toReturn;
 }
 
@@ -29,53 +31,60 @@ Object ListIterator_Clone(Object _self)
 {
 	Object _toReturn;
 	_toReturn = ListIterator_Create();
-	(((ListIterator) (_toReturn->entity))->_list) = (((ListIterator) (_self->entity))->_list);
-	(((ListIterator) (_toReturn->entity))->_node) = (((ListIterator) (_self->entity))->_node);
-	Object_Retain((((ListIterator) (_toReturn->entity))->_list));
-	Object_Retain((((ListIterator) (_toReturn->entity))->_node));
+	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_list), (((ListIterator) (_self->entity))->_list));
+	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_node), (((ListIterator) (_self->entity))->_node));
 	return _toReturn;
 }
 
 Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node)
 {
-	Object_Retain(_list);
-	Object_Retain(_node);
-	(((ListIterator) (_self->entity))->_list) = _list;
-	(((ListIterator) (_self->entity))->_node) = _node;
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
+	return _self;
+}
+
+Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object _node)
+{
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
+	Object_Release(_list);
 	return _self;
 }
 
 Object ListIterator_ResetNode(Object _self, Object _node)
 {
-	Object_Retain(_node);
-	Object_Release((((ListIterator) (_self->entity))->_node));
-	(((ListIterator) (_self->entity))->_node) = _node;
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	return _self;
 }
 
 Object ListIterator_Hide(Object _self)
 {
-	return ListIterator_ResetNode(_self, (((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head));
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head));
+	return _self;
 }
 
 Object ListIterator_Next(Object _self)
 {
-	return ListIterator_ResetNode(_self, (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next));
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next));
+	return _self;
 }
 
 Object ListIterator_Prev(Object _self)
 {
-	return ListIterator_ResetNode(_self, (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev));
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev));
+	return _self;
 }
 
 Object ListIterator_ToBegin(Object _self)
 {
-	return ListIterator_ResetNode(_self, (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head)->entity))->_next));
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head)->entity))->_next));
+	return _self;
 }
 
 Object ListIterator_ToEnd(Object _self)
 {
-	return ListIterator_ResetNode(_self, (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_tail)->entity))->_prev));
+	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_tail)->entity))->_prev));
+	return _self;
 }
 
 Object ListIterator_ToPosition(Object _self, Object _position)
@@ -209,7 +218,7 @@ Object ListIterator_ThisSetData(Object _self, Object _object)
 {
 	Object_Retain(_object);
 	Object_Release((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data));
-	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data) = _object;
+	Object_SetRetaining(&(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data), _object);
 	return _self;
 }
 
@@ -217,7 +226,7 @@ Object ListIterator_PrevSetData(Object _self, Object _object)
 {
 	Object_Retain(_object);
 	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data));
-	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data) = _object;
+	Object_SetRetaining(&(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data), _object);
 	return _self;
 }
 
@@ -225,7 +234,7 @@ Object ListIterator_NextSetData(Object _self, Object _object)
 {
 	Object_Retain(_object);
 	Object_Release((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data));
-	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data) = _object;
+	Object_SetRetaining(&(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data), _object);
 	return _self;
 }
 
@@ -234,7 +243,7 @@ Object ListIterator_AddAfter(Object _self, Object _object)
 	Object_Retain(_object);
 	Object _addingElement;
 	_addingElement = ListNode_Create();
-	(((ListNode) (_addingElement->entity))->_data) = _object;
+	Object_SetRetaining(&(((ListNode) (_addingElement->entity))->_data), _object);
 	Object _savedNext;
 	_savedNext = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
 	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next) = _addingElement;
@@ -249,7 +258,7 @@ Object ListIterator_AddBefore(Object _self, Object _object)
 	Object_Retain(_object);
 	Object _addingElement;
 	_addingElement = ListNode_Create();
-	(((ListNode) (_addingElement->entity))->_data) = _object;
+	Object_SetRetaining(&(((ListNode) (_addingElement->entity))->_data), _object);
 	Object _savedPrev;
 	_savedPrev = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev) = _addingElement;

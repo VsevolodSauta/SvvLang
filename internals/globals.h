@@ -4,12 +4,13 @@
 
 extern Object _nothing;
 extern Object _nil;
+extern Object _null;
 
 extern Object _allocator;
 
 extern Object _autoreleasePool;
 
-extern Object _charFactory;
+// extern Object _charFactory;
 extern Object _stringFactory;
 extern Object _numberFactory;
 extern Object _logicFactory;

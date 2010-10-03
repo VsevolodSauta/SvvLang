@@ -10,6 +10,7 @@ List Init
 	return self
 
 List Destroy
+	self.iterator Release
 	node = self.head
 	while node != nil
 		nextNode = node.next
@@ -149,7 +150,7 @@ List <ListIterator> First
 
 List <ListIterator> SystemIterator
 	iterator = <ListIterator>
-	iterator InitWithListAndNode self self.head
+	iterator SystemInitWithListAndNode self self.head
 	return iterator
 
 List <Object> DataFromPosition <Number> position

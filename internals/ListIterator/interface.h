@@ -8,6 +8,7 @@ Object ListIterator_Compare(Object _self, Object _iterator);
 Object ListIterator_Destroy(Object _self);
 Object ListIterator_Clone(Object _self);
 Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node);
+Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object _node);
 Object ListIterator_ResetNode(Object _self, Object _node);
 Object ListIterator_Hide(Object _self);
 Object ListIterator_Next(Object _self);

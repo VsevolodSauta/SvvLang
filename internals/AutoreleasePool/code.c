@@ -10,13 +10,14 @@ Object AutoreleasePool_Create(void)
 	Object_SetComparator(toReturn, &AutoreleasePool_Compare);
 	Object_SetDestructor(toReturn, &AutoreleasePool_Destroy);
 	Object_SetCloner(toReturn, &AutoreleasePool_Clone);
+	((AutoreleasePool) (toReturn->entity))->_stack = _nil;
 	toReturn = AutoreleasePool_Init(toReturn);
 	return toReturn;
 }
 
 Object AutoreleasePool_Init(Object _self)
 {
-	(((AutoreleasePool) (_self->entity))->_stack) = Stack_Create();
+	Object_SetReleasing(&(((AutoreleasePool) (_self->entity))->_stack), Stack_Create());
 	return _self;
 }
 

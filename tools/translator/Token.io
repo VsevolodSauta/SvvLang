@@ -1,7 +1,7 @@
 Token := Sequence clone
 
 Token isCreator := method(
-	(self exclusiveSlice(0, 1) == "<") and (self exclusiveSlice(self size - 1, self size))
+	(self beginsWithSeq("<")) and (self endsWithSeq(">"))
 )
 
 Token with := method(sequence,
@@ -37,10 +37,31 @@ Token endsNewAction := method(
 	self == ")"
 )
 
+Token beginsPropertyList := method(
+	self == "["
+)
+
+Token endsPropertyList := method(
+	self == "]"
+)
+
+Token beginsString := method(
+	(self beginsWithSeq("\""))
+)
+
+Token endsString := method(
+	(self endsWithSeq("\""))
+)
+
 Token isNumber := method(
 	self foreach(index, elem, 
 		if((index == 0) and (elem == 45), continue)
 		if((elem < 48) or (elem > 57), return false)
 	)
 	true
+)
+
+Token isString := method(
+	(self beginsWithSeq("\"")) and (self endsWithSeq("\""))
+
 )

@@ -1,7 +1,7 @@
-<ListIterator> <List> list <ListNode> node
+<ListIterator> <List> [Retain] list <ListNode> [Retain] node
 
 ListIterator <Comparation> Compare <ListIterator> iterator
-	return self.node Compare iterator.node
+	return self.node ? iterator.node
 
 ListIterator Destroy
 	self.node Release
@@ -12,37 +12,42 @@ ListIterator Clone
 	toReturn = <ListIterator>
 	toReturn.list = self.list
 	toReturn.node = self.node
-	toReturn.list Retain
-	toReturn.node Retain
 	return toReturn
 
 ListIterator InitWithListAndNode <List> list <ListNode> node
-	list Retain
-	node Retain
 	self.list = list
 	self.node = node
 	return self
 
+ListIterator SystemInitWithListAndNode <List> list <ListNode> node
+	self.list = list
+	self.node = node
+	list Release
+	return self
+
 ListIterator ResetNode <ListNode> node
-	node Retain
-	self.node Release
 	self.node = node
 	return self
 
 ListIterator Hide
-	return self ResetNode self.list.head
+	self.node = self.list.head
+	return self
 
-ListIterator Next
-	return self ResetNode self.node.next
+ListIterator Next (++)
+	self.node = self.node.next
+	return self
 
-ListIterator Prev
-	return self ResetNode self.node.prev
+ListIterator Prev (--)
+	self.node = self.node.prev
+	return self
 
 ListIterator ToBegin
-	return self ResetNode self.list.head.next
+	self.node = self.list.head.next
+	return self
 
 ListIterator ToEnd
-	return self ResetNode self.list.tail.prev
+	self.node = self.list.tail.prev
+	return self
 
 ListIterator ToPosition <Number> position
 	if position >= 0
@@ -92,7 +97,7 @@ ListIterator <Number> SearchForwardOffset object
 		position Inc
 	return -1
 
-ListIterator ThisRemove
+ListIterator ThisRemove (Remove)
 	self.node.next.prev = self.node.next
 	self.node.prev.next = self.node.prev
 	self.node Release
@@ -112,7 +117,7 @@ ListIterator NextRemove
 	toRemove Release
 	return self
 
-ListIterator <Object> ThisData
+ListIterator <Object> ThisData (Data)
 	return self.node.data
 
 ListIterator <Object> NextData
@@ -121,19 +126,19 @@ ListIterator <Object> NextData
 ListIterator <Object> PrevData
 	return self.node.prev.data
 
-ListIterator ThisSetData object
+ListIterator ThisSetData (SetThisData SetData) object
 	object Retain
 	self.node.data Release
 	self.node.data = object
 	return self
 
-ListIterator PrevSetData object
+ListIterator PrevSetData (SetPrevData) object
 	object Retain
 	self.node.prev.data Release
 	self.node.prev.data = object
 	return self
 
-ListIterator NextSetData object
+ListIterator NextSetData (SetNextData) object
 	object Retain
 	self.node.next.data Release
 	self.node.next.data = object
@@ -161,10 +166,10 @@ ListIterator AddBefore object
 	savedPrev.next = addingElement
 	return self
 
-ListIterator ThisBegin
+ListIterator ThisBegin (Begin)
 	return self.node.prev == nothing
 
-ListIterator ThisEnd
+ListIterator ThisEnd (End)
 	return self.node.next == nothing
 
 ListIterator PrevBegin

@@ -10,13 +10,14 @@ Object MultiSet_Create(void)
 	Object_SetComparator(toReturn, &MultiSet_Compare);
 	Object_SetDestructor(toReturn, &MultiSet_Destroy);
 	Object_SetCloner(toReturn, &MultiSet_Clone);
+	((MultiSet) (toReturn->entity))->_list = _nil;
 	toReturn = MultiSet_Init(toReturn);
 	return toReturn;
 }
 
 Object MultiSet_Init(Object _self)
 {
-	(((MultiSet) (_self->entity))->_list) = List_Create();
+	Object_SetReleasing(&(((MultiSet) (_self->entity))->_list), List_Create());
 	return _self;
 }
 
@@ -30,8 +31,7 @@ Object MultiSet_Clone(Object _self)
 {
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
-	Object_Release((((MultiSet) (_toReturn->entity))->_list));
-	(((MultiSet) (_toReturn->entity))->_list) = Object_Clone((((MultiSet) (_self->entity))->_list));
+	Object_SetReleasing(&(((MultiSet) (_toReturn->entity))->_list), Object_Clone((((MultiSet) (_self->entity))->_list)));
 	return _toReturn;
 }
 

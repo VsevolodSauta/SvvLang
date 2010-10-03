@@ -1,4 +1,4 @@
-<Stack> <List> list
+<Stack> <List> [Retain] list
 
 Stack Init
 	self.list = <List>
@@ -26,7 +26,6 @@ Stack <List> GetList
 
 Stack Clone
 	toReturn = <Stack>
-	toReturn.list Release
 	toReturn.list = self.list Clone
 	return toReturn
 

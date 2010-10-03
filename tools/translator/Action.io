@@ -1,6 +1,5 @@
 Action := Object clone
 Action actionName := Token clone
-Action comparationOperationsList := list("==", "<>", "!=", ">", "<", "<=", ">=")
 Action comparationTypeMap := Map with(
 	"==", "==", 
 	"<>", "!=", 
@@ -42,18 +41,59 @@ Action getActionType := method(actor,
 )
 
 Action process := method(actor, line,
-	actionName copy(TableOfSymbols getMainActionNameForActorAndAction(actor, self))
 	toReturn := Actor clone
+	
+/*
+	if(actionName == "Not=",
+		TranslatorError with(line, "Invalid construction Not=.")
+	)
+*/
+	
+	if(actionName beginsWithSeq("Not"),
+		actionName copy(actionName exclusiveSlice(3))
+		toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
+		toReturn actorType = "Logic" asMutable,
+		
+		toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters})" asMutable
+		toReturn actorType = "#{actionResult actorType}" asMutable
+	)
+	
+	actionName copy(TableOfSymbols getMainActionNameForActorAndAction(actor, self))
 	if(actionName == "=",
 		actor2 := line getActor
-		toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable interpolateInPlace
+		if(actor hasProperty("Constant"),
+			TranslatorWarning with(line, "Attempt to assign constant object #{actor actorName}." interpolate)
+		)
+		if(actor hasProperty("Retain"),
+			if(actor2 hasProperty("JustCreated") not,
+				toReturn actorName = "Object_SetRetaining(&#{actor actorName}, #{actor2 actorName})" asMutable,
+				
+				toReturn actorName = "Object_SetReleasing(&#{actor actorName}, #{actor2 actorName})" asMutable
+			),
+			
+			if(actor2 hasProperty("Copy") or actor2 hasProperty("Clone"),
+				if(actor2 hasProperty("JustCreated") not,
+					toReturn actorName = "Object_SetCloning(&#{actor actorName}, #{actor2 actorName})" asMutable,
+					
+					toReturn actorName = "Object_SetReleasing(&#{actor actorName}, #{actor2 actorName})" asMutable
+				),
+				
+				toReturn actorName = "#{actor actorName} = #{actor2 actorName}" asMutable
+			)
+		)
+		if(actor hasProperty("ConstantType"),
+			if((actor2 actorType) != (actor actorType),
+				TranslatorWarning with(line, "Attempt to change type of constant type object #{actor actorName} from #{actor actorType} to #{actor2 actorType}." interpolate)
+			)
+		)
+		toReturn actorName interpolateInPlace
 		toReturn actorType = actor2 actorType
 		actor actorType = actor2 actorType
 		TableOfSymbols updateActorType(actor)
 		return toReturn
 	)
 	
-	if(comparationOperationsList contains(actionName),
+	if(comparationTypeMap hasKey(actionName),
 		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationTypeMap at(actionName)} #{comparationValueMap at(actionName)}" interpolate)
 		toReturn actorName copy("LogicFactory_FromLong(_logicFactory, #{toReturn actorName})" interpolate)
 		toReturn actorType = "Logic"
@@ -67,20 +107,17 @@ Action process := method(actor, line,
 		return toReturn
 	)
 	
-	if(actionName beginsWithSeq("Not"),
-		actionName copy(actionName exclusiveSlice(3))
-		toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
-		toReturn actorType = "Logic" asMutable,
-		
-		toReturn actorName = "#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters})" asMutable
-		toReturn actorType = "#{actionResult actorType}" asMutable
-	)
 	
 	actionType := getActionType(actor)
 	actionResult := actor getReturnedType(self)
 	parameters := line getParameters
 	
+	if(actionName == "Clone",
+		toReturn setProperty("JustCreated")
+	)
+	
 	toReturn actorType interpolateInPlace
 	toReturn actorName interpolateInPlace
+	TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
 	toReturn
 )

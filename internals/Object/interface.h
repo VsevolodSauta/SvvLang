@@ -28,3 +28,27 @@ Object Object_SetCloner(Object receiver, ObjectCloner);
 Object Object_SetDestructor(Object receiver, ObjectDestructor);
 Object Object_Hash(Object receiver);
 Object Object_EmptyComparator(Object receiver, Object object);
+
+inline static Object Object_SetRetaining(Object *toSet, Object with)
+{
+	Object_Retain(with);
+	Object_Release(*toSet);
+	*toSet = with;
+	return with;
+}
+
+inline static Object Object_SetCloning(Object *toSet, Object with)
+{
+	with = Object_Clone(with);
+	Object_Release(*toSet);
+	*toSet = with;
+	return with;
+}
+
+inline static Object Object_SetReleasing(Object *toSet, Object with)
+{
+	Object_Release(*toSet);
+	*toSet = with;
+	return with;
+}
+

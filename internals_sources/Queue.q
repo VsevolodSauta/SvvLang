@@ -1,4 +1,4 @@
-<Queue> <List> list
+<Queue> <List> [Retain] list
 
 Queue Init
 	self.list = <List>
@@ -26,7 +26,6 @@ Queue <List> GetList
 
 Queue Clone
 	toReturn = <Queue>
-	toReturn.list Release
 	toReturn.list = self.list Clone
 	return toReturn
 

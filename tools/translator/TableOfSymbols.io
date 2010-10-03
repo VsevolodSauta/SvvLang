@@ -1,17 +1,17 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif")
-TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory")
+TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash", "Destroy")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory")
 TableOfSymbols globalObjects := Map with(
-	"_nil", "Object", "_nothing", "Object",
+	"_nil", "Object", "_nothing", "Object", "_null", "Object",
 	"_allocator", "Allocator",
 	"_autoreleasePool", "AutoreleasePool",
 	"_true", "Logic", "_false", "Logic", "_yes", "Logic", "_no", "Logic",
-	"_less", "Comparation", "_greater", "Comparation", "_equal", "Comparation", "_uncomparableLess", "Comparation", "_uncomparableGreater",
+	"_less", "Comparation", "_greater", "Comparation", "_equal", "Comparation", "_uncomparableLess", "Comparation", "_uncomparableGreater", "Comparation",
 	"_numberFactory", "NumberFactory",
 	"_logicFactory", "LogicFactory",
-	"_charFactory", "Object",
-	"_stringFactory", "Object"
+//	"_charFactory", "Object",
+	"_stringFactory", "StringFactory"
 )
 
 TableOfSymbols tableOfImports := Map clone
@@ -22,9 +22,10 @@ TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map clone
 TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols mapOfGids := Map with(
-	"Object", "Object" hash,
-	"Number", "Number" hash
+	"Object", "Object" hash asString(20, 0) .. "ull",
+	"Number", "Number" hash asString(20, 0) .. "ull"
 )
+
 TableOfSymbols mapOfMethodAliases := Map with(
 	"Object", Map with(
 		"Copy", "Clone",
@@ -55,7 +56,8 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"Comparation", Map clone,
 	"Allocator", Map clone,
 	"NumberFactory", Map clone,
-	"LogicFactory", Map clone
+	"LogicFactory", Map clone,
+	"StringFactory", Map clone
 )
 
 TableOfSymbols updateActorType := method(actor,
@@ -116,7 +118,10 @@ TableOfSymbols getActorActionReturnedType := method(actor, action,
 			toReturn := Actor unnamedActor(actor actorType),
 			
 			toReturn := classMethods at(actor actorType) ?at(action actionName)
-			if(toReturn isNil, toReturn := Actor unnamedActor("Object"))
+			if(toReturn isNil,
+				TranslatorError with(nil, "Unknown method #{action actionName} for class #{actor actorType}." interpolate)
+				toReturn := Actor unnamedActor("Object")
+			)
 		)
 	)
 	toReturn
@@ -127,17 +132,20 @@ TableOfSymbols setClassActionReturnedType := method(className, action, returnedA
 	classMethods at(className) atPut(action actionName, returnedActor)
 )
 
-TableOfSymbols setFieldType := method(class, field, fieldType,
-	classFields at(class) atPut(field, fieldType)
+TableOfSymbols setClassField := method(class, actor,
+	classFields at(class) append(actor)
 	self
 )
 
-TableOfSymbols getFieldType := method(class, field,
-	classMap := classFields at(class) 
-	if(classMap isNil, Exception raise("Undefined class name #{class}." interpolate))
-	fieldType := classMap at(field)
-	if(fieldType isNil, Exception raise("Unknown class field #{field} in class #{class}." interpolate))
-	fieldType
+TableOfSymbols getClassFieldNamed := method(class, fieldName,
+	classFieldsList := classFields at(class) 
+	if(classFieldsList isNil, TranslatorError with(nil, "Undefined class name #{class}." interpolate))
+	classFieldsList foreach(field,
+		if(field actorName == fieldName,
+			return field
+		)
+	)
+	TranslatorError with(nil, "Unknown class field #{fieldName} in class #{class}." interpolate)
 )
 
 TableOfSymbols setClassId := method(class, id,
@@ -165,7 +173,7 @@ TableOfSymbols importing := method(objectType,
 TableOfSymbols ensureKnownClassForClass := method(importingType, contextType,
 	if(basicClasses contains(importingType), return)
 	if(classFields at(importingType) isNil,
-		classFields atPut(importingType, Map clone)
+		classFields atPut(importingType, List clone)
 		mapOfMethodAliases atPut(importingType, Map clone)
 		tableOfImports atPut(importingType, List clone)
 		Translator importObjectType(importingType)
@@ -203,9 +211,9 @@ TableOfSymbols importListForClass := method(objectType,
 )
 
 TableOfSymbols getMainActionNameForActorAndAction := method(actor, action,
-	toReturn := mapOfMethodAliases at(actor actorType) at(action actionName)
+	toReturn := mapOfMethodAliases at("Object") at(action actionName)
 	if(toReturn isNil,
-		toReturn = mapOfMethodAliases at("Object") at(action actionName)
+		toReturn = mapOfMethodAliases at(actor actorType) at(action actionName)
 		if(toReturn isNil,
 			action actionName,
 			toReturn

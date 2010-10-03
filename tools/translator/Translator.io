@@ -60,7 +60,6 @@ Translator insertDeclaration := method(name,
 )
 
 Translator translateClass := method(objectClassName,
-	"=============== #{objectClassName alignCenter(20)} ===============" interpolate println
 	SourceFile = SourceFile with(objectClassName)
 	DestinationFile openObjectClass(objectClassName)
 	
@@ -122,6 +121,8 @@ if(System args size == 1,
 )
 
 toProcessList foreach(index, objectClassName,
+	"=============== #{objectClassName alignCenter(20)} ===============" interpolate println
+	Translator currentClassName := objectClassName
 	TableOfSymbols ensureKnownClassForClass(objectClassName, "Object")
 	TableOfSymbols newObjectProcessing
 	Translator translateClass(objectClassName)

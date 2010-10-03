@@ -1,11 +1,11 @@
-<Char> <Number> code
+<Char> <Number> [Clone] code
 
 Char Init
-	self.code = 0 Retain
+	self.code = 0
 	return self
 
 Char <Comparation> Compare <Char> char
-	return self.code Compare char.code
+	return self.code ? char.code
 
 Char <Object> Destroy
 	self.code Release

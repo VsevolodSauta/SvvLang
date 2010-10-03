@@ -10,6 +10,7 @@ Object AVLTree_Create(void)
 	Object_SetComparator(toReturn, &AVLTree_Compare);
 	Object_SetDestructor(toReturn, &AVLTree_Destroy);
 	Object_SetCloner(toReturn, &AVLTree_Clone);
+	((AVLTree) (toReturn->entity))->_root = _nil;
 	toReturn = AVLTree_Init(toReturn);
 	return toReturn;
 }
@@ -17,6 +18,7 @@ Object AVLTree_Create(void)
 Object AVLTree_Init(Object _self)
 {
 	(((AVLTree) (_self->entity))->_root) = AVLTreeNode_SetData(AVLTreeNode_Create(), _nil);
+	(((AVLTreeNode) ((((AVLTree) (_self->entity))->_root)->entity))->_height) = NumberFactory_FromLong(_numberFactory, -1);
 	return _self;
 }
 
@@ -52,4 +54,44 @@ Object AVLTree_Add(Object _self, Object _object)
 		AVLTreeNode_Balance(_node);
 	}
 	return _self;
+}
+
+Object AVLTree_Remove(Object _self, Object _object)
+{
+	Object _node;
+	_node = AVLTreeNode_FindNodeForObject((((AVLTreeNode) ((((AVLTree) (_self->entity))->_root)->entity))->_left), _object);
+	if((Logic_Not(AVLTreeNode_IsLeaf(_node))) != _false)
+	{
+		AVLTreeNode_DeleteFromTree(_node);
+	}
+	return _self;
+}
+
+Object AVLTree_AddWithComfirmation(Object _self)
+{
+	Object _node;
+	Object _object;
+	_node = AVLTreeNode_FindNodeForObject((((AVLTreeNode) ((((AVLTree) (_self->entity))->_root)->entity))->_left), _object);
+	if((AVLTreeNode_IsLeaf(_node)) != _false)
+	{
+		AVLTreeNode_SetData(_node, _object);
+		AVLTreeNode_Balance(_node);
+		return _true;
+	}
+	else
+	{
+		return _false;
+	}
+}
+
+Object AVLTree_RemoveWithConfirmation(Object _self, Object _object)
+{
+	Object _node;
+	_node = AVLTreeNode_FindNodeForObject((((AVLTreeNode) ((((AVLTree) (_self->entity))->_root)->entity))->_left), _object);
+	if((Logic_Not(AVLTreeNode_IsLeaf(_node))) != _false)
+	{
+		AVLTreeNode_DeleteFromTree(_node);
+		return _true;
+	}
+	return _false;
 }

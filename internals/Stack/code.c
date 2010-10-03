@@ -10,13 +10,14 @@ Object Stack_Create(void)
 	Object_SetComparator(toReturn, &Stack_Compare);
 	Object_SetDestructor(toReturn, &Stack_Destroy);
 	Object_SetCloner(toReturn, &Stack_Clone);
+	((Stack) (toReturn->entity))->_list = _nil;
 	toReturn = Stack_Init(toReturn);
 	return toReturn;
 }
 
 Object Stack_Init(Object _self)
 {
-	(((Stack) (_self->entity))->_list) = List_Create();
+	Object_SetReleasing(&(((Stack) (_self->entity))->_list), List_Create());
 	return _self;
 }
 
@@ -43,7 +44,7 @@ Object Stack_Compare(Object _self, Object _queue)
 
 Object Stack_Destroy(Object _self)
 {
-	List_Destroy((((Stack) (_self->entity))->_list));
+	Object_Destroy((((Stack) (_self->entity))->_list));
 	return Object_Destroy(_self);
 }
 
@@ -56,7 +57,6 @@ Object Stack_Clone(Object _self)
 {
 	Object _toReturn;
 	_toReturn = Stack_Create();
-	Object_Release((((Stack) (_toReturn->entity))->_list));
-	(((Stack) (_toReturn->entity))->_list) = Object_Clone((((Stack) (_self->entity))->_list));
+	Object_SetReleasing(&(((Stack) (_toReturn->entity))->_list), Object_Clone((((Stack) (_self->entity))->_list)));
 	return _toReturn;
 }

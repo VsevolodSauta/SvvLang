@@ -1,6 +1,13 @@
 #!/usr/local/bin/io
 
 SourceFile := File clone
+SourceFile lineNumber := 0
+
+SourceFile clone := method(
+	toReturn := super(clone)
+	toReturn lineNumber := 0
+	toReturn
+)
 
 SourceFile openObjectClass := method(objectClassName,
 	openForReading("../../internals_sources/#{objectClassName}.q" interpolate)
@@ -11,5 +18,6 @@ SourceFile with := method(objectClassName,
 )
 
 SourceFile getLine := method(
-	Line withString(self readLine)
+	lineNumber = lineNumber + 1
+	Line withStringAndNumber(self readLine, lineNumber)
 )

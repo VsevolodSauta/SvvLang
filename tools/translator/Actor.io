@@ -1,11 +1,13 @@
 Actor := Object clone
 Actor actorType := "Object" asMutable clone
 Actor actorName := Token clone
+Actor properties := List clone
 
 Actor clone := method(
 	toReturn := Object super(clone)
 	toReturn actorType := Actor actorType clone
 	toReturn actorName := Actor actorName clone
+	toReturn properties := Actor properties clone
 	toReturn
 )
 
@@ -13,13 +15,15 @@ Actor unnamedActor := method(unnamedActorType,
 	toReturn := Actor clone
 	toReturn actorName copy("[unnamed]")
 	toReturn actorType copy(unnamedActorType)
+	toReturn properties = list("Constant")
 	toReturn
 )
 
-Actor fullActor := method(fullActorName, fullActorType,
+Actor fullActor := method(fullActorName, fullActorType, fullActorProperties,
 	toReturn := Actor clone
 	toReturn actorName copy(fullActorName)
 	toReturn actorType copy(fullActorType)
+	toReturn properties = fullActorProperties
 	toReturn
 )
 
@@ -30,6 +34,7 @@ Actor with := method(name,
 		toReturn actorType = name outOfBrackets
 		TableOfSymbols ensureKnownClassForClass(toReturn actorType, "Object")
 		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate)
+		toReturn setProperty("JustCreated")
 		return toReturn
 	)
 	
@@ -38,23 +43,34 @@ Actor with := method(name,
 		toReturn actorName copy("NumberFactory_FromLong(_numberFactory, #{name})" interpolate)
 		return toReturn
 	)
-			
-	listOfFields := name split(".")
-	listOfFields foreach(index, field,
-		field = "_" .. field
+	
+	if(name isString,
+		toReturn actorType = "List"
+		toReturn actorName copy("StringFactory_FromUTF8(_stringFactory, \"#{name outOfBrackets asMutable escape}\", #{name outOfBrackets size})" interpolate)
+		return toReturn
+	)
+	
+	listOfFieldNames := name split(".")
+	listOfFieldNames foreach(index, fieldName,
+		fieldName = "_" .. fieldName
 		if(index == 0,
-			toReturn actorName copy(field)
-			toReturn actorType = TableOfSymbols getActorType(field)
+			toReturn actorName copy(fieldName)
+			toReturn actorType = TableOfSymbols getActorType(fieldName)
 			if(toReturn actorType isNil,
-				if(listOfFields size != 1, Exception raise("No fields in object #{field} of Object type found." interpolate))
+				if(listOfFieldNames size != 1,
+					TranslatorError with(line, "No fields in object #{fieldName} of Object type found." interpolate)
+				)
 				toReturn actorType = "Object"
 				TableOfSymbols setActorType(toReturn)
-				Translator insertDeclaration(field)
+				Translator insertDeclaration(fieldName)
 			),
 			
-			toReturn actorName copy("(((#{toReturn actorType}) (#{toReturn actorName}->entity))->#{field})" interpolate)
-			toReturn actorType = TableOfSymbols getFieldType(toReturn actorType, field)
+			actor := TableOfSymbols getClassFieldNamed(toReturn actorType, fieldName)
+			toReturn actorName copy("(((#{toReturn actorType}) (#{toReturn actorName}->entity))->#{actor actorName})" interpolate)
+			toReturn actorType = actor actorType
+			toReturn properties = actor properties
 		)
+		TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
 	)
 	toReturn
 )
@@ -77,6 +93,9 @@ Actor getCreatorBody := method(
 		"\tObject_SetDestructor(toReturn, &#{self actorType}_Destroy);\n" interpolate,
 		"\tObject_SetCloner(toReturn, &#{self actorType}_Clone);\n" interpolate
 	)
+	TableOfSymbols classFields at(actorType) foreach(field,
+		toReturn push("\t((#{actorType}) (toReturn->entity))->#{field actorName} = _nil;\n" interpolate)
+	)
 	if(TableOfSymbols actorHasAction(Actor unnamedActor(self actorType), Action with("Init")),
 		toReturn push("\ttoReturn = #{self actorType}_Init(toReturn);\n" interpolate)
 	)
@@ -86,4 +105,13 @@ Actor getCreatorBody := method(
 	)
 	
 	toReturn join
+)
+
+Actor setProperty := method(property,
+	properties appendIfAbsent(property)
+	self
+)
+
+Actor hasProperty := method(property,
+	properties contains(property)
 )

@@ -10,6 +10,9 @@ Object ListNode_Create(void)
 	Object_SetComparator(toReturn, &ListNode_Compare);
 	Object_SetDestructor(toReturn, &ListNode_Destroy);
 	Object_SetCloner(toReturn, &ListNode_Clone);
+	((ListNode) (toReturn->entity))->_next = _nil;
+	((ListNode) (toReturn->entity))->_prev = _nil;
+	((ListNode) (toReturn->entity))->_data = _nil;
 	return toReturn;
 }
 
@@ -19,8 +22,7 @@ Object ListNode_Clone(Object _self)
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
 	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
-	(((ListNode) (_toReturn->entity))->_data) = (((ListNode) (_self->entity))->_data);
-	Object_Retain((((ListNode) (_toReturn->entity))->_data));
+	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), (((ListNode) (_self->entity))->_data));
 	return _toReturn;
 }
 

@@ -10,13 +10,14 @@ Object Queue_Create(void)
 	Object_SetComparator(toReturn, &Queue_Compare);
 	Object_SetDestructor(toReturn, &Queue_Destroy);
 	Object_SetCloner(toReturn, &Queue_Clone);
+	((Queue) (toReturn->entity))->_list = _nil;
 	toReturn = Queue_Init(toReturn);
 	return toReturn;
 }
 
 Object Queue_Init(Object _self)
 {
-	(((Queue) (_self->entity))->_list) = List_Create();
+	Object_SetReleasing(&(((Queue) (_self->entity))->_list), List_Create());
 	return _self;
 }
 
@@ -43,7 +44,7 @@ Object Queue_Compare(Object _self, Object _queue)
 
 Object Queue_Destroy(Object _self)
 {
-	List_Destroy((((Queue) (_self->entity))->_list));
+	Object_Destroy((((Queue) (_self->entity))->_list));
 	return Object_Destroy(_self);
 }
 
@@ -56,7 +57,6 @@ Object Queue_Clone(Object _self)
 {
 	Object _toReturn;
 	_toReturn = Queue_Create();
-	Object_Release((((Queue) (_toReturn->entity))->_list));
-	(((Queue) (_toReturn->entity))->_list) = Object_Clone((((Queue) (_self->entity))->_list));
+	Object_SetReleasing(&(((Queue) (_toReturn->entity))->_list), Object_Clone((((Queue) (_self->entity))->_list)));
 	return _toReturn;
 }

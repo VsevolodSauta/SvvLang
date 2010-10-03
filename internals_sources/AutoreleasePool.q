@@ -1,4 +1,4 @@
-<AutoreleasePool> <Stack> stack
+<AutoreleasePool> <Stack> [Retain] stack
 
 AutoreleasePool Init
 	self.stack = <Stack>
@@ -26,4 +26,3 @@ AutoreleasePool <Comparation> Compare <AutoreleasePool> autoreleasePool
 
 AutoreleasePool Clone
 	return self									// Nobody needs this function
-

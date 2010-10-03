@@ -1,17 +1,32 @@
 Line := Object clone
 Line string := nil
+Line number := nil
 
-Line withString := method(argument,
-	if(argument isNil, return nil)
+Line preprocessingMap := Map with(
+	"(", "( ",
+	")", " )",
+	"[", "[ ",
+	"]", " ]",
+	"{", "{ ",
+	"}", " }"
+)
+
+Line withStringAndNumber := method(string, number,
+	if(string isNil, return nil)
 	toReturn := Line clone
-	toReturn string = argument
+	toReturn string = string
 	toReturn removeComments
 	toReturn separateBrackets
+	toReturn number = number
 	toReturn
 )
 
 Line separateBrackets := method(
-	string copy(string asMutable replaceSeq("(", "( ") replaceSeq(")", " )"))
+	stringToProcess := string asMutable
+	preprocessingMap foreach(leftSide, rightSide,
+		stringToProcess replaceSeq(leftSide, rightSide)
+	)
+	string copy(stringToProcess)
 )
 
 Line removeComments := method(
@@ -79,13 +94,32 @@ Line getAction := method(
 	toReturn
 )
 
+Line readString := method(
+	toReturn := "" asMutable appendProto(Token)
+	while(getCurrentToken beginsString,
+		toReturn appendSeq(getCurrentToken exclusiveSlice(1))
+		toNextToken
+		while(toReturn endsString not,
+			toReturn appendSeq(" ", getCurrentToken)
+			toNextToken
+		)
+		toReturn removeLast
+		if(getCurrentToken isNil, break)
+	)
+	"\"#{toReturn}\"" interpolate appendProto(Token)
+)
+
 Line getActor := method(
 	if(getCurrentToken beginsNewAction,
 		toNextToken
 		actor := getActor,
-		
-		actor := getCurrentToken asActor
-		toNextToken
+			
+		if(getCurrentToken beginsString,
+			actor := readString asActor,
+			
+			actor := getCurrentToken asActor
+			toNextToken
+		)
 	)
 	
 	if(getCurrentToken isNil,
@@ -96,7 +130,6 @@ Line getActor := method(
 		toNextToken
 		return actor
 	)
-	
 	getAction process(actor, self)
 )
 
@@ -127,7 +160,7 @@ Line translateMethodSignature := method(contextObject,
 	TableOfSymbols setClassActionReturnedType(class, Action with(name), Actor unnamedActor(returnType))
 	
 	parameters := "Object _self" asMutable
-	TableOfSymbols setActorType(Actor fullActor("_self", class))
+	TableOfSymbols setActorType(Actor fullActor("_self", class, list("Constant")))
 	if(getCurrentToken isNil not,
 		if(getCurrentToken beginsNewAction,
 			loop(
@@ -143,6 +176,7 @@ Line translateMethodSignature := method(contextObject,
 		)
 		
 		typeOfParameter := "Object"
+		propertyList := List clone
 		while(getCurrentToken isNil not,
 			token := getCurrentToken
 			toNextToken
@@ -151,8 +185,16 @@ Line translateMethodSignature := method(contextObject,
 				TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
 				continue
 			)
+			if(token beginsPropertyList,
+				toNextToken
+				while(getCurrentToken endsPropertyList not,
+					propertyList appendIfAbsent(getCurrentToken)
+					toNextToken
+				)
+			)
 			token = "_" .. token
-			TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter))
+			TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter, propertyList))
+			propertyList = List clone
 			typeOfParameter = "Object"
 			parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
 		)
@@ -162,20 +204,35 @@ Line translateMethodSignature := method(contextObject,
 
 Line translateObjectSignature := method(contextObject, 
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
-	objectName := tokens at(0) outOfBrackets
+	objectName := getCurrentToken outOfBrackets
+	flagAddToTable := TableOfSymbols classFields at(objectName) empty
+	toNextToken
 	TableOfSymbols setClassId(objectName, ((objectName hash) mod (Number longMax)) asString(20, 0) .. "ull")
 	
 	fields := "" asMutable
 	typeOfParameter := "Object"
-	tokens foreach(index, token, 
-		if(index < 1, continue)
+	propertyList := List clone
+	while(getCurrentToken isNil not,
+		token := getCurrentToken
+		toNextToken
 		if(token isCreator,
 			typeOfParameter = token outOfBrackets
 			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
 			continue
 		)
+		if(token beginsPropertyList,
+			while(getCurrentToken endsPropertyList not,
+				propertyList appendIfAbsent(getCurrentToken)
+				toNextToken
+			)
+			toNextToken
+			continue
+		)
 		token = "_" .. token
-		TableOfSymbols setFieldType(objectName, token, typeOfParameter)
+		if(flagAddToTable,
+			TableOfSymbols setClassField(objectName, Actor fullActor(token, typeOfParameter, propertyList))
+		)
+		propertyList = List clone
 		typeOfParameter = "Object"
 		fields appendSeq("\tObject #{token};\n" interpolate)
 	)
