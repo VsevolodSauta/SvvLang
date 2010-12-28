@@ -1,6 +1,4 @@
 #include "internals/basics.h"
-#include "internals/Undestroyable/imports.h"
-
 
 Object Undestroyable_Create(void)
 {
@@ -26,5 +24,6 @@ Object Undestroyable_Clone(Object _self)
 
 Object Undestroyable_Compare(Object _self, Object _undestroyable)
 {
-	return Object_Compare(Object_Hash(_self), Object_Hash(_undestroyable));
+	return (_self == _undestroyable) ? _equal :
+		(_self > _undestroyable) ? _greater : _less;
 }

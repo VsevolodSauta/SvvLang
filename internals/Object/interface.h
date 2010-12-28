@@ -7,7 +7,7 @@ typedef struct Object* (*ObjectComparator)(struct Object*, struct Object*);
 typedef struct Object* (*ObjectCloner)(struct Object*);
 
 typedef struct Object {
-	long				gid;
+	long long int			gid;
 	long				links;
 	ObjectDestructor		destroy;
 	ObjectComparator		compare;
@@ -28,6 +28,7 @@ Object Object_SetCloner(Object receiver, ObjectCloner);
 Object Object_SetDestructor(Object receiver, ObjectDestructor);
 Object Object_Hash(Object receiver);
 Object Object_EmptyComparator(Object receiver, Object object);
+Object Object_Is(Object receiver, Object object);
 
 inline static Object Object_SetRetaining(Object *toSet, Object with)
 {

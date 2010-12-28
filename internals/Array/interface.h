@@ -8,7 +8,7 @@ typedef struct Array {
 } *Array;
 
 Object Array_Create();
-Object Array_Compare(Object receiver, Object number);
+Object Array_Compare(Object receiver, Object array);
 Object Array_Clone(Object receiver);
 Object Array_Destroy(Object receiver);
 

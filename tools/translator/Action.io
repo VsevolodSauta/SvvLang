@@ -49,7 +49,7 @@ Action process := method(actor, line,
 	)
 */
 	
-	if(actionName beginsWithSeq("Not"),
+	if((actionName beginsWithSeq("Not")) and (actionName != "Not"),
 		actionName copy(actionName exclusiveSlice(3))
 		toReturn actorName = "Logic_Not(#{actionType actorType}_#{actionName}(#{actor actorName}#{parameters}))" asMutable
 		toReturn actorType = "Logic" asMutable,
@@ -71,7 +71,7 @@ Action process := method(actor, line,
 				toReturn actorName = "Object_SetReleasing(&#{actor actorName}, #{actor2 actorName})" asMutable
 			),
 			
-			if(actor2 hasProperty("Copy") or actor2 hasProperty("Clone"),
+			if(actor hasProperty("Copy") or actor hasProperty("Clone"),
 				if(actor2 hasProperty("JustCreated") not,
 					toReturn actorName = "Object_SetCloning(&#{actor actorName}, #{actor2 actorName})" asMutable,
 					

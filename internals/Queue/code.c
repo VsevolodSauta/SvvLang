@@ -37,6 +37,11 @@ Object Queue_Peek(Object _self)
 	return List_PeekFront((((Queue) (_self->entity))->_list));
 }
 
+Object Queue_Empty(Object _self)
+{
+	return List_Empty((((Queue) (_self->entity))->_list));
+}
+
 Object Queue_Compare(Object _self, Object _queue)
 {
 	return Object_Compare((((Queue) (_self->entity))->_list), (((Queue) (_queue->entity))->_list));
@@ -44,7 +49,7 @@ Object Queue_Compare(Object _self, Object _queue)
 
 Object Queue_Destroy(Object _self)
 {
-	Object_Destroy((((Queue) (_self->entity))->_list));
+	Object_Release((((Queue) (_self->entity))->_list));
 	return Object_Destroy(_self);
 }
 

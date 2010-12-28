@@ -17,7 +17,7 @@ Object Char_Create(void)
 
 Object Char_Init(Object _self)
 {
-	(((Char) (_self->entity))->_code) = NumberFactory_FromLong(_numberFactory, 0);
+	Object_SetCloning(&(((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 0));
 	return _self;
 }
 

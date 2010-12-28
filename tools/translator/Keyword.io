@@ -62,6 +62,33 @@ Keyword CProcess := method(line,
 	toReturn
 )
 
+Keyword DEBUG_MSGProcess := method(line,
+	toReturn := "DMSGS" asMutable
+	line tokens foreach(index, token,
+		if(index == 0, continue)
+		toReturn appendSeq(token, " ")
+	)
+	toReturn
+)
+
+Keyword DEBUG_PUSHProcess := method(line,
+	toReturn := "DPUSHS" asMutable
+	line tokens foreach(index, token,
+		if(index == 0, continue)
+		toReturn appendSeq(token, " ")
+	)
+	toReturn
+)
+
+Keyword DEBUG_POPProcess := method(line,
+	toReturn := "DPOPS" asMutable
+	line tokens foreach(index, token,
+		if(index == 0, continue)
+		toReturn appendSeq(token, " ")
+	)
+	toReturn
+)
+
 KeywordDefHandler := Object clone
 
 KeywordDefHandler blockWillEnd := method(

@@ -127,4 +127,5 @@ toProcessList foreach(index, objectClassName,
 	TableOfSymbols newObjectProcessing
 	Translator translateClass(objectClassName)
 	DestinationFile writeImport(TableOfSymbols importStringForClass(objectClassName))
+	DestinationFile createCMake(TableOfSymbols importListForClass(objectClassName) remove(objectClassName))
 )

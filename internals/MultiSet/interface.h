@@ -11,3 +11,4 @@ Object MultiSet_Push(Object _self, Object _object);
 Object MultiSet_Contains(Object _self, Object _object);
 Object MultiSet_RemoveOnce(Object _self, Object _object);
 Object MultiSet_RemoveEvery(Object _self, Object _object);
+Object MultiSet_Empty(Object _self);

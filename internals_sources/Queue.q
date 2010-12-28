@@ -14,11 +14,14 @@ Queue <Object> Pop
 Queue <Object> Peek
 	return self.list PeekFront
 
+Queue <Logic> Empty
+	return self.list Empty
+
 Queue <Comparation> Compare <Queue> queue
 	return (self.list) Compare (queue.list)
 
 Queue <Object> Destroy
-	self.list Destroy
+	self.list Release
 	return (self AsObject) Destroy
 
 Queue <List> GetList

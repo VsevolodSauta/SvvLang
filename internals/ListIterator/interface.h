@@ -1,6 +1,7 @@
 typedef struct ListIterator {
 	Object _list;
 	Object _node;
+	Object _system;
 } *ListIterator;
 
 Object ListIterator_Create(void);
@@ -26,6 +27,10 @@ Object ListIterator_NextRemove(Object _self);
 Object ListIterator_ThisData(Object _self);
 Object ListIterator_NextData(Object _self);
 Object ListIterator_PrevData(Object _self);
+Object ListIterator_LogicData(Object _self);
+Object ListIterator_NumberData(Object _self);
+Object ListIterator_ListData(Object _self);
+Object ListIterator_ListMapData(Object _self);
 Object ListIterator_ThisSetData(Object _self, Object _object);
 Object ListIterator_PrevSetData(Object _self, Object _object);
 Object ListIterator_NextSetData(Object _self, Object _object);

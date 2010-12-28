@@ -19,17 +19,20 @@ Object List_Create(void)
 
 Object List_Init(Object _self)
 {
+	DPUSHS( "List: Initing." ) 
 	(((List) (_self->entity))->_head) = ListNode_Create();
 	(((List) (_self->entity))->_tail) = ListNode_Create();
 	(((ListNode) ((((List) (_self->entity))->_head)->entity))->_next) = (((List) (_self->entity))->_tail);
 	(((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev) = (((List) (_self->entity))->_head);
 	(((ListNode) ((((List) (_self->entity))->_tail)->entity))->_next) = (((ListNode) ((((List) (_self->entity))->_head)->entity))->_prev) = _nil;
 	(((List) (_self->entity))->_iterator) = List_SystemIterator(_self);
+	DPOPS( "List: Inited." ) 
 	return _self;
 }
 
 Object List_Destroy(Object _self)
 {
+	DPUSHS( "List: Destroying." ) 
 	Object_Release((((List) (_self->entity))->_iterator));
 	Object _node;
 	_node = (((List) (_self->entity))->_head);
@@ -40,6 +43,7 @@ Object List_Destroy(Object _self)
 		Object_Release(_node);
 		_node = _nextNode;
 	}
+	DPOPS( "List: Destroyed." ) 
 	return Object_Destroy(_self);
 }
 
@@ -114,9 +118,11 @@ Object List_PushFront(Object _self, Object _object)
 
 Object List_PushBack(Object _self, Object _object)
 {
+	DPUSHS( "List: Pushing back." ) 
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS( "List: Pushed back." ) 
 	return _self;
 }
 
@@ -159,10 +165,12 @@ Object List_PopFront(Object _self)
 
 Object List_PopBack(Object _self)
 {
+	DPUSHS( "List: Popping back." ) 
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS( "List: Popped back." ) 
 	return def;
 }
 
@@ -203,6 +211,21 @@ Object List_RemoveFirst(Object _self, Object _object)
 	return _self;
 }
 
+Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
+{
+	Object _confirmation;
+	_confirmation = _false;
+	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
+	if((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
+	{
+		_confirmation = _true;
+		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	}
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	return _confirmation;
+}
+
 Object List_RemoveLast(Object _self, Object _object)
 {
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
@@ -213,6 +236,21 @@ Object List_RemoveLast(Object _self, Object _object)
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	return _self;
+}
+
+Object List_RemoveLastWithConfirmation(Object _self, Object _object)
+{
+	Object _confirmation;
+	_confirmation = _false;
+	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
+	ListIterator_SearchBackward((((List) (_self->entity))->_iterator), _object);
+	if((Logic_Not(ListIterator_ThisBegin((((List) (_self->entity))->_iterator)))) != _false)
+	{
+		_confirmation = _true;
+		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	}
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	return _confirmation;
 }
 
 Object List_RemoveEvery(Object _self, Object _object)
@@ -228,27 +266,49 @@ Object List_RemoveEvery(Object _self, Object _object)
 	return _self;
 }
 
+Object List_RemoveEveryWithConfirmation(Object _self, Object _object)
+{
+	Object _confirmation;
+	_confirmation = _false;
+	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
+	while((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
+	{
+		_confirmation = _true;
+		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+		ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
+	}
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	return _confirmation;
+}
+
 Object List_Last(Object _self)
 {
+	DPUSHS( "List: Getting last iterator" ) 
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev));
+	DPOPS( "List: Last iterator got." ) 
 	return _iterator;
 }
 
 Object List_First(Object _self)
 {
+	DPUSHS( "List: Getting first iterator" ) 
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next));
+	DPOPS( "List: First iterator got." ) 
 	return _iterator;
 }
 
 Object List_SystemIterator(Object _self)
 {
+	DPUSHS( "List: Getting system iterator." ) 
 	Object _iterator;
 	_iterator = ListIterator_Create();
-	ListIterator_SystemInitWithListAndNode(_iterator, _self, (((List) (_self->entity))->_head));
+	ListIterator_SystemInitWithListAndNode(_iterator, _self, _nil);
+	DPOPS( "List: System iterator got." ) 
 	return _iterator;
 }
 
@@ -356,16 +416,28 @@ Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _
 
 Object List_Size(Object _self)
 {
-	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	DPUSHS( "List: Getting size." ) 
+	Object _iterator;
+	_iterator = Object_Clone((((List) (_self->entity))->_iterator));
+	ListIterator_ToBegin(_iterator);
 	Object _toReturn;
 	_toReturn = NumberFactory_FromLong(_numberFactory, 0);
-	while((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
+	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
 	{
 		Number_Inc(_toReturn);
-		ListIterator_Next((((List) (_self->entity))->_iterator));
+		ListIterator_Next(_iterator);
 	}
-	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	Object_Release(_iterator);
+	DPOPS( "List: Size got." ) 
 	return _toReturn;
+}
+
+Object List_Empty(Object _self)
+{
+	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	Object def = ListIterator_ThisEnd((((List) (_self->entity))->_iterator));
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	return def;
 }
 
 Object List_Concatenate(Object _self, Object _list)

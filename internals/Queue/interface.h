@@ -7,6 +7,7 @@ Object Queue_Init(Object _self);
 Object Queue_Push(Object _self, Object _object);
 Object Queue_Pop(Object _self);
 Object Queue_Peek(Object _self);
+Object Queue_Empty(Object _self);
 Object Queue_Compare(Object _self, Object _queue);
 Object Queue_Destroy(Object _self);
 Object Queue_GetList(Object _self);

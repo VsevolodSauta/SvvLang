@@ -3,43 +3,43 @@
 #include "internals/Object/interface.h"
 
 typedef struct Number {
-	long		entity;
+	long		_long;
 } *Number;
 
 Object Number_Create();
-Object Number_Compare(Object receiver, Object number);
-Object Number_Clone(Object receiver);
-Object Number_Destroy(Object receiver);
+Object Number_Compare(Object _self, Object number);
+Object Number_Clone(Object _self);
+Object Number_Destroy(Object _self);
 
-Object Number_Inc(Object receiver);
-Object Number_Dec(Object receiver);
-Object Number_Add(Object receiver, Object arg);
-Object Number_Sub(Object receiver, Object arg);
-Object Number_Mul(Object receiver, Object arg);
-Object Number_Div(Object receiver, Object arg);
-Object Number_Mod(Object receiver, Object arg);
-Object Number_AddInPlace(Object receiver, Object arg);
-Object Number_SubInPlace(Object receiver, Object arg);
-Object Number_MulInPlace(Object receiver, Object arg);
-Object Number_DivInPlace(Object receiver, Object arg);
-Object Number_ModInPlace(Object receiver, Object arg);
-Object Number_Min(Object receiver, Object arg);
-Object Number_Max(Object receiver, Object arg);
-Object Number_Abs(Object receiver);
-Object Number_Inv(Object receiver);
+Object Number_Inc(Object _self);
+Object Number_Dec(Object _self);
+Object Number_Add(Object _self, Object arg);
+Object Number_Sub(Object _self, Object arg);
+Object Number_Mul(Object _self, Object arg);
+Object Number_Div(Object _self, Object arg);
+Object Number_Mod(Object _self, Object arg);
+Object Number_AddInPlace(Object _self, Object arg);
+Object Number_SubInPlace(Object _self, Object arg);
+Object Number_MulInPlace(Object _self, Object arg);
+Object Number_DivInPlace(Object _self, Object arg);
+Object Number_ModInPlace(Object _self, Object arg);
+Object Number_Min(Object _self, Object arg);
+Object Number_Max(Object _self, Object arg);
+Object Number_Abs(Object _self);
+Object Number_Inv(Object _self);
 
-Object Number_IsOdd(Object receiver);
-Object Number_IsEven(Object receiver);
-Object Number_Set(Object receiver, Object arg);
+Object Number_IsOdd(Object _self);
+Object Number_IsEven(Object _self);
+Object Number_Set(Object _self, Object arg);
 
-static inline long Number_GetLong(Object receiver)
+static inline long Number_GetLong(Object _self)
 {
-	return ((Number) (receiver->entity))->entity;
+	return ((Number) (_self->entity))->_long;
 };
 
-inline static Object Number_SetLong(Object receiver, long toSet)
+inline static Object Number_SetLong(Object _self, long toSet)
 {
-	((Number) (receiver->entity))->entity = toSet;
-	return receiver;
+	((Number) (_self->entity))->_long = toSet;
+	return _self;
 };
 

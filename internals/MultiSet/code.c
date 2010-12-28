@@ -17,14 +17,18 @@ Object MultiSet_Create(void)
 
 Object MultiSet_Init(Object _self)
 {
+	DPUSHS( "Multiset: Initing." ) 
 	Object_SetReleasing(&(((MultiSet) (_self->entity))->_list), List_Create());
+	DPOPS( "Multiset: Inited." ) 
 	return _self;
 }
 
 Object MultiSet_Destroy(Object _self)
 {
+	DPUSHS( "Multiset: Destroying." ) 
 	Object_Release((((MultiSet) (_self->entity))->_list));
-	return Object_Destroy((((MultiSet) (_self->entity))->_list));
+	DPOPS( "Multiset: Destroyed." ) 
+	return Object_Destroy(_self);
 }
 
 Object MultiSet_Clone(Object _self)
@@ -42,7 +46,9 @@ Object MultiSet_Compare(Object _self, Object _multiset)
 
 Object MultiSet_Push(Object _self, Object _object)
 {
+	DPUSHS( "Multiset: Pushing." ) 
 	List_PushSorted((((MultiSet) (_self->entity))->_list), _object);
+	DPOPS( "Multiset: Pushed." ) 
 	return _self;
 }
 
@@ -61,4 +67,9 @@ Object MultiSet_RemoveEvery(Object _self, Object _object)
 {
 	List_RemoveEvery((((MultiSet) (_self->entity))->_list), _object);
 	return _self;
+}
+
+Object MultiSet_Empty(Object _self)
+{
+	return List_Empty((((MultiSet) (_self->entity))->_list));
 }

@@ -50,6 +50,16 @@ Object Map_Compare(Object _self, Object _map)
 	return Object_Compare((((Map) (_self->entity))->_values), (((Map) (_map->entity))->_values));
 }
 
+Object Map_Empty(Object _self)
+{
+	return List_Empty((((Map) (_self->entity))->_keys));
+}
+
+Object Map_Size(Object _self)
+{
+	return List_Size((((Map) (_self->entity))->_keys));
+}
+
 Object Map_Add(Object _self, Object _key, Object _value)
 {
 	Object _keysIterator;
@@ -173,7 +183,7 @@ Object Map_GetValueForKey(Object _self, Object _key)
 		}
 		else
 		{
-			return ListIterator_ThisData(_keysIterator);
+			return ListIterator_ThisData(_valuesIterator);
 		}
 	}
 	return _nil;

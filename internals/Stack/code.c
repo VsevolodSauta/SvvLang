@@ -17,34 +17,51 @@ Object Stack_Create(void)
 
 Object Stack_Init(Object _self)
 {
+	DPUSHS( "Stack: Initing." ) 
 	Object_SetReleasing(&(((Stack) (_self->entity))->_list), List_Create());
+	DPOPS( "Stack: Inited." ) 
 	return _self;
 }
 
 Object Stack_Push(Object _self, Object _object)
 {
+	DPUSHS( "Stack: Pushing." ) 
 	List_PushBack((((Stack) (_self->entity))->_list), _object);
+	DPOPS( "Stack: Pushed." ) 
 	return _self;
 }
 
 Object Stack_Pop(Object _self)
 {
-	return List_PopBack((((Stack) (_self->entity))->_list));
+	DPUSHS( "Stack: Popping." ) 
+	Object def = List_PopBack((((Stack) (_self->entity))->_list));
+	DPOPS( "Stack: Popped." ) 
+	return def;
 }
 
 Object Stack_Peek(Object _self)
 {
-	return List_PeekBack((((Stack) (_self->entity))->_list));
+	DPUSHS( "Stack: Peeking." ) 
+	Object def = List_PeekBack((((Stack) (_self->entity))->_list));
+	DPOPS( "Stack: Peeked." ) 
+	return def;
 }
 
-Object Stack_Compare(Object _self, Object _queue)
+Object Stack_Empty(Object _self)
 {
-	return Object_Compare(Object_Hash((((Stack) (_self->entity))->_list)), Object_Hash((((Stack) (_queue->entity))->_list)));
+	return List_Empty((((Stack) (_self->entity))->_list));
+}
+
+Object Stack_Compare(Object _self, Object _stack)
+{
+	return Object_Compare(Object_Hash((((Stack) (_self->entity))->_list)), Object_Hash((((Stack) (_stack->entity))->_list)));
 }
 
 Object Stack_Destroy(Object _self)
 {
-	Object_Destroy((((Stack) (_self->entity))->_list));
+	DPUSHS( "Stack: Destroying." ) 
+	Object_Release((((Stack) (_self->entity))->_list));
+	DPOPS( "Stack: Destroyed." ) 
 	return Object_Destroy(_self);
 }
 

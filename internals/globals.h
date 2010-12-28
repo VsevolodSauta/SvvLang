@@ -27,3 +27,5 @@ extern Object _yes;
 extern Object _false;
 extern Object _no;
 
+extern Object _console;
+

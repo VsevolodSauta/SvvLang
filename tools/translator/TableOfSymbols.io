@@ -1,7 +1,7 @@
 TableOfSymbols := Object clone
-TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif")
-TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash", "Destroy")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory")
+TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP")
+TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash", "Destroy", "Is")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory", "Console", "Undestroyable")
 TableOfSymbols globalObjects := Map with(
 	"_nil", "Object", "_nothing", "Object", "_null", "Object",
 	"_allocator", "Allocator",
@@ -11,15 +11,20 @@ TableOfSymbols globalObjects := Map with(
 	"_numberFactory", "NumberFactory",
 	"_logicFactory", "LogicFactory",
 //	"_charFactory", "Object",
-	"_stringFactory", "StringFactory"
+	"_stringFactory", "StringFactory",
+	"_console", "Console"
 )
 
 TableOfSymbols tableOfImports := Map clone
-TableOfSymbols invalutiveClasses := list("Number", "Logic")
+TableOfSymbols invalutiveClasses := list("Number", "Logic", "Console")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
-TableOfSymbols classMethods := Map clone
+TableOfSymbols classMethods := Map with(
+	"StringFactory", Map with(
+		"FromNumber", Actor unnamedActor("Number")
+	)
+)
 TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols mapOfGids := Map with(
 	"Object", "Object" hash asString(20, 0) .. "ull",
@@ -57,7 +62,9 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"Allocator", Map clone,
 	"NumberFactory", Map clone,
 	"LogicFactory", Map clone,
-	"StringFactory", Map clone
+	"StringFactory", Map clone,
+	"Console", Map clone,
+	"Undestroyable", Map clone
 )
 
 TableOfSymbols updateActorType := method(actor,

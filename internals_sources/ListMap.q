@@ -1,4 +1,4 @@
-<ListMap> <ListMapNode> [Constant] root
+<ListMap> <ListMapNode> root
 
 ListMap Init
 	self.root = <ListMapNode>
@@ -17,6 +17,9 @@ ListMap Clone
 	toReturn.root = self.root Clone
 	return toReturn
 
+ListMap <Logic> Empty
+	return (self.root.mapped Not) And (self.root.nextMap Empty)
+
 ListMap Add (AtPut Put +) <List> list object
 	iterator = list First
 	node = self.root
@@ -26,39 +29,45 @@ ListMap Add (AtPut Put +) <List> list object
 		else
 			next = <ListMapNode>
 			node.nextMap AtPut (iterator ThisData) next
+			next Release
 			node = next
 		iterator ++
 	node.mapped = true
 	node.mapping = object
 	return self
 
-ListMap RemoveKey (DeleteKey - \) <List> list
-	iterator = list First
-	node = self.root
-	while iterator NotThisEnd
-		if node.nextMap HasKey (iterator ThisData)
-			node = (node.nextMap GetValueForKey (iterator ThisData)) AsListMapNode
-		else
-			return self
-		iterator ++
-	node.mapped = false
-	node.mapping = nil
+ListMap Remove (RemoveAt RemoveKey Remove DeleteKey Delete - \) <List> list
+	self RemoveKeyWithConfirmation list
 	return self
 
-ListMap <Logic> RemoveKeyWithConfirmation (DeleteKeyWithConfirmation -? \?) <List> list
+ListMap <Logic> RemoveKeyWithConfirmation (RemoveWithConfirmation DeleteKeyWithConfirmation DeleteWithConfirmation -? \?) <List> list
+	stack = <Stack>
 	iterator = list First
 	node = self.root
 	while iterator NotThisEnd
 		if node.nextMap HasKey (iterator ThisData)
+			stack Push node
 			node = (node.nextMap GetValueForKey (iterator ThisData)) AsListMapNode
 		else
+			stack Release
 			return false
 		iterator ++
+	stack Push node
 	node.mapped = false
 	node.mapping = nil
+	while (stack NotEmpty) And (iterator NotPrevBegin)
+		node = (stack Pop) AsListMapNode
+		iterator --
+		if ((node.nextMap Size) != 0) Or (node.mapped)
+			break
+		else
+			node Release
+			parent = ((stack Peek) AsListMapNode)
+			parent.nextMap RemoveKey (iterator ThisData)
+	stack Release
 	return true
 
-ListMap <Object> GetAt (AtGet GetValueForKey Get) <List> list
+ListMap <Object> ObjectAt (AtGet GetValueForKey At GetAt) <List> list
 	node = self.root
 	iterator = list First
 	while iterator NotThisEnd
@@ -81,3 +90,23 @@ ListMap <Logic> Contains (HasKey Has) <List> list
 			return false
 		iterator ++
 	return node.mapped
+
+ListMap <ListMap> ListMapAt <List> list
+	return (self GetAt list) AsListMap
+
+ListMap <List> ListAt <List> list
+	return (self GetAt list) AsList
+
+ListMap <Queue> QueueAt <List> list
+	return (self GetAt list) AsQueue
+
+ListMap <Logic> LogicAt <List> list
+	return (self GetAt list) AsLogic
+
+ListMap <Number> NumberAt <List> list
+	return (self GetAt list) AsNumber
+
+ListMap <Synonim> SynonimAt <List> list
+	return (self GetAt list) AsSynonim
+
+

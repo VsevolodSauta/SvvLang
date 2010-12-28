@@ -1,51 +1,64 @@
-<ListIterator> <List> [Retain] list <ListNode> [Retain] node
+<ListIterator> <List> [Retain] list <ListNode> [Retain] node <Logic> system
 
 ListIterator <Comparation> Compare <ListIterator> iterator
 	return self.node ? iterator.node
 
 ListIterator Destroy
 	self.node Release
-	self.list Release
+	if self.system Is false
+		self.list Release
 	return (self AsObject) Destroy
 
 ListIterator Clone
+	DEBUG_PUSH ("List Iterator: Cloning.")
 	toReturn = <ListIterator>
 	toReturn.list = self.list
 	toReturn.node = self.node
+	toReturn.system = false
+	DEBUG_POP ("List Iterator: Clonned.")
 	return toReturn
 
 ListIterator InitWithListAndNode <List> list <ListNode> node
 	self.list = list
 	self.node = node
+	self.system = false
 	return self
 
 ListIterator SystemInitWithListAndNode <List> list <ListNode> node
 	self.list = list
 	self.node = node
+	self.system = true
 	list Release
 	return self
 
 ListIterator ResetNode <ListNode> node
+	DEBUG_MSG ("List Iterator: Reseting node.")
 	self.node = node
 	return self
 
 ListIterator Hide
-	self.node = self.list.head
+	DEBUG_PUSH ("List Iterator: Hiding.")
+	self.node = nil
+	DEBUG_POP ("List Iterator: Hidden.")
 	return self
 
 ListIterator Next (++)
+	DEBUG_MSG ("List Iterator: Advancing.")
 	self.node = self.node.next
 	return self
 
 ListIterator Prev (--)
+	DEBUG_MSG ("List Iterator: Returning.")
 	self.node = self.node.prev
 	return self
 
 ListIterator ToBegin
+	DEBUG_MSG ("List Iterator: Bringing to begin.")
 	self.node = self.list.head.next
 	return self
 
 ListIterator ToEnd
+	DEBUG_MSG ("List Iterator: Bringing to end.")
 	self.node = self.list.tail.prev
 	return self
 
@@ -98,8 +111,8 @@ ListIterator <Number> SearchForwardOffset object
 	return -1
 
 ListIterator ThisRemove (Remove)
-	self.node.next.prev = self.node.next
-	self.node.prev.next = self.node.prev
+	self.node.next.prev = self.node.prev
+	self.node.prev.next = self.node.next
 	self.node Release
 	return self Next
 
@@ -118,34 +131,46 @@ ListIterator NextRemove
 	return self
 
 ListIterator <Object> ThisData (Data)
+	DEBUG_MSG ("List Iterator: Getting this data.")
 	return self.node.data
 
 ListIterator <Object> NextData
+	DEBUG_MSG ("List Iterator: Getting next data.")
 	return self.node.next.data
 
 ListIterator <Object> PrevData
+	DEBUG_MSG ("List Iterator: Getting previous data.")
 	return self.node.prev.data
 
+ListIterator <Logic> LogicData
+	return self.node.data AsLogic
+
+ListIterator <Number> NumberData
+	return self.node.data AsNumber
+
+ListIterator <List> ListData
+	return self.node.data AsList
+
+ListIterator <ListMap> ListMapData
+	return self.node.data AsListMap
+
 ListIterator ThisSetData (SetThisData SetData) object
-	object Retain
-	self.node.data Release
+	DEBUG_MSG ("List Iterator: Setting this data.")
 	self.node.data = object
 	return self
 
 ListIterator PrevSetData (SetPrevData) object
-	object Retain
-	self.node.prev.data Release
+	DEBUG_MSG ("List Iterator: Setting previous data.")
 	self.node.prev.data = object
 	return self
 
 ListIterator NextSetData (SetNextData) object
-	object Retain
-	self.node.next.data Release
+	DEBUG_MSG ("List Iterator: Setting next data.")
 	self.node.next.data = object
 	return self
 
 ListIterator AddAfter object
-	object Retain
+	DEBUG_PUSH ("List Iterator: Adding data to the next.")
 	addingElement = <ListNode>
 	addingElement.data = object
 	savedNext = self.node.next
@@ -153,10 +178,11 @@ ListIterator AddAfter object
 	addingElement.prev = self.node
 	addingElement.next = savedNext
 	savedNext.prev = addingElement
+	DEBUG_POP ("List Iterator: Data added to the next.")
 	return self
 
 ListIterator AddBefore object
-	object Retain
+	DEBUG_PUSH ("List Iterator: Adding data to the prev.")
 	addingElement = <ListNode>
 	addingElement.data = object
 	savedPrev = self.node.prev
@@ -164,6 +190,7 @@ ListIterator AddBefore object
 	addingElement.next = self.node
 	addingElement.prev = savedPrev
 	savedPrev.next = addingElement
+	DEBUG_POP ("List Iterator: Data added to the prev.")
 	return self
 
 ListIterator ThisBegin (Begin)

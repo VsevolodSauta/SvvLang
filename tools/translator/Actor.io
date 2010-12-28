@@ -58,7 +58,7 @@ Actor with := method(name,
 			toReturn actorType = TableOfSymbols getActorType(fieldName)
 			if(toReturn actorType isNil,
 				if(listOfFieldNames size != 1,
-					TranslatorError with(line, "No fields in object #{fieldName} of Object type found." interpolate)
+					TranslatorError with(nil, "No fields in object #{fieldName} of Object type found." interpolate)
 				)
 				toReturn actorType = "Object"
 				TableOfSymbols setActorType(toReturn)

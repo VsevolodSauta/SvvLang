@@ -22,6 +22,12 @@ Map <Comparation> Compare <Map> map
 		return candidate
 	return self.values ? map.values
 
+Map <Logic> Empty
+	return self.keys Empty
+
+Map <Number> Size
+	return self.keys Size
+
 Map Add (AtPut PutAt +) key value
 	keysIterator = self.keys First
 	valuesIterator = self.values First
@@ -89,6 +95,6 @@ Map GetValueForKey (GetAt AtGet) key
 		elif (keysIterator ThisData) > key
 			break
 		else
-			return keysIterator ThisData
+			return valuesIterator ThisData
 	return nil
 
