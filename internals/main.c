@@ -10,19 +10,19 @@ int DLEVEL = 0;
 int main(int argc, char** argv)
 {
 	_allocator = Allocator_Create();
-	Object runtime = Runtime_Create();
-	Object machine = Machine_Create();
-	Machine_Run(machine);
-	Object_Release(machine);
-	Object_Release(runtime);
+	Object _runtime = Runtime_Create();
+	Object _machine = Machine_Create();
+	Machine_Run(_machine);
+	Object_Release(_machine);
+	Object_Release(_runtime);
+	Object_Release(_allocator);
 #if MEMORY_DEBUG
 	printf("Allocated: %i\nResized: %i\nFreed: %i\n",
-		Allocator_GetAllocated(),
-		Allocator_GetResized(),
-		Allocator_GetFreed()
+		Allocator_GetAllocated(_allocator),
+		Allocator_GetResized(_allocator),
+		Allocator_GetFreed(_allocator)
 	);
-	DMSG(Allocator_GetAllocated() - Allocator_GetFreed() == 24 ? "Everything is OK.\n" : "Memory leaks detected.\n");
-	Allocator_Dump();
+	printf(Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator) == 24 ? "Everything is OK.\n" : "Memory leaks detected.\n");
 #endif
 	return 0;
 }

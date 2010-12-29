@@ -1,6 +1,8 @@
 #pragma once
 
 #include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 #include "internals/Object/interface.h"
 #include "internals/Number/interface.h"

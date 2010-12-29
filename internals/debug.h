@@ -1,7 +1,13 @@
 #pragma once
 
+#include <stdio.h>
+#define _DMSG(args...) \
+	fprintf(stderr, args); \
+	fflush(stderr);
+
+
 #define DEBUG 0
-#define MEMORY_DEBUG 0
+#define MEMORY_DEBUG 1
 
 #if DEBUG
 #include <stdio.h>
