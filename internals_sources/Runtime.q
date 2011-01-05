@@ -14,6 +14,7 @@ Runtime Init
 	logicFactory = <LogicFactory>
 	autoreleasePool = <AutoreleasePool>
 	autoreleasePool PushFrame
+	console = <Console>
 	return self
 
 Runtime Destroy

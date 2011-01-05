@@ -119,7 +119,7 @@ Object Processor_DoHelper(Object _self, Object _toDo)
 	_action = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Действие", 16));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_action, _nil) == _equal)) != _false)
 	{
-		Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: отсутствует действие.", 71));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: отсутствует действие.", 71));
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_action, StringFactory_FromUTF8(_stringFactory, "Вызвать Do", 17)) == _equal)) != _false)
 	{
@@ -195,7 +195,7 @@ Object Processor_DoHelper(Object _self, Object _toDo)
 	}
 	else
 	{
-		Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: неизвестное действие.", 71));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: неизвестное действие.", 71));
 	}
 	return _self;
 }
@@ -206,7 +206,7 @@ Object Processor_Do(Object _self, Object _toDo)
 	_action = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Действие", 16));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_action, _nil) == _equal)) != _false)
 	{
-		Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: отсутствует действие.", 71));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: отсутствует действие.", 71));
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_action, StringFactory_FromUTF8(_stringFactory, "Послать сообщение", 33)) == _equal)) != _false)
 	{
@@ -283,7 +283,7 @@ Object Processor_Do(Object _self, Object _toDo)
 		}
 		else
 		{
-			Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Попытка удалить несуществующее поле.", 68));
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Попытка удалить несуществующее поле.", 68));
 			Object_Release(_place);
 			return _self;
 		}
@@ -317,7 +317,7 @@ Object Processor_Do(Object _self, Object _toDo)
 	}
 	else
 	{
-		Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: неизвестное действие.", 71));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: неизвестное действие.", 71));
 	}
 	return _self;
 }
@@ -329,7 +329,7 @@ Object Processor_InvokeMethod(Object _self, Object _methodName, Object _paramete
 	_method = ListMap_ListMapAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Методы", 12)), _methodName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_method, _nil) == _equal)) != _false)
 	{
-		Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ошибка! Вызов несуществующего метода.", 69));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ошибка! Вызов несуществующего метода.", 69));
 		AutoreleasePool_PopFrame(_autoreleasePool);
 		return _self;
 	}

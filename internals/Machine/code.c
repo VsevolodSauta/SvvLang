@@ -33,7 +33,7 @@ Object Machine_Init(Object _self)
 Object Machine_CreateObject(Object _self)
 {
 	AutoreleasePool_PushFrame(_autoreleasePool);
-	Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Создаем объект.", 28));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Создаем объект.", 28));
 	Object _object;
 	_object = ListMap_Create();
 	Object _messageQueue;
@@ -70,19 +70,19 @@ Object Machine_ObjectByUID(Object _self, Object _uid)
 
 Object Machine_RestorePreviousState(Object _self)
 {
-	Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
 	return _self;
 }
 
 Object Machine_Schedule(Object _self, Object _object)
 {
-	Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
 	return _self;
 }
 
 Object Machine_Run(Object _self)
 {
-	Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Машина запущена.", 30));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Машина запущена.", 30));
 	if((_true) != _false)
 	{
 		Machine_CreateObject(_self);
@@ -97,7 +97,7 @@ Object Machine_Run(Object _self)
 		_object = MachineScheduler_GetNextObject((((Machine) (_self->entity))->_scheduler));
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_object, _nil) == _equal)) != _false)
 		{
-			Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Планировщик времени не выдал объект. Следовало бы уйти в ожидание, но событий больше никаких не произойдет. Выходим.", 212));
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Планировщик времени не выдал объект. Следовало бы уйти в ожидание, но событий больше никаких не произойдет. Выходим.", 212));
 			break;
 		}
 		else

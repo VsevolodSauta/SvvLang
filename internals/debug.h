@@ -7,44 +7,47 @@
 
 
 #define DEBUG 0
-#define MEMORY_DEBUG 1
+#define MEMORY_DEBUG 0
 
 #if DEBUG
 #include <stdio.h>
 
 extern int DLEVEL;
 
-
-#define DMSGS(args...) { \
-	int i = 0; \
-	while(i++ < DLEVEL) fprintf(stderr, "\t"); \
-	fprintf(stderr, "%p --- ", _self); \
-	fprintf(stderr, args); \
-	fprintf(stderr, "\n"); \
-	fflush(stderr);	\
+static inline int strlen(char* arg)
+{
+	register int toReturn = 0;
+	while(arg[toReturn++]);
+	return toReturn - 1;
 }
 
-#define DMSG(args...) { \
+#define DMSGS(arg) { \
 	int i = 0; \
-	while(i++ < DLEVEL) fprintf(stderr, "\t"); \
-	fprintf(stderr, args); \
-	fprintf(stderr, "\n"); \
-	fflush(stderr);	\
+	while(i++ < DLEVEL) OSfileWrite(2, "\t", 1); \
+	OSfileWrite(2, arg, strlen(arg)); \
+	OSfileWrite(2, "\n", 1); \
 }
 
-#define DPUSH(args...) {DMSG(args); DLEVEL++;}
-#define DPOP(args...) {DLEVEL--; DMSG(args);}
-#define DPUSHS(args...) {DMSGS(args); DLEVEL++;}
-#define DPOPS(args...) {DLEVEL--; DMSGS(args);}
+#define DMSG(arg) { \
+	int i = 0; \
+	while(i++ < DLEVEL) OSfileWrite(2, "\t", 1); \
+	OSfileWrite(2, arg, strlen(arg)); \
+	OSfileWrite(2, "\n", 1); \
+}
+
+#define DPUSH(arg) {DMSG(arg); DLEVEL++;}
+#define DPOP(arg) {DLEVEL--; DMSG(arg);}
+#define DPUSHS(arg) {DMSGS(args); DLEVEL++;}
+#define DPOPS(arg) {DLEVEL--; DMSGS(arg);}
 #define IMPOSSIBLE() DMSG("IMPOSSIBLE!!!")
 #else
 
-#define DMSGS(args...)
-#define DMSG(args...)
-#define DPUSHS(args...)
-#define DPOPS(args...)
-#define DPUSH(args...)
-#define DPOP(args...)
+#define DMSGS(arg)
+#define DMSG(arg)
+#define DPUSHS(arg)
+#define DPOPS(arg)
+#define DPUSH(arg)
+#define DPOP(arg)
 #define IMPOSSIBLE()
 
 

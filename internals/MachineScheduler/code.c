@@ -16,7 +16,7 @@ Object MachineScheduler_Create(void)
 
 Object MachineScheduler_GetNextObject(Object _self)
 {
-	Console_PrintLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод планировщика виртуального процессора виртуальной машины не реализован.", 153));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод планировщика виртуального процессора виртуальной машины не реализован.", 153));
 	return _nil;
 }
 

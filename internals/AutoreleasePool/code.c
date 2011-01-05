@@ -28,7 +28,7 @@ Object AutoreleasePool_Dump(Object _self)
 	DPUSHS( "Autorelease Pool: Dumping." ) 
 	Object _ms;
 	_ms = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
-	Console_PrintLnNumber(_console, List_Size((((MultiSet) (_ms->entity))->_list)));
+	Console_WriteLnNumber(_console, List_Size((((MultiSet) (_ms->entity))->_list)));
 	DPOPS( "Autorelease Pool: Dumped." ) 
 	return _self;
 }
@@ -62,7 +62,7 @@ Object AutoreleasePool_PopFrame(Object _self)
 
 Object AutoreleasePool_Add(Object _self, Object _object)
 {
-	DPUSHS( "Autorelease Pool: Adding object %p of type %llu to pool.", _object, _object->gid ) 
+	DPUSHS( "Autorelease Pool: Adding object to pool." ) 
 	MultiSet_Push(Stack_Peek((((AutoreleasePool) (_self->entity))->_stack)), _object);
 	Object_Release(_object);
 	DPOPS( "Autorelease Pool: Object added." ) 

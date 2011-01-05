@@ -49,11 +49,10 @@ static inline void* AllocateSpace(Allocator _self, int size)
 {
 	if(_self->fd == 0)
 	{
-		_self->fd = open("memory", 0x42, 0666);
+		_self->fd = OSfileOpen("memory", 0x42, 0666);
 	}
-	printf("%d\n", _self->fd);
-	ftruncate(_self->fd, _self->allocatedMem + size);
-	void* mapped = mmap(ALLOCATION_BASE, size, 0x07, 0x01, _self->fd, _self->allocatedMem);
+	OSfileTruncate(_self->fd, _self->allocatedMem + size);
+	void* mapped = OSmappingMap(ALLOCATION_BASE, size, 0x07, 0x01, _self->fd, _self->allocatedMem);
 	_self->allocatedMem += size;
 	return mapped;
 }
@@ -274,7 +273,7 @@ static inline void*  Allocator_InternalGetUndeletable(Allocator _self)
 	return NULL;
 }
 
-#ifdef MEMORY_DEBUG
+#if MEMORY_DEBUG
 static inline int Allocator_InternalGetFreed(Allocator _self)
 {
 	return _self->freed;
@@ -305,7 +304,6 @@ Object Allocator_Create()
 #endif
 	allocatorEntity.allocatedMem = 0;
 	allocatorEntity.allocatorData = AllocateSpace(&allocatorEntity, POOL_SIZE);
-	printf("%p\n", allocatorEntity.allocatorData);
 	allocatorEntity.allocatorData2 = allocatorEntity.allocatorData + 1;
 	allocatorEntity.allocatorData2->size = POOL_SIZE - 2 * sizeof(struct AllocatorNode);
 	allocatorEntity.allocatorData2->left = NULL;
@@ -331,6 +329,18 @@ Object Allocator_Create()
 	return _allocator;
 }
 
+void Allocator_Restore()
+{
+	struct Allocator allocatorEntity;
+	allocatorEntity.fd = 0;
+#if MEMORY_DEBUG
+	allocatorEntity.allocated = 0;
+	allocatorEntity.resized = 0;
+	allocatorEntity.freed = 0;
+#endif
+	allocatorEntity.allocatedMem = 0;
+	allocatorEntity.allocatorData = AllocateSpace(&allocatorEntity, POOL_SIZE);
+}
 
 void* Allocator_New(Object _self, int size)
 {
@@ -355,7 +365,7 @@ void*  Allocator_GetUndeletable(Object _self)
 	return Allocator_InternalGetUndeletable(_self->entity);
 }
 
-#ifdef MEMORY_DEBUG
+#if MEMORY_DEBUG
 int Allocator_GetFreed(Object _self)
 {
 	return Allocator_InternalGetFreed(_self->entity);

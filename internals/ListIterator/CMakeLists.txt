@@ -1,4 +1,4 @@
 project(ListIterator)
 cmake_minimum_required(VERSION 2.6)
 add_library(ListIterator ${Library} code.c)
-target_link_libraries(ListIterator Object Number Logic Comparation Allocator NumberFactory LogicFactory StringFactory Console Undestroyable List ListNode ListMap)
+target_link_libraries(ListIterator Object Number Logic Comparation Allocator NumberFactory LogicFactory StringFactory File Undestroyable List ListNode ListMap)

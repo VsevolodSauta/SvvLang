@@ -30,6 +30,7 @@ Object Runtime_Init(Object _self)
 	_logicFactory = LogicFactory_Create();
 	_autoreleasePool = AutoreleasePool_Create();
 	AutoreleasePool_PushFrame(_autoreleasePool);
+	_console = Console_Create();
 	return _self;
 }
 

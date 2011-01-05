@@ -4,4 +4,5 @@
 
 Object NumberFactory_Create();
 
-Object NumberFactory_FromLong(Object receiver, long arg);
+Object NumberFactory_FromLong(Object _self, long arg);
+Object NumberFactory_FromString(Object _self, Object _string);

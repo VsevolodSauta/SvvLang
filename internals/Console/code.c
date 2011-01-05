@@ -1,56 +1,57 @@
 #include "internals/basics.h"
-#include "internals/Number/interface.h"
-#include "internals/List/interface.h"
-#include "internals/ListIterator/interface.h"
-#include "internals/Char/interface.h"
-#include "internals/StringFactory/interface.h"
+#include "internals/Console/imports.h"
 
-Object Console_Create()
+
+Object Console_Create(void)
 {
-	return Undestroyable_Create();
+	Object toReturn = Object_Create();
+	toReturn->entity = Allocator_New(_allocator, sizeof(struct Console));
+	toReturn->gid =  2102628007026497536ull;
+	Object_SetComparator(toReturn, &Console_Compare);
+	Object_SetDestructor(toReturn, &Console_Destroy);
+	Object_SetCloner(toReturn, &Console_Clone);
+	((Console) (toReturn->entity))->_toRead = _nil;
+	((Console) (toReturn->entity))->_toWrite = _nil;
+	toReturn = Console_Init(toReturn);
+	return toReturn;
 }
 
-Object Console_Compare(Object receiver, Object console)
+Object Console_Init(Object _self)
+{
+	(((Console) (_self->entity))->_toRead) = File_Create();
+	(((Console) (_self->entity))->_toWrite) = File_Create();
+	return _self;
+}
+
+Object Console_WriteLnString(Object _self, Object _string)
+{
+	File_WriteLnString((((Console) (_self->entity))->_toWrite), _string);
+	return _self;
+}
+
+Object Console_WriteString(Object _self, Object _string)
+{
+	File_WriteNakedString((((Console) (_self->entity))->_toWrite), _string);
+	return _self;
+}
+
+Object Console_WriteLnNumber(Object _self, Object _number)
+{
+	File_WriteLnNumber((((Console) (_self->entity))->_toWrite), _number);
+	return _self;
+}
+
+Object Console_Clone(Object _self)
+{
+	return _self;
+}
+
+Object Console_Compare(Object _self, Object _console)
 {
 	return _equal;
 }
 
-Object Console_Clone(Object receiver)
+Object Console_Destroy(Object _self)
 {
-	return receiver;
+	return _self;
 }
-
-Object Console_Destroy(Object receiver)
-{
-	return receiver;
-}
-
-Object Console_PrintLnNumber(Object receiver, Object number)
-{
-	Console_PrintLnString(receiver, StringFactory_FromNumber(_stringFactory, number));
-	return receiver;
-}
-
-Object Console_PrintString(Object receiver, Object list)
-{
-	char buffer[1024];
-	write(0, buffer, StringFactory_GetUTF8String(_stringFactory, list, buffer, 1024));
-	return receiver;
-}
-
-Object Console_PrintLnString(Object receiver, Object list)
-{
-	char buffer[1024];
-	write(0, buffer, StringFactory_GetUTF8String(_stringFactory, list, buffer, 1024));
-	write(0, "\n", 1);
-	return receiver;
-}
-
-Object Console_ReadString(Object receiver)
-{
-	char buffer[1024];
-	Object toReturn = StringFactory_FromUTF8(_stringFactory, buffer, read(0, buffer, 1024));
-	return toReturn;
-}
-
-Object _console;

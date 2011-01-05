@@ -1,14 +1,13 @@
-#pragma once
+typedef struct Console {
+	Object _toRead;
+	Object _toWrite;
+} *Console;
 
-#include "internals/Object/interface.h"
-
-Object Console_Create();
-Object Console_Compare(Object receiver, Object console);
-Object Console_Clone(Object receiver);
-Object Console_Destroy(Object receiver);
-
-Object Console_PrintNumber(Object receiver, Object number);
-Object Console_PrintString(Object receiver, Object list);
-Object Console_PrintLnNumber(Object receiver, Object number);
-Object Console_PrintLnString(Object receiver, Object list);
-Object Console_ReadString(Object receiver);
+Object Console_Create(void);
+Object Console_Init(Object _self);
+Object Console_WriteLnString(Object _self, Object _string);
+Object Console_WriteString(Object _self, Object _string);
+Object Console_WriteLnNumber(Object _self, Object _number);
+Object Console_Clone(Object _self);
+Object Console_Compare(Object _self, Object _console);
+Object Console_Destroy(Object _self);

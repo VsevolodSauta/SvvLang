@@ -1,11 +1,9 @@
 #include "internals/basics.h"
 #include "internals/AutoreleasePool/interface.h"
-#include <stdio.h>
 
 Object Object_Create(void)
 {
-//	printf("Object Create\n");
-//	fflush(stdout);
+//	DMSG("Object Create\n");
 	Object toReturn = Allocator_New(_allocator, sizeof(struct Object));
 	toReturn->links = 1;
 	toReturn->gid = 2803832687958515712ull;
@@ -38,16 +36,14 @@ Object Object_EmptyComparator(Object receiver, Object object)
 
 Object Object_Retain(Object receiver)
 {
-//	printf("Object Retain\n");
-//	fflush(stdout);
+//	DMSG("Object Retain\n");
 	receiver->links++;
 	return receiver;
 }
 
 Object Object_Release(Object receiver)
 {
-//	printf("Object Release\n");
-//	fflush(stdout);
+//	DMSG("Object Release\n");
 	if(!(--(receiver->links)))
 	{
 		receiver->destroy(receiver);
@@ -57,15 +53,14 @@ Object Object_Release(Object receiver)
 
 Object Object_Autorelease(Object receiver)
 {
-//	printf("Object Autorelease\n");
-//	fflush(stdout);
+//	DMSG("Object Autorelease\n");
 	AutoreleasePool_Add(_autoreleasePool, receiver);
 	return receiver;
 }
 
 Object Object_Destroy(Object receiver)
 {
-//	printf("Object Destroy\n");
+//	DMSG("Object Destroy\n");
 //	fflush(stdout);
 	Allocator_Delete(_allocator, receiver->entity);
 	return Allocator_Delete(_allocator, receiver);
@@ -78,8 +73,7 @@ Object Object_Clone(Object receiver)
 
 Object Object_TempClone(Object receiver)
 {
-//	printf("Object TempClone\n");
-//	fflush(stdout);
+//	DMSG("Object TempClone\n");
 	Object toReturn = receiver->clone(receiver);
 	Object_Autorelease(toReturn);
 	return toReturn;
@@ -112,5 +106,3 @@ Object Object_Is(Object receiver, Object object)
 {
 	return (receiver == object) ? _true : _false;
 }
-
-Object _autoreleasePool;

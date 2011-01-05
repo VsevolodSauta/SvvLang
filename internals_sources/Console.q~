@@ -1,0 +1,29 @@
+<Console> <File> toRead <File> toWrite
+
+Console Init
+	self.toRead = <File>
+	self.toWrite = <File>
+	self.toRead OpenForReading 0
+	self.toWrite OpenForAppending 1
+	return self
+
+Console WriteLnString (PrintLnString) <List> string
+	self.toWrite WriteLnString string
+	return self
+
+Console WriteString (PrintString) <List> string
+	self.toWrite WriteNskedString string
+	return self
+
+Console WriteLnNumber (PrintLnNumber) <Number> number
+	self.toWrite WriteLnNumber number
+	return self
+
+Console Clone
+	return self
+
+Console Compare <Console> console
+	return equal
+
+Console Destroy
+	return self

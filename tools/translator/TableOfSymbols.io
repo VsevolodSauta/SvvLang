@@ -1,7 +1,7 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP")
 TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash", "Destroy", "Is")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory", "Console", "Undestroyable")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory", "File", "Undestroyable")
 TableOfSymbols globalObjects := Map with(
 	"_nil", "Object", "_nothing", "Object", "_null", "Object",
 	"_allocator", "Allocator",
@@ -16,19 +16,47 @@ TableOfSymbols globalObjects := Map with(
 )
 
 TableOfSymbols tableOfImports := Map clone
-TableOfSymbols invalutiveClasses := list("Number", "Logic", "Console")
+TableOfSymbols invalutiveClasses := list("Number", "Logic")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map with(
 	"StringFactory", Map with(
-		"FromNumber", Actor unnamedActor("Number")
+		"FromNumber", Actor unnamedActor("List")
+	),
+	"File", Map with(
+		"OpenForReading", Actor unnamedActor("File"),
+		"OpenForAppending", Actor unnamedActor("File"),
+		"Close", Actor unnamedActor("File"),
+		"TruncateToSize", Actor unnamedActor("File"),
+		"SeekToPosition", Actor unnamedActor("File"),
+		"Advance", Actor unnamedActor("File"),
+		"SeekFromEndToPosition", Actor unnamedActor("File"),
+		"GetPosition", Actor unnamedActor("Number"),
+		"WriteByte", Actor unnamedActor("File"),
+		"WriteNakedString", Actor unnamedActor("File"),
+		"WriteNakedNumber", Actor unnamedActor("File"),
+		"WriteLnString", Actor unnamedActor("File"),
+		"WriteLnNumber", Actor unnamedActor("File"),
+		"WriteString", Actor unnamedActor("File"),
+		"WriteNumber", Actor unnamedActor("File"),
+		"WriteList", Actor unnamedActor("File"),
+		"WriteListMap", Actor unnamedActor("File"),
+		"ReadByte", Actor unnamedActor("Number"),
+		"ReadNumber", Actor unnamedActor("Number"),
+		"ReadString", Actor unnamedActor("String"),
+		"ReadLnString", Actor unnamedActor("String"),
+		"ReadStringOfLength", Actor unnamedActor("String"),
+		"ReadChar", Actor unnamedActor("Char"),
+		"ReadListMap", Actor unnamedActor("ListMap"),
+		"ReadList", Actor unnamedActor("List")
 	)
 )
 TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols mapOfGids := Map with(
 	"Object", "Object" hash asString(20, 0) .. "ull",
 	"Number", "Number" hash asString(20, 0) .. "ull"
+	"File", "File" hash asString(20, 0) .. "ull"
 )
 
 TableOfSymbols mapOfMethodAliases := Map with(
@@ -63,7 +91,7 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"NumberFactory", Map clone,
 	"LogicFactory", Map clone,
 	"StringFactory", Map clone,
-	"Console", Map clone,
+	"File", Map clone,
 	"Undestroyable", Map clone
 )
 

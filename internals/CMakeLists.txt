@@ -13,6 +13,7 @@ add_subdirectory(Allocator)
 add_subdirectory(AutoreleasePool)
 add_subdirectory(Undestroyable)
 
+add_subdirectory(File)
 add_subdirectory(Console)
 
 add_subdirectory(Char)
@@ -28,7 +29,7 @@ add_subdirectory(Queue)
 add_subdirectory(MultiSet)
 add_subdirectory(UIDGenerator)
 
-add_subdirectory(Array)
+#add_subdirectory(Array)
 
 add_subdirectory(Synonim)
 
@@ -38,4 +39,4 @@ add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
 add_executable(VM main.c)
-target_link_libraries(VM Machine Runtime Object)
+target_link_libraries(VM Machine Runtime Object OSKernel)

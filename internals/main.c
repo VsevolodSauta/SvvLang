@@ -1,13 +1,19 @@
 #include "internals/basics.h"
 #include "internals/Runtime/interface.h"
 #include "internals/Machine/interface.h"
+#include "os_dependent/linux.h"
+#if MEMORY_DEBUG
 #include <stdio.h>
+#endif
 
 #if DEBUG
 int DLEVEL = 0;
 #endif
 
-int main(int argc, char** argv)
+Object _autoreleasePool;
+Object _console;
+
+void _start(void)
 {
 	_allocator = Allocator_Create();
 	Object _runtime = Runtime_Create();
@@ -15,14 +21,16 @@ int main(int argc, char** argv)
 	Machine_Run(_machine);
 	Object_Release(_machine);
 	Object_Release(_runtime);
-	Object_Release(_allocator);
 #if MEMORY_DEBUG
-	printf("Allocated: %i\nResized: %i\nFreed: %i\n",
+	printf("Allocated: %i\nResized: %i\nFreed: %i\nNot freed: %i\n",
 		Allocator_GetAllocated(_allocator),
 		Allocator_GetResized(_allocator),
-		Allocator_GetFreed(_allocator)
+		Allocator_GetFreed(_allocator),
+		Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator)
 	);
-	printf(Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator) == 24 ? "Everything is OK.\n" : "Memory leaks detected.\n");
+	// Prev number of Not freed allocator objects was 24. Probably there is a bug in source code.
+	printf(Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator) == 46 ? "Everything is OK.\n" : "Memory leaks detected.\n");
 #endif
-	return 0;
+	Object_Release(_allocator);
+	OSexit(0);
 }

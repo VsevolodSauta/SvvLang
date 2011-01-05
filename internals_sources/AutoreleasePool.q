@@ -33,7 +33,7 @@ AutoreleasePool PopFrame (--)
 	return self
 
 AutoreleasePool Add object
-	DEBUG_PUSH ("Autorelease Pool: Adding object %p of type %llu to pool.", _object, _object->gid)
+	DEBUG_PUSH ("Autorelease Pool: Adding object to pool.")
 	((self.stack Peek) AsMultiSet) Push object
 	object Release
 	DEBUG_POP ("Autorelease Pool: Object added.")
