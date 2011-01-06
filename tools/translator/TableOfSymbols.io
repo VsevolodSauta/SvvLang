@@ -21,6 +21,10 @@ TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map with(
+	"NumberFactory", Map with(
+		"FromString", Actor unnamedActor("Number"),
+		"FromHexString", Actor unnamedActor("Number")
+	),
 	"StringFactory", Map with(
 		"FromNumber", Actor unnamedActor("List")
 	),

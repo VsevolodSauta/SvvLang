@@ -50,6 +50,12 @@ Actor with := method(name,
 		return toReturn
 	)
 	
+	if(name isChar,
+		toReturn actorType = "Char"
+		toReturn actorName copy("CharFactory_FromLong(_charFactory, #{name})" interpolate)
+		return toReturn
+	)
+	
 	listOfFieldNames := name split(".")
 	listOfFieldNames foreach(index, fieldName,
 		fieldName = "_" .. fieldName

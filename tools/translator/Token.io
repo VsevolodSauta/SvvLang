@@ -65,3 +65,7 @@ Token isString := method(
 	(self beginsWithSeq("\"")) and (self endsWithSeq("\""))
 
 )
+
+Token isChar := method(
+	(self beginsWithSeq("'")) and (self endsWithSeq("'"))
+)

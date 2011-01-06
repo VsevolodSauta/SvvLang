@@ -16,17 +16,8 @@ Line withStringAndNumber := method(string, number,
 	toReturn := Line clone
 	toReturn string = string
 	toReturn removeComments
-	toReturn separateBrackets
 	toReturn number = number
 	toReturn
-)
-
-Line separateBrackets := method(
-	stringToProcess := string asMutable
-	preprocessingMap foreach(leftSide, rightSide,
-		stringToProcess replaceSeq(leftSide, rightSide)
-	)
-	string copy(stringToProcess)
 )
 
 Line removeComments := method(
@@ -34,29 +25,97 @@ Line removeComments := method(
 )
 
 Line tokens := lazySlot(
-	toReturn := self string ?splitNoEmpties
+	listOfSeparators := list("(", ")", "{", "}", "[", "]")
+	toReturn := List clone
+	toReturn appendIfNotEmpty := method(string,
+		if(string size != 0, self append(string clone))
+		string setSize(0)
+	)
+	parsingString := false
+	parsingChar := false
+	currentToken := "" asMutable
+	escaped := false
+	self string foreach(position, charCode,
+		char := charCode asCharacter
+		if(parsingString,
+			currentToken appendSeq(char)
+			if(char == "\\",
+				if(escaped,
+					escaped = false,
+					
+					escaped = true
+				)
+				continue
+			)
+			if(char == "\"",
+				if(escaped not,
+					toReturn appendIfNotEmpty(currentToken)
+					parsingString = false
+					continue
+				)
+			)
+			escaped = false
+			continue
+		)
+		if(parsingChar,
+			currentToken appendSeq(char)
+			if(char == "\\",
+				if(escaped,
+					escaped = false,
+					
+					escaped = true
+				)
+				continue
+			)
+			if(char == "'",
+				if(escaped not,
+					toReturn appendIfNotEmpty(currentToken)
+					parsingChar = false
+					continue
+				)
+			)
+			escaped = false
+			continue
+		)
+		if(char == "\"", 
+			toReturn appendIfNotEmpty(currentToken)
+			currentToken appendSeq(char)
+			parsingString = true
+			continue
+		)
+		if(char == "'",
+			toReturn appendIfNotEmpty(currentToken)
+			currentToken appendSeq(char)
+			parsingChar = true
+			continue
+		)
+		if(listOfSeparators contains(char),
+			toReturn appendIfNotEmpty(currentToken)
+			toReturn append(char)
+			continue
+		)
+		if((char == " ") or (char == "\t") or (char == "\n") or (char == "\r"),
+			toReturn appendIfNotEmpty(currentToken)
+			continue
+		)
+		currentToken appendSeq(char)
+	)
+	if((parsingChar not) and (parsingString not),
+		toReturn appendIfNotEmpty(currentToken),
+		TranslatorError with(self, "Line terminated while parsing string or character.")
+	)
 	toReturn foreach(token, token appendProto(Token))
 	toReturn
 )
 
-Line tokenz := lazySlot(
-	self string ?split
-)
-
 Line getLevel := lazySlot(
-	broken := false
-	level := 0
-	tokenz ?foreach(token,
-		if(token == "",
-			level = level + 1,
-			broken = true
-			break
+	listOfWSP := list("\t" at(0), " " at(0))
+	self string foreach(position, charCode,
+		if(listOfWSP contains(charCode) not,
+			return position
 		)
 	)
-	if(broken,
-		level,
-		0
-	)
+	0
 )
 
 Line currentTokenNumber := 0
@@ -94,32 +153,13 @@ Line getAction := method(
 	toReturn
 )
 
-Line readString := method(
-	toReturn := "" asMutable appendProto(Token)
-	while(getCurrentToken beginsString,
-		toReturn appendSeq(getCurrentToken exclusiveSlice(1))
-		toNextToken
-		while(toReturn endsString not,
-			toReturn appendSeq(" ", getCurrentToken)
-			toNextToken
-		)
-		toReturn removeLast
-		if(getCurrentToken isNil, break)
-	)
-	"\"#{toReturn}\"" interpolate appendProto(Token)
-)
-
 Line getActor := method(
 	if(getCurrentToken beginsNewAction,
 		toNextToken
 		actor := getActor,
 			
-		if(getCurrentToken beginsString,
-			actor := readString asActor,
-			
-			actor := getCurrentToken asActor
-			toNextToken
-		)
+		actor := getCurrentToken asActor
+		toNextToken
 	)
 	
 	if(getCurrentToken isNil,
