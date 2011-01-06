@@ -27,6 +27,7 @@ Object Number_Min(Object _self, Object arg);
 Object Number_Max(Object _self, Object arg);
 Object Number_Abs(Object _self);
 Object Number_Inv(Object _self);
+Object Number_Power(Object _self, Object arg);
 
 Object Number_IsOdd(Object _self);
 Object Number_IsEven(Object _self);

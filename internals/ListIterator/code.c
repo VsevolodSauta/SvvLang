@@ -253,6 +253,11 @@ Object ListIterator_ListMapData(Object _self)
 	return (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 }
 
+Object ListIterator_CharData(Object _self)
+{
+	return (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
+}
+
 Object ListIterator_ThisSetData(Object _self, Object _object)
 {
 	DMSGS( "List Iterator: Setting this data." ) 
@@ -364,5 +369,23 @@ Object ListIterator_RemoveCount(Object _self, Object _count)
 	}
 	(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev) = _savedPrev;
 	(((ListNode) (_savedPrev->entity))->_next) = (((ListIterator) (_self->entity))->_node);
+	return _self;
+}
+
+Object ListIterator_StringSkipSpace(Object _self)
+{
+	while((Char_IsSpace(ListIterator_CharData(_self))) != _false)
+	{
+		ListIterator_Next(_self);
+	}
+	return _self;
+}
+
+Object ListIterator_StringSkipWhiteSpace(Object _self)
+{
+	while((Char_IsWhiteSpace(ListIterator_CharData(_self))) != _false)
+	{
+		ListIterator_Next(_self);
+	}
 	return _self;
 }

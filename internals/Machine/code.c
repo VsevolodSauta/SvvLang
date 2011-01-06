@@ -70,13 +70,13 @@ Object Machine_ObjectByUID(Object _self, Object _uid)
 
 Object Machine_RestorePreviousState(Object _self)
 {
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. :)", 127));
 	return _self;
 }
 
 Object Machine_Schedule(Object _self, Object _object)
 {
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. : )", 128));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. :)", 127));
 	return _self;
 }
 

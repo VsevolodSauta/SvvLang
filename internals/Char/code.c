@@ -50,3 +50,23 @@ Object Char_GetCode(Object _self)
 {
 	return Object_TempClone((((Char) (_self->entity))->_code));
 }
+
+Object Char_IsSpace(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 32)) == _equal);
+}
+
+Object Char_IsWhiteSpace(Object _self)
+{
+	return LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 32)) != _greater);
+}
+
+Object Char_IsDigit(Object _self)
+{
+	return Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 48)) != _less), LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 58)) == _less));
+}
+
+Object Char_IsHexDigit(Object _self)
+{
+	return Logic_Or(Char_IsDigit(_self), Logic_Or(Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 97)) != _less), LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 102)) != _greater)), Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 65)) != _less), LogicFactory_FromLong(_logicFactory, Object_Compare((((Char) (_self->entity))->_code), NumberFactory_FromLong(_numberFactory, 70)) != _greater))));
+}

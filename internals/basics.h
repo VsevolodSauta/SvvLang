@@ -14,6 +14,7 @@
 #include "internals/NumberFactory/interface.h"
 #include "internals/StringFactory/interface.h"
 #include "internals/LogicFactory/interface.h"
+#include "internals/CharFactory/interface.h"
 #include "internals/Logic/interface.h"
 #include "internals/File/interface.h"
 #include "internals/Comparation/interface.h"

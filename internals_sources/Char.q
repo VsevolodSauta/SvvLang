@@ -23,3 +23,15 @@ Char SetCode <Number> code
 Char <Number> GetCode
 	return self.code TempClone
 
+Char <Logic> IsSpace
+	return self.code == 32
+
+Char <Logic> IsWhiteSpace
+	return self.code <= 32
+
+Char <Logic> IsDigit
+	return (self.code >= 48) And (self.code < 58)
+
+Char <Logic> IsHexDigit
+	return (self IsDigit) Or (((self.code >= 97) And (self.code <= 102)) Or ((self.code >= 65) And (self.code  <= 70)))
+

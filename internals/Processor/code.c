@@ -339,7 +339,7 @@ Object Processor_InvokeMethod(Object _self, Object _methodName, Object _paramete
 		_adressConstant = StringFactory_FromUTF8(_stringFactory, "Адрес", 10);
 		Object _object;
 		_object = (((Processor) (_self->entity))->_contextObject);
-		( ( BasicMethod ) ListMap_ObjectAt( _method, _adressConstant ) )( _object, _parameters ); 
+		( ( BasicMethod ) ListMap_ObjectAt ( _method, _adressConstant ) ) ( _object, _parameters ) ; 
 	}
 	else
 	{

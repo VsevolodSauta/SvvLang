@@ -14,6 +14,7 @@ extern Object _autoreleasePool;
 extern Object _stringFactory;
 extern Object _numberFactory;
 extern Object _logicFactory;
+extern Object _charFactory;
 
 extern Object _uncomparableGreater;
 extern Object _uncomparableLess;

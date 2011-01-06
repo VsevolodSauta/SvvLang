@@ -57,6 +57,20 @@ Object Number_Mul(Object _self, Object arg)
 	return toReturn;
 }
 
+Object Number_Power(Object _self, Object arg)
+{
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	long count = ((Number) (arg->entity))->_long;
+	long result = 1;
+	while(count--)
+	{
+		result *= ((Number) (_self->entity))->_long;
+	}
+	Number_SetLong(toReturn, result);
+	return toReturn;
+}
+
 Object Number_Div(Object _self, Object arg)
 {
 	Object toReturn = Number_Create();

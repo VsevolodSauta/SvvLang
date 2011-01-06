@@ -154,6 +154,9 @@ ListIterator <List> ListData
 ListIterator <ListMap> ListMapData
 	return self.node.data AsListMap
 
+ListIterator <Char> CharData
+	return self.node.data AsChar
+
 ListIterator ThisSetData (SetThisData SetData) object
 	DEBUG_MSG ("List Iterator: Setting this data.")
 	self.node.data = object
@@ -193,16 +196,16 @@ ListIterator AddBefore object
 	DEBUG_POP ("List Iterator: Data added to the prev.")
 	return self
 
-ListIterator ThisBegin (Begin)
+ListIterator <Logic> ThisBegin (Begin)
 	return self.node.prev == nothing
 
-ListIterator ThisEnd (End)
+ListIterator <Logic> ThisEnd (End)
 	return self.node.next == nothing
 
-ListIterator PrevBegin
+ListIterator <Logic> PrevBegin
 	return self.node.prev.prev == nothing
 
-ListIterator NextEnd
+ListIterator <Logic> NextEnd
 	return self.node.next.next == nothing
 
 ListIterator AddListBefore <List> list
@@ -230,3 +233,12 @@ ListIterator RemoveCount <Number> count
 	savedPrev.next = self.node
 	return self
 
+ListIterator StringSkipSpace
+	while (self CharData) IsSpace
+		self ++
+	return self
+
+ListIterator StringSkipWhiteSpace
+	while (self CharData) IsWhiteSpace
+		self ++
+	return self

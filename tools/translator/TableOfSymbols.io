@@ -10,7 +10,7 @@ TableOfSymbols globalObjects := Map with(
 	"_less", "Comparation", "_greater", "Comparation", "_equal", "Comparation", "_uncomparableLess", "Comparation", "_uncomparableGreater", "Comparation",
 	"_numberFactory", "NumberFactory",
 	"_logicFactory", "LogicFactory",
-//	"_charFactory", "Object",
+	"_charFactory", "CharFactory",
 	"_stringFactory", "StringFactory",
 	"_console", "Console"
 )
@@ -22,11 +22,15 @@ TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map with(
 	"NumberFactory", Map with(
+		"FromLong", Actor unnamedActor("Number"),
 		"FromString", Actor unnamedActor("Number"),
 		"FromHexString", Actor unnamedActor("Number")
 	),
 	"StringFactory", Map with(
 		"FromNumber", Actor unnamedActor("List")
+	),
+	"CharFactory", Map with(
+		"FromLong", Actor unnamedActor("Char")
 	),
 	"File", Map with(
 		"OpenForReading", Actor unnamedActor("File"),
@@ -79,6 +83,7 @@ TableOfSymbols mapOfMethodAliases := Map with(
 		"*=", "MulInPlace",
 		"/=", "DivInPlace",
 		"%=", "ModInPlace",
+		"**", "Power",
 		"++", "Inc",
 		"--", "Dec"
 	),
