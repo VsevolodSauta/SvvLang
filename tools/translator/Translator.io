@@ -114,6 +114,7 @@ BlockDelegatesHandling afterEachBlockBegins(Translator, 5)
 if(System args size == 1,
 	toProcessList := List clone
 	Directory with("../../internals_sources") files foreach(file,
+		if(file name at(file name size - 1) asCharacter == "~", continue)
 		toProcessList push(file baseName)
 	),
 	
@@ -121,7 +122,7 @@ if(System args size == 1,
 )
 
 toProcessList foreach(index, objectClassName,
-	"=============== #{objectClassName alignCenter(20)} ===============" interpolate println
+	"=============== #{objectClassName alignCenter(30)} ===============" interpolate println
 	Translator currentClassName := objectClassName
 	TableOfSymbols ensureKnownClassForClass(objectClassName, "Object")
 	TableOfSymbols newObjectProcessing

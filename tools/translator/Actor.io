@@ -56,6 +56,12 @@ Actor with := method(name,
 		return toReturn
 	)
 	
+	if(name isPointer,
+		toReturn actorType = "Method"
+		toReturn actorName copy("MethodFactory_FromPointer(_methodFactory, #{name})" interpolate)
+		return toReturn
+	)
+	
 	listOfFieldNames := name split(".")
 	listOfFieldNames foreach(index, fieldName,
 		fieldName = "_" .. fieldName
@@ -97,7 +103,8 @@ Actor getCreatorBody := method(
 		"\ttoReturn->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
 		"\tObject_SetComparator(toReturn, &#{self actorType}_Compare);\n" interpolate,
 		"\tObject_SetDestructor(toReturn, &#{self actorType}_Destroy);\n" interpolate,
-		"\tObject_SetCloner(toReturn, &#{self actorType}_Clone);\n" interpolate
+		"\tObject_SetCloner(toReturn, &#{self actorType}_Clone);\n" interpolate,
+		"\tObject_SetDeepCloner(toReturn, &#{self actorType}_DeepClone);\n" interpolate
 	)
 	TableOfSymbols classFields at(actorType) foreach(field,
 		toReturn push("\t((#{actorType}) (toReturn->entity))->#{field actorName} = _nil;\n" interpolate)

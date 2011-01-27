@@ -17,7 +17,14 @@ Console WriteLnNumber (PrintLnNumber) <Number> number
 	self.toWrite WriteLnNumber number
 	return self
 
+Console WriteHash (PrintHash) object
+	self.toWrite WriteLnNumber (object Hash)
+	return self
+
 Console Clone
+	return self
+
+Console DeepClone
 	return self
 
 Console Compare <Console> console

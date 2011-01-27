@@ -1,3 +1,7 @@
 #include "internals/Runtime/interface.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/Console/interface.h"
+#include "internals/JSON/interface.h"
+#include "internals/List/interface.h"
+#include "internals/ListIterator/interface.h"
+#include "internals/ListMap/interface.h"

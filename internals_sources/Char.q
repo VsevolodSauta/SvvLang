@@ -16,12 +16,20 @@ Char Clone
 	toReturn SetCode self.code
 	return toReturn
 
+Char DeepClone
+	toReturn = <Char>
+	toReturn SetCode self.code
+	return toReturn
+
 Char SetCode <Number> code
 	self.code Set code
 	return self
 
-Char <Number> GetCode
+Char <Number> GetCode (GetImmutableCode)
 	return self.code TempClone
+
+Char <Number> GetMutableCode
+	return self.code
 
 Char <Logic> IsSpace
 	return self.code == 32

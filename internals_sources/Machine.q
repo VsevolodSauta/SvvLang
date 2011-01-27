@@ -11,33 +11,48 @@ Machine Init
 	return self
 
 
-Machine CreateObject
+Machine LoadApplication <List> applicationName
+	DEBUG_PUSH ("Machine: Loading application.")
 	autoreleasePool ++
-	console PrintLnString ("Создаем объект.")
-	object = <ListMap>
-	messageQueue = <Queue>				// Отображение uidа отправителя в список строк сообщений.
-	methods = <ListMap>				// Отображение имен методов в список строк действий.
-	fields = <ListMap>				// Отображение имен полей в их uidы.
-	jobs = <List>					// Отображение имен работ в их состояния (стадии).
-	properties = <ListMap>				// Список текущих свойств объекта --- его состояние.
-	object AtPut ("Методы") methods
-	object AtPut ("Поля") fields
-	object AtPut ("Свойства") properties
-	object AtPut ("Работы") jobs
-	object AtPut ("Сообщения") messageQueue
-	self.objectsByUIDs AtPut (self.uidGenerator getUID) object
-	object Release
-	jobs Release
-	fields Release
-	properties Release
-	methods Release
-	messageQueue Release
-	def self
+	console PrintLnString "Загружаем приложение."
+	file = <File>
+	file OpenForReading applicationName
+	if file ErrorWhileOpenning
+		console PrintLnString "Возникла ошибка при загрузке приложения. Невозможно прочитать приложение."
+	contents = file ReadContentsOfFile
+	file Close
+	console PrintLnNumber (contents Size)
+	console PrintLnString contents
+	parsedObject = json ParseObject (contents First)
+	if parsedObject == json.error
+		console PrintLnString "Некорректный текст приложения. Невозможно провести грамматический разбор."
+		autoreleasePool --
+		return self
+	self.globalContext AtPut ((parsedObject ListMapAt "Объект") ListAt "Имя") parsedObject
+	uid = self.uidGenerator GetUID
+	self.objectsByUIDs AtPut uid parsedObject
+	uids = <List>
+	parsedObject AtPut ("Идентификаторы") uids
+	uids PushBack uid
+	uids Release
+	messageList = <List>
+	parsedObject AtPut ("Сообщения") messageList
+	messageList Release
+	self.scheduler Schedule uid
 	autoreleasePool --
+	DEBUG_POP ("Machine: Application loaded.")
+	return self
 
 
-Machine <ListMap> ObjectByUID <List> uid
+Machine <ListMap> ObjectByUID (ObjectFormUID UIDToObject) <List> uid
 	return ((self.objectsByUIDs At uid) AsListMap)
+
+Machine SetObjectByUID (SetObjectFromUID SetUIDToObject) <ListMap> object <List> uid
+	self.objectsByUIDs AtPut uid object
+	return self
+
+Machine <List> GetUID
+	return self.uidGenerator GetUID
 
 
 Machine RestorePreviousState
@@ -45,15 +60,15 @@ Machine RestorePreviousState
 	return self
 
 
-Machine Schedule <ListMap> object
-	console PrintLnString ("Этот метод виртуальной машины не реализован. Не обращайте внимания. :)")
+Machine Schedule <List> uid
+	self.scheduler Schedule uid
 	return self
 
 
 Machine Run
 	console PrintLnString ("Машина запущена.")
 	if true
-		self CreateObject
+		self LoadApplication "Приложение"
 	else
 		self RestorePreviousState
 	loop
@@ -75,10 +90,11 @@ Machine Destroy
 	def self Destroy
 	DEBUG_POP ("Machine: Destroyed.")
 
-
 Machine Clone
 	return self
 
+Machine DeepClone
+	return self
 
 Machine <Comparation> Compare <Machine> machine
 	return equal

@@ -10,6 +10,7 @@ Object Map_Create(void)
 	Object_SetComparator(toReturn, &Map_Compare);
 	Object_SetDestructor(toReturn, &Map_Destroy);
 	Object_SetCloner(toReturn, &Map_Clone);
+	Object_SetDeepCloner(toReturn, &Map_DeepClone);
 	((Map) (toReturn->entity))->_keys = _nil;
 	((Map) (toReturn->entity))->_values = _nil;
 	toReturn = Map_Init(toReturn);
@@ -36,6 +37,15 @@ Object Map_Clone(Object _self)
 	_toReturn = Map_Create();
 	Object_SetReleasing(&(((Map) (_toReturn->entity))->_keys), Object_Clone((((Map) (_self->entity))->_keys)));
 	Object_SetReleasing(&(((Map) (_toReturn->entity))->_values), Object_Clone((((Map) (_self->entity))->_values)));
+	return _toReturn;
+}
+
+Object Map_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = Map_Create();
+	Object_SetRetaining(&(((Map) (_toReturn->entity))->_keys), Object_DeepClone((((Map) (_self->entity))->_keys)));
+	Object_SetRetaining(&(((Map) (_toReturn->entity))->_values), Object_DeepClone((((Map) (_self->entity))->_values)));
 	return _toReturn;
 }
 

@@ -10,6 +10,7 @@ Object Queue_Create(void)
 	Object_SetComparator(toReturn, &Queue_Compare);
 	Object_SetDestructor(toReturn, &Queue_Destroy);
 	Object_SetCloner(toReturn, &Queue_Clone);
+	Object_SetDeepCloner(toReturn, &Queue_DeepClone);
 	((Queue) (toReturn->entity))->_list = _nil;
 	toReturn = Queue_Init(toReturn);
 	return toReturn;
@@ -30,6 +31,35 @@ Object Queue_Push(Object _self, Object _object)
 Object Queue_Pop(Object _self)
 {
 	return List_PopFront((((Queue) (_self->entity))->_list));
+}
+
+Object Queue_PopIfNotEmpty(Object _self)
+{
+	if((Queue_Empty(_self)) != _false)
+	{
+		return _nil;
+	}
+	else
+	{
+		return Queue_Pop(_self);
+	}
+}
+
+Object Queue_Remove(Object _self)
+{
+	return List_RemoveFront((((Queue) (_self->entity))->_list));
+}
+
+Object Queue_RemoveIfNotEmpty(Object _self)
+{
+	if((Queue_Empty(_self)) != _false)
+	{
+		return _nil;
+	}
+	else
+	{
+		return Queue_Remove(_self);
+	}
 }
 
 Object Queue_Peek(Object _self)
@@ -63,5 +93,13 @@ Object Queue_Clone(Object _self)
 	Object _toReturn;
 	_toReturn = Queue_Create();
 	Object_SetReleasing(&(((Queue) (_toReturn->entity))->_list), Object_Clone((((Queue) (_self->entity))->_list)));
+	return _toReturn;
+}
+
+Object Queue_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = Queue_Create();
+	Object_SetRetaining(&(((Queue) (_toReturn->entity))->_list), Object_DeepClone((((Queue) (_self->entity))->_list)));
 	return _toReturn;
 }

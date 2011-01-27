@@ -11,14 +11,29 @@ Queue Push (Add Insert) object
 Queue <Object> Pop
 	return self.list PopFront
 
+Queue <Object> PopIfNotEmpty
+	if self IsEmpty
+		return nil
+	else
+		return self Pop
+
+Queue <Object> Remove
+	return self.list RemoveFront
+
+Queue <Object> RemoveIfNotEmpty
+	if self IsEmpty
+		return nil
+	else
+		return self Remove
+
 Queue <Object> Peek
 	return self.list PeekFront
 
-Queue <Logic> Empty
+Queue <Logic> Empty (IsEmpty)
 	return self.list Empty
 
 Queue <Comparation> Compare <Queue> queue
-	return (self.list) Compare (queue.list)
+	return (self.list) ? (queue.list)
 
 Queue <Object> Destroy
 	self.list Release
@@ -30,5 +45,10 @@ Queue <List> GetList
 Queue Clone
 	toReturn = <Queue>
 	toReturn.list = self.list Clone
+	return toReturn
+
+Queue DeepClone
+	toReturn = <Queue>
+	toReturn.list = self.list DeepClone
 	return toReturn
 

@@ -4,9 +4,12 @@ Synonim Init
 	references = <List>
 	return self
 
-Synonim SetObject (SetField) <List> object
+Synonim SetObject (SetField SetUID) <List> object
 	self.object = object
 	return self
+
+Synonim <List> Object (GetObject GetField GetUID Field UID)
+	return self.object
 
 Synonim Unite (Intersect) <Synonim> synonim
 	iterator = self.references First
@@ -46,6 +49,9 @@ Synonim Destroy
 	return self Destroy
 
 Synonim Clone
+	return self
+
+Synonim DeepClone
 	return self
 
 Synonim <Comparation> Compare <Synonim> synonim

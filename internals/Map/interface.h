@@ -7,6 +7,7 @@ Object Map_Create(void);
 Object Map_Init(Object _self);
 Object Map_Destroy(Object _self);
 Object Map_Clone(Object _self);
+Object Map_DeepClone(Object _self);
 Object Map_Compare(Object _self, Object _map);
 Object Map_Empty(Object _self);
 Object Map_Size(Object _self);

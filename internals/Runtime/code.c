@@ -10,6 +10,7 @@ Object Runtime_Create(void)
 	Object_SetComparator(toReturn, &Runtime_Compare);
 	Object_SetDestructor(toReturn, &Runtime_Destroy);
 	Object_SetCloner(toReturn, &Runtime_Clone);
+	Object_SetDeepCloner(toReturn, &Runtime_DeepClone);
 	((Runtime) (toReturn->entity))->_placeHolder = _nil;
 	toReturn = Runtime_Init(toReturn);
 	return toReturn;
@@ -31,6 +32,7 @@ Object Runtime_Init(Object _self)
 	_autoreleasePool = AutoreleasePool_Create();
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	_console = Console_Create();
+	_json = JSON_Create();
 	return _self;
 }
 
@@ -38,11 +40,18 @@ Object Runtime_Destroy(Object _self)
 {
 	DPUSHS( "Runtime: Destroying." ) 
 	Object_Release(_autoreleasePool);
+	Object_Release(_console);
+	Object_Release(_json);
 	DPOPS( "Runtime: Destroyed." ) 
 	return Object_Destroy(_self);
 }
 
 Object Runtime_Clone(Object _self)
+{
+	return _self;
+}
+
+Object Runtime_DeepClone(Object _self)
 {
 	return _self;
 }

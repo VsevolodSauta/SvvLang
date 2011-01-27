@@ -10,11 +10,11 @@ extern Object _allocator;
 
 extern Object _autoreleasePool;
 
-// extern Object _charFactory;
 extern Object _stringFactory;
 extern Object _numberFactory;
 extern Object _logicFactory;
 extern Object _charFactory;
+extern Object _methodFactory;
 
 extern Object _uncomparableGreater;
 extern Object _uncomparableLess;
@@ -29,4 +29,5 @@ extern Object _false;
 extern Object _no;
 
 extern Object _console;
+extern Object _json;
 

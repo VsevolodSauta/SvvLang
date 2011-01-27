@@ -10,6 +10,7 @@ Object ListIterator_Create(void)
 	Object_SetComparator(toReturn, &ListIterator_Compare);
 	Object_SetDestructor(toReturn, &ListIterator_Destroy);
 	Object_SetCloner(toReturn, &ListIterator_Clone);
+	Object_SetDeepCloner(toReturn, &ListIterator_DeepClone);
 	((ListIterator) (toReturn->entity))->_list = _nil;
 	((ListIterator) (toReturn->entity))->_node = _nil;
 	((ListIterator) (toReturn->entity))->_system = _nil;
@@ -40,6 +41,18 @@ Object ListIterator_Clone(Object _self)
 	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_node), (((ListIterator) (_self->entity))->_node));
 	(((ListIterator) (_toReturn->entity))->_system) = _false;
 	DPOPS( "List Iterator: Clonned." ) 
+	return _toReturn;
+}
+
+Object ListIterator_DeepClone(Object _self)
+{
+	DPUSHS( "List Iterator: Deep cloning." ) 
+	Object _toReturn;
+	_toReturn = ListIterator_Create();
+	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_list), (((ListIterator) (_self->entity))->_list));
+	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_node), (((ListIterator) (_self->entity))->_node));
+	(((ListIterator) (_toReturn->entity))->_system) = _false;
+	DPOPS( "List Iterator: Deep clonned." ) 
 	return _toReturn;
 }
 
@@ -192,7 +205,7 @@ Object ListIterator_ThisRemove(Object _self)
 	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_prev) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_next) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
 	Object_Release((((ListIterator) (_self->entity))->_node));
-	return ListIterator_Next(_self);
+	return _self;
 }
 
 Object ListIterator_PrevRemove(Object _self)
@@ -350,6 +363,54 @@ Object ListIterator_AddListAfter(Object _self, Object _list)
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
 	{
 		ListIterator_AddAfter(_self, ListIterator_ThisData(_listIterator));
+		ListIterator_Prev(_listIterator);
+	}
+	return _self;
+}
+
+Object ListIterator_AddListBeforeClonning(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_First(_list);
+	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
+	{
+		ListIterator_AddBefore(_self, Object_Clone(ListIterator_ThisData(_listIterator)));
+		ListIterator_Next(_listIterator);
+	}
+	return _self;
+}
+
+Object ListIterator_AddListAfterClonning(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_Last(_list);
+	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
+	{
+		ListIterator_AddAfter(_self, Object_Clone(ListIterator_ThisData(_listIterator)));
+		ListIterator_Prev(_listIterator);
+	}
+	return _self;
+}
+
+Object ListIterator_AddListBeforeDeepClonning(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_First(_list);
+	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
+	{
+		ListIterator_AddBefore(_self, Object_DeepClone(ListIterator_ThisData(_listIterator)));
+		ListIterator_Next(_listIterator);
+	}
+	return _self;
+}
+
+Object ListIterator_AddListAfterDeepClonning(Object _self, Object _list)
+{
+	Object _listIterator;
+	_listIterator = List_Last(_list);
+	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
+	{
+		ListIterator_AddAfter(_self, Object_DeepClone(ListIterator_ThisData(_listIterator)));
 		ListIterator_Prev(_listIterator);
 	}
 	return _self;

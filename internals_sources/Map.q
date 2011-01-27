@@ -16,6 +16,12 @@ Map Clone
 	toReturn.values = self.values Clone
 	return toReturn
 
+Map DeepClone
+	toReturn = <Map>
+	toReturn.keys = self.keys DeepClone
+	toReturn.values = self.values DeepClone
+	return toReturn
+
 Map <Comparation> Compare <Map> map
 	candidate = self.keys ? map.keys
 	if candidate != equal
@@ -85,7 +91,7 @@ Map ContainsKey (HasKey) key
 			return true
 	return false
 
-Map GetValueForKey (GetAt AtGet) key
+Map GetValueForKey (GetAt AtGet At) key
 	keysIterator = self.keys First
 	valuesIterator = self.values First
 	while keysIterator NotThisEnd

@@ -69,3 +69,7 @@ Token isString := method(
 Token isChar := method(
 	(self beginsWithSeq("'")) and (self endsWithSeq("'"))
 )
+
+Token isPointer := method(
+	self beginsWithSeq("&")
+)

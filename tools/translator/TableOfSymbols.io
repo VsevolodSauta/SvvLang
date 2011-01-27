@@ -1,18 +1,29 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP")
-TableOfSymbols objectsMethods := list("Clone", "Compare", "Retain", "Release", "Autorelease", "TempClone", "Hash", "Destroy", "Is")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "NumberFactory", "LogicFactory", "StringFactory", "File", "Undestroyable")
+TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "File", "Undestroyable", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
-	"_nil", "Object", "_nothing", "Object", "_null", "Object",
-	"_allocator", "Allocator",
-	"_autoreleasePool", "AutoreleasePool",
-	"_true", "Logic", "_false", "Logic", "_yes", "Logic", "_no", "Logic",
-	"_less", "Comparation", "_greater", "Comparation", "_equal", "Comparation", "_uncomparableLess", "Comparation", "_uncomparableGreater", "Comparation",
-	"_numberFactory", "NumberFactory",
-	"_logicFactory", "LogicFactory",
-	"_charFactory", "CharFactory",
-	"_stringFactory", "StringFactory",
-	"_console", "Console"
+	"_nil",				"Object",
+	"_nothing",			"Object",
+	"_null",			"Object",
+	"_allocator",			"Allocator",
+	"_autoreleasePool",		"AutoreleasePool",
+	"_true",			"Logic",
+	"_yes",				"Logic",
+	"_false",			"Logic",
+	"_no",				"Logic",
+	"_less",			"Comparation", 
+	"_greater",			"Comparation", 
+	"_equal",			"Comparation", 
+	"_uncomparableLess",		"Comparation", 
+	"_uncomparableGreater",		"Comparation",
+	"_numberFactory",		"NumberFactory",
+	"_logicFactory",		"LogicFactory",
+	"_charFactory",			"CharFactory",
+	"_stringFactory",		"StringFactory",
+	"_console",			"Console",
+	"_json",			"JSON",
+	"_methodFactory",		"MethodFactory"
 )
 
 TableOfSymbols tableOfImports := Map clone
@@ -31,6 +42,12 @@ TableOfSymbols classMethods := Map with(
 	),
 	"CharFactory", Map with(
 		"FromLong", Actor unnamedActor("Char")
+	),
+	"MethodFactory", Map with(
+		"FromPointer", Actor unnamedActor("Method")
+	),
+	"Method", Map with(
+		"Invoke", Actor unnamedActor("Object")
 	),
 	"File", Map with(
 		"OpenForReading", Actor unnamedActor("File"),
@@ -57,9 +74,12 @@ TableOfSymbols classMethods := Map with(
 		"ReadStringOfLength", Actor unnamedActor("String"),
 		"ReadChar", Actor unnamedActor("Char"),
 		"ReadListMap", Actor unnamedActor("ListMap"),
-		"ReadList", Actor unnamedActor("List")
+		"ReadList", Actor unnamedActor("List"),
+		"ReadContentsOfFile", Actor unnamedActor("List"),
+		"ErrorWhileOpenning", Actor unnamedActor("Logic")
 	)
 )
+
 TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols mapOfGids := Map with(
 	"Object", "Object" hash asString(20, 0) .. "ull",
@@ -101,7 +121,11 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"LogicFactory", Map clone,
 	"StringFactory", Map clone,
 	"File", Map clone,
-	"Undestroyable", Map clone
+	"Undestroyable", Map clone,
+	"MethodFactory", Map clone,
+	"Method", Map with(
+		"Call", "Invoke"
+	)
 )
 
 TableOfSymbols updateActorType := method(actor,
@@ -122,7 +146,9 @@ TableOfSymbols setActorType := method(actor,
 TableOfSymbols getActorType := method(actorName,
 	actorTypesStack foreach(map,
 		actorType := map at(actorName)
-		if(actorType isTrue, return actorType)
+		if(actorType isTrue, 
+			return actorType
+		)
 	)
 	nil
 )

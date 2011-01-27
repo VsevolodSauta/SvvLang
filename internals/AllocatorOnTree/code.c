@@ -3,6 +3,7 @@
 #define POOL_SIZE		(256 * 1048576)
 #define ALLOCATION_UNIT_SIZE	0x100000
 #define ALLOCATION_BASE		(void*) 0x10000000
+#define NULL			0x0
 
 typedef struct AllocatorNode {
 	long			size;
@@ -40,8 +41,8 @@ static inline void memcpy(char* dest, char* src, int size)
 	i = size % sizeof(long);
 	while(i)
 	{
+		dest[size - i] = src[size - i];
 		i--;
-		dest[i] = src[i];
 	}
 }
 
@@ -216,6 +217,7 @@ static inline void* Allocator_InternalNew(Allocator _self, int size)
 #endif
 	size = (size + 0x1F) & ~0x1F;
 	AllocatorNode node = FindBestFitNode(_self, size);
+	RemoveNode(_self, node);
 	
 	if(node->size > size + sizeof(struct AllocatorNode))
 	{
@@ -231,7 +233,6 @@ static inline void* Allocator_InternalNew(Allocator _self, int size)
 		node->size = size;
 		AddNode(_self, nodeToAdd);
 	}
-	RemoveNode(_self, node);
 	return (node + 1);
 }
 
@@ -254,6 +255,12 @@ static inline void Allocator_InternalDelete(Allocator _self, void* toDelete)
 	if(toDelete == NULL)
 		return;
 	AllocatorNode node = ((AllocatorNode) toDelete) - 1;
+#if MEMORY_DEBUG
+	if(!IsInUse(_self, node))
+	{
+		IMPOSSIBLE();
+	}
+#endif
 	if((node->prev != _self->allocatorData) && !IsInUse(_self, node->prev))
 	{
 		RemoveNode(_self, node->prev);

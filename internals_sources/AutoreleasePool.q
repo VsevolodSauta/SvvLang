@@ -8,18 +8,19 @@ AutoreleasePool Init
 
 AutoreleasePool Dump
 	DEBUG_PUSH ("Autorelease Pool: Dumping.")
-	ms = (self.stack Peek) AsMultiSet
-	console PrintLnNumber (ms.list Size)
+	list = (self.stack Peek) AsList
+	console PrintLnNumber (list Size)
 	DEBUG_POP ("Autorelease Pool: Dumped.")
 	return self
 
 AutoreleasePool Depth
-	DEBUG_MSG ("Autorelease Pool: Getting depth.")
-	return (self.stack.list Size)
+	DEBUG_PUSH ("Autorelease Pool: Getting depth.")
+	def (self.stack.list Size)
+	DEBUG_POP ("Autorelease Pool: Depth got.")
 
 AutoreleasePool PushFrame (++)
 	DEBUG_PUSH ("Autorelease Pool: Pushing frame.")
-	toPush = <MultiSet>
+	toPush = <List>
 	self.stack Push toPush
 	toPush Release
 	DEBUG_POP ("Autorelease Pool: Frame pushed.")
@@ -27,14 +28,13 @@ AutoreleasePool PushFrame (++)
 
 AutoreleasePool PopFrame (--)
 	DEBUG_PUSH ("Autorelease Pool: Popping frame.")
-	ms = (self.stack Peek) AsMultiSet
-	(self.stack Pop)
+	(self.stack Remove)
 	DEBUG_POP ("Autorelease Pool: Frame popped.")
 	return self
 
 AutoreleasePool Add object
 	DEBUG_PUSH ("Autorelease Pool: Adding object to pool.")
-	((self.stack Peek) AsMultiSet) Push object
+	((self.stack Peek) AsList) Push object
 	object Release
 	DEBUG_POP ("Autorelease Pool: Object added.")
 	return self
@@ -46,7 +46,10 @@ AutoreleasePool <Object> Destroy
 	return (self AsObject) Destroy
 
 AutoreleasePool <Comparation> Compare <AutoreleasePool> autoreleasePool
-	return self.stack Compare autoreleasePool.stack					// Nobody needs this method
+	return self.stack ? autoreleasePool.stack					// Nobody really needs this method
 
 AutoreleasePool Clone
+	return self									// Nobody needs this method
+
+AutoreleasePool DeepClone
 	return self									// Nobody needs this method

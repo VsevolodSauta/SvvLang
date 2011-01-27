@@ -1,13 +1,12 @@
 typedef struct JSON {
-	Object _null;
-	Object _true;
-	Object _false;
+	Object _error;
 } *JSON;
 
 Object JSON_Create(void);
 Object JSON_Init(Object _self);
 Object JSON_Compare(Object _self, Object _json);
 Object JSON_Clone(Object _self);
+Object JSON_DeepClone(Object _self);
 Object JSON_Destroy(Object _self);
 Object JSON_ParseString(Object _self, Object _iterator);
 Object JSON_ParseObject(Object _self, Object _iterator);

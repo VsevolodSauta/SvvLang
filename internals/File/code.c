@@ -50,6 +50,12 @@ Object File_Close(Object _self)
 	return _self;
 }
 
+Object File_ErrorWhileOpenning(Object _self)
+{
+	File entity = _self->entity;
+	return LogicFactory_FromLong(_logicFactory, entity->_descriptor < 0);
+}
+
 Object File_TruncateToSize(Object _self, Object _size)
 {
 	File entity = _self->entity;
@@ -60,28 +66,28 @@ Object File_TruncateToSize(Object _self, Object _size)
 Object File_SeekToPosition(Object _self, Object _position)
 {
 	File entity = _self->entity;
-	OSfileSeek(entity->_descriptor, 0, Number_GetLong(_position));
+	OSfileSeek(entity->_descriptor, Number_GetLong(_position), 0);
 	return _self;
 }
 
 Object File_Advance(Object _self, Object _offset)
 {
 	File entity = _self->entity;
-	OSfileSeek(entity->_descriptor, 1, Number_GetLong(_offset));
+	OSfileSeek(entity->_descriptor, Number_GetLong(_offset), 1);
 	return _self;
 }
 
 Object File_SeekFromEndToPosition(Object _self, Object _position)
 {
 	File entity = _self->entity;
-	OSfileSeek(entity->_descriptor, 2, Number_GetLong(_position));
+	OSfileSeek(entity->_descriptor, Number_GetLong(_position), 2);
 	return _self;
 }
 
 Object File_GetPosition(Object _self)
 {
 	File entity = _self->entity;
-	return NumberFactory_FromLong(_numberFactory, OSfileSeek(entity->_descriptor, 1, 0));
+	return NumberFactory_FromLong(_numberFactory, OSfileSeek(entity->_descriptor, 0, 1));
 }
 
 Object File_ReadByte(Object _self)
@@ -110,12 +116,12 @@ Object File_ReadChar(Object _self)
 	int charSize = UTF8GetLengthOfChar(buffer);
 	if(charSize > read)
 	{
-		OSfileSeek(entity->_descriptor, SEEK_CUR, read);
+		OSfileSeek(entity->_descriptor, -read, 1);
 		return _nil;
 	} else {
 		Object _char = Char_Create();
-		Char_SetCode(_char, NumberFactory_FromLong(_numberFactory, UTF8GetCode(buffer, charSize)));
-		OSfileSeek(entity->_descriptor, SEEK_CUR, read - charSize);
+		Number_SetLong(Char_GetMutableCode(_char), UTF8GetCode(buffer, charSize));
+		OSfileSeek(entity->_descriptor, charSize - read, 1);
 		return Object_Autorelease(_char);
 	}
 }
@@ -136,7 +142,7 @@ static inline Object File_InternalReadString(Object _self, long maxLength, long 
 			}
 		} else {
 			int i;
-			long code = Number_GetLong(Char_GetCode(_char));
+			long code = Number_GetLong(Char_GetMutableCode(_char));
 			for(i = 0; i < stopSymbolsLength; i++)
 			{
 				if(code == stopSymbols[i])
@@ -176,6 +182,11 @@ Object File_ReadNumber(Object _self)
 Object File_ReadList(Object _self);
 Object File_ReadListMap(Object _self);
 
+Object File_ReadContentsOfFile(Object _self)
+{
+	return File_InternalReadString(_self, -1, 0, 0);
+}
+
 Object File_Compare(Object _self, Object _file)
 {
 	File entity1 = _self->entity;
@@ -205,8 +216,8 @@ Object File_Destroy(Object _self)
 Object File_WriteNakedString(Object _self, Object _list)
 {
 	File entity = _self->entity;
-	char buffer[1024];
-	OSfileWrite(entity->_descriptor, buffer, StringFactory_GetUTF8String(_stringFactory, _list, buffer, 1024));
+	char buffer[4096];
+	OSfileWrite(entity->_descriptor, buffer, StringFactory_GetUTF8String(_stringFactory, _list, buffer, 4096));
 	return _self;
 }
 

@@ -10,6 +10,7 @@ Object ListMap_Create(void)
 	Object_SetComparator(toReturn, &ListMap_Compare);
 	Object_SetDestructor(toReturn, &ListMap_Destroy);
 	Object_SetCloner(toReturn, &ListMap_Clone);
+	Object_SetDeepCloner(toReturn, &ListMap_DeepClone);
 	((ListMap) (toReturn->entity))->_root = _nil;
 	toReturn = ListMap_Init(toReturn);
 	return toReturn;
@@ -38,6 +39,15 @@ Object ListMap_Clone(Object _self)
 	_toReturn = ListMap_Create();
 	Object_Release((((ListMap) (_toReturn->entity))->_root));
 	(((ListMap) (_toReturn->entity))->_root) = Object_Clone((((ListMap) (_self->entity))->_root));
+	return _toReturn;
+}
+
+Object ListMap_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = ListMap_Create();
+	Object_Release((((ListMap) (_toReturn->entity))->_root));
+	(((ListMap) (_toReturn->entity))->_root) = Object_DeepClone((((ListMap) (_self->entity))->_root));
 	return _toReturn;
 }
 
@@ -70,6 +80,12 @@ Object ListMap_Add(Object _self, Object _list, Object _object)
 	}
 	(((ListMapNode) (_node->entity))->_mapped) = _true;
 	Object_SetRetaining(&(((ListMapNode) (_node->entity))->_mapping), _object);
+	return _self;
+}
+
+Object ListMap_AddListMap(Object _self, Object _listMap)
+{
+	ListMapNode_MergeRecursiveStrong((((ListMap) (_self->entity))->_root), (((ListMap) (_listMap->entity))->_root));
 	return _self;
 }
 

@@ -7,28 +7,31 @@ typedef struct Object* (*ObjectComparator)(struct Object*, struct Object*);
 typedef struct Object* (*ObjectCloner)(struct Object*);
 
 typedef struct Object {
+	void*				entity;
 	long long int			gid;
 	long				links;
 	ObjectDestructor		destroy;
 	ObjectComparator		compare;
 	ObjectCloner			clone;
-	void*				entity;
+	ObjectCloner			deepClone;
 } *Object;
 
 Object Object_Create(void);
-Object Object_Destroy(Object receiver);
-Object Object_Retain(Object receiver);
-Object Object_Release(Object receiver);
-Object Object_Autorelease(Object receiver);
-Object Object_Compare(Object receiver, Object object);
-Object Object_Clone(Object receiver);
-Object Object_TempClone(Object receiver);
-Object Object_SetComparator(Object receiver, ObjectComparator);
-Object Object_SetCloner(Object receiver, ObjectCloner);
-Object Object_SetDestructor(Object receiver, ObjectDestructor);
-Object Object_Hash(Object receiver);
-Object Object_EmptyComparator(Object receiver, Object object);
-Object Object_Is(Object receiver, Object object);
+Object Object_Destroy(Object _self);
+Object Object_Retain(Object _self);
+Object Object_Release(Object _self);
+Object Object_Autorelease(Object _self);
+Object Object_Compare(Object _self, Object object);
+Object Object_Clone(Object _self);
+Object Object_DeepClone(Object _self);
+Object Object_TempClone(Object _self);
+Object Object_SetComparator(Object _self, ObjectComparator);
+Object Object_SetCloner(Object _self, ObjectCloner);
+Object Object_SetDeepCloner(Object _self, ObjectCloner);
+Object Object_SetDestructor(Object _self, ObjectDestructor);
+Object Object_Hash(Object _self);
+Object Object_EmptyComparator(Object _self, Object object);
+Object Object_Is(Object _self, Object object);
 
 inline static Object Object_SetRetaining(Object *toSet, Object with)
 {

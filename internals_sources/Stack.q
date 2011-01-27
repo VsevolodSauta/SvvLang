@@ -17,6 +17,11 @@ Stack <Object> Pop
 	def self.list PopBack
 	DEBUG_POP ("Stack: Popped.")
 
+Stack <Object> Remove
+	DEBUG_PUSH ("Stack: Removing.")
+	def self.list RemoveBack
+	DEBUG_POP ("Stack: Removed.")
+
 Stack <Object> Peek
 	DEBUG_PUSH ("Stack: Peeking.")
 	def self.list PeekBack
@@ -26,7 +31,7 @@ Stack <Logic> Empty (IsEmpty)
 	return self.list Empty
 
 Stack <Comparation> Compare <Stack> stack
-	return (self.list Hash) Compare (stack.list Hash)
+	return (self.list) ? (stack.list)
 
 Stack <Object> Destroy
 	DEBUG_PUSH ("Stack: Destroying.")
@@ -40,5 +45,10 @@ Stack <List> GetList
 Stack Clone
 	toReturn = <Stack>
 	toReturn.list = self.list Clone
+	return toReturn
+
+Stack DeepClone
+	toReturn = <Stack>
+	toReturn.list = self.list DeepClone
 	return toReturn
 

@@ -2,15 +2,6 @@ Line := Object clone
 Line string := nil
 Line number := nil
 
-Line preprocessingMap := Map with(
-	"(", "( ",
-	")", " )",
-	"[", "[ ",
-	"]", " ]",
-	"{", "{ ",
-	"}", " }"
-)
-
 Line withStringAndNumber := method(string, number,
 	if(string isNil, return nil)
 	toReturn := Line clone
@@ -109,10 +100,13 @@ Line tokens := lazySlot(
 )
 
 Line getLevel := lazySlot(
-	listOfWSP := list("\t" at(0), " " at(0))
 	self string foreach(position, charCode,
-		if(listOfWSP contains(charCode) not,
-			return position
+		if(charCode != 9,
+			if(charCode != 32,
+				return position,
+				
+				TranslatorWarning with(self, "Using space for identation. Tab is prefered.")
+			)
 		)
 	)
 	0
@@ -170,7 +164,8 @@ Line getActor := method(
 		toNextToken
 		return actor
 	)
-	getAction process(actor, self)
+	toReturn := getAction process(actor, self)
+	toReturn
 )
 
 Line getCondition := method(

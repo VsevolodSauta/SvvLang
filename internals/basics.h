@@ -1,9 +1,5 @@
 #pragma once
 
-// #include <unistd.h>
-// #include <sys/mman.h>
-// #include <fcntl.h>
-
 #include "os_dependent/linux.h"
 
 #include "internals/debug.h"
@@ -19,7 +15,9 @@
 #include "internals/File/interface.h"
 #include "internals/Comparation/interface.h"
 #include "internals/Undestroyable/interface.h"
+#include "internals/Method/interface.h"
+#include "internals/MethodFactory/interface.h"
 
 #include "internals/globals.h"
 
-typedef Object (*BasicMethod)(Object, Object);
+typedef Object (*BasicMethod)(Object, Object, Object);

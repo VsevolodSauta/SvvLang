@@ -10,18 +10,15 @@ Object JSON_Create(void)
 	Object_SetComparator(toReturn, &JSON_Compare);
 	Object_SetDestructor(toReturn, &JSON_Destroy);
 	Object_SetCloner(toReturn, &JSON_Clone);
-	((JSON) (toReturn->entity))->_null = _nil;
-	((JSON) (toReturn->entity))->_true = _nil;
-	((JSON) (toReturn->entity))->_false = _nil;
+	Object_SetDeepCloner(toReturn, &JSON_DeepClone);
+	((JSON) (toReturn->entity))->_error = _nil;
 	toReturn = JSON_Init(toReturn);
 	return toReturn;
 }
 
 Object JSON_Init(Object _self)
 {
-	_null = Object_Create();
-	_true = Object_Create();
-	_false = Object_Create();
+	(((JSON) (_self->entity))->_error) = Object_Create();
 	return _self;
 }
 
@@ -31,6 +28,11 @@ Object JSON_Compare(Object _self, Object _json)
 }
 
 Object JSON_Clone(Object _self)
+{
+	return _self;
+}
+
+Object JSON_DeepClone(Object _self)
 {
 	return _self;
 }
@@ -48,7 +50,7 @@ Object JSON_ParseString(Object _self, Object _iterator)
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) != _equal))) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	Object _toReturn;
@@ -121,7 +123,7 @@ Object JSON_ParseString(Object _self, Object _iterator)
 		}
 		ListIterator_Next(_iterator);
 	}
-	return _nil;
+	return (((JSON) (_self->entity))->_error);
 }
 
 Object JSON_ParseObject(Object _self, Object _iterator)
@@ -132,7 +134,7 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 	Object_Autorelease(_toReturn);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '{')) != _equal))) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -145,21 +147,21 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 		}
 		Object _string;
 		_string = JSON_ParseString(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_string, _nil) == _equal)) != _false)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_string, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
 		{
-			return _nil;
+			break;
 		}
 		ListIterator_StringSkipWhiteSpace(_iterator);
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, ':')) != _equal)) != _false)
 		{
-			return _nil;
+			break;
 		}
 		ListIterator_Next(_iterator);
 		Object _value;
 		_value = JSON_ParseValue(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) == _equal)) != _false)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
 		{
-			return _nil;
+			break;
 		}
 		ListIterator_StringSkipWhiteSpace(_iterator);
 		ListMap_Add(_toReturn, _string, _value);
@@ -169,10 +171,10 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 		}
 		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '}')) != _equal)) != _false)
 		{
-			return _nil;
+			break;
 		}
 	}
-	return _nil;
+	return (((JSON) (_self->entity))->_error);
 }
 
 Object JSON_ParseArray(Object _self, Object _iterator)
@@ -183,7 +185,7 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 	Object_Autorelease(_toReturn);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '[')) != _equal))) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -196,9 +198,9 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 		}
 		Object _value;
 		_value = JSON_ParseValue(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) == _equal)) != _false)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
 		{
-			return _nil;
+			return (((JSON) (_self->entity))->_error);
 		}
 		ListIterator_StringSkipWhiteSpace(_iterator);
 		List_PushBack(_toReturn, _value);
@@ -208,10 +210,10 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 		}
 		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, ']')) != _equal)) != _false)
 		{
-			return _nil;
+			return (((JSON) (_self->entity))->_error);
 		}
 	}
-	return _nil;
+	return (((JSON) (_self->entity))->_error);
 }
 
 Object JSON_ParseValue(Object _self, Object _iterator)
@@ -219,7 +221,7 @@ Object JSON_ParseValue(Object _self, Object _iterator)
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((ListIterator_ThisEnd(_iterator)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) == _equal)) != _false)
 	{
@@ -251,7 +253,7 @@ Object JSON_ParseValue(Object _self, Object _iterator)
 	}
 	else
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 }
 
@@ -259,80 +261,80 @@ Object JSON_ParseTrue(Object _self, Object _iterator)
 {
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 't')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'r')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'u')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'e')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
-	return (((JSON) (_self->entity))->_true);
+	return _true;
 }
 
 Object JSON_ParseFalse(Object _self, Object _iterator)
 {
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'f')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'a')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 's')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'e')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
-	return (((JSON) (_self->entity))->_false);
+	return _false;
 }
 
 Object JSON_ParseNull(Object _self, Object _iterator)
 {
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'n')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'u')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	ListIterator_Next(_iterator);
-	return (((JSON) (_self->entity))->_null);
+	return _nil;
 }
 
 Object JSON_ParseNumber(Object _self, Object _iterator)
@@ -349,7 +351,7 @@ Object JSON_ParseNumber(Object _self, Object _iterator)
 	}
 	if((Logic_Not(Char_IsDigit(ListIterator_CharData(_iterator)))) != _false)
 	{
-		return _nil;
+		return (((JSON) (_self->entity))->_error);
 	}
 	while((Char_IsDigit(ListIterator_CharData(_iterator))) != _false)
 	{

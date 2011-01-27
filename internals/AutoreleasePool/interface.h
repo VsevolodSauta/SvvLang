@@ -12,3 +12,4 @@ Object AutoreleasePool_Add(Object _self, Object _object);
 Object AutoreleasePool_Destroy(Object _self);
 Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool);
 Object AutoreleasePool_Clone(Object _self);
+Object AutoreleasePool_DeepClone(Object _self);

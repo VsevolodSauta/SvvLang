@@ -10,10 +10,18 @@ Object ListNode_Create(void)
 	Object_SetComparator(toReturn, &ListNode_Compare);
 	Object_SetDestructor(toReturn, &ListNode_Destroy);
 	Object_SetCloner(toReturn, &ListNode_Clone);
+	Object_SetDeepCloner(toReturn, &ListNode_DeepClone);
 	((ListNode) (toReturn->entity))->_next = _nil;
 	((ListNode) (toReturn->entity))->_prev = _nil;
 	((ListNode) (toReturn->entity))->_data = _nil;
+	toReturn = ListNode_Init(toReturn);
 	return toReturn;
+}
+
+Object ListNode_Init(Object _self)
+{
+	DMSGS( "List Node: Init." ) 
+	return _self;
 }
 
 Object ListNode_Clone(Object _self)
@@ -23,6 +31,16 @@ Object ListNode_Clone(Object _self)
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
 	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
 	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), (((ListNode) (_self->entity))->_data));
+	return _toReturn;
+}
+
+Object ListNode_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = ListNode_Create();
+	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
+	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
+	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), Object_DeepClone((((ListNode) (_self->entity))->_data)));
 	return _toReturn;
 }
 

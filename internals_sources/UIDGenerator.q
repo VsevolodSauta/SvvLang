@@ -11,6 +11,11 @@ UIDGenerator Clone
 	toReturn.currentUID = self.currentUID
 	return toReturn
 
+UIDGenerator DeepClone
+	toReturn = <UIDGenerator>
+	toReturn.currentUID = self.currentUID
+	return toReturn
+
 UIDGenerator Destroy
 	self.currentUID Release
 	return self Destroy
@@ -18,7 +23,7 @@ UIDGenerator Destroy
 UIDGenerator <Comparation> Compare uidGenerator
 	return (self Hash) ? (uidGenerator Hash)
 
-UIDGenerator <List> getUID
+UIDGenerator <List> GetUID
 	DEBUG_PUSH ("UID Generator: Generating UID.")
 	def stringFactory FromNumber self.currentUID
 	self.currentUID ++

@@ -12,6 +12,8 @@ Object File_OpenForAppending(Object _self, Object _filename);
 Object File_Close(Object _self);
 Object File_TruncateToSize(Object _self, Object _size);
 
+Object File_ErrorWhileOpenning(Object _self);
+
 Object File_SeekToPosition(Object _self, Object _position);
 Object File_Advance(Object _self, Object _offset);
 Object File_SeekFromEndToPosition(Object _self, Object _position);
@@ -28,6 +30,8 @@ Object File_ReadNumber(Object _self);
 
 Object File_ReadList(Object _self);
 Object File_ReadListMap(Object _self);
+
+Object File_ReadContentsOfFile(Object _self);
 
 Object File_Compare(Object _self, Object _file);
 Object File_Clone(Object _self);

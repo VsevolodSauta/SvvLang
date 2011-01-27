@@ -1,14 +1,17 @@
 typedef struct Processor {
 	Object _contextObject;
 	Object _contextJobStage;
+	Object _contextJob;
 	Object _machine;
 	Object _localNamespaces;
 	Object _helperStack;
+	Object _processorCodes;
 } *Processor;
 
 Object Processor_Create(void);
 Object Processor_Init(Object _self);
 Object Processor_Clone(Object _self);
+Object Processor_DeepClone(Object _self);
 Object Processor_Destroy(Object _self);
 Object Processor_Compare(Object _self, Object _processor);
 Object Processor_SetMachine(Object _self, Object _machine);
@@ -22,4 +25,4 @@ Object Processor_MessageConfirmsToParameter(Object _self, Object _message, Objec
 Object Processor_TryLinkMessageWithJobStage(Object _self, Object _jobStage, Object _message);
 Object Processor_ProcessOneMessage(Object _self);
 Object Processor_ProcessOneJobIfAny(Object _self);
-Object Processor_ProcessObject(Object _self, Object _object);
+Object Processor_ProcessObject(Object _self, Object _uid);

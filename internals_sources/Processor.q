@@ -1,15 +1,16 @@
-<Processor> <ListMap> [Retain] contextObject <ListMap> [Retain] contextJobStage <Machine> machine <Stack> localNamespaces <Stack> helperStack
-
+<Processor> <ListMap> [Retain] contextObject <ListMap> [Retain] contextJobStage <ListMap> [Retain] contextJob <Machine> machine <Stack> localNamespaces <Stack> helperStack <ListMap> processorCodes
 
 Processor Init
 	self.localNamespaces = <Stack>
 	self.helperStack = <Stack>
+	self.processorCodes = <ListMap>
 	return self
-
 
 Processor <Processor> Clone
 	return <Processor>
 
+Processor <Processor> DeepClone
+	return <Processor>
 
 Processor Destroy
 	self.contextObject Release
@@ -32,7 +33,7 @@ Processor <List> LocationType <List> objectName
 	candidate = ((self.localNamespaces Peek) AsListMap) ObjectAt objectName
 	if candidate != nil
 		return ("Локальное поле")
-	candidate = ((self.contextJobStage ListMapAt ("Работа")) ListMapAt ("Поля"))  ObjectAt objectName
+	candidate = (self.contextJob ListMapAt ("Поля"))  ObjectAt objectName
 	if candidate != nil
 		return ("Поле работы")
 	candidate = (self.contextObject ListMapAt ("Поля")) ObjectAt objectName
@@ -49,7 +50,7 @@ Processor <Synonim> ResolveName <List> objectName
 	candidate = ((self.localNamespaces Peek) AsListMap) SynonimAt objectName
 	if candidate != nil
 		return candidate
-	candidate = ((self.contextJobStage ListMapAt ("Работа")) ListMapAt ("Поля"))  SynonimAt objectName
+	candidate = (self.contextJob ListMapAt ("Поля"))  SynonimAt objectName
 	if candidate != nil
 		return candidate
 	candidate = (self.contextObject ListMapAt ("Поля")) SynonimAt objectName
@@ -60,32 +61,56 @@ Processor <Synonim> ResolveName <List> objectName
 
 
 Processor SendMessage <ListMap> message
-	receiver = self.machine ObjectByUID (message ListAt ("Получатель"))
-	messageQueue = (receiver QueueAt ("Сообщения"))
-	messageQueue Push message
-	self.machine Schedule receiver
+	DEBUG_PUSH ("Processor: Sending message.")
+	uid = message ListAt ("Получатель")
+	receiver = self.machine ObjectByUID uid
+	messageList = (receiver ListAt ("Сообщения"))
+	messageList PushBack message
+	self.machine Schedule uid
+	DEBUG_POP ("Processor: Message sent.")
 	return self
 
 Processor DoHelper <ListMap> toDo
+	DEBUG_PUSH ("Processor: DOHelper.")
 	action = toDo ListAt ("Действие")
 	if action == nil
 		console PrintLnString ("Некорректное toDo: отсутствует действие.")
 	elif action == ("Вызвать Do")
 		value = (toDo At ("Аргумент"))
-		if value = nil
+		if value == nil
 			value = (self.helperStack Pop)
 		self Do value
-	elif action == ("Создать список")
-		list = <List>
+	elif action == ("Разрешить имя") // Пусть будет для "Создать поле *"
+		name = (toDo At ("Имя"))
+		if name == nil
+			name = (self.helperStack Pop)
+		self.helperStack Push (self ResolveName name)
+	elif action == ("Взять объект из синонима")
+		synonim = (toDo At ("Синоним"))
+		if synonim == nil
+			synonim = (self.helperStack Pop)
+		self.helperStack Push ((synonim AsSynonim) Object)
+	elif action == ("Добавить текущий объект в вершину")
+		self.helperStack Push self.contextObject
+	elif action == ("Добавить текущую работу в вершину")
+		self.helperStack Push self.contextJob
+	elif action == ("Добавить текущую стадию в вершину")
+		self.helperStack Push self.contextJobStage
+	elif action == ("Добавить список в вершину")
+		list = (toDo At ("Список"))
+		if list == nil
+			list = <List>
+			list Autorelease
 		self.helperStack Push list
-		list Release
-	elif action == ("Создать отображение")
-		listMap = <ListMap>
+	elif action == ("Добавить отображение в вершину")
+		listMap = (toDo At ("Отображение"))
+		if listMap == nil
+			listMap = <ListMap>
+			listMap Autorelease
 		self.helperStack Push listMap
-		listMap Release
 	elif action == ("Удалить вершину")
 		self.helperStack Pop
-	elif action == ("Добавить в отображение элемент")
+	elif action == ("Добавить элемент в отображение")
 		key = (toDo At ("Ключ"))
 		value = (toDo At ("Значение"))
 		if value = nil
@@ -93,15 +118,20 @@ Processor DoHelper <ListMap> toDo
 		if key == nil
 			key = (self.helperStack Pop)
 		((self.helperStack Peek) AsListMap) AtPut key value
-	elif action == ("Добавить в список элемент")
+	elif action == ("Добавить элемент в список")
 		value = (toDo At ("Значение"))
 		if value = nil
 			value = (self.helperStack Pop)
 		((self.helperStack Peek) AsList) Append value
 	elif action == ("Добавить в стек")
 		self.helperStack Push (toDo ObjectAt ("Значение"))
-	elif action == ("Дублировать")
+	elif action == ("Дублировать вершину")
 		self.helperStack Push (self.helperStack Peek)
+	elif action == ("Поменять местами вершинные элементы")
+		a = self.helperStack Pop
+		b = self.helperStack Pop
+		self.helperStack Push a
+		self.helperStack Push b
 	elif action == ("Вызвать DoHelper")
 		value = (toDo At ("Аргумент"))
 		if value = nil
@@ -109,34 +139,78 @@ Processor DoHelper <ListMap> toDo
 		self DoHelper value
 	else
 		console PrintLnString ("Некорректное toDo: неизвестное действие.")
+	DEBUG_POP ("Processor: DONEHelper.")
 	return self
-	
 
 Processor Do <ListMap> toDo
+	DEBUG_PUSH ("Processor: DO.")
 	action = toDo ListAt ("Действие")
 	if action == nil
 		console PrintLnString ("Некорректное toDo: отсутствует действие.")
 	elif action == ("Послать сообщение")
 		self SendMessage (toDo ListMapAt ("Сообщение"))
-	elif action == ("Определить метод")
-		methodEntity = <ListMap>
-		methodEntity AtPut ("Базовый") (toDo LogicAt ("Базовый"))
-		methodEntity AtPut ("Тело") (toDo ListAt ("Тело метода"))
-		methodEntity AtPut ("Адрес") (toDo ListAt ("Адрес"))
-		methodEntity Release
-		(self.contextObject ListMapAt ("Методы")) AtPut (toDo ListAt ("Имя метода")) (toDo ListMapAt ("Метод"))
 	elif action == ("Вызвать метод")
 		self InvokeMethod (toDo ListAt ("Имя метода")) (toDo ListMapAt ("Параметры"))
+	elif action == ("Определить метод")
+		(self.contextObject ListMapAt ("Методы")) AtPut (toDo ListAt ("Имя метода")) (toDo ListMapAt ("Метод"))
 	elif action == ("Удалить метод")
 		(self.contextObject ListMapAt ("Методы")) RemoveAt (toDo ListAt ("Имя метода"))
 	elif action == ("Создать ТВА")
-		((self.localNamespaces Peek) AsListMap) Add (toDo ListAt ("Имя поля")) (toDo SynonimAt ("Синоним"))
+		synonim = toDo SynonimAt ("Синоним")
+		if synonim == nil
+			name = toDo ListAt ("Существующее имя поля")
+			if name == nil
+				console PrintLnString ("Некорректные параметры для действия \"Создать ТВА\".")
+				DEBUG_POP ("Processor: DONE.")
+				return self
+			synonim = self ResolveName name
+		reference = <ListMap>
+		reference AtPut ("Пространство имен") ((self.localNamespaces Peek) AsListMap)
+		reference AtPut ("Имя поля") (toDo ListAt ("Имя поля"))
+		synonim AddReference reference
+		reference Release
 	elif action == ("Создать поле работы")
-		((self.contextJobStage ListMapAt ("Работа"))  ListMapAt ("Поля")) Add (toDo ListAt ("Имя поля")) (toDo SynonimAt ("Синоним"))
+		synonim = toDo SynonimAt ("Синоним")
+		if synonim == nil
+			name = toDo ListAt ("Существующее имя поля")
+			if name == nil
+				console PrintLnString ("Некорректные параметры для действия \"Создать поле работы\".")
+				DEBUG_POP ("Processor: DONE.")
+				return self
+			synonim = self ResolveName name
+		reference = <ListMap>
+		reference AtPut ("Пространство имен") (self.contextJob  ListMapAt ("Поля"))
+		reference AtPut ("Имя поля") (toDo ListAt ("Имя поля"))
+		synonim AddReference reference
+		reference Release
 	elif action == ("Создать поле объекта")
-		(self.contextObject ListMapAt ("Поля")) Add (toDo ListAt ("Имя поля")) (toDo SynonimAt ("Синоним"))
+		synonim = toDo SynonimAt ("Синоним")
+		if synonim == nil
+			name = toDo ListAt ("Существующее имя поля")
+			if name == nil
+				console PrintLnString ("Некорректные параметры для действия \"Создать поле объекта\".")
+				DEBUG_POP ("Processor: DONE.")
+				return self
+			synonim = self ResolveName name
+		reference = <ListMap>
+		reference AtPut ("Пространство имен") (self.contextObject ListMapAt ("Поля"))
+		reference AtPut ("Имя поля") (toDo ListAt ("Имя поля"))
+		synonim AddReference reference
+		reference Release
 	elif action == ("Создать глобальное поле")
-		(self.machine.globalContext AtPut (toDo ListAt ("Имя поля")) (toDo SynonimAt ("Синоним")))
+		synonim = toDo SynonimAt ("Синоним")
+		if synonim == nil
+			name = toDo ListAt ("Существующее имя поля")
+			if name == nil
+				console PrintLnString ("Некорректные параметры для действия \"Создать глобальное поле\".")
+				DEBUG_POP ("Processor: DONE.")
+				return self
+			synonim = self ResolveName name
+		reference = <ListMap>
+		reference AtPut ("Пространство имен") self.machine.globalContext
+		reference AtPut ("Имя поля") (toDo ListAt ("Имя поля"))
+		synonim AddReference reference
+		reference Release
 	elif action == ("Присвоить")
 		(self ResolveName (toDo ListAt ("Имя поля"))) SetObject (toDo ListAt ("Идентификатор"))
 	elif action == ("Перемежить")
@@ -158,6 +232,7 @@ Processor Do <ListMap> toDo
 		else
 			console PrintLnString ("Попытка удалить несуществующее поле.")
 			place Release
+			DEBUG_POP ("Processor: DONE.")
 			return self
 		synonim = self ResolveName (toDo ListAt ("Имя поля"))
 		synonim RemoveReference place
@@ -173,26 +248,32 @@ Processor Do <ListMap> toDo
 	elif action == ("Очистить стадии")
 		((toDo ListMapAt ("Работа")) ListAt ("Стадии")) RemoveAll
 	elif action == ("Завершить работу")
+		console PrintLnString "Завершение работы"
 		(self.contextObject ListAt ("Работы")) RemoveFirst (toDo ListMapAt ("Работа"))
 	else
 		console PrintLnString ("Некорректное toDo: неизвестное действие.")
+	DEBUG_POP ("Processor: DONE.")
 	return self
 
 
 Processor InvokeMethod <List> methodName <ListMap> parameters
+	DEBUG_PUSH ("Processor: Invoking method.")
 	autoreleasePool ++
 	method = (self.contextObject ListMapAt ("Методы")) ListMapAt methodName
 	if method == nil
 		console PrintLnString ("Ошибка! Вызов несуществующего метода.")
 		autoreleasePool --
+		DEBUG_POP ("Processor: Method processed.")
 		return self
 	if method LogicAt ("Базовый")
 		adressConstant = ("Адрес")
+		externalObjectEntity = self.contextObject At ("Сущность")
 		object = self.contextObject
-		C ((BasicMethod) ListMap_ObjectAt(_method, _adressConstant))(_object, _parameters);
+		C ((BasicMethod) ListMap_ObjectAt(_method, _adressConstant))(_externalObjectEntity, _object, _parameters);
 	else
 		namespace = <ListMap>
 		self.localNamespaces Push namespace
+		namespace AddListMap parameters
 		namespace Release
 		methodBody = (method At ("Тело")) AsList
 		iterator = methodBody First
@@ -201,18 +282,20 @@ Processor InvokeMethod <List> methodName <ListMap> parameters
 			iterator ++
 		self.localNamespaces Pop
 	autoreleasePool --
+	DEBUG_POP ("Processor: Method processed.")
 	return self
 
 
 Processor MessageConfirmsToParameter <ListMap> message <ListMap> parameter
 	checkingMethod = parameter At ("Метод проверки")
 	if checkingMethod == ("Совпадение")
-		if (message At (parameter At ("Тип"))) == (parameter At ("Значение"))
+		if (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
 			return true
 	return false
 
 
 Processor TryLinkMessageWithJobStage <ListMap> jobStage <ListMap> message
+	DEBUG_PUSH ("Processor: Trying to link message with a job.")
 	messagesIterator = (jobStage ListAt ("Ожидаемые сообщения")) First
 	while messagesIterator NotThisEnd
 		parametersIterator = (messagesIterator ListData) First
@@ -230,49 +313,64 @@ Processor TryLinkMessageWithJobStage <ListMap> jobStage <ListMap> message
 			if msgNeeded == 0
 				jobStage AtPut ("Состояние") ("Готовность")
 		messagesIterator ++
+	DEBUG_POP ("Processor: Message linking ended.")
 	return self
 
 
 Processor ProcessOneMessage
-	message = (self.contextObject QueueAt ("Сообщения")) Pop
-	jobsIterator = (self.contextObject ListAt ("Работы")) First
-	while jobsIterator NotThisEnd
-		job = jobsIterator ListMapData
-		jobStagesIterator = (job ListAt ("Стадии")) First
-		while jobStagesIterator NotThisEnd
-			self TryLinkMessageWithJobStage message (jobStagesIterator ListMapData)
-			jobStagesIterator ++
-		jobsIterator ++
+	DEBUG_PUSH ("Processor: Processing message.")
+	messageList = (self.contextObject ListAt ("Сообщения"))
+	if messageList NotIsEmpty
+		message = messageList PopFront
+		if message != nil
+			jobsIterator = (self.contextObject ListAt ("Работы")) First
+			while jobsIterator NotThisEnd
+				job = jobsIterator ListMapData
+				jobStagesIterator = (job ListAt ("Стадии")) First
+				while jobStagesIterator NotThisEnd
+					self TryLinkMessageWithJobStage message (jobStagesIterator ListMapData)
+					jobStagesIterator ++
+				jobsIterator ++
+	DEBUG_POP ("Processor: Message processed.")
 	return self
 
 
 Processor ProcessOneJobIfAny
+	DEBUG_PUSH ("Processor: Processing job.")
 	jobsIterator = (self.contextObject ListAt ("Работы")) First
 	while jobsIterator NotThisEnd
 		job = (jobsIterator ListMapData)
 		jobStagesIterator = (job ListAt ("Стадии")) First
 		while jobStagesIterator NotThisEnd
 			jobStage = jobStagesIterator ListMapData
-			if (jobStage ListAt ("Cостояние")) == ("Готовность")
+			console PrintLnString (jobStage ListAt ("Состояние"))
+			if (jobStage ListAt ("Состояние")) == ("Готовность")
 				jobsIterator Hide
 				jobStagesIterator Hide
 				self.contextJobStage = jobStage
+				self.contextJob = job
 				emptyParameters = <ListMap>
 				self InvokeMethod (jobStage ListAt ("Метод")) emptyParameters
 				emptyParameters Release
 				self.contextJobStage = nil
+				self.contextJob = nil
+				DEBUG_POP ("Processor: Job processed.")
 				return self
 			jobStagesIterator ++
 		jobsIterator ++
+	DEBUG_POP ("Processor: Job processed.")
 	return self
 
 
-Processor ProcessObject <ListMap> object
+Processor ProcessObject <List> uid
+	DEBUG_PUSH ("Processor: Processing object.")
 	autoreleasePool ++
+	object = self.machine ObjectByUID uid
 	self.contextObject = object
 	self ProcessOneMessage
 	self ProcessOneJobIfAny
 	self.contextObject = nil
 	autoreleasePool --
+	DEBUG_POP ("Processor: Object processed.")
 	return self
 

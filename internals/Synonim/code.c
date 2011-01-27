@@ -10,6 +10,7 @@ Object Synonim_Create(void)
 	Object_SetComparator(toReturn, &Synonim_Compare);
 	Object_SetDestructor(toReturn, &Synonim_Destroy);
 	Object_SetCloner(toReturn, &Synonim_Clone);
+	Object_SetDeepCloner(toReturn, &Synonim_DeepClone);
 	((Synonim) (toReturn->entity))->_object = _nil;
 	((Synonim) (toReturn->entity))->_references = _nil;
 	toReturn = Synonim_Init(toReturn);
@@ -27,6 +28,11 @@ Object Synonim_SetObject(Object _self, Object _object)
 {
 	Object_SetRetaining(&(((Synonim) (_self->entity))->_object), _object);
 	return _self;
+}
+
+Object Synonim_Object(Object _self)
+{
+	return (((Synonim) (_self->entity))->_object);
 }
 
 Object Synonim_Unite(Object _self, Object _synonim)
@@ -88,6 +94,11 @@ Object Synonim_Destroy(Object _self)
 }
 
 Object Synonim_Clone(Object _self)
+{
+	return _self;
+}
+
+Object Synonim_DeepClone(Object _self)
 {
 	return _self;
 }

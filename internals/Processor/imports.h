@@ -6,7 +6,6 @@
 #include "internals/Machine/interface.h"
 #include "internals/Stack/interface.h"
 #include "internals/Synonim/interface.h"
-#include "internals/Queue/interface.h"
 #include "internals/Console/interface.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/ListIterator/interface.h"

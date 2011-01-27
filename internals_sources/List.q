@@ -29,21 +29,28 @@ List Clone
 	list.iterator Hide
 	return list
 
+List DeepClone
+	list = <List>
+	list.iterator ToEnd
+	list.iterator AddListAfterDeepClonning self
+	list.iterator Hide
+	return list
+
 List <Comparation> Compare <List> list
-	self.iterator ToBegin
-	list.iterator ToBegin
+	selfIterator = self First
+	listIterator = list First
 	loop
-		if self.iterator ThisEnd
-			if list.iterator ThisEnd
+		if selfIterator ThisEnd
+			if listIterator ThisEnd
 				return equal
 			else
 				return less
-		if list.iterator ThisEnd
+		if listIterator ThisEnd
 			return greater
-		candidateForReturning = (self.iterator ThisData) Compare (list.iterator ThisData)
+		candidateForReturning = (selfIterator ThisData) ? (listIterator ThisData)
 		if candidateForReturning == equal
-			list.iterator Next
-			self.iterator Next
+			listIterator Next
+			selfIterator Next
 		else
 			return candidateForReturning
 
@@ -63,7 +70,7 @@ List PushFront (Prepend) object
 	self.iterator Hide
 	return self
 
-List PushBack (Append) object
+List PushBack (Append Push) object
 	DEBUG_PUSH ("List: Pushing back.")
 	self.iterator ToEnd
 	self.iterator AddAfter object
@@ -90,18 +97,36 @@ List <Object> PeekBack
 	self.iterator Hide
 
 List <Object> PopFront
+	DEBUG_PUSH ("List: Popping front.")
 	self.iterator ToBegin
-	def self.iterator ThisData
+	def ((self.iterator ThisData) Retain) Autorelease
 	self.iterator ThisRemove
 	self.iterator Hide
+	DEBUG_POP ("List: Popped front.")
 
-List <Object> PopBack
+List <Object> PopBack (Pop)
 	DEBUG_PUSH ("List: Popping back.")
 	self.iterator ToEnd
-	def self.iterator ThisData
+	def ((self.iterator ThisData) Retain) Autorelease
 	self.iterator ThisRemove
 	self.iterator Hide
 	DEBUG_POP ("List: Popped back.")
+
+List <Object> RemoveFront
+	DEBUG_PUSH ("List: Removing front.")
+	self.iterator ToBegin
+	self.iterator ThisRemove
+	self.iterator Hide
+	DEBUG_POP ("List: Removed front.")
+	return self
+
+List <Object> RemoveBack (Remove)
+	DEBUG_PUSH ("List: Removing back.")
+	self.iterator ToEnd
+	self.iterator ThisRemove
+	self.iterator Hide
+	DEBUG_POP ("List: Removed back.")
+	return self
 
 List AddAfterPosition <Number> position object
 	self.iterator ToPosition position
@@ -198,10 +223,13 @@ List <ListIterator> SystemIterator
 	DEBUG_POP ("List: System iterator got.")
 	return iterator
 
-List <Object> DataFromPosition <Number> position
+List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> position
 	self.iterator ToPosition position
 	def self.iterator ThisData
 	self.iterator Hide
+
+List <ListMap> ListMapAtPosition (ListMapFromPosition) <Number> position
+	return (self ObjectAtPosition 0) AsListMap
 
 List Search object
 	self.iterator ToBegin
@@ -272,7 +300,7 @@ List <Number> Size
 	DEBUG_POP ("List: Size got.")
 	return toReturn
 
-List <Logic> Empty
+List <Logic> Empty (IsEmpty)
 	self.iterator ToBegin
 	def self.iterator ThisEnd
 	self.iterator Hide

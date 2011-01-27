@@ -10,6 +10,7 @@ Object Console_Create(void)
 	Object_SetComparator(toReturn, &Console_Compare);
 	Object_SetDestructor(toReturn, &Console_Destroy);
 	Object_SetCloner(toReturn, &Console_Clone);
+	Object_SetDeepCloner(toReturn, &Console_DeepClone);
 	((Console) (toReturn->entity))->_toRead = _nil;
 	((Console) (toReturn->entity))->_toWrite = _nil;
 	toReturn = Console_Init(toReturn);
@@ -41,7 +42,18 @@ Object Console_WriteLnNumber(Object _self, Object _number)
 	return _self;
 }
 
+Object Console_WriteHash(Object _self, Object _object)
+{
+	File_WriteLnNumber((((Console) (_self->entity))->_toWrite), Object_Hash(_object));
+	return _self;
+}
+
 Object Console_Clone(Object _self)
+{
+	return _self;
+}
+
+Object Console_DeepClone(Object _self)
 {
 	return _self;
 }

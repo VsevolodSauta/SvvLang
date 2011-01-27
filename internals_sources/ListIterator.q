@@ -18,6 +18,15 @@ ListIterator Clone
 	DEBUG_POP ("List Iterator: Clonned.")
 	return toReturn
 
+ListIterator DeepClone
+	DEBUG_PUSH ("List Iterator: Deep cloning.")
+	toReturn = <ListIterator>
+	toReturn.list = self.list
+	toReturn.node = self.node
+	toReturn.system = false
+	DEBUG_POP ("List Iterator: Deep clonned.")
+	return toReturn
+
 ListIterator InitWithListAndNode <List> list <ListNode> node
 	self.list = list
 	self.node = node
@@ -110,11 +119,11 @@ ListIterator <Number> SearchForwardOffset object
 		position Inc
 	return -1
 
-ListIterator ThisRemove (Remove)
-	self.node.next.prev = self.node.prev
+ListIterator ThisRemove (Remove)			// Здесь все правильно. :)
+	self.node.next.prev = self.node.prev		// Node объявлена со свойством Retain.
 	self.node.prev.next = self.node.next
 	self.node Release
-	return self Next
+	return self
 
 ListIterator PrevRemove
 	toRemove = self.node.next
@@ -219,6 +228,34 @@ ListIterator AddListAfter <List> list
 	listIterator = list Last
 	while listIterator NotThisBegin
 		self AddAfter (listIterator ThisData)
+		listIterator Prev
+	return self
+
+ListIterator AddListBeforeClonning <List> list
+	listIterator = list First
+	while listIterator NotThisEnd
+		self AddBefore ((listIterator ThisData) Clone)
+		listIterator Next
+	return self
+
+ListIterator AddListAfterClonning <List> list
+	listIterator = list Last
+	while listIterator NotThisBegin
+		self AddAfter ((listIterator ThisData) Clone)
+		listIterator Prev
+	return self
+
+ListIterator AddListBeforeDeepClonning <List> list
+	listIterator = list First
+	while listIterator NotThisEnd
+		self AddBefore ((listIterator ThisData) DeepClone)
+		listIterator Next
+	return self
+
+ListIterator AddListAfterDeepClonning <List> list
+	listIterator = list Last
+	while listIterator NotThisBegin
+		self AddAfter ((listIterator ThisData) DeepClone)
 		listIterator Prev
 	return self
 

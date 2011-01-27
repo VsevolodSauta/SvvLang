@@ -14,6 +14,9 @@ add_subdirectory(Allocator)
 add_subdirectory(AutoreleasePool)
 add_subdirectory(Undestroyable)
 
+add_subdirectory(Method)
+add_subdirectory(MethodFactory)
+
 add_subdirectory(File)
 add_subdirectory(Console)
 
@@ -39,6 +42,7 @@ add_subdirectory(MachineScheduler)
 add_subdirectory(Processor)
 add_subdirectory(Machine)
 add_subdirectory(Runtime)
+
 
 add_executable(VM main.c)
 target_link_libraries(VM Machine Runtime Object OSKernel)

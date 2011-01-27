@@ -11,7 +11,7 @@ Object CharFactory_FromLong(Object _self, long _arg)
 {
 	DMSG("Char factory: Creating char.\n");
 	Object _toReturn = Char_Create();
-	Number_SetLong(Char_GetCode(_toReturn), _arg);
+	Number_SetLong(Char_GetMutableCode(_toReturn), _arg);
 	Object_Autorelease(_toReturn);
 	return _toReturn;
 };

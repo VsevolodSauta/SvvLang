@@ -10,6 +10,7 @@ Object List_Create(void)
 	Object_SetComparator(toReturn, &List_Compare);
 	Object_SetDestructor(toReturn, &List_Destroy);
 	Object_SetCloner(toReturn, &List_Clone);
+	Object_SetDeepCloner(toReturn, &List_DeepClone);
 	((List) (toReturn->entity))->_iterator = _nil;
 	((List) (toReturn->entity))->_head = _nil;
 	((List) (toReturn->entity))->_tail = _nil;
@@ -57,15 +58,27 @@ Object List_Clone(Object _self)
 	return _list;
 }
 
+Object List_DeepClone(Object _self)
+{
+	Object _list;
+	_list = List_Create();
+	ListIterator_ToEnd((((List) (_list->entity))->_iterator));
+	ListIterator_AddListAfterDeepClonning((((List) (_list->entity))->_iterator), _self);
+	ListIterator_Hide((((List) (_list->entity))->_iterator));
+	return _list;
+}
+
 Object List_Compare(Object _self, Object _list)
 {
-	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
-	ListIterator_ToBegin((((List) (_list->entity))->_iterator));
+	Object _selfIterator;
+	_selfIterator = List_First(_self);
+	Object _listIterator;
+	_listIterator = List_First(_list);
 	while(1)
 	{
-		if((ListIterator_ThisEnd((((List) (_self->entity))->_iterator))) != _false)
+		if((ListIterator_ThisEnd(_selfIterator)) != _false)
 		{
-			if((ListIterator_ThisEnd((((List) (_list->entity))->_iterator))) != _false)
+			if((ListIterator_ThisEnd(_listIterator)) != _false)
 			{
 				return _equal;
 			}
@@ -74,16 +87,16 @@ Object List_Compare(Object _self, Object _list)
 				return _less;
 			}
 		}
-		if((ListIterator_ThisEnd((((List) (_list->entity))->_iterator))) != _false)
+		if((ListIterator_ThisEnd(_listIterator)) != _false)
 		{
 			return _greater;
 		}
 		Object _candidateForReturning;
-		_candidateForReturning = Object_Compare(ListIterator_ThisData((((List) (_self->entity))->_iterator)), ListIterator_ThisData((((List) (_list->entity))->_iterator)));
+		_candidateForReturning = Object_Compare(ListIterator_ThisData(_selfIterator), ListIterator_ThisData(_listIterator));
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidateForReturning, _equal) == _equal)) != _false)
 		{
-			ListIterator_Next((((List) (_list->entity))->_iterator));
-			ListIterator_Next((((List) (_self->entity))->_iterator));
+			ListIterator_Next(_listIterator);
+			ListIterator_Next(_selfIterator);
 		}
 		else
 		{
@@ -156,10 +169,12 @@ Object List_PeekBack(Object _self)
 
 Object List_PopFront(Object _self)
 {
+	DPUSHS( "List: Popping front." ) 
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
-	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
+	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS( "List: Popped front." ) 
 	return def;
 }
 
@@ -167,11 +182,31 @@ Object List_PopBack(Object _self)
 {
 	DPUSHS( "List: Popping back." ) 
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
-	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
+	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	DPOPS( "List: Popped back." ) 
 	return def;
+}
+
+Object List_RemoveFront(Object _self)
+{
+	DPUSHS( "List: Removing front." ) 
+	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS( "List: Removed front." ) 
+	return _self;
+}
+
+Object List_RemoveBack(Object _self)
+{
+	DPUSHS( "List: Removing back." ) 
+	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
+	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS( "List: Removed back." ) 
+	return _self;
 }
 
 Object List_AddAfterPosition(Object _self, Object _position, Object _object)
@@ -312,12 +347,17 @@ Object List_SystemIterator(Object _self)
 	return _iterator;
 }
 
-Object List_DataFromPosition(Object _self, Object _position)
+Object List_ObjectAtPosition(Object _self, Object _position)
 {
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	return def;
+}
+
+Object List_ListMapAtPosition(Object _self, Object _position)
+{
+	return List_ObjectAtPosition(_self, NumberFactory_FromLong(_numberFactory, 0));
 }
 
 Object List_Search(Object _self, Object _object)

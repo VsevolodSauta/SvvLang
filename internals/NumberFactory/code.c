@@ -11,10 +11,11 @@ Object NumberFactory_Create()
 
 Object NumberFactory_FromLong(Object _self, long _arg)
 {
-	DMSG("Number factory: Creating number.\n");
+	DPUSHS("Number factory: Creating number.");
 	Object _toReturn = Number_Create();
 	Number_SetLong(_toReturn, _arg);
 	Object_Autorelease(_toReturn);
+	DPOPS("Number factory: Number created.");
 	return _toReturn;
 };
 

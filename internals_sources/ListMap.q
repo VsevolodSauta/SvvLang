@@ -17,6 +17,12 @@ ListMap Clone
 	toReturn.root = self.root Clone
 	return toReturn
 
+ListMap DeepClone
+	toReturn = <ListMap>
+	toReturn.root Release
+	toReturn.root = self.root DeepClone
+	return toReturn
+
 ListMap <Logic> Empty
 	return (self.root.mapped Not) And (self.root.nextMap Empty)
 
@@ -34,6 +40,10 @@ ListMap Add (AtPut Put +) <List> list object
 		iterator ++
 	node.mapped = true
 	node.mapping = object
+	return self
+
+ListMap AddListMap <ListMap> listMap
+	self.root MergeRecursiveStrong listMap.root
 	return self
 
 ListMap Remove (RemoveAt RemoveKey Remove DeleteKey Delete - \) <List> list
@@ -108,5 +118,4 @@ ListMap <Number> NumberAt <List> list
 
 ListMap <Synonim> SynonimAt <List> list
 	return (self GetAt list) AsSynonim
-
 

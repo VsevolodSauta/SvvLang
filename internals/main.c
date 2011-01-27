@@ -12,8 +12,13 @@ int DLEVEL = 0;
 
 Object _autoreleasePool;
 Object _console;
+Object _json;
 
+#if STDLIB
+int main(void)
+#else
 void _start(void)
+#endif
 {
 	_allocator = Allocator_Create();
 	Object _runtime = Runtime_Create();
@@ -21,7 +26,7 @@ void _start(void)
 	Machine_Run(_machine);
 	Object_Release(_machine);
 	Object_Release(_runtime);
-#if MEMORY_DEBUG
+#if 0 // MEMORY_DEBUG
 	printf("Allocated: %i\nResized: %i\nFreed: %i\nNot freed: %i\n",
 		Allocator_GetAllocated(_allocator),
 		Allocator_GetResized(_allocator),

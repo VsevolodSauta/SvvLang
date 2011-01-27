@@ -10,6 +10,7 @@ Object AutoreleasePool_Create(void)
 	Object_SetComparator(toReturn, &AutoreleasePool_Compare);
 	Object_SetDestructor(toReturn, &AutoreleasePool_Destroy);
 	Object_SetCloner(toReturn, &AutoreleasePool_Clone);
+	Object_SetDeepCloner(toReturn, &AutoreleasePool_DeepClone);
 	((AutoreleasePool) (toReturn->entity))->_stack = _nil;
 	toReturn = AutoreleasePool_Init(toReturn);
 	return toReturn;
@@ -26,24 +27,26 @@ Object AutoreleasePool_Init(Object _self)
 Object AutoreleasePool_Dump(Object _self)
 {
 	DPUSHS( "Autorelease Pool: Dumping." ) 
-	Object _ms;
-	_ms = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
-	Console_WriteLnNumber(_console, List_Size((((MultiSet) (_ms->entity))->_list)));
+	Object _list;
+	_list = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
+	Console_WriteLnNumber(_console, List_Size(_list));
 	DPOPS( "Autorelease Pool: Dumped." ) 
 	return _self;
 }
 
 Object AutoreleasePool_Depth(Object _self)
 {
-	DMSGS( "Autorelease Pool: Getting depth." ) 
-	return List_Size((((Stack) ((((AutoreleasePool) (_self->entity))->_stack)->entity))->_list));
+	DPUSHS( "Autorelease Pool: Getting depth." ) 
+	Object def = List_Size((((Stack) ((((AutoreleasePool) (_self->entity))->_stack)->entity))->_list));
+	DPOPS( "Autorelease Pool: Depth got." ) 
+	return def;
 }
 
 Object AutoreleasePool_PushFrame(Object _self)
 {
 	DPUSHS( "Autorelease Pool: Pushing frame." ) 
 	Object _toPush;
-	_toPush = MultiSet_Create();
+	_toPush = List_Create();
 	Stack_Push((((AutoreleasePool) (_self->entity))->_stack), _toPush);
 	Object_Release(_toPush);
 	DPOPS( "Autorelease Pool: Frame pushed." ) 
@@ -53,9 +56,7 @@ Object AutoreleasePool_PushFrame(Object _self)
 Object AutoreleasePool_PopFrame(Object _self)
 {
 	DPUSHS( "Autorelease Pool: Popping frame." ) 
-	Object _ms;
-	_ms = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
-	Stack_Pop((((AutoreleasePool) (_self->entity))->_stack));
+	Stack_Remove((((AutoreleasePool) (_self->entity))->_stack));
 	DPOPS( "Autorelease Pool: Frame popped." ) 
 	return _self;
 }
@@ -63,7 +64,7 @@ Object AutoreleasePool_PopFrame(Object _self)
 Object AutoreleasePool_Add(Object _self, Object _object)
 {
 	DPUSHS( "Autorelease Pool: Adding object to pool." ) 
-	MultiSet_Push(Stack_Peek((((AutoreleasePool) (_self->entity))->_stack)), _object);
+	List_PushBack(Stack_Peek((((AutoreleasePool) (_self->entity))->_stack)), _object);
 	Object_Release(_object);
 	DPOPS( "Autorelease Pool: Object added." ) 
 	return _self;
@@ -83,6 +84,11 @@ Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool)
 }
 
 Object AutoreleasePool_Clone(Object _self)
+{
+	return _self;
+}
+
+Object AutoreleasePool_DeepClone(Object _self)
 {
 	return _self;
 }

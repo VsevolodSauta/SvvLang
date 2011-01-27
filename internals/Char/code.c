@@ -10,6 +10,7 @@ Object Char_Create(void)
 	Object_SetComparator(toReturn, &Char_Compare);
 	Object_SetDestructor(toReturn, &Char_Destroy);
 	Object_SetCloner(toReturn, &Char_Clone);
+	Object_SetDeepCloner(toReturn, &Char_DeepClone);
 	((Char) (toReturn->entity))->_code = _nil;
 	toReturn = Char_Init(toReturn);
 	return toReturn;
@@ -40,6 +41,14 @@ Object Char_Clone(Object _self)
 	return _toReturn;
 }
 
+Object Char_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = Char_Create();
+	Char_SetCode(_toReturn, (((Char) (_self->entity))->_code));
+	return _toReturn;
+}
+
 Object Char_SetCode(Object _self, Object _code)
 {
 	Number_Set((((Char) (_self->entity))->_code), _code);
@@ -49,6 +58,11 @@ Object Char_SetCode(Object _self, Object _code)
 Object Char_GetCode(Object _self)
 {
 	return Object_TempClone((((Char) (_self->entity))->_code));
+}
+
+Object Char_GetMutableCode(Object _self)
+{
+	return (((Char) (_self->entity))->_code);
 }
 
 Object Char_IsSpace(Object _self)

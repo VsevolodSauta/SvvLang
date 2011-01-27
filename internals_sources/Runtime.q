@@ -15,15 +15,21 @@ Runtime Init
 	autoreleasePool = <AutoreleasePool>
 	autoreleasePool PushFrame
 	console = <Console>
+	json = <JSON>
 	return self
 
 Runtime Destroy
 	DEBUG_PUSH ("Runtime: Destroying.")
 	autoreleasePool Release
+	console Release
+	json Release
 	DEBUG_POP ("Runtime: Destroyed.")
 	return self Destroy
 
 Runtime Clone
+	return self
+
+Runtime DeepClone
 	return self
 
 Runtime <Comparation> Compare <Runtime> runtime

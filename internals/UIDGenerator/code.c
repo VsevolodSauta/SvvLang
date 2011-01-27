@@ -10,6 +10,7 @@ Object UIDGenerator_Create(void)
 	Object_SetComparator(toReturn, &UIDGenerator_Compare);
 	Object_SetDestructor(toReturn, &UIDGenerator_Destroy);
 	Object_SetCloner(toReturn, &UIDGenerator_Clone);
+	Object_SetDeepCloner(toReturn, &UIDGenerator_DeepClone);
 	((UIDGenerator) (toReturn->entity))->_currentUID = _nil;
 	toReturn = UIDGenerator_Init(toReturn);
 	return toReturn;
@@ -31,6 +32,14 @@ Object UIDGenerator_Clone(Object _self)
 	return _toReturn;
 }
 
+Object UIDGenerator_DeepClone(Object _self)
+{
+	Object _toReturn;
+	_toReturn = UIDGenerator_Create();
+	Object_SetCloning(&(((UIDGenerator) (_toReturn->entity))->_currentUID), (((UIDGenerator) (_self->entity))->_currentUID));
+	return _toReturn;
+}
+
 Object UIDGenerator_Destroy(Object _self)
 {
 	Object_Release((((UIDGenerator) (_self->entity))->_currentUID));
@@ -42,7 +51,7 @@ Object UIDGenerator_Compare(Object _self, Object _uidGenerator)
 	return Object_Compare(Object_Hash(_self), Object_Hash(_uidGenerator));
 }
 
-Object UIDGenerator_getUID(Object _self)
+Object UIDGenerator_GetUID(Object _self)
 {
 	DPUSHS( "UID Generator: Generating UID." ) 
 	Object def = StringFactory_FromNumber(_stringFactory, (((UIDGenerator) (_self->entity))->_currentUID));
