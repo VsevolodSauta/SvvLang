@@ -4,59 +4,84 @@
 
 Object MachineScheduler_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct MachineScheduler));
-	toReturn->gid =  4460415907327830016ull;
-	Object_SetComparator(toReturn, &MachineScheduler_Compare);
-	Object_SetDestructor(toReturn, &MachineScheduler_Destroy);
-	Object_SetCloner(toReturn, &MachineScheduler_Clone);
-	Object_SetDeepCloner(toReturn, &MachineScheduler_DeepClone);
-	((MachineScheduler) (toReturn->entity))->_queue = _nil;
-	toReturn = MachineScheduler_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("MachineScheduler: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct MachineScheduler));
+	_self->gid =  4460415907327830016ull;
+	Object_SetComparator(_self, &MachineScheduler_Compare);
+	Object_SetDestructor(_self, &MachineScheduler_Destroy);
+	Object_SetCloner(_self, &MachineScheduler_Clone);
+	Object_SetDeepCloner(_self, &MachineScheduler_DeepClone);
+	((MachineScheduler) (_self->entity))->_queue = _nil;
+	_self = MachineScheduler_Init(_self);
+	DPOPS ("MachineScheduler: Create ended.")
+	return _self;
 }
 
 Object MachineScheduler_Init(Object _self)
 {
+	DPUSHS ("MachineScheduler: Init begined.")
 	(((MachineScheduler) (_self->entity))->_queue) = Queue_Create();
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MachineScheduler: Init ended.")
+	return toReturn;
 }
 
 Object MachineScheduler_GetNextObject(Object _self)
 {
+	DPUSHS ("MachineScheduler: GetNextObject begined.")
 	if((Queue_Empty((((MachineScheduler) (_self->entity))->_queue))) != _false)
 	{
-		return _nil;
+		Object toReturn = _nil;
+		DPOPS ("MachineScheduler: GetNextObject ended.")
+		return toReturn;
 	}
 	else
 	{
-		return Queue_Pop((((MachineScheduler) (_self->entity))->_queue));
+		Object toReturn = Queue_Pop((((MachineScheduler) (_self->entity))->_queue));
+		DPOPS ("MachineScheduler: GetNextObject ended.")
+		return toReturn;
 	}
 }
 
 Object MachineScheduler_Schedule(Object _self, Object _uid)
 {
+	DPUSHS ("MachineScheduler: Schedule begined.")
 	Queue_Push((((MachineScheduler) (_self->entity))->_queue), _uid);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MachineScheduler: Schedule ended.")
+	return toReturn;
 }
 
 Object MachineScheduler_Destroy(Object _self)
 {
+	DPUSHS ("MachineScheduler: Destroy begined.")
 	Object_Release((((MachineScheduler) (_self->entity))->_queue));
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("MachineScheduler: Destroy ended.")
+	return toReturn;
 }
 
 Object MachineScheduler_DeepClone(Object _self)
 {
-	return _self;
+	DPUSHS ("MachineScheduler: DeepClone begined.")
+	Object toReturn = _self;
+	DPOPS ("MachineScheduler: DeepClone ended.")
+	return toReturn;
 }
 
 Object MachineScheduler_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("MachineScheduler: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("MachineScheduler: Clone ended.")
+	return toReturn;
 }
 
 Object MachineScheduler_Compare(Object _self, Object _scheduler)
 {
-	return _equal;
+	DPUSHS ("MachineScheduler: Compare begined.")
+	Object toReturn = _equal;
+	DPOPS ("MachineScheduler: Compare ended.")
+	return toReturn;
 }

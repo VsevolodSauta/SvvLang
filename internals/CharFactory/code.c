@@ -1,6 +1,7 @@
+#include "internals/basics.h"
 #include "internals/Number/interface.h"
 #include "internals/Char/interface.h"
-#include "internals/basics.h"
+#include "internals/Undestroyable/interface.h"
 
 Object CharFactory_Create()
 {

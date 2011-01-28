@@ -4,66 +4,95 @@
 
 Object Console_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct Console));
-	toReturn->gid =  2102628007026497536ull;
-	Object_SetComparator(toReturn, &Console_Compare);
-	Object_SetDestructor(toReturn, &Console_Destroy);
-	Object_SetCloner(toReturn, &Console_Clone);
-	Object_SetDeepCloner(toReturn, &Console_DeepClone);
-	((Console) (toReturn->entity))->_toRead = _nil;
-	((Console) (toReturn->entity))->_toWrite = _nil;
-	toReturn = Console_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("Console: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct Console));
+	_self->gid =  2102628007026497536ull;
+	Object_SetComparator(_self, &Console_Compare);
+	Object_SetDestructor(_self, &Console_Destroy);
+	Object_SetCloner(_self, &Console_Clone);
+	Object_SetDeepCloner(_self, &Console_DeepClone);
+	((Console) (_self->entity))->_toRead = _nil;
+	((Console) (_self->entity))->_toWrite = _nil;
+	_self = Console_Init(_self);
+	DPOPS ("Console: Create ended.")
+	return _self;
 }
 
 Object Console_Init(Object _self)
 {
+	DPUSHS ("Console: Init begined.")
 	(((Console) (_self->entity))->_toRead) = File_Create();
 	(((Console) (_self->entity))->_toWrite) = File_Create();
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Console: Init ended.")
+	return toReturn;
 }
 
 Object Console_WriteLnString(Object _self, Object _string)
 {
+	DPUSHS ("Console: WriteLnString begined.")
 	File_WriteLnString((((Console) (_self->entity))->_toWrite), _string);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Console: WriteLnString ended.")
+	return toReturn;
 }
 
 Object Console_WriteString(Object _self, Object _string)
 {
+	DPUSHS ("Console: WriteString begined.")
 	File_WriteNakedString((((Console) (_self->entity))->_toWrite), _string);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Console: WriteString ended.")
+	return toReturn;
 }
 
 Object Console_WriteLnNumber(Object _self, Object _number)
 {
+	DPUSHS ("Console: WriteLnNumber begined.")
 	File_WriteLnNumber((((Console) (_self->entity))->_toWrite), _number);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Console: WriteLnNumber ended.")
+	return toReturn;
 }
 
 Object Console_WriteHash(Object _self, Object _object)
 {
+	DPUSHS ("Console: WriteHash begined.")
 	File_WriteLnNumber((((Console) (_self->entity))->_toWrite), Object_Hash(_object));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Console: WriteHash ended.")
+	return toReturn;
 }
 
 Object Console_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("Console: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("Console: Clone ended.")
+	return toReturn;
 }
 
 Object Console_DeepClone(Object _self)
 {
-	return _self;
+	DPUSHS ("Console: DeepClone begined.")
+	Object toReturn = _self;
+	DPOPS ("Console: DeepClone ended.")
+	return toReturn;
 }
 
 Object Console_Compare(Object _self, Object _console)
 {
-	return _equal;
+	DPUSHS ("Console: Compare begined.")
+	Object toReturn = _equal;
+	DPOPS ("Console: Compare ended.")
+	return toReturn;
 }
 
 Object Console_Destroy(Object _self)
 {
-	return _self;
+	DPUSHS ("Console: Destroy begined.")
+	Object toReturn = _self;
+	DPOPS ("Console: Destroy ended.")
+	return toReturn;
 }

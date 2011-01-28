@@ -4,36 +4,39 @@
 
 Object List_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct List));
-	toReturn->gid =  3732711262168886272ull;
-	Object_SetComparator(toReturn, &List_Compare);
-	Object_SetDestructor(toReturn, &List_Destroy);
-	Object_SetCloner(toReturn, &List_Clone);
-	Object_SetDeepCloner(toReturn, &List_DeepClone);
-	((List) (toReturn->entity))->_iterator = _nil;
-	((List) (toReturn->entity))->_head = _nil;
-	((List) (toReturn->entity))->_tail = _nil;
-	toReturn = List_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("List: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct List));
+	_self->gid =  3732711262168886272ull;
+	Object_SetComparator(_self, &List_Compare);
+	Object_SetDestructor(_self, &List_Destroy);
+	Object_SetCloner(_self, &List_Clone);
+	Object_SetDeepCloner(_self, &List_DeepClone);
+	((List) (_self->entity))->_iterator = _nil;
+	((List) (_self->entity))->_head = _nil;
+	((List) (_self->entity))->_tail = _nil;
+	_self = List_Init(_self);
+	DPOPS ("List: Create ended.")
+	return _self;
 }
 
 Object List_Init(Object _self)
 {
-	DPUSHS( "List: Initing." ) 
+	DPUSHS ("List: Init begined.")
 	(((List) (_self->entity))->_head) = ListNode_Create();
 	(((List) (_self->entity))->_tail) = ListNode_Create();
 	(((ListNode) ((((List) (_self->entity))->_head)->entity))->_next) = (((List) (_self->entity))->_tail);
 	(((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev) = (((List) (_self->entity))->_head);
 	(((ListNode) ((((List) (_self->entity))->_tail)->entity))->_next) = (((ListNode) ((((List) (_self->entity))->_head)->entity))->_prev) = _nil;
 	(((List) (_self->entity))->_iterator) = List_SystemIterator(_self);
-	DPOPS( "List: Inited." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: Init ended.")
+	return toReturn;
 }
 
 Object List_Destroy(Object _self)
 {
-	DPUSHS( "List: Destroying." ) 
+	DPUSHS ("List: Destroy begined.")
 	Object_Release((((List) (_self->entity))->_iterator));
 	Object _node;
 	_node = (((List) (_self->entity))->_head);
@@ -44,32 +47,40 @@ Object List_Destroy(Object _self)
 		Object_Release(_node);
 		_node = _nextNode;
 	}
-	DPOPS( "List: Destroyed." ) 
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("List: Destroy ended.")
+	return toReturn;
 }
 
 Object List_Clone(Object _self)
 {
+	DPUSHS ("List: Clone begined.")
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToEnd((((List) (_list->entity))->_iterator));
 	ListIterator_AddListAfter((((List) (_list->entity))->_iterator), _self);
 	ListIterator_Hide((((List) (_list->entity))->_iterator));
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: Clone ended.")
+	return toReturn;
 }
 
 Object List_DeepClone(Object _self)
 {
+	DPUSHS ("List: DeepClone begined.")
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToEnd((((List) (_list->entity))->_iterator));
 	ListIterator_AddListAfterDeepClonning((((List) (_list->entity))->_iterator), _self);
 	ListIterator_Hide((((List) (_list->entity))->_iterator));
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: DeepClone ended.")
+	return toReturn;
 }
 
 Object List_Compare(Object _self, Object _list)
 {
+	DPUSHS ("List: Compare begined.")
 	Object _selfIterator;
 	_selfIterator = List_First(_self);
 	Object _listIterator;
@@ -80,16 +91,22 @@ Object List_Compare(Object _self, Object _list)
 		{
 			if((ListIterator_ThisEnd(_listIterator)) != _false)
 			{
-				return _equal;
+				Object toReturn = _equal;
+				DPOPS ("List: Compare ended.")
+				return toReturn;
 			}
 			else
 			{
-				return _less;
+				Object toReturn = _less;
+				DPOPS ("List: Compare ended.")
+				return toReturn;
 			}
 		}
 		if((ListIterator_ThisEnd(_listIterator)) != _false)
 		{
-			return _greater;
+			Object toReturn = _greater;
+			DPOPS ("List: Compare ended.")
+			return toReturn;
 		}
 		Object _candidateForReturning;
 		_candidateForReturning = Object_Compare(ListIterator_ThisData(_selfIterator), ListIterator_ThisData(_listIterator));
@@ -100,13 +117,16 @@ Object List_Compare(Object _self, Object _list)
 		}
 		else
 		{
-			return _candidateForReturning;
+			Object toReturn = _candidateForReturning;
+			DPOPS ("List: Compare ended.")
+			return toReturn;
 		}
 	}
 }
 
 Object List_Clean(Object _self)
 {
+	DPUSHS ("List: Clean begined.")
 	Object _node;
 	_node = (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next);
 	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_node, (((List) (_self->entity))->_tail)) != _equal)) != _false)
@@ -118,29 +138,36 @@ Object List_Clean(Object _self)
 	}
 	(((ListNode) ((((List) (_self->entity))->_head)->entity))->_next) = (((List) (_self->entity))->_tail);
 	(((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev) = (((List) (_self->entity))->_head);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: Clean ended.")
+	return toReturn;
 }
 
 Object List_PushFront(Object _self, Object _object)
 {
+	DPUSHS ("List: PushFront begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: PushFront ended.")
+	return toReturn;
 }
 
 Object List_PushBack(Object _self, Object _object)
 {
-	DPUSHS( "List: Pushing back." ) 
+	DPUSHS ("List: PushBack begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	DPOPS( "List: Pushed back." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: PushBack ended.")
+	return toReturn;
 }
 
 Object List_PushSorted(Object _self, Object _object)
 {
+	DPUSHS ("List: PushSorted begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	while((Logic_And(Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator))), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData((((List) (_self->entity))->_iterator)), _object) == _less))) != _false)
 	{
@@ -148,94 +175,111 @@ Object List_PushSorted(Object _self, Object _object)
 	}
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: PushSorted ended.")
+	return toReturn;
 }
 
 Object List_PeekFront(Object _self)
 {
+	DPUSHS ("List: PeekFront begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS ("List: PeekFront ended.")
 	return def;
 }
 
 Object List_PeekBack(Object _self)
 {
+	DPUSHS ("List: PeekBack begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS ("List: PeekBack ended.")
 	return def;
 }
 
 Object List_PopFront(Object _self)
 {
-	DPUSHS( "List: Popping front." ) 
+	DPUSHS ("List: PopFront begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	DPOPS( "List: Popped front." ) 
+	DPOPS ("List: PopFront ended.")
 	return def;
 }
 
 Object List_PopBack(Object _self)
 {
-	DPUSHS( "List: Popping back." ) 
+	DPUSHS ("List: PopBack begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	DPOPS( "List: Popped back." ) 
+	DPOPS ("List: PopBack ended.")
 	return def;
 }
 
 Object List_RemoveFront(Object _self)
 {
-	DPUSHS( "List: Removing front." ) 
+	DPUSHS ("List: RemoveFront begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	DPOPS( "List: Removed front." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: RemoveFront ended.")
+	return toReturn;
 }
 
 Object List_RemoveBack(Object _self)
 {
-	DPUSHS( "List: Removing back." ) 
+	DPUSHS ("List: RemoveBack begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	DPOPS( "List: Removed back." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: RemoveBack ended.")
+	return toReturn;
 }
 
 Object List_AddAfterPosition(Object _self, Object _position, Object _object)
 {
+	DPUSHS ("List: AddAfterPosition begined.")
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: AddAfterPosition ended.")
+	return toReturn;
 }
 
 Object List_AddBeforePosition(Object _self, Object _position, Object _object)
 {
+	DPUSHS ("List: AddBeforePosition begined.")
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: AddBeforePosition ended.")
+	return toReturn;
 }
 
 Object List_Contains(Object _self, Object _object)
 {
+	DPUSHS ("List: Contains begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	Object def = Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS ("List: Contains ended.")
 	return def;
 }
 
 Object List_RemoveFirst(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveFirst begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	if((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
@@ -243,11 +287,14 @@ Object List_RemoveFirst(Object _self, Object _object)
 		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: RemoveFirst ended.")
+	return toReturn;
 }
 
 Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveFirstWithConfirmation begined.")
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -258,11 +305,14 @@ Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
 		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _confirmation;
+	Object toReturn = _confirmation;
+	DPOPS ("List: RemoveFirstWithConfirmation ended.")
+	return toReturn;
 }
 
 Object List_RemoveLast(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveLast begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_SearchBackward((((List) (_self->entity))->_iterator), _object);
 	if((Logic_Not(ListIterator_ThisBegin((((List) (_self->entity))->_iterator)))) != _false)
@@ -270,11 +320,14 @@ Object List_RemoveLast(Object _self, Object _object)
 		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: RemoveLast ended.")
+	return toReturn;
 }
 
 Object List_RemoveLastWithConfirmation(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveLastWithConfirmation begined.")
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
@@ -285,11 +338,14 @@ Object List_RemoveLastWithConfirmation(Object _self, Object _object)
 		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _confirmation;
+	Object toReturn = _confirmation;
+	DPOPS ("List: RemoveLastWithConfirmation ended.")
+	return toReturn;
 }
 
 Object List_RemoveEvery(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveEvery begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	while((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
@@ -298,11 +354,14 @@ Object List_RemoveEvery(Object _self, Object _object)
 		ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: RemoveEvery ended.")
+	return toReturn;
 }
 
 Object List_RemoveEveryWithConfirmation(Object _self, Object _object)
 {
+	DPUSHS ("List: RemoveEveryWithConfirmation begined.")
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -314,54 +373,65 @@ Object List_RemoveEveryWithConfirmation(Object _self, Object _object)
 		ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _confirmation;
+	Object toReturn = _confirmation;
+	DPOPS ("List: RemoveEveryWithConfirmation ended.")
+	return toReturn;
 }
 
 Object List_Last(Object _self)
 {
-	DPUSHS( "List: Getting last iterator" ) 
+	DPUSHS ("List: Last begined.")
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev));
-	DPOPS( "List: Last iterator got." ) 
-	return _iterator;
+	Object toReturn = _iterator;
+	DPOPS ("List: Last ended.")
+	return toReturn;
 }
 
 Object List_First(Object _self)
 {
-	DPUSHS( "List: Getting first iterator" ) 
+	DPUSHS ("List: First begined.")
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next));
-	DPOPS( "List: First iterator got." ) 
-	return _iterator;
+	Object toReturn = _iterator;
+	DPOPS ("List: First ended.")
+	return toReturn;
 }
 
 Object List_SystemIterator(Object _self)
 {
-	DPUSHS( "List: Getting system iterator." ) 
+	DPUSHS ("List: SystemIterator begined.")
 	Object _iterator;
 	_iterator = ListIterator_Create();
 	ListIterator_SystemInitWithListAndNode(_iterator, _self, _nil);
-	DPOPS( "List: System iterator got." ) 
-	return _iterator;
+	Object toReturn = _iterator;
+	DPOPS ("List: SystemIterator ended.")
+	return toReturn;
 }
 
 Object List_ObjectAtPosition(Object _self, Object _position)
 {
+	DPUSHS ("List: ObjectAtPosition begined.")
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS ("List: ObjectAtPosition ended.")
 	return def;
 }
 
 Object List_ListMapAtPosition(Object _self, Object _position)
 {
-	return List_ObjectAtPosition(_self, NumberFactory_FromLong(_numberFactory, 0));
+	DPUSHS ("List: ListMapAtPosition begined.")
+	Object toReturn = List_ObjectAtPosition(_self, NumberFactory_FromLong(_numberFactory, 0));
+	DPOPS ("List: ListMapAtPosition ended.")
+	return toReturn;
 }
 
 Object List_Search(Object _self, Object _object)
 {
+	DPUSHS ("List: Search begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object _list;
 	_list = Object_Autorelease(List_Create());
@@ -371,16 +441,22 @@ Object List_Search(Object _self, Object _object)
 		List_PushBack(_list, Object_TempClone((((List) (_self->entity))->_iterator)));
 		ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	}
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: Search ended.")
+	return toReturn;
 }
 
 Object List_IteratorFromPosition(Object _self, Object _position)
 {
-	return ListIterator_ToPosition(List_First(_self), _position);
+	DPUSHS ("List: IteratorFromPosition begined.")
+	Object toReturn = ListIterator_ToPosition(List_First(_self), _position);
+	DPOPS ("List: IteratorFromPosition ended.")
+	return toReturn;
 }
 
 Object List_CreatingIteratorFromPosition(Object _self, Object _position)
 {
+	DPUSHS ("List: CreatingIteratorFromPosition begined.")
 	Object _iterator;
 	_iterator = List_First(_self);
 	Object _currentPosition;
@@ -398,11 +474,14 @@ Object List_CreatingIteratorFromPosition(Object _self, Object _position)
 		}
 	}
 	ListIterator_Prev(_iterator);
-	return _iterator;
+	Object toReturn = _iterator;
+	DPOPS ("List: CreatingIteratorFromPosition ended.")
+	return toReturn;
 }
 
 Object List_SearchPositions(Object _self, Object _object)
 {
+	DPUSHS ("List: SearchPositions begined.")
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -418,11 +497,14 @@ Object List_SearchPositions(Object _self, Object _object)
 		ListIterator_Next((((List) (_self->entity))->_iterator));
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: SearchPositions ended.")
+	return toReturn;
 }
 
 Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _positionTo)
 {
+	DPUSHS ("List: SublistBetweenPositions begined.")
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _positionFrom);
 	Object _list;
 	_list = Object_Autorelease(List_Create());
@@ -436,11 +518,14 @@ Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _
 	}
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	Object_Release(_position);
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: SublistBetweenPositions ended.")
+	return toReturn;
 }
 
 Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _positionTo)
 {
+	DPUSHS ("List: SublistBetweenIterators begined.")
 	Object _iterator;
 	_iterator = Object_Clone(_positionFrom);
 	Object _list;
@@ -451,12 +536,14 @@ Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _
 		ListIterator_Next(_iterator);
 	}
 	Object_Release(_iterator);
-	return _list;
+	Object toReturn = _list;
+	DPOPS ("List: SublistBetweenIterators ended.")
+	return toReturn;
 }
 
 Object List_Size(Object _self)
 {
-	DPUSHS( "List: Getting size." ) 
+	DPUSHS ("List: Size begined.")
 	Object _iterator;
 	_iterator = Object_Clone((((List) (_self->entity))->_iterator));
 	ListIterator_ToBegin(_iterator);
@@ -468,27 +555,36 @@ Object List_Size(Object _self)
 		ListIterator_Next(_iterator);
 	}
 	Object_Release(_iterator);
-	DPOPS( "List: Size got." ) 
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("List: Size ended.")
+	return toReturn;
 }
 
 Object List_Empty(Object _self)
 {
+	DPUSHS ("List: Empty begined.")
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisEnd((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	DPOPS ("List: Empty ended.")
 	return def;
 }
 
 Object List_Concatenate(Object _self, Object _list)
 {
+	DPUSHS ("List: Concatenate begined.")
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddListAfter((((List) (_self->entity))->_iterator), _list);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("List: Concatenate ended.")
+	return toReturn;
 }
 
 Object List_SortInPlace(Object _self)
 {
-	return _self;
+	DPUSHS ("List: SortInPlace begined.")
+	Object toReturn = _self;
+	DPOPS ("List: SortInPlace ended.")
+	return toReturn;
 }

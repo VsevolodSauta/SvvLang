@@ -1,7 +1,7 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP")
 TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "File", "Undestroyable", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
+TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
 	"_nil",				"Object",
 	"_nothing",			"Object",
@@ -121,7 +121,6 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"LogicFactory", Map clone,
 	"StringFactory", Map clone,
 	"File", Map clone,
-	"Undestroyable", Map clone,
 	"MethodFactory", Map clone,
 	"Method", Map with(
 		"Call", "Invoke"

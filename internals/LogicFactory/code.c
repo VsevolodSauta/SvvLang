@@ -1,4 +1,5 @@
 #include "internals/basics.h"
+#include "internals/Undestroyable/interface.h"
 
 Object _logicFactory;
 

@@ -1,7 +1,6 @@
 <ListNode> <ListNode> next <ListNode> prev [Retain] data
 
 ListNode Init
-	DEBUG_MSG ("List Node: Init.")
 	return self
 
 ListNode Clone

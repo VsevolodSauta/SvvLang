@@ -5,6 +5,7 @@
 #include "internals/ListIterator/interface.h"
 #include "internals/Number/interface.h"
 #include "internals/Encoding/interface.h"
+#include "internals/Undestroyable/interface.h"
 
 Object StringFactory_Create()
 {
@@ -13,6 +14,7 @@ Object StringFactory_Create()
 
 Object StringFactory_FromUTF8(Object _self, char* string, int length)
 {
+	DPUSHS ("String Factory: Creating string.")
 	Object toReturn = List_Create();
 	int i;
 	int offset = 0;
@@ -29,11 +31,13 @@ Object StringFactory_FromUTF8(Object _self, char* string, int length)
 		i += additionalOffset;
 	}
 	Object_Autorelease(toReturn);
+	DPOPS ("String Factory: String created.")
 	return toReturn;
 };
 
 int StringFactory_GetUTF8String(Object _self, Object string, char* buffer, int bufferLength)
 {
+	DPUSHS ("String Factory: Getting UTF8 array from string.")
 	Object iterator = List_First(string);
 	int position = 0;
 	while(ListIterator_ThisEnd(iterator) == _false)
@@ -43,14 +47,21 @@ int StringFactory_GetUTF8String(Object _self, Object string, char* buffer, int b
 		long code = Number_GetLong(_number);
 		int charLength = UTF8GetLengthOfCode(code);
 		if(charLength == -1)
+		{
+			DPOPS ("String Factory: UTF8 array from string got (with error).")
 			return -1;
+		}
 		if(charLength + position >= bufferLength)
+		{
+			DPOPS ("String Factory: UTF8 array from string got (with error).")
 			return -1;
+		}
 		UTF8PutChar(buffer + position, code, charLength);
 		position += charLength;
 		ListIterator_Next(iterator);
 	}
 	buffer[position] = 0;
+	DPOPS ("String Factory: UTF8 array from string got.")
 	return position;
 }
 

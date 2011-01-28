@@ -10,21 +10,17 @@ ListIterator Destroy
 	return (self AsObject) Destroy
 
 ListIterator Clone
-	DEBUG_PUSH ("List Iterator: Cloning.")
 	toReturn = <ListIterator>
 	toReturn.list = self.list
 	toReturn.node = self.node
 	toReturn.system = false
-	DEBUG_POP ("List Iterator: Clonned.")
 	return toReturn
 
 ListIterator DeepClone
-	DEBUG_PUSH ("List Iterator: Deep cloning.")
 	toReturn = <ListIterator>
 	toReturn.list = self.list
 	toReturn.node = self.node
 	toReturn.system = false
-	DEBUG_POP ("List Iterator: Deep clonned.")
 	return toReturn
 
 ListIterator InitWithListAndNode <List> list <ListNode> node
@@ -41,33 +37,26 @@ ListIterator SystemInitWithListAndNode <List> list <ListNode> node
 	return self
 
 ListIterator ResetNode <ListNode> node
-	DEBUG_MSG ("List Iterator: Reseting node.")
 	self.node = node
 	return self
 
 ListIterator Hide
-	DEBUG_PUSH ("List Iterator: Hiding.")
 	self.node = nil
-	DEBUG_POP ("List Iterator: Hidden.")
 	return self
 
 ListIterator Next (++)
-	DEBUG_MSG ("List Iterator: Advancing.")
 	self.node = self.node.next
 	return self
 
 ListIterator Prev (--)
-	DEBUG_MSG ("List Iterator: Returning.")
 	self.node = self.node.prev
 	return self
 
 ListIterator ToBegin
-	DEBUG_MSG ("List Iterator: Bringing to begin.")
 	self.node = self.list.head.next
 	return self
 
 ListIterator ToEnd
-	DEBUG_MSG ("List Iterator: Bringing to end.")
 	self.node = self.list.tail.prev
 	return self
 
@@ -140,15 +129,12 @@ ListIterator NextRemove
 	return self
 
 ListIterator <Object> ThisData (Data)
-	DEBUG_MSG ("List Iterator: Getting this data.")
 	return self.node.data
 
 ListIterator <Object> NextData
-	DEBUG_MSG ("List Iterator: Getting next data.")
 	return self.node.next.data
 
 ListIterator <Object> PrevData
-	DEBUG_MSG ("List Iterator: Getting previous data.")
 	return self.node.prev.data
 
 ListIterator <Logic> LogicData
@@ -167,22 +153,18 @@ ListIterator <Char> CharData
 	return self.node.data AsChar
 
 ListIterator ThisSetData (SetThisData SetData) object
-	DEBUG_MSG ("List Iterator: Setting this data.")
 	self.node.data = object
 	return self
 
 ListIterator PrevSetData (SetPrevData) object
-	DEBUG_MSG ("List Iterator: Setting previous data.")
 	self.node.prev.data = object
 	return self
 
 ListIterator NextSetData (SetNextData) object
-	DEBUG_MSG ("List Iterator: Setting next data.")
 	self.node.next.data = object
 	return self
 
 ListIterator AddAfter object
-	DEBUG_PUSH ("List Iterator: Adding data to the next.")
 	addingElement = <ListNode>
 	addingElement.data = object
 	savedNext = self.node.next
@@ -190,11 +172,9 @@ ListIterator AddAfter object
 	addingElement.prev = self.node
 	addingElement.next = savedNext
 	savedNext.prev = addingElement
-	DEBUG_POP ("List Iterator: Data added to the next.")
 	return self
 
 ListIterator AddBefore object
-	DEBUG_PUSH ("List Iterator: Adding data to the prev.")
 	addingElement = <ListNode>
 	addingElement.data = object
 	savedPrev = self.node.prev
@@ -202,7 +182,6 @@ ListIterator AddBefore object
 	addingElement.next = self.node
 	addingElement.prev = savedPrev
 	savedPrev.next = addingElement
-	DEBUG_POP ("List Iterator: Data added to the prev.")
 	return self
 
 ListIterator <Logic> ThisBegin (Begin)

@@ -4,36 +4,41 @@
 
 Object Machine_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct Machine));
-	toReturn->gid =  6547848715907434496ull;
-	Object_SetComparator(toReturn, &Machine_Compare);
-	Object_SetDestructor(toReturn, &Machine_Destroy);
-	Object_SetCloner(toReturn, &Machine_Clone);
-	Object_SetDeepCloner(toReturn, &Machine_DeepClone);
-	((Machine) (toReturn->entity))->_objectsByUIDs = _nil;
-	((Machine) (toReturn->entity))->_uidGenerator = _nil;
-	((Machine) (toReturn->entity))->_globalContext = _nil;
-	((Machine) (toReturn->entity))->_processor = _nil;
-	((Machine) (toReturn->entity))->_scheduler = _nil;
-	toReturn = Machine_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("Machine: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct Machine));
+	_self->gid =  6547848715907434496ull;
+	Object_SetComparator(_self, &Machine_Compare);
+	Object_SetDestructor(_self, &Machine_Destroy);
+	Object_SetCloner(_self, &Machine_Clone);
+	Object_SetDeepCloner(_self, &Machine_DeepClone);
+	((Machine) (_self->entity))->_objectsByUIDs = _nil;
+	((Machine) (_self->entity))->_uidGenerator = _nil;
+	((Machine) (_self->entity))->_globalContext = _nil;
+	((Machine) (_self->entity))->_processor = _nil;
+	((Machine) (_self->entity))->_scheduler = _nil;
+	_self = Machine_Init(_self);
+	DPOPS ("Machine: Create ended.")
+	return _self;
 }
 
 Object Machine_Init(Object _self)
 {
+	DPUSHS ("Machine: Init begined.")
 	(((Machine) (_self->entity))->_objectsByUIDs) = ListMap_Create();
 	(((Machine) (_self->entity))->_uidGenerator) = UIDGenerator_Create();
 	(((Machine) (_self->entity))->_globalContext) = ListMap_Create();
 	(((Machine) (_self->entity))->_processor) = Processor_Create();
 	Processor_SetMachine((((Machine) (_self->entity))->_processor), _self);
 	(((Machine) (_self->entity))->_scheduler) = MachineScheduler_Create();
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: Init ended.")
+	return toReturn;
 }
 
 Object Machine_LoadApplication(Object _self, Object _applicationName)
 {
-	DPUSHS( "Machine: Loading application." ) 
+	DPUSHS ("Machine: LoadApplication begined.")
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Загружаем приложение.", 40));
 	Object _file;
@@ -54,7 +59,9 @@ Object Machine_LoadApplication(Object _self, Object _applicationName)
 	{
 		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректный текст приложения. Невозможно провести грамматический разбор.", 138));
 		AutoreleasePool_PopFrame(_autoreleasePool);
-		return _self;
+		Object toReturn = _self;
+		DPOPS ("Machine: LoadApplication ended.")
+		return toReturn;
 	}
 	ListMap_Add((((Machine) (_self->entity))->_globalContext), ListMap_ListAt(ListMap_ListMapAt(_parsedObject, StringFactory_FromUTF8(_stringFactory, "Объект", 12)), StringFactory_FromUTF8(_stringFactory, "Имя", 6)), _parsedObject);
 	Object _uid;
@@ -71,40 +78,57 @@ Object Machine_LoadApplication(Object _self, Object _applicationName)
 	Object_Release(_messageList);
 	MachineScheduler_Schedule((((Machine) (_self->entity))->_scheduler), _uid);
 	AutoreleasePool_PopFrame(_autoreleasePool);
-	DPOPS( "Machine: Application loaded." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: LoadApplication ended.")
+	return toReturn;
 }
 
 Object Machine_ObjectByUID(Object _self, Object _uid)
 {
-	return ListMap_ObjectAt((((Machine) (_self->entity))->_objectsByUIDs), _uid);
+	DPUSHS ("Machine: ObjectByUID begined.")
+	Object toReturn = ListMap_ObjectAt((((Machine) (_self->entity))->_objectsByUIDs), _uid);
+	DPOPS ("Machine: ObjectByUID ended.")
+	return toReturn;
 }
 
 Object Machine_SetObjectByUID(Object _self, Object _object, Object _uid)
 {
+	DPUSHS ("Machine: SetObjectByUID begined.")
 	ListMap_Add((((Machine) (_self->entity))->_objectsByUIDs), _uid, _object);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: SetObjectByUID ended.")
+	return toReturn;
 }
 
 Object Machine_GetUID(Object _self)
 {
-	return UIDGenerator_GetUID((((Machine) (_self->entity))->_uidGenerator));
+	DPUSHS ("Machine: GetUID begined.")
+	Object toReturn = UIDGenerator_GetUID((((Machine) (_self->entity))->_uidGenerator));
+	DPOPS ("Machine: GetUID ended.")
+	return toReturn;
 }
 
 Object Machine_RestorePreviousState(Object _self)
 {
+	DPUSHS ("Machine: RestorePreviousState begined.")
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. :)", 127));
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: RestorePreviousState ended.")
+	return toReturn;
 }
 
 Object Machine_Schedule(Object _self, Object _uid)
 {
+	DPUSHS ("Machine: Schedule begined.")
 	MachineScheduler_Schedule((((Machine) (_self->entity))->_scheduler), _uid);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: Schedule ended.")
+	return toReturn;
 }
 
 Object Machine_Run(Object _self)
 {
+	DPUSHS ("Machine: Run begined.")
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Машина запущена.", 30));
 	if((_true) != _false)
 	{
@@ -128,32 +152,43 @@ Object Machine_Run(Object _self)
 			Processor_ProcessObject((((Machine) (_self->entity))->_processor), _object);
 		}
 	}
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Machine: Run ended.")
+	return toReturn;
 }
 
 Object Machine_Destroy(Object _self)
 {
-	DPUSHS( "Machine: Destroying." ) 
+	DPUSHS ("Machine: Destroy begined.")
 	Object_Release((((Machine) (_self->entity))->_objectsByUIDs));
 	Object_Release((((Machine) (_self->entity))->_globalContext));
 	Object_Release((((Machine) (_self->entity))->_uidGenerator));
 	Object_Release((((Machine) (_self->entity))->_scheduler));
-	Object def = Object_Destroy(_self);
-	DPOPS( "Machine: Destroyed." ) 
-	return def;
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("Machine: Destroy ended.")
+	return toReturn;
 }
 
 Object Machine_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("Machine: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("Machine: Clone ended.")
+	return toReturn;
 }
 
 Object Machine_DeepClone(Object _self)
 {
-	return _self;
+	DPUSHS ("Machine: DeepClone begined.")
+	Object toReturn = _self;
+	DPOPS ("Machine: DeepClone ended.")
+	return toReturn;
 }
 
 Object Machine_Compare(Object _self, Object _machine)
 {
-	return _equal;
+	DPUSHS ("Machine: Compare begined.")
+	Object toReturn = _equal;
+	DPOPS ("Machine: Compare ended.")
+	return toReturn;
 }

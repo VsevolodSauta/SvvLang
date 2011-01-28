@@ -66,10 +66,10 @@ BlockDelegatesHandling blockDidBegin := method(
 )
 
 BlockDelegatesHandling blockWillEnd := method(
-	delegatesBeforeOneBlockBegins pop
-	delegatesBeforeEachBlockBegins pop
-	delegatesAfterOneBlockBegins pop
-	delegatesAfterEachBlockBegins pop
+	delegatesBeforeOneBlockBegins removeFirst
+	delegatesBeforeEachBlockBegins removeFirst
+	delegatesAfterOneBlockBegins removeFirst
+	delegatesAfterEachBlockBegins removeFirst
 	delegatesBeforeOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
 	delegatesAfterOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
 	poppingHandleWithListAndName(delegatesBeforeBlockEnds, "blockWillEnd", 0)

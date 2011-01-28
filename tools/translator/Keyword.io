@@ -14,7 +14,11 @@ Keyword process := method(line,
 
 Keyword returnProcess := method(line,
 	line toNextToken
-	"return #{line getActor actorName};" interpolate
+	Translator putCurrentLevels
+	DestinationFile write("Object toReturn = #{line getActor actorName};\n" interpolate)
+	Translator putCurrentLevels
+	DestinationFile write("DPOPS (\"#{Translator currentClassName}: #{Translator currentMethodName} ended.\")\n" interpolate)
+	"return toReturn;" interpolate
 )
 
 Keyword loopProcess := method(line,
@@ -72,7 +76,7 @@ Keyword DEBUG_MSGProcess := method(line,
 )
 
 Keyword DEBUG_PUSHProcess := method(line,
-	toReturn := "DPUSHS" asMutable
+	toReturn := "DPUSHS " asMutable
 	line tokens foreach(index, token,
 		if(index == 0, continue)
 		toReturn appendSeq(token, " ")
@@ -81,7 +85,7 @@ Keyword DEBUG_PUSHProcess := method(line,
 )
 
 Keyword DEBUG_POPProcess := method(line,
-	toReturn := "DPOPS" asMutable
+	toReturn := "DPOPS " asMutable
 	line tokens foreach(index, token,
 		if(index == 0, continue)
 		toReturn appendSeq(token, " ")
@@ -93,6 +97,8 @@ KeywordDefHandler := Object clone
 
 KeywordDefHandler blockWillEnd := method(
 	Translator putNLevels(1)
+	DestinationFile write("DPOPS (\"#{Translator currentClassName}: #{Translator currentMethodName} ended.\")\n" interpolate)
+	Translator putCurrentLevels
 	DestinationFile write("return def;\n")
 	Translator putCurrentLevels(-1)
 )

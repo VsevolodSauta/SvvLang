@@ -4,91 +4,108 @@
 
 Object AutoreleasePool_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct AutoreleasePool));
-	toReturn->gid =  6558146264612776960ull;
-	Object_SetComparator(toReturn, &AutoreleasePool_Compare);
-	Object_SetDestructor(toReturn, &AutoreleasePool_Destroy);
-	Object_SetCloner(toReturn, &AutoreleasePool_Clone);
-	Object_SetDeepCloner(toReturn, &AutoreleasePool_DeepClone);
-	((AutoreleasePool) (toReturn->entity))->_stack = _nil;
-	toReturn = AutoreleasePool_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("AutoreleasePool: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct AutoreleasePool));
+	_self->gid =  6558146264612776960ull;
+	Object_SetComparator(_self, &AutoreleasePool_Compare);
+	Object_SetDestructor(_self, &AutoreleasePool_Destroy);
+	Object_SetCloner(_self, &AutoreleasePool_Clone);
+	Object_SetDeepCloner(_self, &AutoreleasePool_DeepClone);
+	((AutoreleasePool) (_self->entity))->_stack = _nil;
+	_self = AutoreleasePool_Init(_self);
+	DPOPS ("AutoreleasePool: Create ended.")
+	return _self;
 }
 
 Object AutoreleasePool_Init(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Initing" ) 
+	DPUSHS ("AutoreleasePool: Init begined.")
 	Object_SetReleasing(&(((AutoreleasePool) (_self->entity))->_stack), Stack_Create());
-	DPOPS( "Autorelease Pool: Inited" ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: Init ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Dump(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Dumping." ) 
+	DPUSHS ("AutoreleasePool: Dump begined.")
 	Object _list;
 	_list = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
 	Console_WriteLnNumber(_console, List_Size(_list));
-	DPOPS( "Autorelease Pool: Dumped." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: Dump ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Depth(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Getting depth." ) 
-	Object def = List_Size((((Stack) ((((AutoreleasePool) (_self->entity))->_stack)->entity))->_list));
-	DPOPS( "Autorelease Pool: Depth got." ) 
-	return def;
+	DPUSHS ("AutoreleasePool: Depth begined.")
+	Object toReturn = List_Size((((Stack) ((((AutoreleasePool) (_self->entity))->_stack)->entity))->_list));
+	DPOPS ("AutoreleasePool: Depth ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_PushFrame(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Pushing frame." ) 
+	DPUSHS ("AutoreleasePool: PushFrame begined.")
 	Object _toPush;
 	_toPush = List_Create();
 	Stack_Push((((AutoreleasePool) (_self->entity))->_stack), _toPush);
 	Object_Release(_toPush);
-	DPOPS( "Autorelease Pool: Frame pushed." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: PushFrame ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_PopFrame(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Popping frame." ) 
+	DPUSHS ("AutoreleasePool: PopFrame begined.")
 	Stack_Remove((((AutoreleasePool) (_self->entity))->_stack));
-	DPOPS( "Autorelease Pool: Frame popped." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: PopFrame ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Add(Object _self, Object _object)
 {
-	DPUSHS( "Autorelease Pool: Adding object to pool." ) 
+	DPUSHS ("AutoreleasePool: Add begined.")
 	List_PushBack(Stack_Peek((((AutoreleasePool) (_self->entity))->_stack)), _object);
 	Object_Release(_object);
-	DPOPS( "Autorelease Pool: Object added." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: Add ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Destroy(Object _self)
 {
-	DPUSHS( "Autorelease Pool: Destroying." ) 
+	DPUSHS ("AutoreleasePool: Destroy begined.")
 	Object_Release((((AutoreleasePool) (_self->entity))->_stack));
-	DPOPS( "Autorelease Pool: Destroyed." ) 
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("AutoreleasePool: Destroy ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool)
 {
-	return Object_Compare((((AutoreleasePool) (_self->entity))->_stack), (((AutoreleasePool) (_autoreleasePool->entity))->_stack));
+	DPUSHS ("AutoreleasePool: Compare begined.")
+	Object toReturn = Object_Compare((((AutoreleasePool) (_self->entity))->_stack), (((AutoreleasePool) (_autoreleasePool->entity))->_stack));
+	DPOPS ("AutoreleasePool: Compare ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("AutoreleasePool: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: Clone ended.")
+	return toReturn;
 }
 
 Object AutoreleasePool_DeepClone(Object _self)
 {
-	return _self;
+	DPUSHS ("AutoreleasePool: DeepClone begined.")
+	Object toReturn = _self;
+	DPOPS ("AutoreleasePool: DeepClone ended.")
+	return toReturn;
 }

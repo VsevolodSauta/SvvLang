@@ -4,76 +4,98 @@
 
 Object ListMapNode_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct ListMapNode));
-	toReturn->gid =  5883107801261346816ull;
-	Object_SetComparator(toReturn, &ListMapNode_Compare);
-	Object_SetDestructor(toReturn, &ListMapNode_Destroy);
-	Object_SetCloner(toReturn, &ListMapNode_Clone);
-	Object_SetDeepCloner(toReturn, &ListMapNode_DeepClone);
-	((ListMapNode) (toReturn->entity))->_nextMap = _nil;
-	((ListMapNode) (toReturn->entity))->_mapped = _nil;
-	((ListMapNode) (toReturn->entity))->_mapping = _nil;
-	toReturn = ListMapNode_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("ListMapNode: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct ListMapNode));
+	_self->gid =  5883107801261346816ull;
+	Object_SetComparator(_self, &ListMapNode_Compare);
+	Object_SetDestructor(_self, &ListMapNode_Destroy);
+	Object_SetCloner(_self, &ListMapNode_Clone);
+	Object_SetDeepCloner(_self, &ListMapNode_DeepClone);
+	((ListMapNode) (_self->entity))->_nextMap = _nil;
+	((ListMapNode) (_self->entity))->_mapped = _nil;
+	((ListMapNode) (_self->entity))->_mapping = _nil;
+	_self = ListMapNode_Init(_self);
+	DPOPS ("ListMapNode: Create ended.")
+	return _self;
 }
 
 Object ListMapNode_Init(Object _self)
 {
+	DPUSHS ("ListMapNode: Init begined.")
 	Object_SetReleasing(&(((ListMapNode) (_self->entity))->_nextMap), Map_Create());
 	Object_SetRetaining(&(((ListMapNode) (_self->entity))->_mapping), _nil);
 	(((ListMapNode) (_self->entity))->_mapped) = _false;
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("ListMapNode: Init ended.")
+	return toReturn;
 }
 
 Object ListMapNode_Destroy(Object _self)
 {
+	DPUSHS ("ListMapNode: Destroy begined.")
 	Object_Release((((ListMapNode) (_self->entity))->_nextMap));
 	Object_Release((((ListMapNode) (_self->entity))->_mapping));
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("ListMapNode: Destroy ended.")
+	return toReturn;
 }
 
 Object ListMapNode_Clone(Object _self)
 {
+	DPUSHS ("ListMapNode: Clone begined.")
 	Object _toReturn;
 	_toReturn = ListMapNode_Create();
 	Object_SetReleasing(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_Clone((((ListMapNode) (_self->entity))->_nextMap)));
 	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_mapping), (((ListMapNode) (_self->entity))->_mapping));
 	(((ListMapNode) (_toReturn->entity))->_mapped) = (((ListMapNode) (_self->entity))->_mapped);
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("ListMapNode: Clone ended.")
+	return toReturn;
 }
 
 Object ListMapNode_DeepClone(Object _self)
 {
+	DPUSHS ("ListMapNode: DeepClone begined.")
 	Object _toReturn;
 	_toReturn = ListMapNode_Create();
 	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_DeepClone((((ListMapNode) (_self->entity))->_nextMap)));
 	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_mapping), Object_DeepClone((((ListMapNode) (_self->entity))->_mapping)));
 	(((ListMapNode) (_toReturn->entity))->_mapped) = (((ListMapNode) (_self->entity))->_mapped);
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("ListMapNode: DeepClone ended.")
+	return toReturn;
 }
 
 Object ListMapNode_Compare(Object _self, Object _listMapNode)
 {
+	DPUSHS ("ListMapNode: Compare begined.")
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapNode) (_self->entity))->_mapped), (((ListMapNode) (_listMapNode->entity))->_mapped));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
 	{
-		return _candidate;
+		Object toReturn = _candidate;
+		DPOPS ("ListMapNode: Compare ended.")
+		return toReturn;
 	}
 	if(((((ListMapNode) (_self->entity))->_mapped)) != _false)
 	{
 		_candidate = Object_Compare((((ListMapNode) (_self->entity))->_mapping), (((ListMapNode) (_listMapNode->entity))->_mapping));
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
 		{
-			return _candidate;
+			Object toReturn = _candidate;
+			DPOPS ("ListMapNode: Compare ended.")
+			return toReturn;
 		}
 	}
-	return Object_Compare((((ListMapNode) (_self->entity))->_nextMap), (((ListMapNode) (_listMapNode->entity))->_nextMap));
+	Object toReturn = Object_Compare((((ListMapNode) (_self->entity))->_nextMap), (((ListMapNode) (_listMapNode->entity))->_nextMap));
+	DPOPS ("ListMapNode: Compare ended.")
+	return toReturn;
 }
 
 Object ListMapNode_MergeRecursiveStrong(Object _self, Object _listMapNode)
 {
+	DPUSHS ("ListMapNode: MergeRecursiveStrong begined.")
 	if(((((ListMapNode) (_listMapNode->entity))->_mapped)) != _false)
 	{
 		(((ListMapNode) (_self->entity))->_mapped) = _true;
@@ -95,5 +117,7 @@ Object ListMapNode_MergeRecursiveStrong(Object _self, Object _listMapNode)
 		}
 		ListMapNode_MergeRecursiveStrong(_value, Map_GetValueForKey((((ListMapNode) (_listMapNode->entity))->_nextMap), _key));
 	}
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("ListMapNode: MergeRecursiveStrong ended.")
+	return toReturn;
 }

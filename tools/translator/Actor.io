@@ -98,22 +98,24 @@ Actor getCreatorSignature := method(
 Actor getCreatorBody := method(
 	toReturn := list(
 		"{\n",
-		"\tObject toReturn = Object_Create();\n",
-		"\ttoReturn->entity = Allocator_New(_allocator, sizeof(struct #{self actorType}));\n" interpolate,
-		"\ttoReturn->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
-		"\tObject_SetComparator(toReturn, &#{self actorType}_Compare);\n" interpolate,
-		"\tObject_SetDestructor(toReturn, &#{self actorType}_Destroy);\n" interpolate,
-		"\tObject_SetCloner(toReturn, &#{self actorType}_Clone);\n" interpolate,
-		"\tObject_SetDeepCloner(toReturn, &#{self actorType}_DeepClone);\n" interpolate
+		"\tObject _self = Object_Create();\n",
+		"\tDPUSHS (\"#{self actorType}: Create begined.\")\n" interpolate,
+		"\t_self->entity = Allocator_New(_allocator, sizeof(struct #{self actorType}));\n" interpolate,
+		"\t_self->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
+		"\tObject_SetComparator(_self, &#{self actorType}_Compare);\n" interpolate,
+		"\tObject_SetDestructor(_self, &#{self actorType}_Destroy);\n" interpolate,
+		"\tObject_SetCloner(_self, &#{self actorType}_Clone);\n" interpolate,
+		"\tObject_SetDeepCloner(_self, &#{self actorType}_DeepClone);\n" interpolate
 	)
 	TableOfSymbols classFields at(actorType) foreach(field,
-		toReturn push("\t((#{actorType}) (toReturn->entity))->#{field actorName} = _nil;\n" interpolate)
+		toReturn push("\t((#{actorType}) (_self->entity))->#{field actorName} = _nil;\n" interpolate)
 	)
 	if(TableOfSymbols actorHasAction(Actor unnamedActor(self actorType), Action with("Init")),
-		toReturn push("\ttoReturn = #{self actorType}_Init(toReturn);\n" interpolate)
+		toReturn push("\t_self = #{self actorType}_Init(_self);\n" interpolate)
 	)
 	toReturn push(
-		"\treturn toReturn;\n",
+		"\tDPOPS (\"#{self actorType}: Create ended.\")\n" interpolate,
+		"\treturn _self;\n",
 		"}\n"
 	)
 	

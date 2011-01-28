@@ -4,20 +4,23 @@
 
 Object Runtime_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct Runtime));
-	toReturn->gid =  5367970674748323840ull;
-	Object_SetComparator(toReturn, &Runtime_Compare);
-	Object_SetDestructor(toReturn, &Runtime_Destroy);
-	Object_SetCloner(toReturn, &Runtime_Clone);
-	Object_SetDeepCloner(toReturn, &Runtime_DeepClone);
-	((Runtime) (toReturn->entity))->_placeHolder = _nil;
-	toReturn = Runtime_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("Runtime: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct Runtime));
+	_self->gid =  5367970674748323840ull;
+	Object_SetComparator(_self, &Runtime_Compare);
+	Object_SetDestructor(_self, &Runtime_Destroy);
+	Object_SetCloner(_self, &Runtime_Clone);
+	Object_SetDeepCloner(_self, &Runtime_DeepClone);
+	((Runtime) (_self->entity))->_placeHolder = _nil;
+	_self = Runtime_Init(_self);
+	DPOPS ("Runtime: Create ended.")
+	return _self;
 }
 
 Object Runtime_Init(Object _self)
 {
+	DPUSHS ("Runtime: Init begined.")
 	_nothing = _null = _nil = Undestroyable_Create();
 	_less = Comparation_Create();
 	_greater = Comparation_Create();
@@ -33,30 +36,42 @@ Object Runtime_Init(Object _self)
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	_console = Console_Create();
 	_json = JSON_Create();
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("Runtime: Init ended.")
+	return toReturn;
 }
 
 Object Runtime_Destroy(Object _self)
 {
-	DPUSHS( "Runtime: Destroying." ) 
+	DPUSHS ("Runtime: Destroy begined.")
 	Object_Release(_autoreleasePool);
 	Object_Release(_console);
 	Object_Release(_json);
-	DPOPS( "Runtime: Destroyed." ) 
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("Runtime: Destroy ended.")
+	return toReturn;
 }
 
 Object Runtime_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("Runtime: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("Runtime: Clone ended.")
+	return toReturn;
 }
 
 Object Runtime_DeepClone(Object _self)
 {
-	return _self;
+	DPUSHS ("Runtime: DeepClone begined.")
+	Object toReturn = _self;
+	DPOPS ("Runtime: DeepClone ended.")
+	return toReturn;
 }
 
 Object Runtime_Compare(Object _self, Object _runtime)
 {
-	return _equal;
+	DPUSHS ("Runtime: Compare begined.")
+	Object toReturn = _equal;
+	DPOPS ("Runtime: Compare ended.")
+	return toReturn;
 }

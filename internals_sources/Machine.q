@@ -12,7 +12,6 @@ Machine Init
 
 
 Machine LoadApplication <List> applicationName
-	DEBUG_PUSH ("Machine: Loading application.")
 	autoreleasePool ++
 	console PrintLnString "Загружаем приложение."
 	file = <File>
@@ -40,7 +39,6 @@ Machine LoadApplication <List> applicationName
 	messageList Release
 	self.scheduler Schedule uid
 	autoreleasePool --
-	DEBUG_POP ("Machine: Application loaded.")
 	return self
 
 
@@ -82,13 +80,11 @@ Machine Run
 
 
 Machine Destroy
-	DEBUG_PUSH ("Machine: Destroying.")
 	self.objectsByUIDs Release
 	self.globalContext Release
 	self.uidGenerator Release
 	self.scheduler Release
-	def self Destroy
-	DEBUG_POP ("Machine: Destroyed.")
+	return self Destroy
 
 Machine Clone
 	return self

@@ -1,4 +1,5 @@
 #include "internals/basics.h"
+#include "internals/Undestroyable/interface.h"
 
 static char arr[1048576];
 static int position = 0;

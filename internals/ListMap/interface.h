@@ -21,3 +21,4 @@ Object ListMap_QueueAt(Object _self, Object _list);
 Object ListMap_LogicAt(Object _self, Object _list);
 Object ListMap_NumberAt(Object _self, Object _list);
 Object ListMap_SynonimAt(Object _self, Object _list);
+Object ListMap_MethodAt(Object _self, Object _list);

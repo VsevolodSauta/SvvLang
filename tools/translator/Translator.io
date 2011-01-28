@@ -62,6 +62,7 @@ Translator insertDeclaration := method(name,
 Translator translateClass := method(objectClassName,
 	SourceFile = SourceFile with(objectClassName)
 	DestinationFile openObjectClass(objectClassName)
+	Translator currentClassName := objectClassName
 	
 	DestinationFile write("#include \"internals/basics.h\"\n")
 	DestinationFile write("#include \"internals/#{objectClassName}/imports.h\"\n" interpolate)
@@ -111,6 +112,7 @@ Translator importObjectType := method(objectClassNameToImport,
 
 BlockDelegatesHandling beforeEachBlockBegins(TableOfSymbols, 5)
 BlockDelegatesHandling afterEachBlockBegins(Translator, 5)
+BlockDelegatesHandling afterEachBlockBegins(TranslatorDebugger, 4)
 if(System args size == 1,
 	toProcessList := List clone
 	Directory with("../../internals_sources") files foreach(file,

@@ -191,6 +191,9 @@ Line translateMethodSignature := method(contextObject,
 		toNextToken
 	)
 	name := getCurrentToken
+	if(TableOfSymbols listOfBeingImportedObjects isEmpty,
+		Translator currentMethodName := name
+	)
 	toNextToken
 	TableOfSymbols setClassActionReturnedType(class, Action with(name), Actor unnamedActor(returnType))
 	

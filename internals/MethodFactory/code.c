@@ -1,5 +1,6 @@
 #include "internals/basics.h"
 #include "internals/Method/interface.h"
+#include "internals/Undestroyable/interface.h"
 
 Object MethodFactory_Create()
 {

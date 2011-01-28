@@ -1,4 +1,5 @@
 #include "internals/JSON/interface.h"
+#include "internals/Undestroyable/interface.h"
 #include "internals/List/interface.h"
 #include "internals/ListIterator/interface.h"
 #include "internals/Char/interface.h"

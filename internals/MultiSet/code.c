@@ -4,81 +4,107 @@
 
 Object MultiSet_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct MultiSet));
-	toReturn->gid =  8253887558225682432ull;
-	Object_SetComparator(toReturn, &MultiSet_Compare);
-	Object_SetDestructor(toReturn, &MultiSet_Destroy);
-	Object_SetCloner(toReturn, &MultiSet_Clone);
-	Object_SetDeepCloner(toReturn, &MultiSet_DeepClone);
-	((MultiSet) (toReturn->entity))->_list = _nil;
-	toReturn = MultiSet_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("MultiSet: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct MultiSet));
+	_self->gid =  8253887558225682432ull;
+	Object_SetComparator(_self, &MultiSet_Compare);
+	Object_SetDestructor(_self, &MultiSet_Destroy);
+	Object_SetCloner(_self, &MultiSet_Clone);
+	Object_SetDeepCloner(_self, &MultiSet_DeepClone);
+	((MultiSet) (_self->entity))->_list = _nil;
+	_self = MultiSet_Init(_self);
+	DPOPS ("MultiSet: Create ended.")
+	return _self;
 }
 
 Object MultiSet_Init(Object _self)
 {
-	DPUSHS( "Multiset: Initing." ) 
+	DPUSHS ("MultiSet: Init begined.")
 	Object_SetReleasing(&(((MultiSet) (_self->entity))->_list), List_Create());
-	DPOPS( "Multiset: Inited." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MultiSet: Init ended.")
+	return toReturn;
 }
 
 Object MultiSet_Destroy(Object _self)
 {
-	DPUSHS( "Multiset: Destroying." ) 
+	DPUSHS ("MultiSet: Destroy begined.")
 	Object_Release((((MultiSet) (_self->entity))->_list));
-	DPOPS( "Multiset: Destroyed." ) 
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("MultiSet: Destroy ended.")
+	return toReturn;
 }
 
 Object MultiSet_Clone(Object _self)
 {
+	DPUSHS ("MultiSet: Clone begined.")
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
 	Object_SetReleasing(&(((MultiSet) (_toReturn->entity))->_list), Object_Clone((((MultiSet) (_self->entity))->_list)));
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("MultiSet: Clone ended.")
+	return toReturn;
 }
 
 Object MultiSet_DeepClone(Object _self)
 {
+	DPUSHS ("MultiSet: DeepClone begined.")
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
 	Object_SetRetaining(&(((MultiSet) (_toReturn->entity))->_list), Object_DeepClone((((MultiSet) (_self->entity))->_list)));
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("MultiSet: DeepClone ended.")
+	return toReturn;
 }
 
 Object MultiSet_Compare(Object _self, Object _multiset)
 {
-	return Object_Compare((((MultiSet) (_self->entity))->_list), (((MultiSet) (_multiset->entity))->_list));
+	DPUSHS ("MultiSet: Compare begined.")
+	Object toReturn = Object_Compare((((MultiSet) (_self->entity))->_list), (((MultiSet) (_multiset->entity))->_list));
+	DPOPS ("MultiSet: Compare ended.")
+	return toReturn;
 }
 
 Object MultiSet_Push(Object _self, Object _object)
 {
-	DPUSHS( "Multiset: Pushing." ) 
+	DPUSHS ("MultiSet: Push begined.")
 	List_PushSorted((((MultiSet) (_self->entity))->_list), _object);
-	DPOPS( "Multiset: Pushed." ) 
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MultiSet: Push ended.")
+	return toReturn;
 }
 
 Object MultiSet_Contains(Object _self, Object _object)
 {
-	return List_Contains((((MultiSet) (_self->entity))->_list), _object);
+	DPUSHS ("MultiSet: Contains begined.")
+	Object toReturn = List_Contains((((MultiSet) (_self->entity))->_list), _object);
+	DPOPS ("MultiSet: Contains ended.")
+	return toReturn;
 }
 
 Object MultiSet_RemoveOnce(Object _self, Object _object)
 {
+	DPUSHS ("MultiSet: RemoveOnce begined.")
 	List_RemoveFirst((((MultiSet) (_self->entity))->_list), _object);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MultiSet: RemoveOnce ended.")
+	return toReturn;
 }
 
 Object MultiSet_RemoveEvery(Object _self, Object _object)
 {
+	DPUSHS ("MultiSet: RemoveEvery begined.")
 	List_RemoveEvery((((MultiSet) (_self->entity))->_list), _object);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("MultiSet: RemoveEvery ended.")
+	return toReturn;
 }
 
 Object MultiSet_Empty(Object _self)
 {
-	return List_Empty((((MultiSet) (_self->entity))->_list));
+	DPUSHS ("MultiSet: Empty begined.")
+	Object toReturn = List_Empty((((MultiSet) (_self->entity))->_list));
+	DPOPS ("MultiSet: Empty ended.")
+	return toReturn;
 }

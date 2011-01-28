@@ -4,63 +4,83 @@
 
 Object ListNode_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct ListNode));
-	toReturn->gid =  1592307763146065920ull;
-	Object_SetComparator(toReturn, &ListNode_Compare);
-	Object_SetDestructor(toReturn, &ListNode_Destroy);
-	Object_SetCloner(toReturn, &ListNode_Clone);
-	Object_SetDeepCloner(toReturn, &ListNode_DeepClone);
-	((ListNode) (toReturn->entity))->_next = _nil;
-	((ListNode) (toReturn->entity))->_prev = _nil;
-	((ListNode) (toReturn->entity))->_data = _nil;
-	toReturn = ListNode_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("ListNode: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct ListNode));
+	_self->gid =  1592307763146065920ull;
+	Object_SetComparator(_self, &ListNode_Compare);
+	Object_SetDestructor(_self, &ListNode_Destroy);
+	Object_SetCloner(_self, &ListNode_Clone);
+	Object_SetDeepCloner(_self, &ListNode_DeepClone);
+	((ListNode) (_self->entity))->_next = _nil;
+	((ListNode) (_self->entity))->_prev = _nil;
+	((ListNode) (_self->entity))->_data = _nil;
+	_self = ListNode_Init(_self);
+	DPOPS ("ListNode: Create ended.")
+	return _self;
 }
 
 Object ListNode_Init(Object _self)
 {
-	DMSGS( "List Node: Init." ) 
-	return _self;
+	DPUSHS ("ListNode: Init begined.")
+	Object toReturn = _self;
+	DPOPS ("ListNode: Init ended.")
+	return toReturn;
 }
 
 Object ListNode_Clone(Object _self)
 {
+	DPUSHS ("ListNode: Clone begined.")
 	Object _toReturn;
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
 	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
 	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), (((ListNode) (_self->entity))->_data));
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("ListNode: Clone ended.")
+	return toReturn;
 }
 
 Object ListNode_DeepClone(Object _self)
 {
+	DPUSHS ("ListNode: DeepClone begined.")
 	Object _toReturn;
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
 	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
 	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), Object_DeepClone((((ListNode) (_self->entity))->_data)));
-	return _toReturn;
+	Object toReturn = _toReturn;
+	DPOPS ("ListNode: DeepClone ended.")
+	return toReturn;
 }
 
 Object ListNode_Compare(Object _self, Object _listNode)
 {
+	DPUSHS ("ListNode: Compare begined.")
 	Object _candidate;
 	_candidate = Object_Compare((((ListNode) (_self->entity))->_data), (((ListNode) (_listNode->entity))->_data));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
 	{
-		return _candidate;
+		Object toReturn = _candidate;
+		DPOPS ("ListNode: Compare ended.")
+		return toReturn;
 	}
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(Object_Hash((((ListNode) (_self->entity))->_next)), Object_Hash((((ListNode) (_listNode->entity))->_next))) == _equal)) != _false)
 	{
-		return Object_Compare(Object_Hash((((ListNode) (_self->entity))->_prev)), Object_Hash((((ListNode) (_listNode->entity))->_prev)));
+		Object toReturn = Object_Compare(Object_Hash((((ListNode) (_self->entity))->_prev)), Object_Hash((((ListNode) (_listNode->entity))->_prev)));
+		DPOPS ("ListNode: Compare ended.")
+		return toReturn;
 	}
-	return Object_Compare(Object_Hash((((ListNode) (_self->entity))->_next)), Object_Hash((((ListNode) (_listNode->entity))->_next)));
+	Object toReturn = Object_Compare(Object_Hash((((ListNode) (_self->entity))->_next)), Object_Hash((((ListNode) (_listNode->entity))->_next)));
+	DPOPS ("ListNode: Compare ended.")
+	return toReturn;
 }
 
 Object ListNode_Destroy(Object _self)
 {
+	DPUSHS ("ListNode: Destroy begined.")
 	Object_Release((((ListNode) (_self->entity))->_data));
-	return Object_Destroy(_self);
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("ListNode: Destroy ended.")
+	return toReturn;
 }

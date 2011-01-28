@@ -4,46 +4,64 @@
 
 Object ExternalObjectManipulator_Create(void)
 {
-	Object toReturn = Object_Create();
-	toReturn->entity = Allocator_New(_allocator, sizeof(struct ExternalObjectManipulator));
-	toReturn->gid =  8518571086308177920ull;
-	Object_SetComparator(toReturn, &ExternalObjectManipulator_Compare);
-	Object_SetDestructor(toReturn, &ExternalObjectManipulator_Destroy);
-	Object_SetCloner(toReturn, &ExternalObjectManipulator_Clone);
-	Object_SetDeepCloner(toReturn, &ExternalObjectManipulator_DeepClone);
-	((ExternalObjectManipulator) (toReturn->entity))->_machine = _nil;
-	toReturn = ExternalObjectManipulator_Init(toReturn);
-	return toReturn;
+	Object _self = Object_Create();
+	DPUSHS ("ExternalObjectManipulator: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct ExternalObjectManipulator));
+	_self->gid =  8518571086308177920ull;
+	Object_SetComparator(_self, &ExternalObjectManipulator_Compare);
+	Object_SetDestructor(_self, &ExternalObjectManipulator_Destroy);
+	Object_SetCloner(_self, &ExternalObjectManipulator_Clone);
+	Object_SetDeepCloner(_self, &ExternalObjectManipulator_DeepClone);
+	((ExternalObjectManipulator) (_self->entity))->_machine = _nil;
+	_self = ExternalObjectManipulator_Init(_self);
+	DPOPS ("ExternalObjectManipulator: Create ended.")
+	return _self;
 }
 
 Object ExternalObjectManipulator_Init(Object _self)
 {
-	return _self;
+	DPUSHS ("ExternalObjectManipulator: Init begined.")
+	Object toReturn = _self;
+	DPOPS ("ExternalObjectManipulator: Init ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_Clone(Object _self)
 {
-	return _self;
+	DPUSHS ("ExternalObjectManipulator: Clone begined.")
+	Object toReturn = _self;
+	DPOPS ("ExternalObjectManipulator: Clone ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_Destroy(Object _self)
 {
-	return Object_Destroy(_self);
+	DPUSHS ("ExternalObjectManipulator: Destroy begined.")
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("ExternalObjectManipulator: Destroy ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_Compare(Object _self)
 {
-	return _equal;
+	DPUSHS ("ExternalObjectManipulator: Compare begined.")
+	Object toReturn = _equal;
+	DPOPS ("ExternalObjectManipulator: Compare ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_SetMachine(Object _self, Object _machine)
 {
+	DPUSHS ("ExternalObjectManipulator: SetMachine begined.")
 	(((ExternalObjectManipulator) (_self->entity))->_machine) = _machine;
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("ExternalObjectManipulator: SetMachine ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_ObjectCreate(Object _self)
 {
+	DPUSHS ("ExternalObjectManipulator: ObjectCreate begined.")
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Создаем объект.", 28));
 	Object _object;
@@ -78,11 +96,14 @@ Object ExternalObjectManipulator_ObjectCreate(Object _self)
 	Object_Release(_messageList);
 	Object_Release(_uids);
 	AutoreleasePool_PopFrame(_autoreleasePool);
-	return _uid;
+	Object toReturn = _uid;
+	DPOPS ("ExternalObjectManipulator: ObjectCreate ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_ObjectClone(Object _self, Object _uid)
 {
+	DPUSHS ("ExternalObjectManipulator: ObjectClone begined.")
 	Object _object;
 	_object = Machine_ObjectByUID((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _uidToReturn;
@@ -91,11 +112,14 @@ Object ExternalObjectManipulator_ObjectClone(Object _self, Object _uid)
 	_objectToReturn = Object_DeepClone(_object);
 	Machine_SetObjectByUID((((ExternalObjectManipulator) (_self->entity))->_machine), _uidToReturn, _objectToReturn);
 	Object_Release(_objectToReturn);
-	return _uidToReturn;
+	Object toReturn = _uidToReturn;
+	DPOPS ("ExternalObjectManipulator: ObjectClone ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_SetBasicMethodForObjectWithName(Object _self, Object _methodAdress, Object _uid, Object _name)
 {
+	DPUSHS ("ExternalObjectManipulator: SetBasicMethodForObjectWithName begined.")
 	Object _object;
 	_object = Machine_ObjectByUID((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _methods;
@@ -106,11 +130,14 @@ Object ExternalObjectManipulator_SetBasicMethodForObjectWithName(Object _self, O
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _true);
 	ListMap_Add(_methods, _name, _method);
 	Object_Release(_method);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("ExternalObjectManipulator: SetBasicMethodForObjectWithName ended.")
+	return toReturn;
 }
 
 Object ExternalObjectManipulator_SetMethodForObjectWithName(Object _self, Object _methodBody, Object _uid, Object _name)
 {
+	DPUSHS ("ExternalObjectManipulator: SetMethodForObjectWithName begined.")
 	Object _object;
 	_object = Machine_ObjectByUID((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _methods;
@@ -121,5 +148,7 @@ Object ExternalObjectManipulator_SetMethodForObjectWithName(Object _self, Object
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _false);
 	ListMap_Add(_methods, _name, _method);
 	Object_Release(_method);
-	return _self;
+	Object toReturn = _self;
+	DPOPS ("ExternalObjectManipulator: SetMethodForObjectWithName ended.")
+	return toReturn;
 }

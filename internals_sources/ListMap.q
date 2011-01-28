@@ -42,7 +42,7 @@ ListMap Add (AtPut Put +) <List> list object
 	node.mapping = object
 	return self
 
-ListMap AddListMap <ListMap> listMap
+ListMap AddListMap (Merge MergeStrong) <ListMap> listMap
 	self.root MergeRecursiveStrong listMap.root
 	return self
 
@@ -119,3 +119,5 @@ ListMap <Number> NumberAt <List> list
 ListMap <Synonim> SynonimAt <List> list
 	return (self GetAt list) AsSynonim
 
+ListMap <Method> MethodAt <List> list
+	return (self GetAt list) AsMethod
