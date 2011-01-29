@@ -11,13 +11,13 @@ Machine Init
 	return self
 
 
-Machine LoadApplication <List> applicationName
+Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	autoreleasePool ++
-	console PrintLnString "Загружаем приложение."
+	console PrintLnString "Загружаем объект."
 	file = <File>
-	file OpenForReading applicationName
+	file OpenForReading objectName
 	if file ErrorWhileOpenning
-		console PrintLnString "Возникла ошибка при загрузке приложения. Невозможно прочитать приложение."
+		console PrintLnString "Возникла ошибка при загрузке объекта. Невозможно прочитать контейнер объекта (файл)."
 	contents = file ReadContentsOfFile
 	file Close
 	console PrintLnNumber (contents Size)
@@ -27,55 +27,51 @@ Machine LoadApplication <List> applicationName
 		console PrintLnString "Некорректный текст приложения. Невозможно провести грамматический разбор."
 		autoreleasePool --
 		return self
-	self.globalContext AtPut ((parsedObject ListMapAt "Объект") ListAt "Имя") parsedObject
-	uid = self.uidGenerator GetUID
+	uid = self.uidGenerator GenerateUID
 	self.objectsByUIDs AtPut uid parsedObject
-	uids = <List>
-	parsedObject AtPut ("Идентификаторы") uids
-	uids PushBack uid
-	uids Release
-	messageList = <List>
-	parsedObject AtPut ("Сообщения") messageList
-	messageList Release
-	self.scheduler Schedule uid
+	((parsedObject ListMapAt ("Свойства")) ListAt ("Идентификаторы")) PushBack uid
+	self.scheduler ScheduleUID uid
+	synonim = <Synonim>
+	synonim SetUID uid
+	synonim AddToNamespaceWithName namespace ((parsedObject ListMapAt "Свойства") ListAt "Имя")
+	synonim Release
 	autoreleasePool --
-	return self
+	return uid
 
 
-Machine <ListMap> ObjectByUID (ObjectFormUID UIDToObject) <List> uid
+Machine <ListMap> UIDToObject (ObjectByUID ObjectFormUID) <List> uid
 	return ((self.objectsByUIDs At uid) AsListMap)
 
-Machine SetObjectByUID (SetObjectFromUID SetUIDToObject) <ListMap> object <List> uid
+Machine SetUIDToObject <List> uid <ListMap> object
 	self.objectsByUIDs AtPut uid object
 	return self
 
-Machine <List> GetUID
-	return self.uidGenerator GetUID
-
+Machine <List> GenerateUID (GetUID)
+	return self.uidGenerator GenerateUID
 
 Machine RestorePreviousState
 	console PrintLnString ("Этот метод виртуальной машины не реализован. Не обращайте внимания. :)")
 	return self
 
 
-Machine Schedule <List> uid
-	self.scheduler Schedule uid
+Machine ScheduleUID <List> uid
+	self.scheduler ScheduleUID uid
 	return self
 
 
 Machine Run
 	console PrintLnString ("Машина запущена.")
 	if true
-		self LoadApplication "Приложение"
+		self LoadUIDWithNameToNamespace ("Приложение") self.globalContext
 	else
 		self RestorePreviousState
 	loop
-		object = self.scheduler GetNextObject
-		if object == nil
+		uid = self.scheduler GetNextUID
+		if uid == nil
 			console PrintLnString ("Планировщик времени не выдал объект. Следовало бы уйти в ожидание, но событий больше никаких не произойдет. Выходим.")
 			break
 		else
-			self.processor ProcessObject object
+			self.processor ProcessUID uid
 	return self
 
 

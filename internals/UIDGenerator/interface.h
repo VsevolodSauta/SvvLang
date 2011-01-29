@@ -8,4 +8,4 @@ Object UIDGenerator_Clone(Object _self);
 Object UIDGenerator_DeepClone(Object _self);
 Object UIDGenerator_Destroy(Object _self);
 Object UIDGenerator_Compare(Object _self, Object _uidGenerator);
-Object UIDGenerator_GetUID(Object _self);
+Object UIDGenerator_GenerateUID(Object _self);

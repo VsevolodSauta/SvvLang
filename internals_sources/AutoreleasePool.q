@@ -27,9 +27,9 @@ AutoreleasePool Add object
 	object Release
 	return self
 
-AutoreleasePool <Object> Destroy
+AutoreleasePool Destroy
 	self.stack Release
-	return (self AsObject) Destroy
+	return self Destroy
 
 AutoreleasePool <Comparation> Compare <AutoreleasePool> autoreleasePool
 	return self.stack ? autoreleasePool.stack					// Nobody really needs this method

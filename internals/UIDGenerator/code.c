@@ -66,11 +66,11 @@ Object UIDGenerator_Compare(Object _self, Object _uidGenerator)
 	return toReturn;
 }
 
-Object UIDGenerator_GetUID(Object _self)
+Object UIDGenerator_GenerateUID(Object _self)
 {
-	DPUSHS ("UIDGenerator: GetUID begined.")
+	DPUSHS ("UIDGenerator: GenerateUID begined.")
 	Object def = StringFactory_FromNumber(_stringFactory, (((UIDGenerator) (_self->entity))->_currentUID));
 	Number_Inc((((UIDGenerator) (_self->entity))->_currentUID));
-	DPOPS ("UIDGenerator: GetUID ended.")
+	DPOPS ("UIDGenerator: GenerateUID ended.")
 	return def;
 }

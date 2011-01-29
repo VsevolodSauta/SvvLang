@@ -33,6 +33,7 @@ Object List_Last(Object _self);
 Object List_First(Object _self);
 Object List_SystemIterator(Object _self);
 Object List_ObjectAtPosition(Object _self, Object _position);
+Object List_ObjectAtPositionIfExists(Object _self, Object _position);
 Object List_ListMapAtPosition(Object _self, Object _position);
 Object List_Search(Object _self, Object _object);
 Object List_IteratorFromPosition(Object _self, Object _position);

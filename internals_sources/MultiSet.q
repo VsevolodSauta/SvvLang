@@ -6,7 +6,7 @@ MultiSet Init
 
 MultiSet <Object> Destroy
 	self.list Release
-	return (self AsObject) Destroy
+	return self Destroy
 
 MultiSet Clone
 	toReturn = <MultiSet>

@@ -1,0 +1,30 @@
+typedef struct ListMapIterator {
+	Object _listMap;
+	Object _key;
+	Object _elementStack;
+	Object _thisEnd;
+	Object _thisBegin;
+} *ListMapIterator;
+
+Object ListMapIterator_Create(void);
+Object ListMapIterator_Init(Object _self);
+Object ListMapIterator_SetListMap(Object _self, Object _listMap);
+Object ListMapIterator_ToBegin(Object _self);
+Object ListMapIterator_MoreThanOneElementInNode(Object _self, Object _node);
+Object ListMapIterator_Next(Object _self);
+Object ListMapIterator_NextAnyWithElement(Object _self, Object _element);
+Object ListMapIterator_ThisKey(Object _self);
+Object ListMapIterator_ThisValue(Object _self);
+Object ListMapIterator_ListMapData(Object _self);
+Object ListMapIterator_ListData(Object _self);
+Object ListMapIterator_NumberData(Object _self);
+Object ListMapIterator_LogicData(Object _self);
+Object ListMapIterator_ToEnd(Object _self);
+Object ListMapIterator_Prev(Object _self);
+Object ListMapIterator_PrevAnyWithElement(Object _self, Object _element);
+Object ListMapIterator_ThisEnd(Object _self);
+Object ListMapIterator_ThisBegin(Object _self);
+Object ListMapIterator_Compare(Object _self, Object _iterator);
+Object ListMapIterator_Clone(Object _self);
+Object ListMapIterator_DeepClone(Object _self);
+Object ListMapIterator_Destroy(Object _self);

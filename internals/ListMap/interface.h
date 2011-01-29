@@ -22,3 +22,6 @@ Object ListMap_LogicAt(Object _self, Object _list);
 Object ListMap_NumberAt(Object _self, Object _list);
 Object ListMap_SynonimAt(Object _self, Object _list);
 Object ListMap_MethodAt(Object _self, Object _list);
+Object ListMap_First(Object _self);
+Object ListMap_Last(Object _self);
+Object ListMap_DumpKeys(Object _self);

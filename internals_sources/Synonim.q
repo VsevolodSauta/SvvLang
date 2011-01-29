@@ -1,36 +1,42 @@
-<Synonim> <List> [Retain] object <List> references
+<Synonim> <List> [Retain] uid <List> references
 
 Synonim Init
-	references = <List>
+	self.references = <List>
 	return self
 
-Synonim SetObject (SetField SetUID) <List> object
-	self.object = object
+Synonim SetUID <List> uid
+	self.uid = uid
 	return self
 
-Synonim <List> Object (GetObject GetField GetUID Field UID)
-	return self.object
+Synonim <List> GetUID (UID)
+	return self.uid
 
 Synonim Unite (Intersect) <Synonim> synonim
-	iterator = self.references First
+	iterator = synonim.references First
 	while iterator NotThisEnd
-		synonim AddReference (iterator ListMapData)
+		reference = (iterator ListMapData) Retain
 		iterator Remove
-		self Release
-		iterator ++
-	return nil
-	
+		self AddReference (reference)
+		reference Release
+	return self
+
+Synonim AddToNamespaceWithName <ListMap> namespace <List> name
+	reference = <ListMap>
+	reference AtPut ("Пространство имен") namespace
+	reference AtPut ("Имя поля") name
+	self.references PushSorted reference
+	reference Release
+	namespace AtPut name self
+	return self
 
 Synonim AddReference <ListMap> location
 	self.references PushSorted location
 	(location ListMapAt ("Пространство имен")) AtPut (location ListAt ("Имя поля")) self
-	self Retain
 	return self
 
 Synonim RemoveReference <ListMap> location
 	if self.references RemoveFirstWithConfirmation location
 		(location ListMapAt ("Пространство имен")) Remove (location ListAt ("Имя поля"))
-		self Release
 	return self
 
 Synonim RemoveNamespace <ListMap> namespace
@@ -38,13 +44,12 @@ Synonim RemoveNamespace <ListMap> namespace
 	while iterator NotThisEnd
 		if ((iterator ListMapData) At ("Пространство имен")) == namespace
 			iterator Remove
-			self Release
 		else
 			iterator ++
 	return self
 
 Synonim Destroy
-	self.object Release
+	self.uid Release
 	self.references Release
 	return self Destroy
 
@@ -55,4 +60,4 @@ Synonim DeepClone
 	return self
 
 Synonim <Comparation> Compare <Synonim> synonim
-	return self.object ? synonim.object
+	return self.uid ? synonim.uid

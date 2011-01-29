@@ -16,3 +16,5 @@ Object Map_RemoveKey(Object _self, Object _key);
 Object Map_RemoveKeyConfirming(Object _self, Object _key);
 Object Map_ContainsKey(Object _self, Object _key);
 Object Map_GetValueForKey(Object _self, Object _key);
+Object Map_First(Object _self);
+Object Map_Last(Object _self);

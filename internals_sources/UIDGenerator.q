@@ -21,7 +21,7 @@ UIDGenerator Destroy
 UIDGenerator <Comparation> Compare uidGenerator
 	return (self Hash) ? (uidGenerator Hash)
 
-UIDGenerator <List> GetUID
+UIDGenerator <List> GenerateUID (GetUID)
 	def stringFactory FromNumber self.currentUID
 	self.currentUID ++
 

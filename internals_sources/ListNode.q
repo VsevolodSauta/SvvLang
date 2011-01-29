@@ -25,7 +25,7 @@ ListNode <Comparation> Compare <ListNode> listNode
 		return (self.prev Hash) ? (listNode.prev Hash)
 	return (self.next Hash) ? (listNode.next Hash)
 
-ListNode <Object> Destroy
+ListNode Destroy
 	self.data Release
-	return (self AsObject) Destroy
+	return self Destroy
 

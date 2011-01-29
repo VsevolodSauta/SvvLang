@@ -4,13 +4,13 @@ MachineScheduler Init
 	self.queue = <Queue>
 	return self
 
-MachineScheduler <ListMap> GetNextObject
+MachineScheduler <List> GetNextUID
 	if self.queue IsEmpty
 		return nil
 	else
 		return self.queue Pop
 
-MachineScheduler <ListMap> Schedule <List> uid
+MachineScheduler ScheduleUID <List> uid
 	self.queue Push uid
 	return self
 
@@ -26,4 +26,3 @@ MachineScheduler Clone
 
 MachineScheduler Compare <MachineScheduler> scheduler
 	return equal
-

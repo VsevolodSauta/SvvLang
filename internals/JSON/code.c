@@ -54,9 +54,7 @@ Object JSON_DeepClone(Object _self)
 Object JSON_Destroy(Object _self)
 {
 	DPUSHS ("JSON: Destroy begined.")
-	Object_Release(_null);
-	Object_Release(_true);
-	Object_Release(_false);
+	Object_Release((((JSON) (_self->entity))->_error));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("JSON: Destroy ended.")
 	return toReturn;

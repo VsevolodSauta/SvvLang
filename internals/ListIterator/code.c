@@ -154,19 +154,19 @@ Object ListIterator_ToPosition(Object _self, Object _position)
 		while((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentPosition, _position) == _less)) != _false)
 		{
 			ListIterator_Next(_self);
-			Number_Inc(_position);
+			Number_Inc(_currentPosition);
 		}
-		Object toReturn = _self;
-		DPOPS ("ListIterator: ToPosition ended.")
-		return toReturn;
 	}
-	ListIterator_ToEnd(_self);
-	Object _currentPosition;
-	_currentPosition = NumberFactory_FromLong(_numberFactory, -1);
-	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentPosition, _position) == _greater)) != _false)
+	else
 	{
-		Number_Dec(_currentPosition);
-		ListIterator_Prev(_self);
+		ListIterator_ToEnd(_self);
+		Object _currentPosition;
+		_currentPosition = NumberFactory_FromLong(_numberFactory, -1);
+		while((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentPosition, _position) == _greater)) != _false)
+		{
+			Number_Dec(_currentPosition);
+			ListIterator_Prev(_self);
+		}
 	}
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ToPosition ended.")

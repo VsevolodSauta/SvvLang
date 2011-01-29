@@ -104,3 +104,15 @@ Map GetValueForKey (GetAt AtGet At) key
 			return valuesIterator ThisData
 	return nil
 
+Map <MapIterator> First
+	iterator = <MapIterator>
+	iterator SetMap self
+	iterator ToBegin
+	return iterator Autorelease
+
+Map <MapIterator> Last
+	iterator = <MapIterator>
+	iterator SetMap self
+	iterator ToEnd
+	return iterator Autorelease
+	

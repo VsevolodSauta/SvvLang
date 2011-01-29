@@ -421,6 +421,23 @@ Object List_ObjectAtPosition(Object _self, Object _position)
 	return def;
 }
 
+Object List_ObjectAtPositionIfExists(Object _self, Object _position)
+{
+	DPUSHS ("List: ObjectAtPositionIfExists begined.")
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(_self), _position) == _greater)) != _false)
+	{
+		Object toReturn = List_ObjectAtPosition(_self, _position);
+		DPOPS ("List: ObjectAtPositionIfExists ended.")
+		return toReturn;
+	}
+	else
+	{
+		Object toReturn = _nil;
+		DPOPS ("List: ObjectAtPositionIfExists ended.")
+		return toReturn;
+	}
+}
+
 Object List_ListMapAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ListMapAtPosition begined.")

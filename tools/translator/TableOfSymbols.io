@@ -247,9 +247,8 @@ TableOfSymbols ensureKnownClassForClass := method(importingType, contextType,
 		tableOfImports atPut(importingType, List clone)
 		Translator importObjectType(importingType)
 	)
-	if(basicClasses contains(contextType), return)
-	if(tableOfImports at(contextType) contains(importingType) not,
-		tableOfImports at(contextType) push(importingType)
+	if(basicClasses contains(contextType) not, 
+		tableOfImports at(contextType) appendIfAbsent(importingType)
 	)
 )
 

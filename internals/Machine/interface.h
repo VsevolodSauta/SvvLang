@@ -8,12 +8,12 @@ typedef struct Machine {
 
 Object Machine_Create(void);
 Object Machine_Init(Object _self);
-Object Machine_LoadApplication(Object _self, Object _applicationName);
-Object Machine_ObjectByUID(Object _self, Object _uid);
-Object Machine_SetObjectByUID(Object _self, Object _object, Object _uid);
-Object Machine_GetUID(Object _self);
+Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Object _namespace);
+Object Machine_UIDToObject(Object _self, Object _uid);
+Object Machine_SetUIDToObject(Object _self, Object _uid, Object _object);
+Object Machine_GenerateUID(Object _self);
 Object Machine_RestorePreviousState(Object _self);
-Object Machine_Schedule(Object _self, Object _uid);
+Object Machine_ScheduleUID(Object _self, Object _uid);
 Object Machine_Run(Object _self);
 Object Machine_Destroy(Object _self);
 Object Machine_Clone(Object _self);

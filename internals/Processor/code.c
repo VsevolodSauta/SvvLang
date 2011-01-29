@@ -77,7 +77,9 @@ Object Processor_Init(Object _self)
 	(((Processor) (_self->entity))->_helperStack) = Stack_Create();
 	(((Processor) (_self->entity))->_processorCodes) = ListMap_Create();
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Выполнить", 18), MethodFactory_FromPointer(_methodFactory, &Processor_DoCode));
-	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Разрешить имя", 25), MethodFactory_FromPointer(_methodFactory, &Processor_FieldNameToSynonimCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Взять сообщение из имени", 45), MethodFactory_FromPointer(_methodFactory, &Processor_MessageFromMessageNameCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Взять сущность из поля сообщения", 60), MethodFactory_FromPointer(_methodFactory, &Processor_ObjectFromMessagesFieldCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Взять синоним из поля", 39), MethodFactory_FromPointer(_methodFactory, &Processor_FieldNameToSynonimCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Взять объект из синонима", 45), MethodFactory_FromPointer(_methodFactory, &Processor_SynonimToUIDCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Добавить текущий объект в вершину", 62), MethodFactory_FromPointer(_methodFactory, &Processor_AddCurrentObjectToStackCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Добавить текущую работу в вершину", 62), MethodFactory_FromPointer(_methodFactory, &Processor_AddCurrentJobToStackCode));
@@ -142,6 +144,44 @@ Object Processor_DoCode(Object _self, Object _toDo)
 	return toReturn;
 }
 
+Object Processor_MessageFromMessageNameCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: MessageFromMessageNameCode begined.")
+	Object _name;
+	_name = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя сообщения", 25));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
+	{
+		_name = Stack_Pop((((Processor) (_self->entity))->_helperStack));
+	}
+	Object _message;
+	_message = ListMap_ListMapAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)), _name);
+	Stack_Push((((Processor) (_self->entity))->_helperStack), _message);
+	Object toReturn = _self;
+	DPOPS ("Processor: MessageFromMessageNameCode ended.")
+	return toReturn;
+}
+
+Object Processor_ObjectFromMessagesFieldCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: ObjectFromMessagesFieldCode begined.")
+	Object _name;
+	_name = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
+	{
+		_name = Stack_Pop((((Processor) (_self->entity))->_helperStack));
+	}
+	Object _message;
+	_message = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_message, _nil) == _equal)) != _false)
+	{
+		_message = Stack_Pop((((Processor) (_self->entity))->_helperStack));
+	}
+	Stack_Push((((Processor) (_self->entity))->_helperStack), ListMap_ObjectAt(_message, _name));
+	Object toReturn = _self;
+	DPOPS ("Processor: ObjectFromMessagesFieldCode ended.")
+	return toReturn;
+}
+
 Object Processor_FieldNameToSynonimCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: FieldNameToSynonimCode begined.")
@@ -151,7 +191,7 @@ Object Processor_FieldNameToSynonimCode(Object _self, Object _toDo)
 	{
 		_name = Stack_Pop((((Processor) (_self->entity))->_helperStack));
 	}
-	Stack_Push((((Processor) (_self->entity))->_helperStack), Processor_ResolveName(_self, _name));
+	Stack_Push((((Processor) (_self->entity))->_helperStack), Processor_FieldNameToSynonim(_self, _name));
 	Object toReturn = _self;
 	DPOPS ("Processor: FieldNameToSynonimCode ended.")
 	return toReturn;
@@ -166,7 +206,7 @@ Object Processor_SynonimToUIDCode(Object _self, Object _toDo)
 	{
 		_synonim = Stack_Pop((((Processor) (_self->entity))->_helperStack));
 	}
-	Stack_Push((((Processor) (_self->entity))->_helperStack), Synonim_Object(_synonim));
+	Stack_Push((((Processor) (_self->entity))->_helperStack), Synonim_GetUID(_synonim));
 	Object toReturn = _self;
 	DPOPS ("Processor: SynonimToUIDCode ended.")
 	return toReturn;
@@ -247,7 +287,7 @@ Object Processor_AddObjectToListMapCode(Object _self, Object _toDo)
 	_key = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Ключ", 8));
 	Object _value;
 	_value = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Значение", 16));
-	if((_value = _nil) != _false)
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) == _equal)) != _false)
 	{
 		_value = Stack_Pop((((Processor) (_self->entity))->_helperStack));
 	}
@@ -266,7 +306,7 @@ Object Processor_AddObjectToListCode(Object _self, Object _toDo)
 	DPUSHS ("Processor: AddObjectToListCode begined.")
 	Object _value;
 	_value = ListMap_ObjectAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Значение", 16));
-	if((_value = _nil) != _false)
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) == _equal)) != _false)
 	{
 		_value = Stack_Pop((((Processor) (_self->entity))->_helperStack));
 	}
@@ -288,7 +328,7 @@ Object Processor_AddObjectToStackCode(Object _self, Object _toDo)
 Object Processor_DuplicateTopInStackCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: DuplicateTopInStackCode begined.")
-	Stack_Push((((Processor) (_self->entity))->_helperStack), Stack_Peek((((Processor) (_self->entity))->_helperStack)));
+	Stack_Push((((Processor) (_self->entity))->_helperStack), Object_TempClone(Stack_Peek((((Processor) (_self->entity))->_helperStack))));
 	Object toReturn = _self;
 	DPOPS ("Processor: DuplicateTopInStackCode ended.")
 	return toReturn;
@@ -320,7 +360,7 @@ Object Processor_SendMessageCode(Object _self, Object _toDo)
 Object Processor_InvokeMethodCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: InvokeMethodCode begined.")
-	Processor_InvokeMethod(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя метода", 19)), ListMap_ListMapAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Параметры", 18)));
+	Processor_InvokeMethodWithParameters(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя метода", 19)), ListMap_ListMapAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Параметры", 18)));
 	Object toReturn = _self;
 	DPOPS ("Processor: InvokeMethodCode ended.")
 	return toReturn;
@@ -347,28 +387,7 @@ Object Processor_UnDefineMethodCode(Object _self, Object _toDo)
 Object Processor_DefineLocalFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: DefineLocalFieldCode begined.")
-	Object _synonim;
-	_synonim = ListMap_SynonimAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Синоним", 14));
-	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_synonim, _nil) == _equal)) != _false)
-	{
-		Object _name;
-		_name = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Существующее имя поля", 40));
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
-		{
-			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректные параметры для действия \\\"Создать ТВА\\\".", 94));
-			Object toReturn = _self;
-			DPOPS ("Processor: DefineLocalFieldCode ended.")
-			return toReturn;
-		}
-		_synonim = Processor_ResolveName(_self, _name);
-	}
-	Object _reference;
-	_reference = ListMap_Create();
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), Stack_Peek((((Processor) (_self->entity))->_localNamespaces)));
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
-	Synonim_AddReference(_synonim, _reference);
-	Object_Release(_reference);
-	Object toReturn = _self;
+	Object toReturn = Processor_DefineFieldHelper(_self, _toDo, Stack_Peek((((Processor) (_self->entity))->_localNamespaces)));
 	DPOPS ("Processor: DefineLocalFieldCode ended.")
 	return toReturn;
 }
@@ -376,28 +395,7 @@ Object Processor_DefineLocalFieldCode(Object _self, Object _toDo)
 Object Processor_DefineJobFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: DefineJobFieldCode begined.")
-	Object _synonim;
-	_synonim = ListMap_SynonimAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Синоним", 14));
-	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_synonim, _nil) == _equal)) != _false)
-	{
-		Object _name;
-		_name = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Существующее имя поля", 40));
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
-		{
-			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректные параметры для действия \\\"Создать поле работы\\\".", 109));
-			Object toReturn = _self;
-			DPOPS ("Processor: DefineJobFieldCode ended.")
-			return toReturn;
-		}
-		_synonim = Processor_ResolveName(_self, _name);
-	}
-	Object _reference;
-	_reference = ListMap_Create();
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
-	Synonim_AddReference(_synonim, _reference);
-	Object_Release(_reference);
-	Object toReturn = _self;
+	Object toReturn = Processor_DefineFieldHelper(_self, _toDo, ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
 	DPOPS ("Processor: DefineJobFieldCode ended.")
 	return toReturn;
 }
@@ -405,28 +403,7 @@ Object Processor_DefineJobFieldCode(Object _self, Object _toDo)
 Object Processor_DefineObjectFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: DefineObjectFieldCode begined.")
-	Object _synonim;
-	_synonim = ListMap_SynonimAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Синоним", 14));
-	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_synonim, _nil) == _equal)) != _false)
-	{
-		Object _name;
-		_name = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Существующее имя поля", 40));
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
-		{
-			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректные параметры для действия \\\"Создать поле объекта\\\".", 111));
-			Object toReturn = _self;
-			DPOPS ("Processor: DefineObjectFieldCode ended.")
-			return toReturn;
-		}
-		_synonim = Processor_ResolveName(_self, _name);
-	}
-	Object _reference;
-	_reference = ListMap_Create();
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
-	Synonim_AddReference(_synonim, _reference);
-	Object_Release(_reference);
-	Object toReturn = _self;
+	Object toReturn = Processor_DefineFieldHelper(_self, _toDo, ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
 	DPOPS ("Processor: DefineObjectFieldCode ended.")
 	return toReturn;
 }
@@ -434,6 +411,14 @@ Object Processor_DefineObjectFieldCode(Object _self, Object _toDo)
 Object Processor_DefineGlobalFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: DefineGlobalFieldCode begined.")
+	Object toReturn = Processor_DefineFieldHelper(_self, _toDo, (((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext));
+	DPOPS ("Processor: DefineGlobalFieldCode ended.")
+	return toReturn;
+}
+
+Object Processor_DefineFieldHelper(Object _self, Object _toDo, Object _nameSpace)
+{
+	DPUSHS ("Processor: DefineFieldHelper begined.")
 	Object _synonim;
 	_synonim = ListMap_SynonimAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Синоним", 14));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_synonim, _nil) == _equal)) != _false)
@@ -442,28 +427,28 @@ Object Processor_DefineGlobalFieldCode(Object _self, Object _toDo)
 		_name = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Существующее имя поля", 40));
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_name, _nil) == _equal)) != _false)
 		{
-			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректные параметры для действия \\\"Создать глобальное поле\\\".", 117));
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректные параметры для \\\"Создать поле\\\".", 79));
 			Object toReturn = _self;
-			DPOPS ("Processor: DefineGlobalFieldCode ended.")
+			DPOPS ("Processor: DefineFieldHelper ended.")
 			return toReturn;
 		}
-		_synonim = Processor_ResolveName(_self, _name);
+		_synonim = Processor_FieldNameToSynonim(_self, _name);
 	}
 	Object _reference;
 	_reference = ListMap_Create();
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), (((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext));
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _nameSpace);
 	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
 	Synonim_AddReference(_synonim, _reference);
 	Object_Release(_reference);
 	Object toReturn = _self;
-	DPOPS ("Processor: DefineGlobalFieldCode ended.")
+	DPOPS ("Processor: DefineFieldHelper ended.")
 	return toReturn;
 }
 
 Object Processor_SetFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: SetFieldCode begined.")
-	Synonim_SetObject(Processor_ResolveName(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15))), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Идентификатор", 26)));
+	Synonim_SetUID(Processor_FieldNameToSynonim(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15))), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Идентификатор", 26)));
 	Object toReturn = _self;
 	DPOPS ("Processor: SetFieldCode ended.")
 	return toReturn;
@@ -472,7 +457,7 @@ Object Processor_SetFieldCode(Object _self, Object _toDo)
 Object Processor_UniteFieldCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: UniteFieldCode begined.")
-	Synonim_Unite(Processor_ResolveName(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15))), Processor_ResolveName(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя прибытия", 23))));
+	Synonim_Unite(Processor_FieldNameToSynonim(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя прибытия", 23))), Processor_FieldNameToSynonim(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15))));
 	Object toReturn = _self;
 	DPOPS ("Processor: UniteFieldCode ended.")
 	return toReturn;
@@ -485,37 +470,14 @@ Object Processor_UnDefineFieldCode(Object _self, Object _toDo)
 	_locationType = ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, _nil) == _equal)) != _false)
 	{
-		_locationType = Processor_LocationType(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
+		_locationType = Processor_FieldNameToNamespaceName(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
 	}
 	Object _place;
 	_place = ListMap_Create();
 	ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Имя", 6), ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
-	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Локальное поле", 27)) == _equal)) != _false)
-	{
-		ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), Stack_Peek((((Processor) (_self->entity))->_localNamespaces)));
-	}
-	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Поле работы", 21)) == _equal)) != _false)
-	{
-		ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), ListMap_ListMapAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextJobStage), StringFactory_FromUTF8(_stringFactory, "Работа", 12)), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
-	}
-	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Поле объекта", 23)) == _equal)) != _false)
-	{
-		ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8)));
-	}
-	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Глобальное поле", 29)) == _equal)) != _false)
-	{
-		ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), (((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext));
-	}
-	else
-	{
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Попытка удалить несуществующее поле.", 68));
-		Object_Release(_place);
-		Object toReturn = _self;
-		DPOPS ("Processor: UnDefineFieldCode ended.")
-		return toReturn;
-	}
+	ListMap_Add(_place, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), Processor_NamespaceNameToNamespace(_self, _locationType));
 	Object _synonim;
-	_synonim = Processor_ResolveName(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
+	_synonim = Processor_FieldNameToSynonim(_self, ListMap_ListAt(_toDo, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
 	Synonim_RemoveReference(_synonim, _place);
 	Object_Release(_place);
 	Object toReturn = _self;
@@ -572,74 +534,106 @@ Object Processor_FinishJobCode(Object _self, Object _toDo)
 	return toReturn;
 }
 
-Object Processor_LocationType(Object _self, Object _objectName)
+Object Processor_NamespaceNameToNamespace(Object _self, Object _locationType)
 {
-	DPUSHS ("Processor: LocationType begined.")
+	DPUSHS ("Processor: NamespaceNameToNamespace begined.")
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Глобальное поле", 29)) == _equal)) != _false)
+	{
+		Object toReturn = (((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext);
+		DPOPS ("Processor: NamespaceNameToNamespace ended.")
+		return toReturn;
+	}
+	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Поле объекта", 23)) == _equal)) != _false)
+	{
+		Object toReturn = ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8));
+		DPOPS ("Processor: NamespaceNameToNamespace ended.")
+		return toReturn;
+	}
+	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Поле работы", 21)) == _equal)) != _false)
+	{
+		Object toReturn = ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Поля", 8));
+		DPOPS ("Processor: NamespaceNameToNamespace ended.")
+		return toReturn;
+	}
+	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_locationType, StringFactory_FromUTF8(_stringFactory, "Локальное поле", 27)) == _equal)) != _false)
+	{
+		Object toReturn = Stack_Peek((((Processor) (_self->entity))->_localNamespaces));
+		DPOPS ("Processor: NamespaceNameToNamespace ended.")
+		return toReturn;
+	}
+	Object toReturn = _nil;
+	DPOPS ("Processor: NamespaceNameToNamespace ended.")
+	return toReturn;
+}
+
+Object Processor_FieldNameToNamespaceName(Object _self, Object _objectName)
+{
+	DPUSHS ("Processor: FieldNameToNamespaceName begined.")
 	Object _candidate;
 	_candidate = ListMap_ObjectAt(Stack_Peek((((Processor) (_self->entity))->_localNamespaces)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = StringFactory_FromUTF8(_stringFactory, "Локальное поле", 27);
-		DPOPS ("Processor: LocationType ended.")
+		DPOPS ("Processor: FieldNameToNamespaceName ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_ObjectAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Поля", 8)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = StringFactory_FromUTF8(_stringFactory, "Поле работы", 21);
-		DPOPS ("Processor: LocationType ended.")
+		DPOPS ("Processor: FieldNameToNamespaceName ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_ObjectAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = StringFactory_FromUTF8(_stringFactory, "Поле объекта", 23);
-		DPOPS ("Processor: LocationType ended.")
+		DPOPS ("Processor: FieldNameToNamespaceName ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_ObjectAt((((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = StringFactory_FromUTF8(_stringFactory, "Глобальное поле", 29);
-		DPOPS ("Processor: LocationType ended.")
+		DPOPS ("Processor: FieldNameToNamespaceName ended.")
 		return toReturn;
 	}
 	else
 	{
 		Object toReturn = StringFactory_FromUTF8(_stringFactory, "Нет такого поля", 28);
-		DPOPS ("Processor: LocationType ended.")
+		DPOPS ("Processor: FieldNameToNamespaceName ended.")
 		return toReturn;
 	}
 }
 
-Object Processor_ResolveName(Object _self, Object _objectName)
+Object Processor_FieldNameToSynonim(Object _self, Object _objectName)
 {
-	DPUSHS ("Processor: ResolveName begined.")
+	DPUSHS ("Processor: FieldNameToSynonim begined.")
 	Object _candidate;
 	_candidate = ListMap_SynonimAt(Stack_Peek((((Processor) (_self->entity))->_localNamespaces)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = _candidate;
-		DPOPS ("Processor: ResolveName ended.")
+		DPOPS ("Processor: FieldNameToSynonim ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_SynonimAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextJob), StringFactory_FromUTF8(_stringFactory, "Поля", 8)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = _candidate;
-		DPOPS ("Processor: ResolveName ended.")
+		DPOPS ("Processor: FieldNameToSynonim ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_SynonimAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Поля", 8)), _objectName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
 		Object toReturn = _candidate;
-		DPOPS ("Processor: ResolveName ended.")
+		DPOPS ("Processor: FieldNameToSynonim ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_SynonimAt((((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext), _objectName);
 	Object toReturn = _candidate;
-	DPOPS ("Processor: ResolveName ended.")
+	DPOPS ("Processor: FieldNameToSynonim ended.")
 	return toReturn;
 }
 
@@ -649,62 +643,56 @@ Object Processor_SendMessage(Object _self, Object _message)
 	Object _uid;
 	_uid = ListMap_ListAt(_message, StringFactory_FromUTF8(_stringFactory, "Получатель", 20));
 	Object _receiver;
-	_receiver = Machine_ObjectByUID((((Processor) (_self->entity))->_machine), _uid);
-	Object _messageList;
-	_messageList = ListMap_ListAt(_receiver, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
-	List_PushBack(_messageList, _message);
-	Machine_Schedule((((Processor) (_self->entity))->_machine), _uid);
+	_receiver = Machine_UIDToObject((((Processor) (_self->entity))->_machine), _uid);
+	Processor_ProcessMessageForObject(_self, _message, _receiver);
+	Machine_ScheduleUID((((Processor) (_self->entity))->_machine), _uid);
 	Object toReturn = _self;
 	DPOPS ("Processor: SendMessage ended.")
 	return toReturn;
 }
 
-Object Processor_InvokeMethod(Object _self, Object _methodName, Object _parameters)
+Object Processor_InvokeMethodWithParameters(Object _self, Object _methodName, Object _parameters)
 {
-	DPUSHS ("Processor: InvokeMethod begined.")
+	DPUSHS ("Processor: InvokeMethodWithParameters begined.")
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Object _method;
 	_method = ListMap_ListMapAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Методы", 12)), _methodName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_method, _nil) == _equal)) != _false)
 	{
 		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ошибка! Вызов несуществующего метода.", 69));
-		AutoreleasePool_PopFrame(_autoreleasePool);
-		DPOPS ( "Processor: Method processed." ) 
-		Object toReturn = _self;
-		DPOPS ("Processor: InvokeMethod ended.")
-		return toReturn;
-	}
-	if((ListMap_LogicAt(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14))) != _false)
-	{
-		Object _adressConstant;
-		_adressConstant = StringFactory_FromUTF8(_stringFactory, "Адрес", 10);
-		Object _externalObjectEntity;
-		_externalObjectEntity = ListMap_ObjectAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Сущность", 16));
-		Object _object;
-		_object = (((Processor) (_self->entity))->_contextObject);
-		( ( BasicMethod ) ListMap_ObjectAt ( _method, _adressConstant ) ) ( _externalObjectEntity, _object, _parameters ) ; 
 	}
 	else
 	{
-		Object _namespace;
-		_namespace = ListMap_Create();
-		Stack_Push((((Processor) (_self->entity))->_localNamespaces), _namespace);
-		ListMap_AddListMap(_namespace, _parameters);
-		Object_Release(_namespace);
-		Object _methodBody;
-		_methodBody = ListMap_ObjectAt(_method, StringFactory_FromUTF8(_stringFactory, "Тело", 8));
-		Object _iterator;
-		_iterator = List_First(_methodBody);
-		while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
+		if((ListMap_LogicAt(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14))) != _false)
 		{
-			Processor_Do(_self, ListIterator_ListMapData(_iterator));
-			ListIterator_Next(_iterator);
+			Object _basicMethod;
+			_basicMethod = ListMap_MethodAt(_method, StringFactory_FromUTF8(_stringFactory, "Базовый метод", 25));
+			Object _objectEntity;
+			_objectEntity = ListMap_ObjectAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Свойства", 16)), StringFactory_FromUTF8(_stringFactory, "Сущность", 16));
+			Method_Invoke(_basicMethod, _objectEntity, (((Processor) (_self->entity))->_contextObject), _parameters);
 		}
-		Stack_Pop((((Processor) (_self->entity))->_localNamespaces));
+		else
+		{
+			Object _namespace;
+			_namespace = ListMap_Create();
+			Stack_Push((((Processor) (_self->entity))->_localNamespaces), _namespace);
+			ListMap_AddListMap(_namespace, _parameters);
+			Object_Release(_namespace);
+			Object _methodBody;
+			_methodBody = ListMap_ListAt(_method, StringFactory_FromUTF8(_stringFactory, "Тело", 8));
+			Object _iterator;
+			_iterator = List_First(_methodBody);
+			while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
+			{
+				Processor_Do(_self, ListIterator_ListMapData(_iterator));
+				ListIterator_Next(_iterator);
+			}
+			Stack_Pop((((Processor) (_self->entity))->_localNamespaces));
+		}
 	}
 	AutoreleasePool_PopFrame(_autoreleasePool);
 	Object toReturn = _self;
-	DPOPS ("Processor: InvokeMethod ended.")
+	DPOPS ("Processor: InvokeMethodWithParameters ended.")
 	return toReturn;
 }
 
@@ -727,31 +715,33 @@ Object Processor_MessageConfirmsToParameter(Object _self, Object _message, Objec
 	return toReturn;
 }
 
-Object Processor_TryLinkMessageWithJobStage(Object _self, Object _jobStage, Object _message)
+Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _message, Object _messageSlot, Object _job)
 {
-	DPUSHS ("Processor: TryLinkMessageWithJobStage begined.")
-	Object _messagesIterator;
-	_messagesIterator = List_First(ListMap_ListAt(_jobStage, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)));
-	while((Logic_Not(ListIterator_ThisEnd(_messagesIterator))) != _false)
+	DPUSHS ("Processor: TryLinkMessageWithMessageSlotAndJob begined.")
+	Object _confirms;
+	_confirms = _true;
+	Object _parametersIterator;
+	_parametersIterator = List_First(ListMap_ListAt(_messageSlot, StringFactory_FromUTF8(_stringFactory, "Метод идентификации", 37)));
+	while((Logic_Not(ListIterator_ThisEnd(_parametersIterator))) != _false)
 	{
-		Object _parametersIterator;
-		_parametersIterator = List_First(ListIterator_ListData(_messagesIterator));
-		Object _confirms;
-		_confirms = _true;
-		while((Logic_Not(ListIterator_ThisEnd(_parametersIterator))) != _false)
+		Object _parameter;
+		_parameter = ListIterator_ListMapData(_parametersIterator);
+		if((Logic_Not(Processor_MessageConfirmsToParameter(_self, _message, _parameter))) != _false)
 		{
-			Object _parameter;
-			_parameter = ListIterator_ListMapData(_parametersIterator);
-			if((Logic_Not(Processor_MessageConfirmsToParameter(_self, _message, _parameter))) != _false)
-			{
-				_confirms = _false;
-				break;
-			}
-			ListIterator_Next(_parametersIterator);
+			_confirms = _false;
+			break;
 		}
-		if((_confirms) != _false)
+		ListIterator_Next(_parametersIterator);
+	}
+	if((_confirms) != _false)
+	{
+		ListMap_Add(_messageSlot, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _message);
+		Object _waitingStageNamesIterator;
+		_waitingStageNamesIterator = List_First(ListMap_ListAt(_messageSlot, StringFactory_FromUTF8(_stringFactory, "Ожидающие стадии", 31)));
+		while((Logic_Not(ListIterator_ThisEnd(_waitingStageNamesIterator))) != _false)
 		{
-			ListMap_Add(ListIterator_ListMapData(_messagesIterator), StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _message);
+			Object _jobStage;
+			_jobStage = ListMap_ListMapAt(ListMap_ListMapAt(_job, StringFactory_FromUTF8(_stringFactory, "Стадии", 12)), ListIterator_ListData(_waitingStageNamesIterator));
 			Object _msgNeeded;
 			_msgNeeded = ListMap_NumberAt(_jobStage, StringFactory_FromUTF8(_stringFactory, "Необходимо сообщений", 39));
 			Number_Dec(_msgNeeded);
@@ -760,43 +750,32 @@ Object Processor_TryLinkMessageWithJobStage(Object _self, Object _jobStage, Obje
 				ListMap_Add(_jobStage, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Готовность", 20));
 			}
 		}
-		ListIterator_Next(_messagesIterator);
 	}
 	Object toReturn = _self;
-	DPOPS ("Processor: TryLinkMessageWithJobStage ended.")
+	DPOPS ("Processor: TryLinkMessageWithMessageSlotAndJob ended.")
 	return toReturn;
 }
 
-Object Processor_ProcessOneMessage(Object _self)
+Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _object)
 {
-	DPUSHS ("Processor: ProcessOneMessage begined.")
-	Object _messageList;
-	_messageList = ListMap_ListAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
-	if((Logic_Not(List_Empty(_messageList))) != _false)
+	DPUSHS ("Processor: ProcessMessageForObject begined.")
+	Object _jobsIterator;
+	_jobsIterator = ListMap_First(ListMap_ListMapAt(_object, StringFactory_FromUTF8(_stringFactory, "Работы", 12)));
+	while((Logic_Not(ListMapIterator_ThisEnd(_jobsIterator))) != _false)
 	{
-		Object _message;
-		_message = List_PopFront(_messageList);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_message, _nil) != _equal)) != _false)
+		Object _job;
+		_job = ListMapIterator_ListMapData(_jobsIterator);
+		Object _messageSlotsIterator;
+		_messageSlotsIterator = ListMap_First(ListMap_ListMapAt(_job, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)));
+		while((Logic_Not(ListMapIterator_ThisEnd(_messageSlotsIterator))) != _false)
 		{
-			Object _jobsIterator;
-			_jobsIterator = List_First(ListMap_ListAt((((Processor) (_self->entity))->_contextObject), StringFactory_FromUTF8(_stringFactory, "Работы", 12)));
-			while((Logic_Not(ListIterator_ThisEnd(_jobsIterator))) != _false)
-			{
-				Object _job;
-				_job = ListIterator_ListMapData(_jobsIterator);
-				Object _jobStagesIterator;
-				_jobStagesIterator = List_First(ListMap_ListAt(_job, StringFactory_FromUTF8(_stringFactory, "Стадии", 12)));
-				while((Logic_Not(ListIterator_ThisEnd(_jobStagesIterator))) != _false)
-				{
-					Processor_TryLinkMessageWithJobStage(_self, _message, ListIterator_ListMapData(_jobStagesIterator));
-					ListIterator_Next(_jobStagesIterator);
-				}
-				ListIterator_Next(_jobsIterator);
-			}
+			Processor_TryLinkMessageWithMessageSlotAndJob(_self, _message, ListMapIterator_ListMapData(_messageSlotsIterator), _job);
+			ListMapIterator_Next(_messageSlotsIterator);
 		}
+		ListMapIterator_Next(_jobsIterator);
 	}
 	Object toReturn = _self;
-	DPOPS ("Processor: ProcessOneMessage ended.")
+	DPOPS ("Processor: ProcessMessageForObject ended.")
 	return toReturn;
 }
 
@@ -824,11 +803,10 @@ Object Processor_ProcessOneJobIfAny(Object _self)
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJob), _job);
 				Object _emptyParameters;
 				_emptyParameters = ListMap_Create();
-				Processor_InvokeMethod(_self, ListMap_ListAt(_jobStage, StringFactory_FromUTF8(_stringFactory, "Метод", 10)), _emptyParameters);
+				Processor_InvokeMethodWithParameters(_self, ListMap_ListAt(_jobStage, StringFactory_FromUTF8(_stringFactory, "Метод", 10)), _emptyParameters);
 				Object_Release(_emptyParameters);
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobStage), _nil);
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJob), _nil);
-				DPOPS ( "Processor: Job processed." ) 
 				Object toReturn = _self;
 				DPOPS ("Processor: ProcessOneJobIfAny ended.")
 				return toReturn;
@@ -842,18 +820,18 @@ Object Processor_ProcessOneJobIfAny(Object _self)
 	return toReturn;
 }
 
-Object Processor_ProcessObject(Object _self, Object _uid)
+Object Processor_ProcessUID(Object _self, Object _uid)
 {
-	DPUSHS ("Processor: ProcessObject begined.")
+	DPUSHS ("Processor: ProcessUID begined.")
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Object _object;
-	_object = Machine_ObjectByUID((((Processor) (_self->entity))->_machine), _uid);
+	_object = Machine_UIDToObject((((Processor) (_self->entity))->_machine), _uid);
+	Stack_Clean((((Processor) (_self->entity))->_helperStack));
 	Object_SetRetaining(&(((Processor) (_self->entity))->_contextObject), _object);
-	Processor_ProcessOneMessage(_self);
 	Processor_ProcessOneJobIfAny(_self);
 	Object_SetRetaining(&(((Processor) (_self->entity))->_contextObject), _nil);
 	AutoreleasePool_PopFrame(_autoreleasePool);
 	Object toReturn = _self;
-	DPOPS ("Processor: ProcessObject ended.")
+	DPOPS ("Processor: ProcessUID ended.")
 	return toReturn;
 }

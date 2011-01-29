@@ -246,3 +246,27 @@ Object Map_GetValueForKey(Object _self, Object _key)
 	DPOPS ("Map: GetValueForKey ended.")
 	return toReturn;
 }
+
+Object Map_First(Object _self)
+{
+	DPUSHS ("Map: First begined.")
+	Object _iterator;
+	_iterator = MapIterator_Create();
+	MapIterator_SetMap(_iterator, _self);
+	MapIterator_ToBegin(_iterator);
+	Object toReturn = Object_Autorelease(_iterator);
+	DPOPS ("Map: First ended.")
+	return toReturn;
+}
+
+Object Map_Last(Object _self)
+{
+	DPUSHS ("Map: Last begined.")
+	Object _iterator;
+	_iterator = MapIterator_Create();
+	MapIterator_SetMap(_iterator, _self);
+	MapIterator_ToEnd(_iterator);
+	Object toReturn = Object_Autorelease(_iterator);
+	DPOPS ("Map: Last ended.")
+	return toReturn;
+}

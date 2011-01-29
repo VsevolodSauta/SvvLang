@@ -5,27 +5,34 @@ Stack Init
 	return self
 
 Stack Push object
-	self.list PushBack object
+	self.list PushFront object
 	return self
 
 Stack <Object> Pop
-	return self.list PopBack
+	return self.list PopFront
 
 Stack <Object> Remove
-	return self.list RemoveBack
+	return self.list RemoveFront
 
 Stack <Object> Peek
-	return self.list PeekBack
+	return self.list PeekFront
+
+Stack <Object> ObjectAtPositionIfExists <Number> position
+	return self.list ObjectAtPositionIfExists position
 
 Stack <Logic> Empty (IsEmpty)
 	return self.list Empty
+
+Stack Clean (Clear RemoveAll)
+	self.list RemoveAll
+	return self
 
 Stack <Comparation> Compare <Stack> stack
 	return (self.list) ? (stack.list)
 
 Stack <Object> Destroy
 	self.list Release
-	return (self AsObject) Destroy
+	return self Destroy
 
 Stack <List> GetList
 	return self.list TempClone

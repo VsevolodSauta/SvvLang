@@ -16,7 +16,7 @@ List Destroy
 		nextNode = node.next
 		node Release
 		node = nextNode
-	return (self AsObject) Destroy
+	return self Destroy
 
 List Clone
 	list = <List>
@@ -207,6 +207,12 @@ List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> po
 	self.iterator ToPosition position
 	def self.iterator ThisData
 	self.iterator Hide
+
+List <Object> ObjectAtPositionIfExists (ObjectAtPositionIfPossible) <Number> position
+	if (self Size) > position
+		return self ObjectAtPosition position
+	else
+		return nil
 
 List <ListMap> ListMapAtPosition (ListMapFromPosition) <Number> position
 	return (self ObjectAtPosition 0) AsListMap

@@ -14,9 +14,7 @@ JSON DeepClone
 	return self
 
 JSON Destroy
-	null Release
-	true Release
-	false Release
+	self.error Release
 	return self Destroy
 
 JSON <List> ParseString <ListIterator> iterator

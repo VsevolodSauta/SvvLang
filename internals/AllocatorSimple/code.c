@@ -27,6 +27,7 @@ void*  Allocator_Resize(Object _self, void* toResize, int size)
 
 Object Allocator_Delete(Object _self, void* toDelete)
 {
+	if(toDelete == 0) return _self;
 	int intPtr = (((long) toDelete) - ((long) pool)) / 512;
 	if(arr[intPtr] == 1)
 	{

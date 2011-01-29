@@ -7,9 +7,9 @@ Char Init
 Char <Comparation> Compare <Char> char
 	return self.code ? char.code
 
-Char <Object> Destroy
+Char Destroy
 	self.code Release
-	return (self AsObject) Destroy
+	return self Destroy
 
 Char Clone
 	toReturn = <Char>

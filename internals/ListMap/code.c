@@ -289,3 +289,42 @@ Object ListMap_MethodAt(Object _self, Object _list)
 	DPOPS ("ListMap: MethodAt ended.")
 	return toReturn;
 }
+
+Object ListMap_First(Object _self)
+{
+	DPUSHS ("ListMap: First begined.")
+	Object _iterator;
+	_iterator = ListMapIterator_Create();
+	ListMapIterator_SetListMap(_iterator, _self);
+	ListMapIterator_ToBegin(_iterator);
+	Object toReturn = Object_Autorelease(_iterator);
+	DPOPS ("ListMap: First ended.")
+	return toReturn;
+}
+
+Object ListMap_Last(Object _self)
+{
+	DPUSHS ("ListMap: Last begined.")
+	Object _iterator;
+	_iterator = ListMapIterator_Create();
+	ListMapIterator_SetListMap(_iterator, _self);
+	ListMapIterator_ToEnd(_iterator);
+	Object toReturn = Object_Autorelease(_iterator);
+	DPOPS ("ListMap: Last ended.")
+	return toReturn;
+}
+
+Object ListMap_DumpKeys(Object _self)
+{
+	DPUSHS ("ListMap: DumpKeys begined.")
+	Object _iterator;
+	_iterator = ListMap_First(_self);
+	while((Logic_Not(ListMapIterator_ThisEnd(_iterator))) != _false)
+	{
+		Console_WriteLnString(_console, ListMapIterator_ThisKey(_iterator));
+		ListMapIterator_Next(_iterator);
+	}
+	Object toReturn = _self;
+	DPOPS ("ListMap: DumpKeys ended.")
+	return toReturn;
+}

@@ -12,7 +12,7 @@ Object Synonim_Create(void)
 	Object_SetDestructor(_self, &Synonim_Destroy);
 	Object_SetCloner(_self, &Synonim_Clone);
 	Object_SetDeepCloner(_self, &Synonim_DeepClone);
-	((Synonim) (_self->entity))->_object = _nil;
+	((Synonim) (_self->entity))->_uid = _nil;
 	((Synonim) (_self->entity))->_references = _nil;
 	_self = Synonim_Init(_self);
 	DPOPS ("Synonim: Create ended.")
@@ -22,27 +22,26 @@ Object Synonim_Create(void)
 Object Synonim_Init(Object _self)
 {
 	DPUSHS ("Synonim: Init begined.")
-	Object _references;
-	_references = List_Create();
+	(((Synonim) (_self->entity))->_references) = List_Create();
 	Object toReturn = _self;
 	DPOPS ("Synonim: Init ended.")
 	return toReturn;
 }
 
-Object Synonim_SetObject(Object _self, Object _object)
+Object Synonim_SetUID(Object _self, Object _uid)
 {
-	DPUSHS ("Synonim: SetObject begined.")
-	Object_SetRetaining(&(((Synonim) (_self->entity))->_object), _object);
+	DPUSHS ("Synonim: SetUID begined.")
+	Object_SetRetaining(&(((Synonim) (_self->entity))->_uid), _uid);
 	Object toReturn = _self;
-	DPOPS ("Synonim: SetObject ended.")
+	DPOPS ("Synonim: SetUID ended.")
 	return toReturn;
 }
 
-Object Synonim_Object(Object _self)
+Object Synonim_GetUID(Object _self)
 {
-	DPUSHS ("Synonim: Object begined.")
-	Object toReturn = (((Synonim) (_self->entity))->_object);
-	DPOPS ("Synonim: Object ended.")
+	DPUSHS ("Synonim: GetUID begined.")
+	Object toReturn = (((Synonim) (_self->entity))->_uid);
+	DPOPS ("Synonim: GetUID ended.")
 	return toReturn;
 }
 
@@ -50,16 +49,32 @@ Object Synonim_Unite(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Unite begined.")
 	Object _iterator;
-	_iterator = List_First((((Synonim) (_self->entity))->_references));
+	_iterator = List_First((((Synonim) (_synonim->entity))->_references));
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
 	{
-		Synonim_AddReference(_synonim, ListIterator_ListMapData(_iterator));
+		Object _reference;
+		_reference = Object_Retain(ListIterator_ListMapData(_iterator));
 		ListIterator_ThisRemove(_iterator);
-		Object_Release(_self);
-		ListIterator_Next(_iterator);
+		Synonim_AddReference(_self, _reference);
+		Object_Release(_reference);
 	}
-	Object toReturn = _nil;
+	Object toReturn = _self;
 	DPOPS ("Synonim: Unite ended.")
+	return toReturn;
+}
+
+Object Synonim_AddToNamespaceWithName(Object _self, Object _namespace, Object _name)
+{
+	DPUSHS ("Synonim: AddToNamespaceWithName begined.")
+	Object _reference;
+	_reference = ListMap_Create();
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _namespace);
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _name);
+	List_PushSorted((((Synonim) (_self->entity))->_references), _reference);
+	Object_Release(_reference);
+	ListMap_Add(_namespace, _name, _self);
+	Object toReturn = _self;
+	DPOPS ("Synonim: AddToNamespaceWithName ended.")
 	return toReturn;
 }
 
@@ -68,7 +83,6 @@ Object Synonim_AddReference(Object _self, Object _location)
 	DPUSHS ("Synonim: AddReference begined.")
 	List_PushSorted((((Synonim) (_self->entity))->_references), _location);
 	ListMap_Add(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)), _self);
-	Object_Retain(_self);
 	Object toReturn = _self;
 	DPOPS ("Synonim: AddReference ended.")
 	return toReturn;
@@ -80,7 +94,6 @@ Object Synonim_RemoveReference(Object _self, Object _location)
 	if((List_RemoveFirstWithConfirmation((((Synonim) (_self->entity))->_references), _location)) != _false)
 	{
 		ListMap_Remove(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
-		Object_Release(_self);
 	}
 	Object toReturn = _self;
 	DPOPS ("Synonim: RemoveReference ended.")
@@ -97,7 +110,6 @@ Object Synonim_RemoveNamespace(Object _self, Object _namespace)
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(ListIterator_ListMapData(_iterator), StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), _namespace) == _equal)) != _false)
 		{
 			ListIterator_ThisRemove(_iterator);
-			Object_Release(_self);
 		}
 		else
 		{
@@ -112,7 +124,7 @@ Object Synonim_RemoveNamespace(Object _self, Object _namespace)
 Object Synonim_Destroy(Object _self)
 {
 	DPUSHS ("Synonim: Destroy begined.")
-	Object_Release((((Synonim) (_self->entity))->_object));
+	Object_Release((((Synonim) (_self->entity))->_uid));
 	Object_Release((((Synonim) (_self->entity))->_references));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("Synonim: Destroy ended.")
@@ -138,7 +150,7 @@ Object Synonim_DeepClone(Object _self)
 Object Synonim_Compare(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Compare begined.")
-	Object toReturn = Object_Compare((((Synonim) (_self->entity))->_object), (((Synonim) (_synonim->entity))->_object));
+	Object toReturn = Object_Compare((((Synonim) (_self->entity))->_uid), (((Synonim) (_synonim->entity))->_uid));
 	DPOPS ("Synonim: Compare ended.")
 	return toReturn;
 }

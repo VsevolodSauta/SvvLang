@@ -37,7 +37,7 @@ Queue <Comparation> Compare <Queue> queue
 
 Queue <Object> Destroy
 	self.list Release
-	return (self AsObject) Destroy
+	return self Destroy
 
 Queue <List> GetList
 	return self.list TempClone

@@ -8,4 +8,5 @@
 #include "internals/Console/interface.h"
 #include "internals/JSON/interface.h"
 #include "internals/ListIterator/interface.h"
+#include "internals/Synonim/interface.h"
 #include "internals/Undestroyable/interface.h"

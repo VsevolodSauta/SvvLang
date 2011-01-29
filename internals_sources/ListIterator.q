@@ -66,13 +66,13 @@ ListIterator ToPosition <Number> position
 		currentPosition = 0
 		while currentPosition < position
 			self Next
-			position Inc
-		return self
-	self ToEnd
-	currentPosition = -1
-	while currentPosition > position
-		currentPosition Dec
-		self Prev
+			currentPosition Inc
+	else
+		self ToEnd
+		currentPosition = -1
+		while currentPosition > position
+			currentPosition Dec
+			self Prev
 	return self
 
 ListIterator FromPositionToPosition <Number> positionFrom <Number> positionTo

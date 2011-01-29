@@ -27,29 +27,29 @@ Object MachineScheduler_Init(Object _self)
 	return toReturn;
 }
 
-Object MachineScheduler_GetNextObject(Object _self)
+Object MachineScheduler_GetNextUID(Object _self)
 {
-	DPUSHS ("MachineScheduler: GetNextObject begined.")
+	DPUSHS ("MachineScheduler: GetNextUID begined.")
 	if((Queue_Empty((((MachineScheduler) (_self->entity))->_queue))) != _false)
 	{
 		Object toReturn = _nil;
-		DPOPS ("MachineScheduler: GetNextObject ended.")
+		DPOPS ("MachineScheduler: GetNextUID ended.")
 		return toReturn;
 	}
 	else
 	{
 		Object toReturn = Queue_Pop((((MachineScheduler) (_self->entity))->_queue));
-		DPOPS ("MachineScheduler: GetNextObject ended.")
+		DPOPS ("MachineScheduler: GetNextUID ended.")
 		return toReturn;
 	}
 }
 
-Object MachineScheduler_Schedule(Object _self, Object _uid)
+Object MachineScheduler_ScheduleUID(Object _self, Object _uid)
 {
-	DPUSHS ("MachineScheduler: Schedule begined.")
+	DPUSHS ("MachineScheduler: ScheduleUID begined.")
 	Queue_Push((((MachineScheduler) (_self->entity))->_queue), _uid);
 	Object toReturn = _self;
-	DPOPS ("MachineScheduler: Schedule ended.")
+	DPOPS ("MachineScheduler: ScheduleUID ended.")
 	return toReturn;
 }
 

@@ -121,3 +121,22 @@ ListMap <Synonim> SynonimAt <List> list
 
 ListMap <Method> MethodAt <List> list
 	return (self GetAt list) AsMethod
+
+ListMap <ListMapIterator> First
+	iterator = <ListMapIterator>
+	iterator SetListMap self
+	iterator ToBegin
+	return iterator Autorelease
+
+ListMap <ListMapIterator> Last
+	iterator = <ListMapIterator>
+	iterator SetListMap self
+	iterator ToEnd
+	return iterator Autorelease
+	
+ListMap DumpKeys
+	iterator = self First
+	while iterator NotThisEnd
+		console PrintLnString (iterator Key)
+		iterator ++
+	return self

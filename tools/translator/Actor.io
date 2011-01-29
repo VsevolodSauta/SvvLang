@@ -32,7 +32,7 @@ Actor with := method(name,
 	
 	if(name isCreator,
 		toReturn actorType = name outOfBrackets
-		TableOfSymbols ensureKnownClassForClass(toReturn actorType, "Object")
+		TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName) // "Object")
 		toReturn actorName copy("#{toReturn actorType}_Create()" interpolate)
 		toReturn setProperty("JustCreated")
 		return toReturn

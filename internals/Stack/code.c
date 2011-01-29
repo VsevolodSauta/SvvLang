@@ -30,7 +30,7 @@ Object Stack_Init(Object _self)
 Object Stack_Push(Object _self, Object _object)
 {
 	DPUSHS ("Stack: Push begined.")
-	List_PushBack((((Stack) (_self->entity))->_list), _object);
+	List_PushFront((((Stack) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("Stack: Push ended.")
 	return toReturn;
@@ -39,7 +39,7 @@ Object Stack_Push(Object _self, Object _object)
 Object Stack_Pop(Object _self)
 {
 	DPUSHS ("Stack: Pop begined.")
-	Object toReturn = List_PopBack((((Stack) (_self->entity))->_list));
+	Object toReturn = List_PopFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Pop ended.")
 	return toReturn;
 }
@@ -47,7 +47,7 @@ Object Stack_Pop(Object _self)
 Object Stack_Remove(Object _self)
 {
 	DPUSHS ("Stack: Remove begined.")
-	Object toReturn = List_RemoveBack((((Stack) (_self->entity))->_list));
+	Object toReturn = List_RemoveFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Remove ended.")
 	return toReturn;
 }
@@ -55,8 +55,16 @@ Object Stack_Remove(Object _self)
 Object Stack_Peek(Object _self)
 {
 	DPUSHS ("Stack: Peek begined.")
-	Object toReturn = List_PeekBack((((Stack) (_self->entity))->_list));
+	Object toReturn = List_PeekFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Peek ended.")
+	return toReturn;
+}
+
+Object Stack_ObjectAtPositionIfExists(Object _self, Object _position)
+{
+	DPUSHS ("Stack: ObjectAtPositionIfExists begined.")
+	Object toReturn = List_ObjectAtPositionIfExists((((Stack) (_self->entity))->_list), _position);
+	DPOPS ("Stack: ObjectAtPositionIfExists ended.")
 	return toReturn;
 }
 
@@ -65,6 +73,15 @@ Object Stack_Empty(Object _self)
 	DPUSHS ("Stack: Empty begined.")
 	Object toReturn = List_Empty((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Empty ended.")
+	return toReturn;
+}
+
+Object Stack_Clean(Object _self)
+{
+	DPUSHS ("Stack: Clean begined.")
+	List_Clean((((Stack) (_self->entity))->_list));
+	Object toReturn = _self;
+	DPOPS ("Stack: Clean ended.")
 	return toReturn;
 }
 
