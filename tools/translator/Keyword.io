@@ -93,6 +93,15 @@ Keyword DEBUG_POPProcess := method(line,
 	toReturn
 )
 
+Keyword assertProcess := method(line,
+	toReturn := "ASSERT_Q ( " asMutable
+	line toNextToken
+	toReturn appendSeq(line currentToken)
+	line toNextToken
+	toReturn appendSeq(", ", (line getActor actorName), " )")
+	toReturn
+)
+
 KeywordDefHandler := Object clone
 
 KeywordDefHandler blockWillEnd := method(

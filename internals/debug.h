@@ -9,7 +9,22 @@
 #define MEMORY_DEBUG 0
 #define STDLIB 0
 
+#define DEBUG_ASSERT 1
 #if DEBUG
+
+#define ASSERT_C ( message, assertion ) \
+	if(!(assertion)) \
+	{ \
+		DMSG(message); \
+		OSexit(-1); \
+	}
+
+#define ASSERT_Q ( message, assertion ) \
+	if((assertion) != true) \
+	{ \
+		DMSG(message); \
+		OSexit(-1); \
+	}
 
 extern int DLEVEL;
 
@@ -68,6 +83,9 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 #define DPOPS(arg) {DLEVEL--; DMSGS(arg);}
 #define IMPOSSIBLE() DMSG("IMPOSSIBLE!!!")
 #else
+
+#define ASSERT_C(message, assertion)
+#define ASSERT_Q(message, assertion)
 
 #define DMSGS(arg)
 #define DMSG(arg)
