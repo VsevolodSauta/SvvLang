@@ -2,6 +2,7 @@
 
 Synonim Init
 	self.references = <List>
+	self Autorelease
 	return self
 
 Synonim SetUID <List> uid
@@ -54,9 +55,13 @@ Synonim Destroy
 	return self Destroy
 
 Synonim Clone
+	toReturn = <Synonim>
+	toReturn.uid = self.uid
 	return self
 
 Synonim DeepClone
+	toReturn = <Synonim>
+	toReturn.uid = self.uid
 	return self
 
 Synonim <Comparation> Compare <Synonim> synonim

@@ -21,6 +21,7 @@ Object MultiSet_Create(void)
 Object MultiSet_Init(Object _self)
 {
 	DPUSHS ("MultiSet: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object_SetReleasing(&(((MultiSet) (_self->entity))->_list), List_Create());
 	Object toReturn = _self;
 	DPOPS ("MultiSet: Init ended.")
@@ -30,6 +31,7 @@ Object MultiSet_Init(Object _self)
 Object MultiSet_Destroy(Object _self)
 {
 	DPUSHS ("MultiSet: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object_Release((((MultiSet) (_self->entity))->_list));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("MultiSet: Destroy ended.")
@@ -39,6 +41,7 @@ Object MultiSet_Destroy(Object _self)
 Object MultiSet_Clone(Object _self)
 {
 	DPUSHS ("MultiSet: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
 	Object_SetReleasing(&(((MultiSet) (_toReturn->entity))->_list), Object_Clone((((MultiSet) (_self->entity))->_list)));
@@ -50,6 +53,7 @@ Object MultiSet_Clone(Object _self)
 Object MultiSet_DeepClone(Object _self)
 {
 	DPUSHS ("MultiSet: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
 	Object_SetRetaining(&(((MultiSet) (_toReturn->entity))->_list), Object_DeepClone((((MultiSet) (_self->entity))->_list)));
@@ -61,6 +65,7 @@ Object MultiSet_DeepClone(Object _self)
 Object MultiSet_Compare(Object _self, Object _multiset)
 {
 	DPUSHS ("MultiSet: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object toReturn = Object_Compare((((MultiSet) (_self->entity))->_list), (((MultiSet) (_multiset->entity))->_list));
 	DPOPS ("MultiSet: Compare ended.")
 	return toReturn;
@@ -69,6 +74,7 @@ Object MultiSet_Compare(Object _self, Object _multiset)
 Object MultiSet_Push(Object _self, Object _object)
 {
 	DPUSHS ("MultiSet: Push begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	List_PushSorted((((MultiSet) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("MultiSet: Push ended.")
@@ -78,6 +84,7 @@ Object MultiSet_Push(Object _self, Object _object)
 Object MultiSet_Contains(Object _self, Object _object)
 {
 	DPUSHS ("MultiSet: Contains begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object toReturn = List_Contains((((MultiSet) (_self->entity))->_list), _object);
 	DPOPS ("MultiSet: Contains ended.")
 	return toReturn;
@@ -86,6 +93,7 @@ Object MultiSet_Contains(Object _self, Object _object)
 Object MultiSet_RemoveOnce(Object _self, Object _object)
 {
 	DPUSHS ("MultiSet: RemoveOnce begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	List_RemoveFirst((((MultiSet) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("MultiSet: RemoveOnce ended.")
@@ -95,6 +103,7 @@ Object MultiSet_RemoveOnce(Object _self, Object _object)
 Object MultiSet_RemoveEvery(Object _self, Object _object)
 {
 	DPUSHS ("MultiSet: RemoveEvery begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	List_RemoveEvery((((MultiSet) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("MultiSet: RemoveEvery ended.")
@@ -104,6 +113,7 @@ Object MultiSet_RemoveEvery(Object _self, Object _object)
 Object MultiSet_Empty(Object _self)
 {
 	DPUSHS ("MultiSet: Empty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8253887558225682432ulll )
 	Object toReturn = List_Empty((((MultiSet) (_self->entity))->_list));
 	DPOPS ("MultiSet: Empty ended.")
 	return toReturn;

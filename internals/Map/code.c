@@ -22,6 +22,7 @@ Object Map_Create(void)
 Object Map_Init(Object _self)
 {
 	DPUSHS ("Map: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object_SetReleasing(&(((Map) (_self->entity))->_keys), List_Create());
 	Object_SetReleasing(&(((Map) (_self->entity))->_values), List_Create());
 	Object toReturn = _self;
@@ -32,6 +33,7 @@ Object Map_Init(Object _self)
 Object Map_Destroy(Object _self)
 {
 	DPUSHS ("Map: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object_Release((((Map) (_self->entity))->_keys));
 	Object_Release((((Map) (_self->entity))->_values));
 	Object toReturn = Object_Destroy(_self);
@@ -42,6 +44,7 @@ Object Map_Destroy(Object _self)
 Object Map_Clone(Object _self)
 {
 	DPUSHS ("Map: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _toReturn;
 	_toReturn = Map_Create();
 	Object_SetReleasing(&(((Map) (_toReturn->entity))->_keys), Object_Clone((((Map) (_self->entity))->_keys)));
@@ -54,6 +57,7 @@ Object Map_Clone(Object _self)
 Object Map_DeepClone(Object _self)
 {
 	DPUSHS ("Map: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _toReturn;
 	_toReturn = Map_Create();
 	Object_SetRetaining(&(((Map) (_toReturn->entity))->_keys), Object_DeepClone((((Map) (_self->entity))->_keys)));
@@ -66,6 +70,7 @@ Object Map_DeepClone(Object _self)
 Object Map_Compare(Object _self, Object _map)
 {
 	DPUSHS ("Map: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _candidate;
 	_candidate = Object_Compare((((Map) (_self->entity))->_keys), (((Map) (_map->entity))->_keys));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
@@ -82,6 +87,7 @@ Object Map_Compare(Object _self, Object _map)
 Object Map_Empty(Object _self)
 {
 	DPUSHS ("Map: Empty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object toReturn = List_Empty((((Map) (_self->entity))->_keys));
 	DPOPS ("Map: Empty ended.")
 	return toReturn;
@@ -90,6 +96,7 @@ Object Map_Empty(Object _self)
 Object Map_Size(Object _self)
 {
 	DPUSHS ("Map: Size begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object toReturn = List_Size((((Map) (_self->entity))->_keys));
 	DPOPS ("Map: Size ended.")
 	return toReturn;
@@ -98,6 +105,7 @@ Object Map_Size(Object _self)
 Object Map_Add(Object _self, Object _key, Object _value)
 {
 	DPUSHS ("Map: Add begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _keysIterator;
 	_keysIterator = List_First((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
@@ -131,6 +139,7 @@ Object Map_Add(Object _self, Object _key, Object _value)
 Object Map_RemoveKey(Object _self, Object _key)
 {
 	DPUSHS ("Map: RemoveKey begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _keysIterator;
 	_keysIterator = List_First((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
@@ -161,6 +170,7 @@ Object Map_RemoveKey(Object _self, Object _key)
 Object Map_RemoveKeyConfirming(Object _self, Object _key)
 {
 	DPUSHS ("Map: RemoveKeyConfirming begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _keysIterator;
 	_keysIterator = List_First((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
@@ -193,6 +203,7 @@ Object Map_RemoveKeyConfirming(Object _self, Object _key)
 Object Map_ContainsKey(Object _self, Object _key)
 {
 	DPUSHS ("Map: ContainsKey begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _keysIterator;
 	_keysIterator = List_First((((Map) (_self->entity))->_keys));
 	while((Logic_Not(ListIterator_ThisEnd(_keysIterator))) != _false)
@@ -220,6 +231,7 @@ Object Map_ContainsKey(Object _self, Object _key)
 Object Map_GetValueForKey(Object _self, Object _key)
 {
 	DPUSHS ("Map: GetValueForKey begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _keysIterator;
 	_keysIterator = List_First((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
@@ -250,6 +262,7 @@ Object Map_GetValueForKey(Object _self, Object _key)
 Object Map_First(Object _self)
 {
 	DPUSHS ("Map: First begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _iterator;
 	_iterator = MapIterator_Create();
 	MapIterator_SetMap(_iterator, _self);
@@ -262,6 +275,7 @@ Object Map_First(Object _self)
 Object Map_Last(Object _self)
 {
 	DPUSHS ("Map: Last begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  7784561639000363008ulll )
 	Object _iterator;
 	_iterator = MapIterator_Create();
 	MapIterator_SetMap(_iterator, _self);

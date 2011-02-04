@@ -17,6 +17,7 @@ Object Machine_Create(void)
 	((Machine) (_self->entity))->_globalContext = _nil;
 	((Machine) (_self->entity))->_processor = _nil;
 	((Machine) (_self->entity))->_scheduler = _nil;
+	((Machine) (_self->entity))->_objectManipulator = _nil;
 	_self = Machine_Init(_self);
 	DPOPS ("Machine: Create ended.")
 	return _self;
@@ -25,12 +26,15 @@ Object Machine_Create(void)
 Object Machine_Init(Object _self)
 {
 	DPUSHS ("Machine: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	(((Machine) (_self->entity))->_objectsByUIDs) = ListMap_Create();
 	(((Machine) (_self->entity))->_uidGenerator) = UIDGenerator_Create();
 	(((Machine) (_self->entity))->_globalContext) = ListMap_Create();
 	(((Machine) (_self->entity))->_processor) = Processor_Create();
 	Processor_SetMachine((((Machine) (_self->entity))->_processor), _self);
 	(((Machine) (_self->entity))->_scheduler) = MachineScheduler_Create();
+	(((Machine) (_self->entity))->_objectManipulator) = ExternalObjectManipulator_Create();
+	ExternalObjectManipulator_SetMachine((((Machine) (_self->entity))->_objectManipulator), _self);
 	Object toReturn = _self;
 	DPOPS ("Machine: Init ended.")
 	return toReturn;
@@ -39,6 +43,7 @@ Object Machine_Init(Object _self)
 Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Object _namespace)
 {
 	DPUSHS ("Machine: LoadUIDWithNameToNamespace begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Загружаем объект.", 32));
 	Object _file;
@@ -79,9 +84,19 @@ Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Obje
 	return toReturn;
 }
 
+Object Machine_ImportUID(Object _self, Object _objectName)
+{
+	DPUSHS ("Machine: ImportUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
+	Object toReturn = Machine_LoadUIDWithNameToNamespace(_self, _objectName, (((Machine) (_self->entity))->_globalContext));
+	DPOPS ("Machine: ImportUID ended.")
+	return toReturn;
+}
+
 Object Machine_UIDToObject(Object _self, Object _uid)
 {
 	DPUSHS ("Machine: UIDToObject begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object toReturn = ListMap_ObjectAt((((Machine) (_self->entity))->_objectsByUIDs), _uid);
 	DPOPS ("Machine: UIDToObject ended.")
 	return toReturn;
@@ -90,6 +105,7 @@ Object Machine_UIDToObject(Object _self, Object _uid)
 Object Machine_SetUIDToObject(Object _self, Object _uid, Object _object)
 {
 	DPUSHS ("Machine: SetUIDToObject begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	ListMap_Add((((Machine) (_self->entity))->_objectsByUIDs), _uid, _object);
 	Object toReturn = _self;
 	DPOPS ("Machine: SetUIDToObject ended.")
@@ -99,6 +115,7 @@ Object Machine_SetUIDToObject(Object _self, Object _uid, Object _object)
 Object Machine_GenerateUID(Object _self)
 {
 	DPUSHS ("Machine: GenerateUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object toReturn = UIDGenerator_GenerateUID((((Machine) (_self->entity))->_uidGenerator));
 	DPOPS ("Machine: GenerateUID ended.")
 	return toReturn;
@@ -107,6 +124,7 @@ Object Machine_GenerateUID(Object _self)
 Object Machine_RestorePreviousState(Object _self)
 {
 	DPUSHS ("Machine: RestorePreviousState begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Этот метод виртуальной машины не реализован. Не обращайте внимания. :)", 127));
 	Object toReturn = _self;
 	DPOPS ("Machine: RestorePreviousState ended.")
@@ -116,6 +134,7 @@ Object Machine_RestorePreviousState(Object _self)
 Object Machine_ScheduleUID(Object _self, Object _uid)
 {
 	DPUSHS ("Machine: ScheduleUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	MachineScheduler_ScheduleUID((((Machine) (_self->entity))->_scheduler), _uid);
 	Object toReturn = _self;
 	DPOPS ("Machine: ScheduleUID ended.")
@@ -125,15 +144,8 @@ Object Machine_ScheduleUID(Object _self, Object _uid)
 Object Machine_Run(Object _self)
 {
 	DPUSHS ("Machine: Run begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Машина запущена.", 30));
-	if((_true) != _false)
-	{
-		Machine_LoadUIDWithNameToNamespace(_self, StringFactory_FromUTF8(_stringFactory, "Приложение", 20), (((Machine) (_self->entity))->_globalContext));
-	}
-	else
-	{
-		Machine_RestorePreviousState(_self);
-	}
 	while(1)
 	{
 		Object _uid;
@@ -156,6 +168,7 @@ Object Machine_Run(Object _self)
 Object Machine_Destroy(Object _self)
 {
 	DPUSHS ("Machine: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object_Release((((Machine) (_self->entity))->_objectsByUIDs));
 	Object_Release((((Machine) (_self->entity))->_globalContext));
 	Object_Release((((Machine) (_self->entity))->_uidGenerator));
@@ -168,6 +181,7 @@ Object Machine_Destroy(Object _self)
 Object Machine_Clone(Object _self)
 {
 	DPUSHS ("Machine: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object toReturn = _self;
 	DPOPS ("Machine: Clone ended.")
 	return toReturn;
@@ -176,6 +190,7 @@ Object Machine_Clone(Object _self)
 Object Machine_DeepClone(Object _self)
 {
 	DPUSHS ("Machine: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object toReturn = _self;
 	DPOPS ("Machine: DeepClone ended.")
 	return toReturn;
@@ -184,6 +199,7 @@ Object Machine_DeepClone(Object _self)
 Object Machine_Compare(Object _self, Object _machine)
 {
 	DPUSHS ("Machine: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6547848715907434496ulll )
 	Object toReturn = _equal;
 	DPOPS ("Machine: Compare ended.")
 	return toReturn;

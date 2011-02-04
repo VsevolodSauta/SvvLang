@@ -21,6 +21,7 @@ Object AutoreleasePool_Create(void)
 Object AutoreleasePool_Init(Object _self)
 {
 	DPUSHS ("AutoreleasePool: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object_SetReleasing(&(((AutoreleasePool) (_self->entity))->_stack), Stack_Create());
 	Object toReturn = _self;
 	DPOPS ("AutoreleasePool: Init ended.")
@@ -30,6 +31,7 @@ Object AutoreleasePool_Init(Object _self)
 Object AutoreleasePool_Dump(Object _self)
 {
 	DPUSHS ("AutoreleasePool: Dump begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object _list;
 	_list = Stack_Peek((((AutoreleasePool) (_self->entity))->_stack));
 	Console_WriteLnNumber(_console, List_Size(_list));
@@ -41,6 +43,7 @@ Object AutoreleasePool_Dump(Object _self)
 Object AutoreleasePool_Depth(Object _self)
 {
 	DPUSHS ("AutoreleasePool: Depth begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object toReturn = List_Size((((Stack) ((((AutoreleasePool) (_self->entity))->_stack)->entity))->_list));
 	DPOPS ("AutoreleasePool: Depth ended.")
 	return toReturn;
@@ -49,6 +52,7 @@ Object AutoreleasePool_Depth(Object _self)
 Object AutoreleasePool_PushFrame(Object _self)
 {
 	DPUSHS ("AutoreleasePool: PushFrame begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object _toPush;
 	_toPush = List_Create();
 	Stack_Push((((AutoreleasePool) (_self->entity))->_stack), _toPush);
@@ -61,6 +65,7 @@ Object AutoreleasePool_PushFrame(Object _self)
 Object AutoreleasePool_PopFrame(Object _self)
 {
 	DPUSHS ("AutoreleasePool: PopFrame begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Stack_Remove((((AutoreleasePool) (_self->entity))->_stack));
 	Object toReturn = _self;
 	DPOPS ("AutoreleasePool: PopFrame ended.")
@@ -70,6 +75,7 @@ Object AutoreleasePool_PopFrame(Object _self)
 Object AutoreleasePool_Add(Object _self, Object _object)
 {
 	DPUSHS ("AutoreleasePool: Add begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	List_PushBack(Stack_Peek((((AutoreleasePool) (_self->entity))->_stack)), _object);
 	Object_Release(_object);
 	Object toReturn = _self;
@@ -80,6 +86,7 @@ Object AutoreleasePool_Add(Object _self, Object _object)
 Object AutoreleasePool_Destroy(Object _self)
 {
 	DPUSHS ("AutoreleasePool: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object_Release((((AutoreleasePool) (_self->entity))->_stack));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("AutoreleasePool: Destroy ended.")
@@ -89,6 +96,7 @@ Object AutoreleasePool_Destroy(Object _self)
 Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool)
 {
 	DPUSHS ("AutoreleasePool: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object toReturn = Object_Compare((((AutoreleasePool) (_self->entity))->_stack), (((AutoreleasePool) (_autoreleasePool->entity))->_stack));
 	DPOPS ("AutoreleasePool: Compare ended.")
 	return toReturn;
@@ -97,6 +105,7 @@ Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool)
 Object AutoreleasePool_Clone(Object _self)
 {
 	DPUSHS ("AutoreleasePool: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object toReturn = _self;
 	DPOPS ("AutoreleasePool: Clone ended.")
 	return toReturn;
@@ -105,6 +114,7 @@ Object AutoreleasePool_Clone(Object _self)
 Object AutoreleasePool_DeepClone(Object _self)
 {
 	DPUSHS ("AutoreleasePool: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6558146264612776960ulll )
 	Object toReturn = _self;
 	DPOPS ("AutoreleasePool: DeepClone ended.")
 	return toReturn;

@@ -2,6 +2,7 @@
 #include "internals/UIDGenerator/interface.h"
 #include "internals/Processor/interface.h"
 #include "internals/MachineScheduler/interface.h"
+#include "internals/ExternalObjectManipulator/interface.h"
 #include "internals/Machine/interface.h"
 #include "internals/List/interface.h"
 #include "internals/AutoreleasePool/interface.h"

@@ -13,6 +13,8 @@ Object ListMapIterator_ToBegin(Object _self);
 Object ListMapIterator_MoreThanOneElementInNode(Object _self, Object _node);
 Object ListMapIterator_Next(Object _self);
 Object ListMapIterator_NextAnyWithElement(Object _self, Object _element);
+Object ListMapIterator_ThisRemoveRight(Object _self);
+Object ListMapIterator_ThisRemoveLeft(Object _self);
 Object ListMapIterator_ThisKey(Object _self);
 Object ListMapIterator_ThisValue(Object _self);
 Object ListMapIterator_ListMapData(Object _self);

@@ -50,6 +50,10 @@ ListMap Remove (RemoveAt RemoveKey Remove DeleteKey Delete - \) <List> list
 	self RemoveKeyWithConfirmation list
 	return self
 
+ListMap RemoveAll
+	self.root = <ListMapNode>
+	return self
+
 ListMap <Logic> RemoveKeyWithConfirmation (RemoveWithConfirmation DeleteKeyWithConfirmation DeleteWithConfirmation -? \?) <List> list
 	stack = <Stack>
 	iterator = list First

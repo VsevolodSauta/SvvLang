@@ -108,7 +108,7 @@ ListIterator <Number> SearchForwardOffset object
 		position Inc
 	return -1
 
-ListIterator ThisRemove (Remove)			// Здесь все правильно. :)
+ListIterator ThisRemove (Remove RemoveThis)		// Здесь все правильно. :)
 	self.node.next.prev = self.node.prev		// Node объявлена со свойством Retain.
 	self.node.prev.next = self.node.next
 	self.node Release

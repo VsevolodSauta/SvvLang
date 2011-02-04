@@ -21,6 +21,7 @@ Object Stack_Create(void)
 Object Stack_Init(Object _self)
 {
 	DPUSHS ("Stack: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object_SetReleasing(&(((Stack) (_self->entity))->_list), List_Create());
 	Object toReturn = _self;
 	DPOPS ("Stack: Init ended.")
@@ -30,6 +31,7 @@ Object Stack_Init(Object _self)
 Object Stack_Push(Object _self, Object _object)
 {
 	DPUSHS ("Stack: Push begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	List_PushFront((((Stack) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("Stack: Push ended.")
@@ -39,6 +41,7 @@ Object Stack_Push(Object _self, Object _object)
 Object Stack_Pop(Object _self)
 {
 	DPUSHS ("Stack: Pop begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = List_PopFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Pop ended.")
 	return toReturn;
@@ -47,6 +50,7 @@ Object Stack_Pop(Object _self)
 Object Stack_Remove(Object _self)
 {
 	DPUSHS ("Stack: Remove begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = List_RemoveFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Remove ended.")
 	return toReturn;
@@ -55,6 +59,7 @@ Object Stack_Remove(Object _self)
 Object Stack_Peek(Object _self)
 {
 	DPUSHS ("Stack: Peek begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = List_PeekFront((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Peek ended.")
 	return toReturn;
@@ -63,6 +68,7 @@ Object Stack_Peek(Object _self)
 Object Stack_ObjectAtPositionIfExists(Object _self, Object _position)
 {
 	DPUSHS ("Stack: ObjectAtPositionIfExists begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = List_ObjectAtPositionIfExists((((Stack) (_self->entity))->_list), _position);
 	DPOPS ("Stack: ObjectAtPositionIfExists ended.")
 	return toReturn;
@@ -71,6 +77,7 @@ Object Stack_ObjectAtPositionIfExists(Object _self, Object _position)
 Object Stack_Empty(Object _self)
 {
 	DPUSHS ("Stack: Empty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = List_Empty((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: Empty ended.")
 	return toReturn;
@@ -79,6 +86,7 @@ Object Stack_Empty(Object _self)
 Object Stack_Clean(Object _self)
 {
 	DPUSHS ("Stack: Clean begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	List_Clean((((Stack) (_self->entity))->_list));
 	Object toReturn = _self;
 	DPOPS ("Stack: Clean ended.")
@@ -88,6 +96,7 @@ Object Stack_Clean(Object _self)
 Object Stack_Compare(Object _self, Object _stack)
 {
 	DPUSHS ("Stack: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = Object_Compare((((Stack) (_self->entity))->_list), (((Stack) (_stack->entity))->_list));
 	DPOPS ("Stack: Compare ended.")
 	return toReturn;
@@ -96,6 +105,7 @@ Object Stack_Compare(Object _self, Object _stack)
 Object Stack_Destroy(Object _self)
 {
 	DPUSHS ("Stack: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object_Release((((Stack) (_self->entity))->_list));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("Stack: Destroy ended.")
@@ -105,6 +115,7 @@ Object Stack_Destroy(Object _self)
 Object Stack_GetList(Object _self)
 {
 	DPUSHS ("Stack: GetList begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object toReturn = Object_TempClone((((Stack) (_self->entity))->_list));
 	DPOPS ("Stack: GetList ended.")
 	return toReturn;
@@ -113,6 +124,7 @@ Object Stack_GetList(Object _self)
 Object Stack_Clone(Object _self)
 {
 	DPUSHS ("Stack: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object _toReturn;
 	_toReturn = Stack_Create();
 	Object_SetReleasing(&(((Stack) (_toReturn->entity))->_list), Object_Clone((((Stack) (_self->entity))->_list)));
@@ -124,6 +136,7 @@ Object Stack_Clone(Object _self)
 Object Stack_DeepClone(Object _self)
 {
 	DPUSHS ("Stack: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6822298517081180160ulll )
 	Object _toReturn;
 	_toReturn = Stack_Create();
 	Object_SetRetaining(&(((Stack) (_toReturn->entity))->_list), Object_DeepClone((((Stack) (_self->entity))->_list)));

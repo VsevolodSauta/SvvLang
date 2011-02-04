@@ -21,6 +21,7 @@ Object UIDGenerator_Create(void)
 Object UIDGenerator_Init(Object _self)
 {
 	DPUSHS ("UIDGenerator: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object_SetCloning(&(((UIDGenerator) (_self->entity))->_currentUID), NumberFactory_FromLong(_numberFactory, 0));
 	Object toReturn = _self;
 	DPOPS ("UIDGenerator: Init ended.")
@@ -30,6 +31,7 @@ Object UIDGenerator_Init(Object _self)
 Object UIDGenerator_Clone(Object _self)
 {
 	DPUSHS ("UIDGenerator: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object _toReturn;
 	_toReturn = UIDGenerator_Create();
 	Object_SetCloning(&(((UIDGenerator) (_toReturn->entity))->_currentUID), (((UIDGenerator) (_self->entity))->_currentUID));
@@ -41,6 +43,7 @@ Object UIDGenerator_Clone(Object _self)
 Object UIDGenerator_DeepClone(Object _self)
 {
 	DPUSHS ("UIDGenerator: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object _toReturn;
 	_toReturn = UIDGenerator_Create();
 	Object_SetCloning(&(((UIDGenerator) (_toReturn->entity))->_currentUID), (((UIDGenerator) (_self->entity))->_currentUID));
@@ -52,6 +55,7 @@ Object UIDGenerator_DeepClone(Object _self)
 Object UIDGenerator_Destroy(Object _self)
 {
 	DPUSHS ("UIDGenerator: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object_Release((((UIDGenerator) (_self->entity))->_currentUID));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("UIDGenerator: Destroy ended.")
@@ -61,6 +65,7 @@ Object UIDGenerator_Destroy(Object _self)
 Object UIDGenerator_Compare(Object _self, Object _uidGenerator)
 {
 	DPUSHS ("UIDGenerator: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object toReturn = Object_Compare(Object_Hash(_self), Object_Hash(_uidGenerator));
 	DPOPS ("UIDGenerator: Compare ended.")
 	return toReturn;
@@ -69,6 +74,7 @@ Object UIDGenerator_Compare(Object _self, Object _uidGenerator)
 Object UIDGenerator_GenerateUID(Object _self)
 {
 	DPUSHS ("UIDGenerator: GenerateUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8939281001414702080ulll )
 	Object def = StringFactory_FromNumber(_stringFactory, (((UIDGenerator) (_self->entity))->_currentUID));
 	Number_Inc((((UIDGenerator) (_self->entity))->_currentUID));
 	DPOPS ("UIDGenerator: GenerateUID ended.")

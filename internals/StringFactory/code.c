@@ -35,6 +35,28 @@ Object StringFactory_FromUTF8(Object _self, char* string, int length)
 	return toReturn;
 };
 
+Object StringFactory_FromCUTF8(Object _self, char* string)
+{
+	DPUSHS ("String Factory: Creating string.")
+	Object toReturn = List_Create();
+	int offset = 0;
+	while(1)
+	{
+		int additionalOffset = UTF8GetLengthOfChar(string + offset);
+		long code = UTF8GetCode(string + offset, additionalOffset);
+		offset += additionalOffset;
+		if(code == 0) break;
+		Object _char = Char_Create();
+		Object _number = NumberFactory_FromLong(_numberFactory, code);
+		Char_SetCode(_char, _number);
+		List_PushBack(toReturn, _char);
+		Object_Release(_char);
+	}
+	Object_Autorelease(toReturn);
+	DPOPS ("String Factory: String created.")
+	return toReturn;
+};
+
 int StringFactory_GetUTF8String(Object _self, Object string, char* buffer, int bufferLength)
 {
 	DPUSHS ("String Factory: Getting UTF8 array from string.")

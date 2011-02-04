@@ -22,7 +22,9 @@ Object Synonim_Create(void)
 Object Synonim_Init(Object _self)
 {
 	DPUSHS ("Synonim: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	(((Synonim) (_self->entity))->_references) = List_Create();
+	Object_Autorelease(_self);
 	Object toReturn = _self;
 	DPOPS ("Synonim: Init ended.")
 	return toReturn;
@@ -31,6 +33,7 @@ Object Synonim_Init(Object _self)
 Object Synonim_SetUID(Object _self, Object _uid)
 {
 	DPUSHS ("Synonim: SetUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object_SetRetaining(&(((Synonim) (_self->entity))->_uid), _uid);
 	Object toReturn = _self;
 	DPOPS ("Synonim: SetUID ended.")
@@ -40,6 +43,7 @@ Object Synonim_SetUID(Object _self, Object _uid)
 Object Synonim_GetUID(Object _self)
 {
 	DPUSHS ("Synonim: GetUID begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object toReturn = (((Synonim) (_self->entity))->_uid);
 	DPOPS ("Synonim: GetUID ended.")
 	return toReturn;
@@ -48,6 +52,7 @@ Object Synonim_GetUID(Object _self)
 Object Synonim_Unite(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Unite begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object _iterator;
 	_iterator = List_First((((Synonim) (_synonim->entity))->_references));
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -66,6 +71,7 @@ Object Synonim_Unite(Object _self, Object _synonim)
 Object Synonim_AddToNamespaceWithName(Object _self, Object _namespace, Object _name)
 {
 	DPUSHS ("Synonim: AddToNamespaceWithName begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object _reference;
 	_reference = ListMap_Create();
 	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _namespace);
@@ -81,6 +87,7 @@ Object Synonim_AddToNamespaceWithName(Object _self, Object _namespace, Object _n
 Object Synonim_AddReference(Object _self, Object _location)
 {
 	DPUSHS ("Synonim: AddReference begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	List_PushSorted((((Synonim) (_self->entity))->_references), _location);
 	ListMap_Add(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)), _self);
 	Object toReturn = _self;
@@ -91,6 +98,7 @@ Object Synonim_AddReference(Object _self, Object _location)
 Object Synonim_RemoveReference(Object _self, Object _location)
 {
 	DPUSHS ("Synonim: RemoveReference begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	if((List_RemoveFirstWithConfirmation((((Synonim) (_self->entity))->_references), _location)) != _false)
 	{
 		ListMap_Remove(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
@@ -103,6 +111,7 @@ Object Synonim_RemoveReference(Object _self, Object _location)
 Object Synonim_RemoveNamespace(Object _self, Object _namespace)
 {
 	DPUSHS ("Synonim: RemoveNamespace begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object _iterator;
 	_iterator = List_First((((Synonim) (_self->entity))->_references));
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -124,6 +133,7 @@ Object Synonim_RemoveNamespace(Object _self, Object _namespace)
 Object Synonim_Destroy(Object _self)
 {
 	DPUSHS ("Synonim: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object_Release((((Synonim) (_self->entity))->_uid));
 	Object_Release((((Synonim) (_self->entity))->_references));
 	Object toReturn = Object_Destroy(_self);
@@ -134,6 +144,10 @@ Object Synonim_Destroy(Object _self)
 Object Synonim_Clone(Object _self)
 {
 	DPUSHS ("Synonim: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
+	Object _toReturn;
+	_toReturn = Synonim_Create();
+	Object_SetRetaining(&(((Synonim) (_toReturn->entity))->_uid), (((Synonim) (_self->entity))->_uid));
 	Object toReturn = _self;
 	DPOPS ("Synonim: Clone ended.")
 	return toReturn;
@@ -142,6 +156,10 @@ Object Synonim_Clone(Object _self)
 Object Synonim_DeepClone(Object _self)
 {
 	DPUSHS ("Synonim: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
+	Object _toReturn;
+	_toReturn = Synonim_Create();
+	Object_SetRetaining(&(((Synonim) (_toReturn->entity))->_uid), (((Synonim) (_self->entity))->_uid));
 	Object toReturn = _self;
 	DPOPS ("Synonim: DeepClone ended.")
 	return toReturn;
@@ -150,6 +168,7 @@ Object Synonim_DeepClone(Object _self)
 Object Synonim_Compare(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  6761424502691563520ulll )
 	Object toReturn = Object_Compare((((Synonim) (_self->entity))->_uid), (((Synonim) (_synonim->entity))->_uid));
 	DPOPS ("Synonim: Compare ended.")
 	return toReturn;

@@ -1,4 +1,4 @@
-<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> processor <MachineScheduler> scheduler
+<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> processor <MachineScheduler> scheduler <ExternalObjectManipulator> objectManipulator
 
 
 Machine Init
@@ -8,6 +8,8 @@ Machine Init
 	self.processor = <Processor>
 	self.processor SetMachine self
 	self.scheduler = <MachineScheduler>
+	self.objectManipulator = <ExternalObjectManipulator>
+	self.objectManipulator SetMachine self
 	return self
 
 
@@ -38,6 +40,9 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	autoreleasePool --
 	return uid
 
+Machine <List> ImportUID <List> objectName
+	return self LoadUIDWithNameToNamespace objectName self.globalContext
+
 
 Machine <ListMap> UIDToObject (ObjectByUID ObjectFormUID) <List> uid
 	return ((self.objectsByUIDs At uid) AsListMap)
@@ -61,10 +66,6 @@ Machine ScheduleUID <List> uid
 
 Machine Run
 	console PrintLnString ("Машина запущена.")
-	if true
-		self LoadUIDWithNameToNamespace ("Приложение") self.globalContext
-	else
-		self RestorePreviousState
 	loop
 		uid = self.scheduler GetNextUID
 		if uid == nil

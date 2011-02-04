@@ -25,6 +25,7 @@ Object Object_Compare(Object _self, Object object);
 Object Object_Clone(Object _self);
 Object Object_DeepClone(Object _self);
 Object Object_TempClone(Object _self);
+Object Object_TempDeepClone(Object _self);
 Object Object_SetComparator(Object _self, ObjectComparator);
 Object Object_SetCloner(Object _self, ObjectCloner);
 Object Object_SetDeepCloner(Object _self, ObjectCloner);

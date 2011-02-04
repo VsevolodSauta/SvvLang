@@ -21,6 +21,7 @@ Object Queue_Create(void)
 Object Queue_Init(Object _self)
 {
 	DPUSHS ("Queue: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object_SetReleasing(&(((Queue) (_self->entity))->_list), List_Create());
 	Object toReturn = _self;
 	DPOPS ("Queue: Init ended.")
@@ -30,6 +31,7 @@ Object Queue_Init(Object _self)
 Object Queue_Push(Object _self, Object _object)
 {
 	DPUSHS ("Queue: Push begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	List_PushBack((((Queue) (_self->entity))->_list), _object);
 	Object toReturn = _self;
 	DPOPS ("Queue: Push ended.")
@@ -39,6 +41,7 @@ Object Queue_Push(Object _self, Object _object)
 Object Queue_Pop(Object _self)
 {
 	DPUSHS ("Queue: Pop begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = List_PopFront((((Queue) (_self->entity))->_list));
 	DPOPS ("Queue: Pop ended.")
 	return toReturn;
@@ -47,6 +50,7 @@ Object Queue_Pop(Object _self)
 Object Queue_PopIfNotEmpty(Object _self)
 {
 	DPUSHS ("Queue: PopIfNotEmpty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	if((Queue_Empty(_self)) != _false)
 	{
 		Object toReturn = _nil;
@@ -64,6 +68,7 @@ Object Queue_PopIfNotEmpty(Object _self)
 Object Queue_Remove(Object _self)
 {
 	DPUSHS ("Queue: Remove begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = List_RemoveFront((((Queue) (_self->entity))->_list));
 	DPOPS ("Queue: Remove ended.")
 	return toReturn;
@@ -72,6 +77,7 @@ Object Queue_Remove(Object _self)
 Object Queue_RemoveIfNotEmpty(Object _self)
 {
 	DPUSHS ("Queue: RemoveIfNotEmpty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	if((Queue_Empty(_self)) != _false)
 	{
 		Object toReturn = _nil;
@@ -89,6 +95,7 @@ Object Queue_RemoveIfNotEmpty(Object _self)
 Object Queue_Peek(Object _self)
 {
 	DPUSHS ("Queue: Peek begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = List_PeekFront((((Queue) (_self->entity))->_list));
 	DPOPS ("Queue: Peek ended.")
 	return toReturn;
@@ -97,6 +104,7 @@ Object Queue_Peek(Object _self)
 Object Queue_Empty(Object _self)
 {
 	DPUSHS ("Queue: Empty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = List_Empty((((Queue) (_self->entity))->_list));
 	DPOPS ("Queue: Empty ended.")
 	return toReturn;
@@ -105,6 +113,7 @@ Object Queue_Empty(Object _self)
 Object Queue_Compare(Object _self, Object _queue)
 {
 	DPUSHS ("Queue: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = Object_Compare((((Queue) (_self->entity))->_list), (((Queue) (_queue->entity))->_list));
 	DPOPS ("Queue: Compare ended.")
 	return toReturn;
@@ -113,6 +122,7 @@ Object Queue_Compare(Object _self, Object _queue)
 Object Queue_Destroy(Object _self)
 {
 	DPUSHS ("Queue: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object_Release((((Queue) (_self->entity))->_list));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("Queue: Destroy ended.")
@@ -122,6 +132,7 @@ Object Queue_Destroy(Object _self)
 Object Queue_GetList(Object _self)
 {
 	DPUSHS ("Queue: GetList begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object toReturn = Object_TempClone((((Queue) (_self->entity))->_list));
 	DPOPS ("Queue: GetList ended.")
 	return toReturn;
@@ -130,6 +141,7 @@ Object Queue_GetList(Object _self)
 Object Queue_Clone(Object _self)
 {
 	DPUSHS ("Queue: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object _toReturn;
 	_toReturn = Queue_Create();
 	Object_SetReleasing(&(((Queue) (_toReturn->entity))->_list), Object_Clone((((Queue) (_self->entity))->_list)));
@@ -141,6 +153,7 @@ Object Queue_Clone(Object _self)
 Object Queue_DeepClone(Object _self)
 {
 	DPUSHS ("Queue: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5026058259973625856ulll )
 	Object _toReturn;
 	_toReturn = Queue_Create();
 	Object_SetRetaining(&(((Queue) (_toReturn->entity))->_list), Object_DeepClone((((Queue) (_self->entity))->_list)));

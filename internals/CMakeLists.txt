@@ -47,6 +47,7 @@ add_subdirectory(Processor)
 add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
+add_subdirectory(ExternalObjectManipulator)
 
 add_executable(VM main.c)
 target_link_libraries(VM Machine Runtime Object OSKernel)

@@ -21,6 +21,7 @@ Object ListMap_Create(void)
 Object ListMap_Init(Object _self)
 {
 	DPUSHS ("ListMap: Init begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	(((ListMap) (_self->entity))->_root) = ListMapNode_Create();
 	Object toReturn = _self;
 	DPOPS ("ListMap: Init ended.")
@@ -30,6 +31,7 @@ Object ListMap_Init(Object _self)
 Object ListMap_Compare(Object _self, Object _listSet)
 {
 	DPUSHS ("ListMap: Compare begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = Object_Compare((((ListMap) (_self->entity))->_root), (((ListMap) (_listSet->entity))->_root));
 	DPOPS ("ListMap: Compare ended.")
 	return toReturn;
@@ -38,6 +40,7 @@ Object ListMap_Compare(Object _self, Object _listSet)
 Object ListMap_Destroy(Object _self)
 {
 	DPUSHS ("ListMap: Destroy begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object_Release((((ListMap) (_self->entity))->_root));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("ListMap: Destroy ended.")
@@ -47,6 +50,7 @@ Object ListMap_Destroy(Object _self)
 Object ListMap_Clone(Object _self)
 {
 	DPUSHS ("ListMap: Clone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _toReturn;
 	_toReturn = ListMap_Create();
 	Object_Release((((ListMap) (_toReturn->entity))->_root));
@@ -59,6 +63,7 @@ Object ListMap_Clone(Object _self)
 Object ListMap_DeepClone(Object _self)
 {
 	DPUSHS ("ListMap: DeepClone begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _toReturn;
 	_toReturn = ListMap_Create();
 	Object_Release((((ListMap) (_toReturn->entity))->_root));
@@ -71,6 +76,7 @@ Object ListMap_DeepClone(Object _self)
 Object ListMap_Empty(Object _self)
 {
 	DPUSHS ("ListMap: Empty begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = Logic_And(Logic_Not((((ListMapNode) ((((ListMap) (_self->entity))->_root)->entity))->_mapped)), Map_Empty((((ListMapNode) ((((ListMap) (_self->entity))->_root)->entity))->_nextMap)));
 	DPOPS ("ListMap: Empty ended.")
 	return toReturn;
@@ -79,6 +85,7 @@ Object ListMap_Empty(Object _self)
 Object ListMap_Add(Object _self, Object _list, Object _object)
 {
 	DPUSHS ("ListMap: Add begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _iterator;
 	_iterator = List_First(_list);
 	Object _node;
@@ -109,6 +116,7 @@ Object ListMap_Add(Object _self, Object _list, Object _object)
 Object ListMap_AddListMap(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMap: AddListMap begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	ListMapNode_MergeRecursiveStrong((((ListMap) (_self->entity))->_root), (((ListMap) (_listMap->entity))->_root));
 	Object toReturn = _self;
 	DPOPS ("ListMap: AddListMap ended.")
@@ -118,15 +126,27 @@ Object ListMap_AddListMap(Object _self, Object _listMap)
 Object ListMap_Remove(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: Remove begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	ListMap_RemoveKeyWithConfirmation(_self, _list);
 	Object toReturn = _self;
 	DPOPS ("ListMap: Remove ended.")
 	return toReturn;
 }
 
+Object ListMap_RemoveAll(Object _self)
+{
+	DPUSHS ("ListMap: RemoveAll begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
+	(((ListMap) (_self->entity))->_root) = ListMapNode_Create();
+	Object toReturn = _self;
+	DPOPS ("ListMap: RemoveAll ended.")
+	return toReturn;
+}
+
 Object ListMap_RemoveKeyWithConfirmation(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: RemoveKeyWithConfirmation begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _stack;
 	_stack = Stack_Create();
 	Object _iterator;
@@ -177,6 +197,7 @@ Object ListMap_RemoveKeyWithConfirmation(Object _self, Object _list)
 Object ListMap_ObjectAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ObjectAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _node;
 	_node = (((ListMap) (_self->entity))->_root);
 	Object _iterator;
@@ -212,6 +233,7 @@ Object ListMap_ObjectAt(Object _self, Object _list)
 Object ListMap_Contains(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: Contains begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _node;
 	_node = (((ListMap) (_self->entity))->_root);
 	Object _iterator;
@@ -237,6 +259,7 @@ Object ListMap_Contains(Object _self, Object _list)
 Object ListMap_ListMapAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ListMapAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: ListMapAt ended.")
 	return toReturn;
@@ -245,6 +268,7 @@ Object ListMap_ListMapAt(Object _self, Object _list)
 Object ListMap_ListAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ListAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: ListAt ended.")
 	return toReturn;
@@ -253,6 +277,7 @@ Object ListMap_ListAt(Object _self, Object _list)
 Object ListMap_QueueAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: QueueAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: QueueAt ended.")
 	return toReturn;
@@ -261,6 +286,7 @@ Object ListMap_QueueAt(Object _self, Object _list)
 Object ListMap_LogicAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: LogicAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: LogicAt ended.")
 	return toReturn;
@@ -269,6 +295,7 @@ Object ListMap_LogicAt(Object _self, Object _list)
 Object ListMap_NumberAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: NumberAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: NumberAt ended.")
 	return toReturn;
@@ -277,6 +304,7 @@ Object ListMap_NumberAt(Object _self, Object _list)
 Object ListMap_SynonimAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: SynonimAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: SynonimAt ended.")
 	return toReturn;
@@ -285,6 +313,7 @@ Object ListMap_SynonimAt(Object _self, Object _list)
 Object ListMap_MethodAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: MethodAt begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: MethodAt ended.")
 	return toReturn;
@@ -293,6 +322,7 @@ Object ListMap_MethodAt(Object _self, Object _list)
 Object ListMap_First(Object _self)
 {
 	DPUSHS ("ListMap: First begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _iterator;
 	_iterator = ListMapIterator_Create();
 	ListMapIterator_SetListMap(_iterator, _self);
@@ -305,6 +335,7 @@ Object ListMap_First(Object _self)
 Object ListMap_Last(Object _self)
 {
 	DPUSHS ("ListMap: Last begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _iterator;
 	_iterator = ListMapIterator_Create();
 	ListMapIterator_SetListMap(_iterator, _self);
@@ -317,6 +348,7 @@ Object ListMap_Last(Object _self)
 Object ListMap_DumpKeys(Object _self)
 {
 	DPUSHS ("ListMap: DumpKeys begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  2108332898258556672ulll )
 	Object _iterator;
 	_iterator = ListMap_First(_self);
 	while((Logic_Not(ListMapIterator_ThisEnd(_iterator))) != _false)

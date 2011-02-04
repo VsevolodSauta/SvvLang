@@ -12,6 +12,7 @@ Object ListMap_Empty(Object _self);
 Object ListMap_Add(Object _self, Object _list, Object _object);
 Object ListMap_AddListMap(Object _self, Object _listMap);
 Object ListMap_Remove(Object _self, Object _list);
+Object ListMap_RemoveAll(Object _self);
 Object ListMap_RemoveKeyWithConfirmation(Object _self, Object _list);
 Object ListMap_ObjectAt(Object _self, Object _list);
 Object ListMap_Contains(Object _self, Object _list);

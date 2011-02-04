@@ -65,12 +65,26 @@ ListMapIterator <ListMapIteratorElement> NextAnyWithElement <ListMapIteratorElem
 	self.key PushBack (element.iterator ThisKey)
 	return nextElement
 
+ListMapIterator ThisRemoveRight (RemoveThis ThisRemove)
+	assert "" self.thisEnd != true
+	assert "" self.thisBegin != true
+	key = self.key
+	self ++
+	self.listMap Remove key
+	return self
 
+ListMapIterator ThisRemoveLeft
+	assert "" self.thisEnd != true
+	assert "" self.thisBegin != true
+	key = self.key
+	self --
+	self.listMap Remove key
+	return self
 
-ListMapIterator ThisKey (Key)
+ListMapIterator <List> ThisKey (Key)
 	return self.key TempClone
 
-ListMapIterator ThisValue (ThisData Value Data)
+ListMapIterator <Object> ThisValue (ThisData Value Data)
 	element = (self.elementStack Peek) AsListMapIteratorElement
 	return element.node.mapping
 

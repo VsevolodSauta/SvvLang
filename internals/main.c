@@ -2,6 +2,7 @@
 #include "internals/Runtime/interface.h"
 #include "internals/Machine/interface.h"
 #include "os_dependent/linux.h"
+#include "internals/AutoreleasePool/interface.h"
 #if MEMORY_DEBUG
 #include <stdio.h>
 #endif
@@ -23,6 +24,20 @@ void _start(void)
 	_allocator = Allocator_Create();
 	Object _runtime = Runtime_Create();
 	Object _machine = Machine_Create();
+	Machine_RestorePreviousState(_machine);
+	AutoreleasePool_PushFrame(_autoreleasePool);
+#if 0
+	int i;
+	for(i = 1; i < argc; i++)
+	{
+		Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, argv[i]);
+		Machine_ImportUID(_machine, _objectToImportName);
+	}
+#else
+	Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, "Приложение");
+	Machine_ImportUID(_machine, _objectToImportName);
+#endif
+	AutoreleasePool_PopFrame(_autoreleasePool);
 	Machine_Run(_machine);
 	Object_Release(_machine);
 	Object_Release(_runtime);

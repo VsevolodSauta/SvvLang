@@ -120,9 +120,32 @@ List AddAfterPosition <Number> position object
 	self.iterator Hide
 	return self
 
-List AddBeforePosition <Number> position object
+List AddBeforePosition (InsertAtPositionObject AtInsert) <Number> position object
 	self.iterator ToPosition position
 	self.iterator AddBefore object
+	self.iterator Hide
+	return self
+
+List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> position
+	self.iterator ToPosition position
+	def self.iterator ThisData
+	self.iterator Hide
+
+List <Object> ObjectAtPositionIfExists (ObjectAtPositionIfPossible) <Number> position
+	if (self Size) > position
+		return self ObjectAtPosition position
+	else
+		return nil
+
+List RemoveObjectAtPosition (RemoveAt) <Number> position
+	self.iterator ToPosition position
+	self.iterator RemoveThis
+	self.iterator Hide
+	return self
+
+List ReplaceAtPositionWithObject <Number> position object
+	self.iterator ToPosition position
+	self.iterator SetThisData object
 	self.iterator Hide
 	return self
 
@@ -203,19 +226,8 @@ List <ListIterator> SystemIterator
 	iterator SystemInitWithListAndNode self nil
 	return iterator
 
-List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> position
-	self.iterator ToPosition position
-	def self.iterator ThisData
-	self.iterator Hide
-
-List <Object> ObjectAtPositionIfExists (ObjectAtPositionIfPossible) <Number> position
-	if (self Size) > position
-		return self ObjectAtPosition position
-	else
-		return nil
-
 List <ListMap> ListMapAtPosition (ListMapFromPosition) <Number> position
-	return (self ObjectAtPosition 0) AsListMap
+	return (self ObjectAtPosition position) AsListMap
 
 List Search object
 	self.iterator ToBegin
