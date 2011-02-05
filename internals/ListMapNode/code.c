@@ -23,7 +23,7 @@ Object ListMapNode_Create(void)
 Object ListMapNode_Init(Object _self)
 {
 	DPUSHS ("ListMapNode: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:Init --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object_SetReleasing(&(((ListMapNode) (_self->entity))->_nextMap), Map_Create());
 	Object_SetRetaining(&(((ListMapNode) (_self->entity))->_mapping), _nil);
 	(((ListMapNode) (_self->entity))->_mapped) = _false;
@@ -35,7 +35,7 @@ Object ListMapNode_Init(Object _self)
 Object ListMapNode_Destroy(Object _self)
 {
 	DPUSHS ("ListMapNode: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:Destroy --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object_Release((((ListMapNode) (_self->entity))->_nextMap));
 	Object_Release((((ListMapNode) (_self->entity))->_mapping));
 	Object toReturn = Object_Destroy(_self);
@@ -46,7 +46,7 @@ Object ListMapNode_Destroy(Object _self)
 Object ListMapNode_Clone(Object _self)
 {
 	DPUSHS ("ListMapNode: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:Clone --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object _toReturn;
 	_toReturn = ListMapNode_Create();
 	Object_SetReleasing(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_Clone((((ListMapNode) (_self->entity))->_nextMap)));
@@ -60,7 +60,7 @@ Object ListMapNode_Clone(Object _self)
 Object ListMapNode_DeepClone(Object _self)
 {
 	DPUSHS ("ListMapNode: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:DeepClone --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object _toReturn;
 	_toReturn = ListMapNode_Create();
 	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_DeepClone((((ListMapNode) (_self->entity))->_nextMap)));
@@ -74,7 +74,7 @@ Object ListMapNode_DeepClone(Object _self)
 Object ListMapNode_Compare(Object _self, Object _listMapNode)
 {
 	DPUSHS ("ListMapNode: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:Compare --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapNode) (_self->entity))->_mapped), (((ListMapNode) (_listMapNode->entity))->_mapped));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
@@ -101,7 +101,7 @@ Object ListMapNode_Compare(Object _self, Object _listMapNode)
 Object ListMapNode_MergeRecursiveStrong(Object _self, Object _listMapNode)
 {
 	DPUSHS ("ListMapNode: MergeRecursiveStrong begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:MergeRecursiveStrong --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	if(((((ListMapNode) (_listMapNode->entity))->_mapped)) != _false)
 	{
 		(((ListMapNode) (_self->entity))->_mapped) = _true;

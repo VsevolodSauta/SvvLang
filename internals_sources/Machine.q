@@ -1,4 +1,4 @@
-<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> processor <MachineScheduler> scheduler <ExternalObjectManipulator> objectManipulator
+<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> processor <MachineScheduler> scheduler <ExternalMachineManipulator> machineManipulator
 
 
 Machine Init
@@ -8,9 +8,9 @@ Machine Init
 	self.processor = <Processor>
 	self.processor SetMachine self
 	self.scheduler = <MachineScheduler>
-	self.objectManipulator = <ExternalObjectManipulator>
-	self.objectManipulator SetMachine self
-	self.objectManipulator CreateUIDObject
+	self.machineManipulator = <ExternalMachineManipulator>
+	self.machineManipulator SetMachine self
+	self.machineManipulator CreateAll
 	return self
 
 
@@ -41,7 +41,7 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	autoreleasePool --
 	return uid
 
-Machine <List> ImportUID <List> objectName
+Machine <List> ImportUID (LoadUID) <List> objectName
 	return self LoadUIDWithNameToNamespace objectName self.globalContext
 
 

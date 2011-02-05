@@ -30,4 +30,4 @@ extern Object _no;
 
 extern Object _console;
 extern Object _json;
-
+extern Object _entitiesFactory;

@@ -16,6 +16,7 @@ Runtime Init
 	autoreleasePool PushFrame
 	console = <Console>
 	json = <JSON>
+	entitiesFactory = <ExternalEntitiesFactory>
 	return self
 
 Runtime Destroy

@@ -4,7 +4,7 @@ typedef struct Machine {
 	Object _globalContext;
 	Object _processor;
 	Object _scheduler;
-	Object _objectManipulator;
+	Object _machineManipulator;
 } *Machine;
 
 Object Machine_Create(void);

@@ -25,7 +25,7 @@ Object ListMapIterator_Create(void)
 Object ListMapIterator_Init(Object _self)
 {
 	DPUSHS ("ListMapIterator: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Init --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	(((ListMapIterator) (_self->entity))->_elementStack) = Stack_Create();
 	Object_SetReleasing(&(((ListMapIterator) (_self->entity))->_key), List_Create());
 	Object toReturn = _self;
@@ -36,7 +36,7 @@ Object ListMapIterator_Init(Object _self)
 Object ListMapIterator_SetListMap(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMapIterator: SetListMap begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:SetListMap --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object_SetRetaining(&(((ListMapIterator) (_self->entity))->_listMap), _listMap);
 	Object toReturn = _self;
 	DPOPS ("ListMapIterator: SetListMap ended.")
@@ -46,7 +46,7 @@ Object ListMapIterator_SetListMap(Object _self, Object _listMap)
 Object ListMapIterator_ToBegin(Object _self)
 {
 	DPUSHS ("ListMapIterator: ToBegin begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ToBegin --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	List_Clean((((ListMapIterator) (_self->entity))->_key));
 	(((ListMapIterator) (_self->entity))->_thisEnd) = _no;
 	(((ListMapIterator) (_self->entity))->_thisBegin) = _no;
@@ -84,7 +84,7 @@ Object ListMapIterator_ToBegin(Object _self)
 Object ListMapIterator_MoreThanOneElementInNode(Object _self, Object _node)
 {
 	DPUSHS ("ListMapIterator: MoreThanOneElementInNode begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:MoreThanOneElementInNode --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	if((Logic_And((((ListMapNode) (_node->entity))->_mapped), Logic_Not(Map_Empty((((ListMapNode) (_node->entity))->_nextMap))))) != _false)
 	{
 		Object toReturn = _true;
@@ -99,7 +99,7 @@ Object ListMapIterator_MoreThanOneElementInNode(Object _self, Object _node)
 Object ListMapIterator_Next(Object _self)
 {
 	DPUSHS ("ListMapIterator: Next begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Next --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	if(((((ListMapIterator) (_self->entity))->_thisBegin)) != _false)
 	{
 		if((Logic_Not((((ListMapIterator) (_self->entity))->_thisEnd))) != _false)
@@ -139,7 +139,7 @@ Object ListMapIterator_Next(Object _self)
 Object ListMapIterator_NextAnyWithElement(Object _self, Object _element)
 {
 	DPUSHS ("ListMapIterator: NextAnyWithElement begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:NextAnyWithElement --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _nextElement;
 	_nextElement = ListMapIteratorElement_Create();
 	Object_SetRetaining(&(((ListMapIteratorElement) (_nextElement->entity))->_node), ListMapIteratorElement_AdvancingValue(_element, Stack_ObjectAtPositionIfExists((((ListMapIterator) (_self->entity))->_elementStack), NumberFactory_FromLong(_numberFactory, 1))));
@@ -157,7 +157,7 @@ Object ListMapIterator_NextAnyWithElement(Object _self, Object _element)
 Object ListMapIterator_ThisRemoveRight(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisRemoveRight begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisRemoveRight --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	ASSERT_Q ( "", LogicFactory_FromLong(_logicFactory, Object_Compare((((ListMapIterator) (_self->entity))->_thisEnd), _true) != _equal) )
 	ASSERT_Q ( "", LogicFactory_FromLong(_logicFactory, Object_Compare((((ListMapIterator) (_self->entity))->_thisBegin), _true) != _equal) )
 	Object _key;
@@ -172,7 +172,7 @@ Object ListMapIterator_ThisRemoveRight(Object _self)
 Object ListMapIterator_ThisRemoveLeft(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisRemoveLeft begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisRemoveLeft --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	ASSERT_Q ( "", LogicFactory_FromLong(_logicFactory, Object_Compare((((ListMapIterator) (_self->entity))->_thisEnd), _true) != _equal) )
 	ASSERT_Q ( "", LogicFactory_FromLong(_logicFactory, Object_Compare((((ListMapIterator) (_self->entity))->_thisBegin), _true) != _equal) )
 	Object _key;
@@ -187,7 +187,7 @@ Object ListMapIterator_ThisRemoveLeft(Object _self)
 Object ListMapIterator_ThisKey(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisKey begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisKey --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = Object_TempClone((((ListMapIterator) (_self->entity))->_key));
 	DPOPS ("ListMapIterator: ThisKey ended.")
 	return toReturn;
@@ -196,7 +196,7 @@ Object ListMapIterator_ThisKey(Object _self)
 Object ListMapIterator_ThisValue(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisValue begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisValue --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _element;
 	_element = Stack_Peek((((ListMapIterator) (_self->entity))->_elementStack));
 	Object toReturn = (((ListMapNode) ((((ListMapIteratorElement) (_element->entity))->_node)->entity))->_mapping);
@@ -207,7 +207,7 @@ Object ListMapIterator_ThisValue(Object _self)
 Object ListMapIterator_ListMapData(Object _self)
 {
 	DPUSHS ("ListMapIterator: ListMapData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ListMapData --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = ListMapIterator_ThisValue(_self);
 	DPOPS ("ListMapIterator: ListMapData ended.")
 	return toReturn;
@@ -216,7 +216,7 @@ Object ListMapIterator_ListMapData(Object _self)
 Object ListMapIterator_ListData(Object _self)
 {
 	DPUSHS ("ListMapIterator: ListData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ListData --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = ListMapIterator_ThisValue(_self);
 	DPOPS ("ListMapIterator: ListData ended.")
 	return toReturn;
@@ -225,7 +225,7 @@ Object ListMapIterator_ListData(Object _self)
 Object ListMapIterator_NumberData(Object _self)
 {
 	DPUSHS ("ListMapIterator: NumberData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:NumberData --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = ListMapIterator_ThisValue(_self);
 	DPOPS ("ListMapIterator: NumberData ended.")
 	return toReturn;
@@ -234,7 +234,7 @@ Object ListMapIterator_NumberData(Object _self)
 Object ListMapIterator_LogicData(Object _self)
 {
 	DPUSHS ("ListMapIterator: LogicData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:LogicData --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = ListMapIterator_ThisValue(_self);
 	DPOPS ("ListMapIterator: LogicData ended.")
 	return toReturn;
@@ -243,7 +243,7 @@ Object ListMapIterator_LogicData(Object _self)
 Object ListMapIterator_ToEnd(Object _self)
 {
 	DPUSHS ("ListMapIterator: ToEnd begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ToEnd --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	List_Clean((((ListMapIterator) (_self->entity))->_key));
 	(((ListMapIterator) (_self->entity))->_thisEnd) = _no;
 	(((ListMapIterator) (_self->entity))->_thisBegin) = _no;
@@ -278,7 +278,7 @@ Object ListMapIterator_ToEnd(Object _self)
 Object ListMapIterator_Prev(Object _self)
 {
 	DPUSHS ("ListMapIterator: Prev begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Prev --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	if(((((ListMapIterator) (_self->entity))->_thisEnd)) != _false)
 	{
 		if((Logic_Not((((ListMapIterator) (_self->entity))->_thisBegin))) != _false)
@@ -318,7 +318,7 @@ Object ListMapIterator_Prev(Object _self)
 Object ListMapIterator_PrevAnyWithElement(Object _self, Object _element)
 {
 	DPUSHS ("ListMapIterator: PrevAnyWithElement begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:PrevAnyWithElement --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _nextElement;
 	_nextElement = ListMapIteratorElement_Create();
 	Object_SetRetaining(&(((ListMapIteratorElement) (_nextElement->entity))->_node), ListMapIteratorElement_ReturningValue(_element, Stack_ObjectAtPositionIfExists((((ListMapIterator) (_self->entity))->_elementStack), NumberFactory_FromLong(_numberFactory, 1))));
@@ -336,7 +336,7 @@ Object ListMapIterator_PrevAnyWithElement(Object _self, Object _element)
 Object ListMapIterator_ThisEnd(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisEnd begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisEnd --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = (((ListMapIterator) (_self->entity))->_thisEnd);
 	DPOPS ("ListMapIterator: ThisEnd ended.")
 	return toReturn;
@@ -345,7 +345,7 @@ Object ListMapIterator_ThisEnd(Object _self)
 Object ListMapIterator_ThisBegin(Object _self)
 {
 	DPUSHS ("ListMapIterator: ThisBegin begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:ThisBegin --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object toReturn = (((ListMapIterator) (_self->entity))->_thisBegin);
 	DPOPS ("ListMapIterator: ThisBegin ended.")
 	return toReturn;
@@ -354,7 +354,7 @@ Object ListMapIterator_ThisBegin(Object _self)
 Object ListMapIterator_Compare(Object _self, Object _iterator)
 {
 	DPUSHS ("ListMapIterator: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Compare --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapIterator) (_self->entity))->_listMap), (((ListMapIterator) (_iterator->entity))->_listMap));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) == _equal)) != _false)
@@ -369,7 +369,7 @@ Object ListMapIterator_Compare(Object _self, Object _iterator)
 Object ListMapIterator_Clone(Object _self)
 {
 	DPUSHS ("ListMapIterator: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Clone --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _toReturn;
 	_toReturn = ListMapIterator_Create();
 	Object_SetRetaining(&(((ListMapIterator) (_toReturn->entity))->_listMap), (((ListMapIterator) (_self->entity))->_listMap));
@@ -385,7 +385,7 @@ Object ListMapIterator_Clone(Object _self)
 Object ListMapIterator_DeepClone(Object _self)
 {
 	DPUSHS ("ListMapIterator: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:DeepClone --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object _toReturn;
 	_toReturn = ListMapIterator_Create();
 	Object_SetRetaining(&(((ListMapIterator) (_toReturn->entity))->_listMap), (((ListMapIterator) (_self->entity))->_listMap));
@@ -401,7 +401,7 @@ Object ListMapIterator_DeepClone(Object _self)
 Object ListMapIterator_Destroy(Object _self)
 {
 	DPUSHS ("ListMapIterator: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Destroy --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
 	Object_Release((((ListMapIterator) (_self->entity))->_listMap));
 	Object_Release((((ListMapIterator) (_self->entity))->_elementStack));
 	Object toReturn = Object_Destroy(_self);

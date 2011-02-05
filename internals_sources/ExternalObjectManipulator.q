@@ -4,10 +4,10 @@ ExternalObjectManipulator Init
 	return self
 
 ExternalObjectManipulator Clone
-	return self
+	return self Retain
 
 ExternalObjectManipulator DeepClone
-	return self
+	return self Retain
 
 ExternalObjectManipulator Destroy
 	self.objectMasterCopy Release
@@ -23,53 +23,30 @@ ExternalObjectManipulator SetMachine <Machine> machine
 ExternalObjectManipulator <List> CreateUIDObject
 	autoreleasePool ++
 	uid = self.machine ImportUID "Объект" 
-	self SetBasicMethodWithNameForUID &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонировать" uid
+	object = self.machine ObjectByUID uid
+	object ObjectSetBasicMethod self &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонировать" 
 	self.objectMasterCopy = (self.machine UIDToObject uid) DeepClone
 	autoreleasePool --
 	return uid
 
-ExternalObjectManipulator <List> SetBasicMethodWithNameForUID <Method> method <List> name <List> uid
-	object = self.machine ObjectByUID uid
-	methods = object ListMapAt ("Методы")
-	methodEntity = <ListMap>
-	methodEntity AtPut ("Базовый метод") method
-	methodEntity AtPut ("Базовый") true
-	methodEntity AtPut ("Сущность") self
-	methods AtPut name methodEntity
-	methodEntity Release
-	return self
-
-ExternalObjectManipulator <List> SetMethodWithNameForUID <List> methodBody <List> name <List> uid
-	object = self.machine ObjectByUID uid
-	methods = object ListMapAt ("Методы")
-	method = <ListMap>
-	method AtPut ("Тело") methodBody
-	method AtPut ("Базовый") false
-	methods AtPut name method
-	method Release
-	return self
-
-ExternalObjectManipulator CloneUIDObjectBasicMethod <List> uid <ListMap> parameters <Processor> processor
+ExternalObjectManipulator CloneUIDObjectInternalRoutine <List> uid
 	object = self.machine UIDToObject uid
 	uidToReturn = self.machine GenerateUID
 	objectToReturn = self.objectMasterCopy DeepClone
-	objectToReturn AtPut "Методы" ((object At "Методы") TempDeepClone)
-	objectToReturn AtPut "Поля" ((object At "Поля") TempDeepClone)
-	list = <List>
-	(objectToReturn ListMapAt "Свойства") AtPut "Идентификаторы" list
-	list Release
+	(object ObjectMethods) DumpKeys
+	objectToReturn ObjectResetMethods ((object ObjectMethods) TempDeepClone)
+	objectToReturn ObjectResetFields ((object ObjectFields) TempDeepClone)
+	objectToReturn ObjectResetIdentifiers
 	self.machine SetUIDToObject uidToReturn objectToReturn
 	objectToReturn Release
-	receiver = processor EntityFromNamedMessageField "Сообщение на клонирование" "Получатель"
-	sender = processor EntityFromNamedMessageField "Сообщение на клонирование" "Отправитель"
-	message = <ListMap>
-	message AtPut "Отправитель" receiver
-	message AtPut "Получатель" sender
-	message AtPut "Тип" "Ответ"
-	message AtPut "Ответ" "Успех"
-	message AtPut "Запрос" "Клонировать"
-	message AtPut "Клон" uidToReturn
-	processor SendMessage message
-	message Release
-	console PrintLnString "Сообщение послано. Ура!"
+	return uidToReturn
+
+
+ExternalObjectManipulator CloneUIDObjectBasicMethod <ListMap> parameters <Processor> processor
+	uidToReturn = self CloneUIDObjectInternalRoutine (processor ContextObject)
+	replyMessage = entitiesFactory CreateEmptyListMap
+	replyMessage AtPut "Тип" "Ответ"
+	replyMessage AtPut "Клон" uidToReturn
+	processor SendReplyForMessage replyMessage "Запрос на клонирование"
 	return self
+

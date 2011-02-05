@@ -20,6 +20,7 @@ Object List_PopFront(Object _self);
 Object List_PopBack(Object _self);
 Object List_RemoveFront(Object _self);
 Object List_RemoveBack(Object _self);
+Object List_PushBackIfAbsent(Object _self, Object _object);
 Object List_AddAfterPosition(Object _self, Object _position, Object _object);
 Object List_AddBeforePosition(Object _self, Object _position, Object _object);
 Object List_ObjectAtPosition(Object _self, Object _position);
@@ -46,5 +47,6 @@ Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _
 Object List_Size(Object _self);
 Object List_Empty(Object _self);
 Object List_Concatenate(Object _self, Object _list);
+Object List_Set(Object _self, Object _list);
 Object List_SortInPlace(Object _self);
 Object List_PrintLn(Object _self);

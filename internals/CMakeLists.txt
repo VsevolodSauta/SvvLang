@@ -48,6 +48,10 @@ add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
 add_subdirectory(ExternalObjectManipulator)
+add_subdirectory(ExternalConsoleManipulator)
+add_subdirectory(ExternalMachineManipulator)
+add_subdirectory(ExternalEntitiesFactory)
+
 
 add_executable(VM main.c)
 target_link_libraries(VM Machine Runtime Object OSKernel)

@@ -27,31 +27,10 @@ Processor <ListMap> ContextObject
 	return self.machine UIDToObject self.contextUID
 
 Processor <ListMap> ContextJob
-	return (self ContextObjectJobs) ListMapAt self.contextJobName
+	return (self ContextObject) ObjectJob self.contextJobName
 
 Processor <ListMap> ContextJobStage
-	return (self ContextJobStages) ListMapAt self.contextJobStageName
-
-Processor <ListMap> ContextObjectMethods
-	return (self ContextObject) ListMapAt ("Методы")
-
-Processor <ListMap> ContextObjectJobs
-	return (self ContextObject) ListMapAt ("Работы")
-
-Processor <ListMap> ContextObjectProperties
-	return (self ContextObject) ListMapAt ("Свойства")
-
-Processor <ListMap> ContextJobStages
-	return (self ContextJob) ListMapAt ("Стадии")
-
-Processor <ListMap> ContextJobMessageSlots (ContextJobExpectedMessages)
-	return (self ContextJob) ListMapAt ("Ожидаемые сообщения")
-
-Processor <ListMap> ContextJobMessageSlot <List> messageSlotName
-	return (self ContextJobMessageSlots) ListMapAt messageSlotName
-
-Processor <ListMap> ContextJobMessage <List> messageName
-	return (self ContextJobMessageSlot messageName) ListMapAt ("Сообщение")
+	return (self ContextJob) JobStage self.contextJobStageName
 
 Processor Init
 	self.localNamespaces = <Stack>
@@ -122,10 +101,9 @@ Processor DoCode <ListMap> toDo
 	return self
 
 Processor EntityFromMessageFieldCode <ListMap> toDo
-	messageName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	message = self ContextJobMessage messageName
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
-	self.helperStack Push (self EntityFromMessageField message fieldName)
+	self.helperStack Push ((self ContextJob) JobFieldInMessageSlot fieldName messageSlotName)
 	return self
 
 Processor UIDFromFieldCode <ListMap> toDo
@@ -183,7 +161,7 @@ Processor RemoveEntityFromListMapByValueCode <ListMap> toDo
 
 Processor AddEntityToListCode <ListMap> toDo
 	value = self GetNamedEntityFromToDoOrStack ("Значение") toDo
-	position = toDo At ("Позиция")
+	position = toDo NumberAt ("Позиция")
 	if position == nil
 		((self.helperStack Peek) AsList) Append value
 	else
@@ -219,8 +197,8 @@ Processor SwapTopInStackCode <ListMap> toDo
 Processor SendMessageToUIDCode <ListMap> toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	receiver = self GetNamedEntityFromToDoOrStack ("Получатель") toDo
-	message AtPut ("Отправитель") self.contextUID
-	message AtPut ("Получатель") receiver
+	message MessageSetSender self.contextUID
+	message MessageSetReceiver receiver
 	self SendMessage message
 	return self
 
@@ -228,22 +206,23 @@ Processor SendMessageToFieldCode <ListMap> toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
 	receiver = self FieldNameToUID fieldName
-	message AtPut ("Отправитель") self.contextUID
-	message AtPut ("Получатель") receiver
+	message MessageSetSender self.contextUID
+	message MessageSetReceiver receiver
 	self SendMessage message
 	return self
 
 Processor SendReplyForMessageCode <ListMap> toDo
 	reply = (self GetNamedEntityFromToDoOrStack ("Ответ") toDo) AsListMap
 	messageName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsListMap
-	message = (((self ContextJobMessageSlots) ListMapAt messageName) ListMapAt "Сообщение")
-	receiver = message ListAt "Отправитель"
-	reqest = message ListAt "Запрос"
-	message AtPut ("Отправитель") self.contextUID
-	message AtPut ("Получатель") receiver
-	message AtPut ("Запрос") reqest
-	message AtPut ("Тип") ("Ответ")
-	self SendMessage message
+	message = (self ContextJob) JobMessageInMessageSlot messageName
+	receiver = message MessageSender
+	reqest = message MessageRequest
+	reply = reply TempDeepClone
+	reply MessageSetSender self.contextUID
+	reply MessageSetReceiver receiver
+	reply MessageSetRequest reqest
+	reply MessageSetType ("Ответ")
+	self SendMessage reply
 	return self
 
 Processor InvokeMethodCode <ListMap> toDo
@@ -255,22 +234,22 @@ Processor InvokeMethodCode <ListMap> toDo
 Processor DefineMethodCode <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
 	method = self GetNamedEntityFromToDoOrStack ("Метод") toDo
-	(self ContextObjectMethods) AtPut methodName method
+	(self ContextObject) ObjectSetMethod method methodName
 	return self
 
 Processor UnDefineMethodCode <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
-	(self ContextObjectMethods) RemoveAt methodName
+	(self ContextObject) ObjectRemoveMethod methodName
 	return self
 
 Processor DefineLocalFieldCode <ListMap> toDo
 	return self DefineFieldHelper toDo ((self.localNamespaces Peek) AsListMap)
 
 Processor DefineJobFieldCode <ListMap> toDo
-	return self DefineFieldHelper toDo ((self ContextJob) ListMapAt ("Поля"))
+	return self DefineFieldHelper toDo ((self ContextJob) JobFields)
 
 Processor DefineObjectFieldCode <ListMap> toDo
-	return self DefineFieldHelper toDo ((self ContextObject) ListMapAt ("Поля"))
+	return self DefineFieldHelper toDo ((self ContextObject) ObjectFields)
 
 Processor DefineGlobalFieldCode <ListMap> toDo
 	return self DefineFieldHelper toDo self.machine.globalContext
@@ -316,102 +295,98 @@ Processor UnDefineFieldCode <ListMap> toDo
 Processor AddJobCode <ListMap> toDo
 	jobName = self GetNamedEntityFromToDoOrStack ("Имя работы") toDo
 	job = self GetNamedEntityFromToDoOrStack ("Работа") toDo
-	(self ContextObjectJobs) AtPut jobName job
+	(self ContextObject) ObjectSetJob job jobName
 	return self
 
 Processor AddJobStageCode <ListMap> toDo
 	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
 	jobStage = self GetNamedEntityFromToDoOrStack ("Стадия") toDo
-	(self ContextJobStages) AtPut jobStageName jobStage
+	(self ContextJob) JobSetStage jobStage jobStageName
 	return self
 
 Processor AddMessageSlotCode <ListMap> toDo
 	messageName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
 	message = self GetNamedEntityFromToDoOrStack ("Сообщение") toDo
-	(self ContextJobMessageSlots) AtPut messageName message
+	(self ContextJob) JobSetMessageSlot message messageName
 	return self
 
 Processor RemoveJobStageCode <ListMap> toDo
 	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	messageSlots = self ContextJobMessageSlots
-	iterator = messageSlots First
+	iterator = (self ContextJob) JobMessageSlotsIterator
 	while iterator NotThisEnd
 		messageSlot = (iterator Data) AsListMap
-		stages = messageSlot ListAt ("Ожидающие стадии")
+		stages = messageSlot MessageSlotStages
 		stages RemoveFirst jobStageName
 		iterator ++
-	(self ContextJob) RemoveKey jobStageName
+	(self ContextJob) JobRemoveStage jobStageName
 	return self
 
 Processor RemoveMessageSlotCode <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	messageSlot = (self ContextJobMessageSlot messageSlotName)
-	mustDecrement = (messageSlot At "Сообщение") != nil
-	stagesIterator = (self ContextJobStages) First
-	if mustDecrement
+	if ((self ContextJob) JobMessageInMessageSlot messageSlotName) != nil
+		stagesIterator = (self ContextJob) JobStagesIterator
 		while stagesIterator NotThisEnd
 			stage = stagesIterator ListMapData
-			if (stage ListAt "Ожидаемые сообщения") RemoveFirstWithConfirmation messageSlotName
-				(stage NumberAt "Необходимо сообщений") --
+			if (stage StageMessageSlots) RemoveFirstWithConfirmation messageSlotName
+				stage StageDecrementMessagesCounter
 			stagesIterator ++
 	else
+		stagesIterator = (self ContextJob) JobStagesIterator
 		while stagesIterator NotThisEnd
 			stage = stagesIterator ListMapData
-			stage ListAt "Ожидаемые сообщения") RemoveFirst
+			(stage StageMessageSlots) RemoveFirst messageSlotName
 			stagesIterator ++
+	(self ContextJob) JobRemoveMessageSlot messageSlotName
 	return self
 
 Processor RemoveMessageInSlotCode <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	messageSlot = (self ContextJobMessageSlot messageSlotName)
-	if (messageSlot At "Сообщение") != nil
-		messageSlot AtPut "Сообщение" nil
-		stagesIterator = (self ContextJobStages) First
+	messageSlot = (self ContextJob) JobMessageSlot messageSlotName
+	if (messageSlot MessageSlotMessage) != nil
+		messageSlot MessageSlotSetMessage nil
+		stagesIterator = (self ContextJob) JobStagesIterator
 		while stagesIterator NotThisEnd
 			stage = stagesIterator ListMapData
-			if (stage ListAt "Ожидаемые сообщения") Contains messageSlotName
-				(stage NumberAt "Необходимо сообщений") --
+			if stage StageContainsMessageSlot messageSlotName
+				stage StageDecrementMessagesCounter
 			stagesIterator ++
 	return nil
 
 Processor RemoveAllReceivedMessagesCode <ListMap> toDo
-	messageSlots = self ContextJobMessageSlots
-	stages = self ContextJobStages
-	stagesIterator = stages First
+	messageSlotsIterator = (self ContextJob) JobMessageSlotsIterator
+	stagesIterator = (self ContextJob) JobStagesIterator
 	while stagesIterator NotThisEnd
 		stage = stagesIterator ListMapData
-		stage AtPut ("Необходимо сообщений") ((stage ListAt "Ожидаемые сообщения") Size)
+		stage StageSetMessagesCounter ((stage StageMessageSlots) Size)
 		stagesIterator ++
-	messageSlotsIterator = messageSlots First
 	while messageSlotsIterator NotThisEnd
 		messageSlot = messageSlotsIterator ListMapData
-		messageSlot AtPut ("Сообщение") nil
+		messageSlot MessageSlotSetMessage nil
 		messageSlotsIterator ++
 	return self
 
 Processor RemoveAllJobStagesCode <ListMap> toDo
-	(self ContextJobStages) RemoveAll
-	messageSlots = self ContextJobMessageSlots
-	messageSlotsIterator = messageSlots First
+	(self ContextJob) JobRemoveAllStages
+	messageSlotsIterator = (self ContextJob) JobMessageSlotsIterator
 	while messageSlotsIterator NotThisEnd
 		messageSlot = messageSlotsIterator ListMapData
-		(messageSlot ListAt "Ожидающие стадии") RemoveAll
+		(messageSlot MessageSlotStages) RemoveAll
 		messageSlotsIterator ++
 	return self
 
 Processor RemoveAllMessageSlotsCode <ListMap> toDo
-	(self ContextJobMessageSlots) RemoveAll
-	jobStagesIterator = (self ContextJobStages) First
+	(self ContextJob) JobRemoveAllMessageSlots
+	jobStagesIterator = (self ContextJob) JobStagesIterator
 	while jobStagesIterator NotThisEnd
 		jobStage = (jobStagesIterator Data) AsListMap
-		(jobStage ListAt ("Ожидаемые сообщения")) RemoveAll
-		(jobStage AtPut ("Необходимо сообщений") 0)
+		(jobStage StageMessageSlots) RemoveAll
+		(jobStage StageSetMessagesCounter 0)
 		jobStagesIterator ++
 	return self
 
 Processor RemoveAllJobStagesAndMessageSlotsCode <ListMap> toDo
-	(self ContextJobStages) RemoveAll
-	(self ContextJobMessageSlots) RemoveAll
+	(self ContextJob) JobRemoveAllStages
+	(self ContextJob) JobRemoveAllMessageSlots
 	return self
 
 Processor AttachToStageMessageSlotCode <ListMap> toDo
@@ -421,60 +396,65 @@ Processor AttachToStageMessageSlotCode <ListMap> toDo
 	return self
 
 Processor FinishThisJobCode <ListMap> toDo
-	(self ContextObjectJobs) RemoveAt (self.contextJobName)
+	((self ContextObject) ObjectRemoveJob (self.contextJobName)
 	return self
+
+
+
+
+
+
+
 
 Processor AttachToStageMessageSlot <List> stageName <List> messageName
-	stage = (self ContextJobStages) ListMapAt stageName
-	stagesInMessageSlot = (self ContextJobMessageSlots) ListAt messageName
+	stage = (self ContextJob) JobStage stageName
+	stagesInMessageSlot = ((self ContextJob) JobMessageSlot messageName) MessageSlotStages
 	if stagesInMessageSlot NotContains stageName
-		messageSlotsInStage = stage ListAt ("Ожидаемые сообщения")
-		stagesInMessageSlot Append stageName
+		messageSlotsInStage = stage StageMessageSlots
+		stagesInMessageSlot Append stageName 
 		messageSlotsInStage Append messageName
-		(stage NumberAt ("Необходимо сообщений")) ++
+		stage StageIncrementMessagesCounter
 	return self
 
-Processor <Object> EntityFromMessageField <ListMap> message <List> name
-	return message ObjectAt name
 
 Processor <Object> EntityFromNamedMessageField <List> messageName <List> fieldName
-	return (((self ContextJobMessageSlots) ListMapAt messageName) ListMapAt ("Сообщение")) ObjectAt fieldName
+	return ((self ContextJob) JobMessageInMessageSlot messageName) ObjectAt fieldName
+
 
 Processor <ListMap> NamespaceNameToNamespace <List> locationType
 	if locationType == "Глобальное поле"
 		return self.machine.globalContext
 	elif locationType == "Поле объекта"
-		return (self ContextObject) ListMapAt ("Поля")
+		return (self ContextObject) ObjectFields
 	elif locationType == "Поле работы"
-		return (self ContextJob) ListMapAt ("Поля")
+		return (self ContextJob) JobFields
 	elif locationType == "Локальное поле"
 		return self.localNamespaces Peek
-	return nil
+	else
+		return nil
+
 
 Processor <List> FieldNameToNamespaceName <List> fieldName
-	candidate = ((self.localNamespaces Peek) AsListMap) ObjectAt fieldName
-	if candidate != nil
+	if ((self.localNamespaces Peek) AsListMap) Contains fieldName
 		return ("Локальное поле")
-	candidate = ((self ContextJob) ListMapAt ("Поля"))  ObjectAt fieldName
-	if candidate != nil
+	elif ((self ContextJob) JobFields) Contains fieldName
 		return ("Поле работы")
-	candidate = ((self ContextObject) ListMapAt ("Поля")) ObjectAt fieldName
-	if candidate != nil
+	elif ((self ContextObject) ObjectFields) Contains fieldName
 		return ("Поле объекта")
-	candidate = (self.machine.globalContext) ObjectAt fieldName
-	if candidate != nil
+	elif (self.machine.globalContext) Contains fieldName
 		return ("Глобальное поле")
 	else
 		return ("Нет такого поля")
+
 
 Processor <Synonim> FieldNameToSynonim <List> fieldName
 	candidate = ((self.localNamespaces Peek) AsListMap) SynonimAt fieldName
 	if candidate != nil
 		return candidate
-	candidate = ((self ContextJob) ListMapAt ("Поля"))  SynonimAt fieldName
+	candidate = ((self ContextJob) JobFields)  SynonimAt fieldName
 	if candidate != nil
 		return candidate
-	candidate = ((self ContextObject) ListMapAt ("Поля")) SynonimAt fieldName
+	candidate = ((self ContextObject) ObjectFields) SynonimAt fieldName
 	if candidate != nil
 		return candidate
 	candidate = (self.machine.globalContext) SynonimAt fieldName
@@ -483,27 +463,40 @@ Processor <Synonim> FieldNameToSynonim <List> fieldName
 	console PrintLnString ("Взятие отсутствующего поля")
 	return nil
 
+
 Processor <List> FieldNameToUID <List> fieldName
-	synonim = self FieldNameToSynonim fieldName
-	return synonim UID
+	return (self FieldNameToSynonim fieldName) UID
+
 
 Processor SendMessage <ListMap> message
-	uid = message ListAt ("Получатель")
+	uid = message MessageSender
 	receiver = self.machine ObjectByUID uid
 	self ProcessMessageForObject message receiver
 	self.machine ScheduleUID uid
 	return self
 
+Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
+	message = (self ContextJob) JobMessageInMessageSlot messageSlotName
+	receiver = message MessageSender
+	reqest = message MessageRequest
+	replyMessage = replyMessage TempDeepClone
+	replyMessage MessageSetSender self.contextUID
+	replyMessage MessageSetReceiver receiver
+	replyMessage MessageSetRequest reqest
+	replyMessage MessageSetType ("Ответ")
+	self SendMessage message
+	return self
+
 Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	autoreleasePool ++
-	method = (self ContextObjectMethods) ListMapAt methodName
+	method = (self ContextObject) ObjectMethod methodName
 	if method == nil
 		console PrintLnString ("Ошибка! Вызов несуществующего метода.")
 	else
 		if method LogicAt ("Базовый")
 			basicMethod = method MethodAt ("Базовый метод")
 			objectEntity = method ObjectAt ("Сущность")
-			basicMethod Invoke objectEntity self.contextUID parameters self
+			basicMethod Invoke objectEntity parameters self
 		else
 			namespace = <ListMap>
 			self.localNamespaces Push namespace
@@ -537,21 +530,20 @@ Processor TryLinkMessageWithMessageSlotAndJob <ListMap> message <ListMap> messag
 			break
 		parametersIterator ++
 	if confirms
-		messageSlot AtPut ("Сообщение") message
-		waitingStageNamesIterator = (messageSlot ListAt ("Ожидающие стадии")) First
+		messageSlot MessageSlotSetMessage message
+		waitingStageNamesIterator = (messageSlot MessageSlotStages) First
 		while waitingStageNamesIterator NotThisEnd
-			jobStage = (job ListMapAt ("Стадии")) ListMapAt (waitingStageNamesIterator ListData)
-			msgNeeded = (jobStage NumberAt ("Необходимо сообщений"))
-			msgNeeded --
+			jobStage = (job JobStages) ListMapAt (waitingStageNamesIterator ListData)
+			jobStage StageDecrementMessagesCounter
 			waitingStageNamesIterator ++
 	return self
 
 
 Processor ProcessMessageForObject <ListMap> message <ListMap> object
-	jobsIterator = (object ListMapAt ("Работы")) First
+	jobsIterator = (object ObjectJobs) First
 	while jobsIterator NotThisEnd
 		job = jobsIterator ListMapData
-		messageSlotsIterator = (job ListMapAt ("Ожидаемые сообщения")) First
+		messageSlotsIterator = job JobMessageSlotsIterator
 		while messageSlotsIterator NotThisEnd
 			self TryLinkMessageWithMessageSlotAndJob message (messageSlotsIterator ListMapData) job
 			messageSlotsIterator ++
@@ -560,17 +552,17 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 
 
 Processor ProcessOneJobIfAny
-	jobsIterator = (self ContextObjectJobs) First
+	jobsIterator = ((self ContextObject) ObjectJobs) First
 	while jobsIterator NotThisEnd
 		job = (jobsIterator ListMapData)
-		jobStagesIterator = (job ListMapAt ("Стадии")) First
+		jobStagesIterator = job JobStagesIterator
 		while jobStagesIterator NotThisEnd
 			jobStage = jobStagesIterator ListMapData
-			if (jobStage NumberAt ("Необходимо сообщений")) == 0
+			if (jobStage StageMessagesCounter) == 0
 				self.contextJobStageName = jobStagesIterator Key
 				self.contextJobName = jobsIterator Key
 				emptyParameters = <ListMap>
-				self InvokeMethodWithParameters (jobStage ListAt ("Метод")) emptyParameters
+				self InvokeMethodWithParameters (jobStage StageMethod) emptyParameters
 				emptyParameters Release
 				self.contextJobStageName = nil
 				self.contextJobName = nil
@@ -588,3 +580,4 @@ Processor ProcessUID <List> uid
 	self.contextUID = nil
 	autoreleasePool --
 	return self
+

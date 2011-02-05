@@ -1,0 +1,213 @@
+#include "internals/basics.h"
+#include "internals/ExternalEntitiesFactory/imports.h"
+
+
+Object ExternalEntitiesFactory_Create(void)
+{
+	Object _self = Object_Create();
+	DPUSHS ("ExternalEntitiesFactory: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct ExternalEntitiesFactory));
+	_self->gid =  4514905638553083904ull;
+	Object_SetComparator(_self, &ExternalEntitiesFactory_Compare);
+	Object_SetDestructor(_self, &ExternalEntitiesFactory_Destroy);
+	Object_SetCloner(_self, &ExternalEntitiesFactory_Clone);
+	Object_SetDeepCloner(_self, &ExternalEntitiesFactory_DeepClone);
+	((ExternalEntitiesFactory) (_self->entity))->_placeHolder = _nil;
+	DPOPS ("ExternalEntitiesFactory: Create ended.")
+	return _self;
+}
+
+Object ExternalEntitiesFactory_Clone(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: Clone begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:Clone --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = Object_Retain(_self);
+	DPOPS ("ExternalEntitiesFactory: Clone ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_DeepClone(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: DeepClone begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:DeepClone --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = Object_Retain(_self);
+	DPOPS ("ExternalEntitiesFactory: DeepClone ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_Destroy(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: Destroy begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:Destroy --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = Object_Destroy(_self);
+	DPOPS ("ExternalEntitiesFactory: Destroy ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_Compare(Object _self, Object _entitiesFactory)
+{
+	DPUSHS ("ExternalEntitiesFactory: Compare begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:Compare --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = _equal;
+	DPOPS ("ExternalEntitiesFactory: Compare ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyListMap(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyListMap begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyListMap --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ListMap_Create();
+	Object toReturn = Object_Autorelease(_toReturn);
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyListMap ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyList(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyList begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyList --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = List_Create();
+	Object toReturn = Object_Autorelease(_toReturn);
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyList ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyJob(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyJob begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyJob --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Поля", 8), ExternalEntitiesFactory_CreateEmptyListMap(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), ExternalEntitiesFactory_CreateEmptyListMap(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyListMap(_self));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyJob ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyMethod(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyMethod begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyMethod --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _false);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Тело", 8), ExternalEntitiesFactory_CreateEmptyList(_self));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyMethod ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyJobStage(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyJobStage begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyJobStage --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод", 10), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Необходимо сообщений", 39), NumberFactory_FromLong(_numberFactory, 0));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyJobStage ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyCondition(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyCondition begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyCondition --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27), StringFactory_FromUTF8(_stringFactory, "Совпадение", 20));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ключ", 8), StringFactory_FromUTF8(_stringFactory, "", 0));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Значение", 16), StringFactory_FromUTF8(_stringFactory, "", 0));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyCondition ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateConditionWithKeyValue(Object _self, Object _key, Object _value)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateConditionWithKeyValue begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateConditionWithKeyValue --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27), StringFactory_FromUTF8(_stringFactory, "Совпадение", 20));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ключ", 8), Object_TempClone(_key));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Значение", 16), Object_TempClone(_value));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateConditionWithKeyValue ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyMessageSlot(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyMessageSlot begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyMessageSlot --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод идентификации", 37), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyList(_self));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyMessageSlot ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateObject(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateObject begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateObject --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Методы", 12), ExternalEntitiesFactory_CreateEmptyMethods(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Поля", 8), ExternalEntitiesFactory_CreateEmptyFields(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Свойства", 16), ExternalEntitiesFactory_CreateEmptyProperties(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Работы", 12), ExternalEntitiesFactory_CreateEmptyJobs(_self));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateObject ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyFields(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyFields begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyFields --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyFields ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyMethods(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyMethods begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyMethods --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyMethods ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyJobs(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyJobs begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyJobs --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyJobs ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyProperties(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyProperties begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyProperties --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Идентификаторы", 28), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Имя", 6), ExternalEntitiesFactory_CreateEmptyList(_self));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyProperties ended.")
+	return toReturn;
+}

@@ -123,6 +123,18 @@ List <Object> RemoveBack (Remove)
 	self.iterator Hide
 	return self
 
+List PushBackIfAbsent (AppendIfAbsent) object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
+	self.iterator ToBegin
+	while self.iterator NotThisEnd
+		if (self.iterator ThisData) == object
+			self.iterator Hide
+			return self
+		self.iterator ++
+	self.iterator AddBefore object
+	self.iterator Hide
+	return self
+
 List AddAfterPosition <Number> position object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
@@ -330,6 +342,11 @@ List Concatenate <List> list
 	self.iterator ToEnd
 	self.iterator AddListAfter list
 	self.iterator Hide
+	return self
+	
+List Set (ReplaceWithList) <List> list
+	self Clean
+	self Concatenate list
 	return self
 
 List SortInPlace

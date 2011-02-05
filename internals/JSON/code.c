@@ -21,7 +21,7 @@ Object JSON_Create(void)
 Object JSON_Init(Object _self)
 {
 	DPUSHS ("JSON: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:Init --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	(((JSON) (_self->entity))->_error) = Object_Create();
 	Object toReturn = _self;
 	DPOPS ("JSON: Init ended.")
@@ -31,7 +31,7 @@ Object JSON_Init(Object _self)
 Object JSON_Compare(Object _self, Object _json)
 {
 	DPUSHS ("JSON: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:Compare --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	Object toReturn = _equal;
 	DPOPS ("JSON: Compare ended.")
 	return toReturn;
@@ -40,7 +40,7 @@ Object JSON_Compare(Object _self, Object _json)
 Object JSON_Clone(Object _self)
 {
 	DPUSHS ("JSON: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:Clone --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	Object toReturn = _self;
 	DPOPS ("JSON: Clone ended.")
 	return toReturn;
@@ -49,7 +49,7 @@ Object JSON_Clone(Object _self)
 Object JSON_DeepClone(Object _self)
 {
 	DPUSHS ("JSON: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:DeepClone --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	Object toReturn = _self;
 	DPOPS ("JSON: DeepClone ended.")
 	return toReturn;
@@ -58,7 +58,7 @@ Object JSON_DeepClone(Object _self)
 Object JSON_Destroy(Object _self)
 {
 	DPUSHS ("JSON: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:Destroy --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	Object_Release((((JSON) (_self->entity))->_error));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("JSON: Destroy ended.")
@@ -68,7 +68,7 @@ Object JSON_Destroy(Object _self)
 Object JSON_ParseString(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseString begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseString --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) != _equal))) != _false)
 	{
@@ -157,7 +157,7 @@ Object JSON_ParseString(Object _self, Object _iterator)
 Object JSON_ParseObject(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseObject begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseObject --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = ListMap_Create();
@@ -216,7 +216,7 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 Object JSON_ParseArray(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseArray begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseArray --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = List_Create();
@@ -267,7 +267,7 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 Object JSON_ParseValue(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseValue begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseValue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((ListIterator_ThisEnd(_iterator)) != _false)
 	{
@@ -328,7 +328,7 @@ Object JSON_ParseValue(Object _self, Object _iterator)
 Object JSON_ParseTrue(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseTrue begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseTrue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 't')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -365,7 +365,7 @@ Object JSON_ParseTrue(Object _self, Object _iterator)
 Object JSON_ParseFalse(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseFalse begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseFalse --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'f')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -409,7 +409,7 @@ Object JSON_ParseFalse(Object _self, Object _iterator)
 Object JSON_ParseNull(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseNull begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseNull --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'n')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -446,7 +446,7 @@ Object JSON_ParseNull(Object _self, Object _iterator)
 Object JSON_ParseNumber(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseNumber begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseNumber --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _negative;
 	_negative = _false;
