@@ -2,6 +2,7 @@
 
 ListMap Init
 	self.root = <ListMapNode>
+	self.clonning = no
 	return self
 
 ListMap <Comparation> Compare <ListMap> listSet

@@ -96,7 +96,7 @@ Keyword DEBUG_POPProcess := method(line,
 Keyword assertProcess := method(line,
 	toReturn := "ASSERT_Q ( " asMutable
 	line toNextToken
-	toReturn appendSeq(line currentToken)
+	toReturn appendSeq(line getCurrentToken)
 	line toNextToken
 	toReturn appendSeq(", ", (line getActor actorName), " )")
 	toReturn

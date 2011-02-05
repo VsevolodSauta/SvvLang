@@ -22,7 +22,7 @@ ListMapIterator ToBegin
 	element Release
 	if element.node.mapped
 		return self
-	if element.nextExists Not
+	if element.node.nextMap Empty
 		self.thisBegin = yes
 		self.thisEnd = yes
 		return self

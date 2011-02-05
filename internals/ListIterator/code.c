@@ -22,7 +22,7 @@ Object ListIterator_Create(void)
 Object ListIterator_Compare(Object _self, Object _iterator)
 {
 	DPUSHS ("ListIterator: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = Object_Compare((((ListIterator) (_self->entity))->_node), (((ListIterator) (_iterator->entity))->_node));
 	DPOPS ("ListIterator: Compare ended.")
 	return toReturn;
@@ -31,7 +31,7 @@ Object ListIterator_Compare(Object _self, Object _iterator)
 Object ListIterator_Destroy(Object _self)
 {
 	DPUSHS ("ListIterator: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_Release((((ListIterator) (_self->entity))->_node));
 	if((Object_Is((((ListIterator) (_self->entity))->_system), _false)) != _false)
 	{
@@ -45,7 +45,7 @@ Object ListIterator_Destroy(Object _self)
 Object ListIterator_Clone(Object _self)
 {
 	DPUSHS ("ListIterator: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _toReturn;
 	_toReturn = ListIterator_Create();
 	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_list), (((ListIterator) (_self->entity))->_list));
@@ -59,7 +59,7 @@ Object ListIterator_Clone(Object _self)
 Object ListIterator_DeepClone(Object _self)
 {
 	DPUSHS ("ListIterator: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _toReturn;
 	_toReturn = ListIterator_Create();
 	Object_SetRetaining(&(((ListIterator) (_toReturn->entity))->_list), (((ListIterator) (_self->entity))->_list));
@@ -73,7 +73,7 @@ Object ListIterator_DeepClone(Object _self)
 Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node)
 {
 	DPUSHS ("ListIterator: InitWithListAndNode begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	(((ListIterator) (_self->entity))->_system) = _false;
@@ -85,7 +85,7 @@ Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node
 Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object _node)
 {
 	DPUSHS ("ListIterator: SystemInitWithListAndNode begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	(((ListIterator) (_self->entity))->_system) = _true;
@@ -98,7 +98,7 @@ Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object
 Object ListIterator_ResetNode(Object _self, Object _node)
 {
 	DPUSHS ("ListIterator: ResetNode begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ResetNode ended.")
@@ -108,17 +108,26 @@ Object ListIterator_ResetNode(Object _self, Object _node)
 Object ListIterator_Hide(Object _self)
 {
 	DPUSHS ("ListIterator: Hide begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _nil);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: Hide ended.")
 	return toReturn;
 }
 
+Object ListIterator_Hidden(Object _self)
+{
+	DPUSHS ("ListIterator: Hidden begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare((((ListIterator) (_self->entity))->_node), _nil) == _equal);
+	DPOPS ("ListIterator: Hidden ended.")
+	return toReturn;
+}
+
 Object ListIterator_Next(Object _self)
 {
 	DPUSHS ("ListIterator: Next begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next));
 	Object toReturn = _self;
 	DPOPS ("ListIterator: Next ended.")
@@ -128,7 +137,7 @@ Object ListIterator_Next(Object _self)
 Object ListIterator_Prev(Object _self)
 {
 	DPUSHS ("ListIterator: Prev begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev));
 	Object toReturn = _self;
 	DPOPS ("ListIterator: Prev ended.")
@@ -138,7 +147,7 @@ Object ListIterator_Prev(Object _self)
 Object ListIterator_ToBegin(Object _self)
 {
 	DPUSHS ("ListIterator: ToBegin begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_head)->entity))->_next));
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ToBegin ended.")
@@ -148,7 +157,7 @@ Object ListIterator_ToBegin(Object _self)
 Object ListIterator_ToEnd(Object _self)
 {
 	DPUSHS ("ListIterator: ToEnd begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), (((ListNode) ((((List) ((((ListIterator) (_self->entity))->_list)->entity))->_tail)->entity))->_prev));
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ToEnd ended.")
@@ -158,7 +167,7 @@ Object ListIterator_ToEnd(Object _self)
 Object ListIterator_ToPosition(Object _self, Object _position)
 {
 	DPUSHS ("ListIterator: ToPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_position, NumberFactory_FromLong(_numberFactory, 0)) != _less)) != _false)
 	{
 		ListIterator_ToBegin(_self);
@@ -189,7 +198,7 @@ Object ListIterator_ToPosition(Object _self, Object _position)
 Object ListIterator_FromPositionToPosition(Object _self, Object _positionFrom, Object _positionTo)
 {
 	DPUSHS ("ListIterator: FromPositionToPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _quantity;
 	_quantity = Number_Sub(_positionTo, _positionFrom);
 	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_quantity, NumberFactory_FromLong(_numberFactory, 0)) == _less)) != _false)
@@ -210,7 +219,7 @@ Object ListIterator_FromPositionToPosition(Object _self, Object _positionFrom, O
 Object ListIterator_SearchForward(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: SearchForward begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	while((Logic_Not(ListIterator_ThisEnd(_self))) != _false)
 	{
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_self), _object) == _equal)) != _false)
@@ -227,7 +236,7 @@ Object ListIterator_SearchForward(Object _self, Object _object)
 Object ListIterator_SearchBackward(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: SearchBackward begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	while((Logic_Not(ListIterator_ThisBegin(_self))) != _false)
 	{
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_self), _object) == _equal)) != _false)
@@ -244,7 +253,7 @@ Object ListIterator_SearchBackward(Object _self, Object _object)
 Object ListIterator_SearchForwardOffset(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: SearchForwardOffset begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _position;
 	_position = NumberFactory_FromLong(_numberFactory, 0);
 	while((Logic_Not(ListIterator_ThisEnd(_self))) != _false)
@@ -266,7 +275,7 @@ Object ListIterator_SearchForwardOffset(Object _self, Object _object)
 Object ListIterator_ThisRemove(Object _self)
 {
 	DPUSHS ("ListIterator: ThisRemove begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_prev) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_next) = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
 	Object_Release((((ListIterator) (_self->entity))->_node));
@@ -278,7 +287,7 @@ Object ListIterator_ThisRemove(Object _self)
 Object ListIterator_PrevRemove(Object _self)
 {
 	DPUSHS ("ListIterator: PrevRemove begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _toRemove;
 	_toRemove = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next);
 	(((ListNode) ((((ListNode) (_toRemove->entity))->_next)->entity))->_prev) = (((ListNode) (_toRemove->entity))->_prev);
@@ -292,7 +301,7 @@ Object ListIterator_PrevRemove(Object _self)
 Object ListIterator_NextRemove(Object _self)
 {
 	DPUSHS ("ListIterator: NextRemove begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _toRemove;
 	_toRemove = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	(((ListNode) ((((ListNode) (_toRemove->entity))->_next)->entity))->_prev) = (((ListNode) (_toRemove->entity))->_prev);
@@ -306,7 +315,7 @@ Object ListIterator_NextRemove(Object _self)
 Object ListIterator_ThisData(Object _self)
 {
 	DPUSHS ("ListIterator: ThisData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: ThisData ended.")
 	return toReturn;
@@ -315,7 +324,7 @@ Object ListIterator_ThisData(Object _self)
 Object ListIterator_NextData(Object _self)
 {
 	DPUSHS ("ListIterator: NextData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data);
 	DPOPS ("ListIterator: NextData ended.")
 	return toReturn;
@@ -324,7 +333,7 @@ Object ListIterator_NextData(Object _self)
 Object ListIterator_PrevData(Object _self)
 {
 	DPUSHS ("ListIterator: PrevData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data);
 	DPOPS ("ListIterator: PrevData ended.")
 	return toReturn;
@@ -333,7 +342,7 @@ Object ListIterator_PrevData(Object _self)
 Object ListIterator_LogicData(Object _self)
 {
 	DPUSHS ("ListIterator: LogicData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: LogicData ended.")
 	return toReturn;
@@ -342,7 +351,7 @@ Object ListIterator_LogicData(Object _self)
 Object ListIterator_NumberData(Object _self)
 {
 	DPUSHS ("ListIterator: NumberData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: NumberData ended.")
 	return toReturn;
@@ -351,7 +360,7 @@ Object ListIterator_NumberData(Object _self)
 Object ListIterator_ListData(Object _self)
 {
 	DPUSHS ("ListIterator: ListData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: ListData ended.")
 	return toReturn;
@@ -360,7 +369,7 @@ Object ListIterator_ListData(Object _self)
 Object ListIterator_ListMapData(Object _self)
 {
 	DPUSHS ("ListIterator: ListMapData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: ListMapData ended.")
 	return toReturn;
@@ -369,7 +378,7 @@ Object ListIterator_ListMapData(Object _self)
 Object ListIterator_CharData(Object _self)
 {
 	DPUSHS ("ListIterator: CharData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data);
 	DPOPS ("ListIterator: CharData ended.")
 	return toReturn;
@@ -378,7 +387,7 @@ Object ListIterator_CharData(Object _self)
 Object ListIterator_ThisSetData(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: ThisSetData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_data), _object);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ThisSetData ended.")
@@ -388,7 +397,7 @@ Object ListIterator_ThisSetData(Object _self, Object _object)
 Object ListIterator_PrevSetData(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: PrevSetData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_data), _object);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: PrevSetData ended.")
@@ -398,7 +407,7 @@ Object ListIterator_PrevSetData(Object _self, Object _object)
 Object ListIterator_NextSetData(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: NextSetData begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object_SetRetaining(&(((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_data), _object);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: NextSetData ended.")
@@ -408,7 +417,7 @@ Object ListIterator_NextSetData(Object _self, Object _object)
 Object ListIterator_AddAfter(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: AddAfter begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _addingElement;
 	_addingElement = ListNode_Create();
 	Object_SetRetaining(&(((ListNode) (_addingElement->entity))->_data), _object);
@@ -426,7 +435,7 @@ Object ListIterator_AddAfter(Object _self, Object _object)
 Object ListIterator_AddBefore(Object _self, Object _object)
 {
 	DPUSHS ("ListIterator: AddBefore begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _addingElement;
 	_addingElement = ListNode_Create();
 	Object_SetRetaining(&(((ListNode) (_addingElement->entity))->_data), _object);
@@ -444,7 +453,7 @@ Object ListIterator_AddBefore(Object _self, Object _object)
 Object ListIterator_ThisBegin(Object _self)
 {
 	DPUSHS ("ListIterator: ThisBegin begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev), _nothing) == _equal);
 	DPOPS ("ListIterator: ThisBegin ended.")
 	return toReturn;
@@ -453,7 +462,7 @@ Object ListIterator_ThisBegin(Object _self)
 Object ListIterator_ThisEnd(Object _self)
 {
 	DPUSHS ("ListIterator: ThisEnd begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next), _nothing) == _equal);
 	DPOPS ("ListIterator: ThisEnd ended.")
 	return toReturn;
@@ -462,7 +471,7 @@ Object ListIterator_ThisEnd(Object _self)
 Object ListIterator_PrevBegin(Object _self)
 {
 	DPUSHS ("ListIterator: PrevBegin begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev)->entity))->_prev), _nothing) == _equal);
 	DPOPS ("ListIterator: PrevBegin ended.")
 	return toReturn;
@@ -471,7 +480,7 @@ Object ListIterator_PrevBegin(Object _self)
 Object ListIterator_NextEnd(Object _self)
 {
 	DPUSHS ("ListIterator: NextEnd begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare((((ListNode) ((((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_next)->entity))->_next), _nothing) == _equal);
 	DPOPS ("ListIterator: NextEnd ended.")
 	return toReturn;
@@ -480,7 +489,7 @@ Object ListIterator_NextEnd(Object _self)
 Object ListIterator_AddListBefore(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBefore begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -496,7 +505,7 @@ Object ListIterator_AddListBefore(Object _self, Object _list)
 Object ListIterator_AddListAfter(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfter begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -512,7 +521,7 @@ Object ListIterator_AddListAfter(Object _self, Object _list)
 Object ListIterator_AddListBeforeClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBeforeClonning begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -528,7 +537,7 @@ Object ListIterator_AddListBeforeClonning(Object _self, Object _list)
 Object ListIterator_AddListAfterClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfterClonning begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -544,7 +553,7 @@ Object ListIterator_AddListAfterClonning(Object _self, Object _list)
 Object ListIterator_AddListBeforeDeepClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBeforeDeepClonning begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -560,7 +569,7 @@ Object ListIterator_AddListBeforeDeepClonning(Object _self, Object _list)
 Object ListIterator_AddListAfterDeepClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfterDeepClonning begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -576,7 +585,7 @@ Object ListIterator_AddListAfterDeepClonning(Object _self, Object _list)
 Object ListIterator_RemoveCount(Object _self, Object _count)
 {
 	DPUSHS ("ListIterator: RemoveCount begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	Object _savedPrev;
 	_savedPrev = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	Object _deletedCount;
@@ -597,7 +606,7 @@ Object ListIterator_RemoveCount(Object _self, Object _count)
 Object ListIterator_StringSkipSpace(Object _self)
 {
 	DPUSHS ("ListIterator: StringSkipSpace begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	while((Char_IsSpace(ListIterator_CharData(_self))) != _false)
 	{
 		ListIterator_Next(_self);
@@ -610,7 +619,7 @@ Object ListIterator_StringSkipSpace(Object _self)
 Object ListIterator_StringSkipWhiteSpace(Object _self)
 {
 	DPUSHS ("ListIterator: StringSkipWhiteSpace begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==   807984642922801280ull )
 	while((Char_IsWhiteSpace(ListIterator_CharData(_self))) != _false)
 	{
 		ListIterator_Next(_self);

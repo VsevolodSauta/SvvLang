@@ -6,6 +6,6 @@ Method_Invoke:
 	movq %rsi, %rdi
 	movq %rdx, %rsi
 	movq %rcx, %rdx
-	movq %r8, %rdx
+	movq %r8, %rcx
 	movq %r9, %r8
-	jmp *%rbx
+	jmpq *%rbx

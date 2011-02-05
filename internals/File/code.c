@@ -24,7 +24,7 @@ Object File_Create()
 Object File_OpenForReading(Object _self, Object _filename)
 {
 	File entity = _self->entity;
-	char buffer[1024];
+	char buffer[4096];
 	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, 1024);
 	entity->_descriptor = OSfileOpen(buffer, 0);
 	return _self;
@@ -33,7 +33,7 @@ Object File_OpenForReading(Object _self, Object _filename)
 Object File_OpenForAppending(Object _self, Object _filename)
 {
 	File entity = _self->entity;
-	char buffer[1024];
+	char buffer[4096];
 	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, 1024);
 	entity->_descriptor = OSfileOpen(buffer, 2);
 	return _self;
@@ -109,8 +109,8 @@ Object File_WriteByte(Object _self, Object _byte)
 Object File_ReadChar(Object _self)
 {
 	File entity = _self->entity;
-	char buffer[4];
-	int read = OSfileRead(entity->_descriptor, buffer, 4);
+	char buffer[16];
+	int read = OSfileRead(entity->_descriptor, buffer, 16);
 	if(read <= 0)
 		return _nil;
 	int charSize = UTF8GetLengthOfChar(buffer);
@@ -216,8 +216,8 @@ Object File_Destroy(Object _self)
 Object File_WriteNakedString(Object _self, Object _list)
 {
 	File entity = _self->entity;
-	char buffer[4096];
-	OSfileWrite(entity->_descriptor, buffer, StringFactory_GetUTF8String(_stringFactory, _list, buffer, 4096));
+	static char buffer[65536];
+	OSfileWrite(entity->_descriptor, buffer, StringFactory_GetUTF8String(_stringFactory, _list, buffer, 65536));
 	return _self;
 }
 

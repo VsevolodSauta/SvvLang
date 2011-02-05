@@ -23,7 +23,7 @@ Object ListNode_Create(void)
 Object ListNode_Init(Object _self)
 {
 	DPUSHS ("ListNode: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ull )
 	Object toReturn = _self;
 	DPOPS ("ListNode: Init ended.")
 	return toReturn;
@@ -32,7 +32,7 @@ Object ListNode_Init(Object _self)
 Object ListNode_Clone(Object _self)
 {
 	DPUSHS ("ListNode: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ull )
 	Object _toReturn;
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
@@ -46,7 +46,7 @@ Object ListNode_Clone(Object _self)
 Object ListNode_DeepClone(Object _self)
 {
 	DPUSHS ("ListNode: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ull )
 	Object _toReturn;
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
@@ -60,7 +60,7 @@ Object ListNode_DeepClone(Object _self)
 Object ListNode_Compare(Object _self, Object _listNode)
 {
 	DPUSHS ("ListNode: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ull )
 	Object _candidate;
 	_candidate = Object_Compare((((ListNode) (_self->entity))->_data), (((ListNode) (_listNode->entity))->_data));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
@@ -83,7 +83,7 @@ Object ListNode_Compare(Object _self, Object _listNode)
 Object ListNode_Destroy(Object _self)
 {
 	DPUSHS ("ListNode: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  1592307763146065920ull )
 	Object_Release((((ListNode) (_self->entity))->_data));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("ListNode: Destroy ended.")

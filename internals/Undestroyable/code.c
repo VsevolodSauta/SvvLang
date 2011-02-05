@@ -20,7 +20,7 @@ Object Undestroyable_Create(void)
 Object Undestroyable_Destroy(Object _self)
 {
 	DPUSHS ("Undestroyable: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ull )
 	Object toReturn = _self;
 	DPOPS ("Undestroyable: Destroy ended.")
 	return toReturn;
@@ -29,7 +29,7 @@ Object Undestroyable_Destroy(Object _self)
 Object Undestroyable_Clone(Object _self)
 {
 	DPUSHS ("Undestroyable: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ull )
 	Object toReturn = _self;
 	DPOPS ("Undestroyable: Clone ended.")
 	return toReturn;
@@ -38,7 +38,7 @@ Object Undestroyable_Clone(Object _self)
 Object Undestroyable_DeepClone(Object _self)
 {
 	DPUSHS ("Undestroyable: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ull )
 	Object toReturn = _self;
 	DPOPS ("Undestroyable: DeepClone ended.")
 	return toReturn;
@@ -47,6 +47,6 @@ Object Undestroyable_DeepClone(Object _self)
 Object Undestroyable_Compare(Object _self, Object _undestroyable)
 {
 	DPUSHS ("Undestroyable: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3814824931964230656ull )
 	return ( _self < _undestroyable ) ? _less : ( ( _self > _undestroyable ) ? _greater : _equal ) ; 
 }

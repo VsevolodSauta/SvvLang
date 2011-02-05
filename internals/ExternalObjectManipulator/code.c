@@ -22,7 +22,7 @@ Object ExternalObjectManipulator_Create(void)
 Object ExternalObjectManipulator_Init(Object _self)
 {
 	DPUSHS ("ExternalObjectManipulator: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: Init ended.")
 	return toReturn;
@@ -31,7 +31,7 @@ Object ExternalObjectManipulator_Init(Object _self)
 Object ExternalObjectManipulator_Clone(Object _self)
 {
 	DPUSHS ("ExternalObjectManipulator: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: Clone ended.")
 	return toReturn;
@@ -40,7 +40,7 @@ Object ExternalObjectManipulator_Clone(Object _self)
 Object ExternalObjectManipulator_DeepClone(Object _self)
 {
 	DPUSHS ("ExternalObjectManipulator: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: DeepClone ended.")
 	return toReturn;
@@ -49,7 +49,7 @@ Object ExternalObjectManipulator_DeepClone(Object _self)
 Object ExternalObjectManipulator_Destroy(Object _self)
 {
 	DPUSHS ("ExternalObjectManipulator: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object_Release((((ExternalObjectManipulator) (_self->entity))->_objectMasterCopy));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("ExternalObjectManipulator: Destroy ended.")
@@ -59,7 +59,7 @@ Object ExternalObjectManipulator_Destroy(Object _self)
 Object ExternalObjectManipulator_Compare(Object _self, Object _manipulator)
 {
 	DPUSHS ("ExternalObjectManipulator: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object toReturn = _equal;
 	DPOPS ("ExternalObjectManipulator: Compare ended.")
 	return toReturn;
@@ -68,7 +68,7 @@ Object ExternalObjectManipulator_Compare(Object _self, Object _manipulator)
 Object ExternalObjectManipulator_SetMachine(Object _self, Object _machine)
 {
 	DPUSHS ("ExternalObjectManipulator: SetMachine begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	(((ExternalObjectManipulator) (_self->entity))->_machine) = _machine;
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: SetMachine ended.")
@@ -78,7 +78,7 @@ Object ExternalObjectManipulator_SetMachine(Object _self, Object _machine)
 Object ExternalObjectManipulator_CreateUIDObject(Object _self)
 {
 	DPUSHS ("ExternalObjectManipulator: CreateUIDObject begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Object _uid;
 	_uid = Machine_ImportUID((((ExternalObjectManipulator) (_self->entity))->_machine), StringFactory_FromUTF8(_stringFactory, "Объект", 12));
@@ -93,16 +93,18 @@ Object ExternalObjectManipulator_CreateUIDObject(Object _self)
 Object ExternalObjectManipulator_SetBasicMethodWithNameForUID(Object _self, Object _method, Object _name, Object _uid)
 {
 	DPUSHS ("ExternalObjectManipulator: SetBasicMethodWithNameForUID begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _methods;
 	_methods = ListMap_ListMapAt(_object, StringFactory_FromUTF8(_stringFactory, "Методы", 12));
-	_method = ListMap_Create();
-	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый метод", 25), _method);
-	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _true);
-	ListMap_Add(_methods, _name, _method);
-	Object_Release(_method);
+	Object _methodEntity;
+	_methodEntity = ListMap_Create();
+	ListMap_Add(_methodEntity, StringFactory_FromUTF8(_stringFactory, "Базовый метод", 25), _method);
+	ListMap_Add(_methodEntity, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _true);
+	ListMap_Add(_methodEntity, StringFactory_FromUTF8(_stringFactory, "Сущность", 16), _self);
+	ListMap_Add(_methods, _name, _methodEntity);
+	Object_Release(_methodEntity);
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: SetBasicMethodWithNameForUID ended.")
 	return toReturn;
@@ -111,7 +113,7 @@ Object ExternalObjectManipulator_SetBasicMethodWithNameForUID(Object _self, Obje
 Object ExternalObjectManipulator_SetMethodWithNameForUID(Object _self, Object _methodBody, Object _name, Object _uid)
 {
 	DPUSHS ("ExternalObjectManipulator: SetMethodWithNameForUID begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _methods;
@@ -130,7 +132,7 @@ Object ExternalObjectManipulator_SetMethodWithNameForUID(Object _self, Object _m
 Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object _uid, Object _parameters, Object _processor)
 {
 	DPUSHS ("ExternalObjectManipulator: CloneUIDObjectBasicMethod begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  8518571086308177920ull )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _uidToReturn;

@@ -44,6 +44,9 @@ ListIterator Hide
 	self.node = nil
 	return self
 
+ListIterator Hidden
+	return self.node == nil
+
 ListIterator Next (++)
 	self.node = self.node.next
 	return self

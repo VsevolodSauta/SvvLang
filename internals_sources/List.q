@@ -61,18 +61,21 @@ List Clean (RemoveAll)
 	return self
 
 List PushFront (Prepend) object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	self.iterator AddBefore object
 	self.iterator Hide
 	return self
 
 List PushBack (Append Push) object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator AddAfter object
 	self.iterator Hide
 	return self
 
 List PushSorted object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	while (self.iterator NotThisEnd) And ((self.iterator ThisData) < (object))
 		self.iterator Next
@@ -81,52 +84,61 @@ List PushSorted object
 	return self
 
 List <Object> PeekFront
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	def self.iterator ThisData
 	self.iterator Hide
 
 List <Object> PeekBack
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	def self.iterator ThisData
 	self.iterator Hide
 
 List <Object> PopFront
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	def ((self.iterator ThisData) Retain) Autorelease
 	self.iterator ThisRemove
 	self.iterator Hide
 
 List <Object> PopBack (Pop)
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	def ((self.iterator ThisData) Retain) Autorelease
 	self.iterator ThisRemove
 	self.iterator Hide
 
 List <Object> RemoveFront
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	self.iterator ThisRemove
 	self.iterator Hide
 	return self
 
 List <Object> RemoveBack (Remove)
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator ThisRemove
 	self.iterator Hide
 	return self
 
 List AddAfterPosition <Number> position object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator AddAfter object
 	self.iterator Hide
 	return self
 
 List AddBeforePosition (InsertAtPositionObject AtInsert) <Number> position object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator AddBefore object
 	self.iterator Hide
 	return self
 
 List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> position
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	def self.iterator ThisData
 	self.iterator Hide
@@ -138,24 +150,28 @@ List <Object> ObjectAtPositionIfExists (ObjectAtPositionIfPossible) <Number> pos
 		return nil
 
 List RemoveObjectAtPosition (RemoveAt) <Number> position
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator RemoveThis
 	self.iterator Hide
 	return self
 
 List ReplaceAtPositionWithObject <Number> position object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator SetThisData object
 	self.iterator Hide
 	return self
 
 List <Logic> Contains object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	self.iterator SearchForward object
 	def self.iterator NotThisEnd
 	self.iterator Hide
 
 List RemoveFirst object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	self.iterator SearchForward object
 	if self.iterator NotThisEnd
@@ -164,6 +180,7 @@ List RemoveFirst object
 	return self
 
 List <Logic> RemoveFirstWithConfirmation object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	confirmation = false
 	self.iterator ToBegin
 	self.iterator SearchForward object
@@ -174,6 +191,7 @@ List <Logic> RemoveFirstWithConfirmation object
 	return confirmation
 
 List RemoveLast object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator SearchBackward object
 	if self.iterator NotThisBegin
@@ -182,6 +200,7 @@ List RemoveLast object
 	return self
 
 List RemoveLastWithConfirmation object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	confirmation = false
 	self.iterator ToEnd
 	self.iterator SearchBackward object
@@ -192,6 +211,7 @@ List RemoveLastWithConfirmation object
 	return confirmation
 
 List RemoveEvery object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	self.iterator SearchForward object
 	while self.iterator NotThisEnd
@@ -201,6 +221,7 @@ List RemoveEvery object
 	return self
 
 List RemoveEveryWithConfirmation object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	confirmation = false
 	self.iterator ToBegin
 	self.iterator SearchForward object
@@ -230,6 +251,7 @@ List <ListMap> ListMapAtPosition (ListMapFromPosition) <Number> position
 	return (self ObjectAtPosition position) AsListMap
 
 List Search object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	list = <List> Autorelease
 	self.iterator SearchForward object
@@ -254,6 +276,7 @@ List <ListIterator> CreatingIteratorFromPosition <Number> position
 	return iterator
 
 List SearchPositions object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	list = <List>
 	self.iterator ToBegin
 	position = 0
@@ -297,15 +320,21 @@ List <Number> Size
 	return toReturn
 
 List <Logic> Empty (IsEmpty)
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToBegin
 	def self.iterator ThisEnd
 	self.iterator Hide
 
 List Concatenate <List> list
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator AddListAfter list
 	self.iterator Hide
 	return self
 
 List SortInPlace
+	return self
+
+List PrintLn
+	console PrintLnString self
 	return self

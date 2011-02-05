@@ -13,6 +13,7 @@ Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node
 Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object _node);
 Object ListIterator_ResetNode(Object _self, Object _node);
 Object ListIterator_Hide(Object _self);
+Object ListIterator_Hidden(Object _self);
 Object ListIterator_Next(Object _self);
 Object ListIterator_Prev(Object _self);
 Object ListIterator_ToBegin(Object _self);

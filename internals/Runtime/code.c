@@ -21,7 +21,7 @@ Object Runtime_Create(void)
 Object Runtime_Init(Object _self)
 {
 	DPUSHS ("Runtime: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ull )
 	_nothing = _null = _nil = Undestroyable_Create();
 	_less = Comparation_Create();
 	_greater = Comparation_Create();
@@ -45,7 +45,7 @@ Object Runtime_Init(Object _self)
 Object Runtime_Destroy(Object _self)
 {
 	DPUSHS ("Runtime: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ull )
 	Object_Release(_autoreleasePool);
 	Object_Release(_console);
 	Object_Release(_json);
@@ -57,7 +57,7 @@ Object Runtime_Destroy(Object _self)
 Object Runtime_Clone(Object _self)
 {
 	DPUSHS ("Runtime: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ull )
 	Object toReturn = _self;
 	DPOPS ("Runtime: Clone ended.")
 	return toReturn;
@@ -66,7 +66,7 @@ Object Runtime_Clone(Object _self)
 Object Runtime_DeepClone(Object _self)
 {
 	DPUSHS ("Runtime: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ull )
 	Object toReturn = _self;
 	DPOPS ("Runtime: DeepClone ended.")
 	return toReturn;
@@ -75,7 +75,7 @@ Object Runtime_DeepClone(Object _self)
 Object Runtime_Compare(Object _self, Object _runtime)
 {
 	DPUSHS ("Runtime: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  5367970674748323840ull )
 	Object toReturn = _equal;
 	DPOPS ("Runtime: Compare ended.")
 	return toReturn;

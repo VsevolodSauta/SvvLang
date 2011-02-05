@@ -21,7 +21,7 @@ Object MachineScheduler_Create(void)
 Object MachineScheduler_Init(Object _self)
 {
 	DPUSHS ("MachineScheduler: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	(((MachineScheduler) (_self->entity))->_queue) = Queue_Create();
 	Object toReturn = _self;
 	DPOPS ("MachineScheduler: Init ended.")
@@ -31,7 +31,7 @@ Object MachineScheduler_Init(Object _self)
 Object MachineScheduler_GetNextUID(Object _self)
 {
 	DPUSHS ("MachineScheduler: GetNextUID begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	if((Queue_Empty((((MachineScheduler) (_self->entity))->_queue))) != _false)
 	{
 		Object toReturn = _nil;
@@ -49,7 +49,7 @@ Object MachineScheduler_GetNextUID(Object _self)
 Object MachineScheduler_ScheduleUID(Object _self, Object _uid)
 {
 	DPUSHS ("MachineScheduler: ScheduleUID begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	Queue_Push((((MachineScheduler) (_self->entity))->_queue), _uid);
 	Object toReturn = _self;
 	DPOPS ("MachineScheduler: ScheduleUID ended.")
@@ -59,7 +59,7 @@ Object MachineScheduler_ScheduleUID(Object _self, Object _uid)
 Object MachineScheduler_Destroy(Object _self)
 {
 	DPUSHS ("MachineScheduler: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	Object_Release((((MachineScheduler) (_self->entity))->_queue));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("MachineScheduler: Destroy ended.")
@@ -69,7 +69,7 @@ Object MachineScheduler_Destroy(Object _self)
 Object MachineScheduler_DeepClone(Object _self)
 {
 	DPUSHS ("MachineScheduler: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	Object toReturn = _self;
 	DPOPS ("MachineScheduler: DeepClone ended.")
 	return toReturn;
@@ -78,7 +78,7 @@ Object MachineScheduler_DeepClone(Object _self)
 Object MachineScheduler_Clone(Object _self)
 {
 	DPUSHS ("MachineScheduler: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	Object toReturn = _self;
 	DPOPS ("MachineScheduler: Clone ended.")
 	return toReturn;
@@ -87,7 +87,7 @@ Object MachineScheduler_Clone(Object _self)
 Object MachineScheduler_Compare(Object _self, Object _scheduler)
 {
 	DPUSHS ("MachineScheduler: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  4460415907327830016ull )
 	Object toReturn = _equal;
 	DPOPS ("MachineScheduler: Compare ended.")
 	return toReturn;

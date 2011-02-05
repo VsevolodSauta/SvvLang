@@ -1,34 +1,8 @@
 #pragma once
 
-#define _DMSG(args...) \
-	fprintf(stderr, args); \
-	fflush(stderr);
-
-
-#define DEBUG 0
-#define MEMORY_DEBUG 0
-#define STDLIB 0
-
-#define DEBUG_ASSERT 1
-#if DEBUG
-
-#define ASSERT_C ( message, assertion ) \
-	if(!(assertion)) \
-	{ \
-		DMSG(message); \
-		OSexit(-1); \
-	}
-
-#define ASSERT_Q ( message, assertion ) \
-	if((assertion) != true) \
-	{ \
-		DMSG(message); \
-		OSexit(-1); \
-	}
-
 extern int DLEVEL;
 
-static inline int strlen(char* arg)
+static inline int DEBUG_strlen(char* arg)
 {
 	register int toReturn = 0;
 	while(arg[toReturn++]);
@@ -60,32 +34,64 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 	return buffer + position;
 }
 
-#define DMSGS(arg) { \
+#define DPRINTS(arg) { \
 	int i = 0; \
 	char* obj = DEBUG_ptrToStr(_self); \
 	while(i++ < DLEVEL) OSfileWrite(2, "\t", 1); \
-	OSfileWrite(2, obj, strlen(obj)); \
+	OSfileWrite(2, obj, DEBUG_strlen(obj)); \
 	OSfileWrite(2, " - ", 3); \
-	OSfileWrite(2, arg, strlen(arg)); \
+	OSfileWrite(2, arg, DEBUG_strlen(arg)); \
 	OSfileWrite(2, "\n", 1); \
 }
 
-#define DMSG(arg) { \
+#define DPRINT(arg) { \
 	int i = 0; \
 	while(i++ < DLEVEL) OSfileWrite(2, "\t", 1); \
-	OSfileWrite(2, arg, strlen(arg)); \
+	OSfileWrite(2, arg, DEBUG_strlen(arg)); \
 	OSfileWrite(2, "\n", 1); \
 }
+
+#define DEBUG 0
+#define MEMORY_DEBUG 0
+#define STDLIB 0
+#define DEBUG_ASSERT 1
+
+#if DEBUG_ASSERT
+
+#define ASSERT_C(message, assertion) \
+	if(!(assertion)) \
+	{ \
+		DPRINT(message); \
+		OSexit(-1); \
+	}
+
+#define ASSERT_Q(message, assertion) \
+	if((assertion) != _true) \
+	{ \
+		DPRINTS(message); \
+		OSexit(-1); \
+	}
+
+#else
+
+#define ASSERT_C(message, assertion)
+#define ASSERT_Q(message, assertion)
+
+#endif
+
+#if DEBUG
+
+#define DMSG(arg) DPRINT(arg)
+#define DMSGS(arg) DPRINTS(arg)
 
 #define DPUSH(arg) {DMSG(arg); DLEVEL++;}
 #define DPOP(arg) {DLEVEL--; DMSG(arg);}
 #define DPUSHS(arg) {DMSGS(arg); DLEVEL++;}
 #define DPOPS(arg) {DLEVEL--; DMSGS(arg);}
 #define IMPOSSIBLE() DMSG("IMPOSSIBLE!!!")
-#else
 
-#define ASSERT_C(message, assertion)
-#define ASSERT_Q(message, assertion)
+
+#else
 
 #define DMSGS(arg)
 #define DMSG(arg)
@@ -94,6 +100,5 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 #define DPUSH(arg)
 #define DPOP(arg)
 #define IMPOSSIBLE()
-
 
 #endif

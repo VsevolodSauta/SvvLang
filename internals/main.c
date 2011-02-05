@@ -7,9 +7,7 @@
 #include <stdio.h>
 #endif
 
-#if DEBUG
 int DLEVEL = 0;
-#endif
 
 Object _autoreleasePool;
 Object _console;

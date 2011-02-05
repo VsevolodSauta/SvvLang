@@ -39,13 +39,13 @@ Processor <ListMap> ContextObjectJobs
 	return (self ContextObject) ListMapAt ("Работы")
 
 Processor <ListMap> ContextObjectProperties
-	return (self ContextJob) ListMapAt ("Свойства")
-
-Processor <ListMap> ContextJobMessageSlots (ContextJobExpectedMessages)
-	return (self ContextJob) ListMapAt ("Ожидаемые сообщения")
+	return (self ContextObject) ListMapAt ("Свойства")
 
 Processor <ListMap> ContextJobStages
 	return (self ContextJob) ListMapAt ("Стадии")
+
+Processor <ListMap> ContextJobMessageSlots (ContextJobExpectedMessages)
+	return (self ContextJob) ListMapAt ("Ожидаемые сообщения")
 
 Processor <ListMap> ContextJobMessageSlot <List> messageSlotName
 	return (self ContextJobMessageSlots) ListMapAt messageSlotName
@@ -77,6 +77,7 @@ Processor Init
 	self.processorCodes AtPut ("Поменять местами вершинные элементы") &Processor_SwapTopInStackCode
 	self.processorCodes AtPut ("Послать сообщение объекту с идентификатором") &Processor_SendMessageToUIDCode
 	self.processorCodes AtPut ("Послать сообщение объекту из поля") &Processor_SendMessageToFieldCode
+	self.processorCodes AtPut ("Послать ответ на сообщение") &Processor_SendReplyForMessageCode
 	self.processorCodes AtPut ("Вызвать метод с параметрами") &Processor_InvokeMethodCode
 	self.processorCodes AtPut ("Определить метод") &Processor_DefineMethodCode
 	self.processorCodes AtPut ("Удалить метод с именем") &Processor_UnDefineMethodCode
@@ -110,7 +111,7 @@ Processor Do <ListMap> toDo
 	return self
 
 Processor <Object> GetNamedEntityFromToDoOrStack <List> entityName <ListMap> toDo
-	object = toDo At entityName
+	object = (toDo At entityName) TempClone
 	if object == nil
 		object = self.helperStack Pop
 	return object
@@ -229,6 +230,19 @@ Processor SendMessageToFieldCode <ListMap> toDo
 	receiver = self FieldNameToUID fieldName
 	message AtPut ("Отправитель") self.contextUID
 	message AtPut ("Получатель") receiver
+	self SendMessage message
+	return self
+
+Processor SendReplyForMessageCode <ListMap> toDo
+	reply = (self GetNamedEntityFromToDoOrStack ("Ответ") toDo) AsListMap
+	messageName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsListMap
+	message = (((self ContextJobMessageSlots) ListMapAt messageName) ListMapAt "Сообщение")
+	receiver = message ListAt "Отправитель"
+	reqest = message ListAt "Запрос"
+	message AtPut ("Отправитель") self.contextUID
+	message AtPut ("Получатель") receiver
+	message AtPut ("Запрос") reqest
+	message AtPut ("Тип") ("Ответ")
 	self SendMessage message
 	return self
 
@@ -424,7 +438,7 @@ Processor <Object> EntityFromMessageField <ListMap> message <List> name
 	return message ObjectAt name
 
 Processor <Object> EntityFromNamedMessageField <List> messageName <List> fieldName
-	return ((self ContextJobMessageSlots) ListMapAt messageName) ObjectAt fieldName
+	return (((self ContextJobMessageSlots) ListMapAt messageName) ListMapAt ("Сообщение")) ObjectAt fieldName
 
 Processor <ListMap> NamespaceNameToNamespace <List> locationType
 	if locationType == "Глобальное поле"
@@ -464,7 +478,10 @@ Processor <Synonim> FieldNameToSynonim <List> fieldName
 	if candidate != nil
 		return candidate
 	candidate = (self.machine.globalContext) SynonimAt fieldName
-	return candidate
+	if candidate != nil
+		return candidate
+	console PrintLnString ("Взятие отсутствующего поля")
+	return nil
 
 Processor <List> FieldNameToUID <List> fieldName
 	synonim = self FieldNameToSynonim fieldName
@@ -485,7 +502,7 @@ Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	else
 		if method LogicAt ("Базовый")
 			basicMethod = method MethodAt ("Базовый метод")
-			objectEntity = (self ContextObjectProperties) ObjectAt ("Внутненняя сущность")
+			objectEntity = method ObjectAt ("Сущность")
 			basicMethod Invoke objectEntity self.contextUID parameters self
 		else
 			namespace = <ListMap>
@@ -526,6 +543,7 @@ Processor TryLinkMessageWithMessageSlotAndJob <ListMap> message <ListMap> messag
 			jobStage = (job ListMapAt ("Стадии")) ListMapAt (waitingStageNamesIterator ListData)
 			msgNeeded = (jobStage NumberAt ("Необходимо сообщений"))
 			msgNeeded --
+			waitingStageNamesIterator ++
 	return self
 
 
@@ -548,7 +566,6 @@ Processor ProcessOneJobIfAny
 		jobStagesIterator = (job ListMapAt ("Стадии")) First
 		while jobStagesIterator NotThisEnd
 			jobStage = jobStagesIterator ListMapData
-			console PrintLnString (jobStage ListAt ("Состояние"))
 			if (jobStage NumberAt ("Необходимо сообщений")) == 0
 				self.contextJobStageName = jobStagesIterator Key
 				self.contextJobName = jobsIterator Key
@@ -565,7 +582,6 @@ Processor ProcessOneJobIfAny
 
 Processor ProcessUID <List> uid
 	autoreleasePool ++
-	object = self.machine ObjectByUID uid
 	self.helperStack Clean
 	self.contextUID = uid
 	self ProcessOneJobIfAny

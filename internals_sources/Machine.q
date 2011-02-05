@@ -10,12 +10,14 @@ Machine Init
 	self.scheduler = <MachineScheduler>
 	self.objectManipulator = <ExternalObjectManipulator>
 	self.objectManipulator SetMachine self
+	self.objectManipulator CreateUIDObject
 	return self
 
 
 Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	autoreleasePool ++
-	console PrintLnString "Загружаем объект."
+	console PrintString "Загружаем объект "
+	console PrintLnString objectName
 	file = <File>
 	file OpenForReading objectName
 	if file ErrorWhileOpenning
@@ -30,9 +32,8 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 		autoreleasePool --
 		return self
 	uid = self.uidGenerator GenerateUID
-	self.objectsByUIDs AtPut uid parsedObject
-	((parsedObject ListMapAt ("Свойства")) ListAt ("Идентификаторы")) PushBack uid
-	self.scheduler ScheduleUID uid
+	self SetUIDToObject uid parsedObject
+	self ScheduleUID uid
 	synonim = <Synonim>
 	synonim SetUID uid
 	synonim AddToNamespaceWithName namespace ((parsedObject ListMapAt "Свойства") ListAt "Имя")
@@ -49,6 +50,7 @@ Machine <ListMap> UIDToObject (ObjectByUID ObjectFormUID) <List> uid
 
 Machine SetUIDToObject <List> uid <ListMap> object
 	self.objectsByUIDs AtPut uid object
+	((object ListMapAt ("Свойства")) ListAt ("Идентификаторы")) PushBack uid
 	return self
 
 Machine <List> GenerateUID (GetUID)
@@ -72,6 +74,7 @@ Machine Run
 			console PrintLnString ("Планировщик времени не выдал объект. Следовало бы уйти в ожидание, но событий больше никаких не произойдет. Выходим.")
 			break
 		else
+			console PrintLnString uid
 			self.processor ProcessUID uid
 	return self
 

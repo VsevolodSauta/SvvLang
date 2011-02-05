@@ -23,7 +23,7 @@ Object List_Create(void)
 Object List_Init(Object _self)
 {
 	DPUSHS ("List: Init begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	(((List) (_self->entity))->_head) = ListNode_Create();
 	(((List) (_self->entity))->_tail) = ListNode_Create();
 	(((ListNode) ((((List) (_self->entity))->_head)->entity))->_next) = (((List) (_self->entity))->_tail);
@@ -38,7 +38,7 @@ Object List_Init(Object _self)
 Object List_Destroy(Object _self)
 {
 	DPUSHS ("List: Destroy begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object_Release((((List) (_self->entity))->_iterator));
 	Object _node;
 	_node = (((List) (_self->entity))->_head);
@@ -57,7 +57,7 @@ Object List_Destroy(Object _self)
 Object List_Clone(Object _self)
 {
 	DPUSHS ("List: Clone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToEnd((((List) (_list->entity))->_iterator));
@@ -71,7 +71,7 @@ Object List_Clone(Object _self)
 Object List_DeepClone(Object _self)
 {
 	DPUSHS ("List: DeepClone begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToEnd((((List) (_list->entity))->_iterator));
@@ -85,7 +85,7 @@ Object List_DeepClone(Object _self)
 Object List_Compare(Object _self, Object _list)
 {
 	DPUSHS ("List: Compare begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _selfIterator;
 	_selfIterator = List_First(_self);
 	Object _listIterator;
@@ -132,7 +132,7 @@ Object List_Compare(Object _self, Object _list)
 Object List_Clean(Object _self)
 {
 	DPUSHS ("List: Clean begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _node;
 	_node = (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next);
 	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_node, (((List) (_self->entity))->_tail)) != _equal)) != _false)
@@ -152,7 +152,8 @@ Object List_Clean(Object _self)
 Object List_PushFront(Object _self, Object _object)
 {
 	DPUSHS ("List: PushFront begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -164,7 +165,8 @@ Object List_PushFront(Object _self, Object _object)
 Object List_PushBack(Object _self, Object _object)
 {
 	DPUSHS ("List: PushBack begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -176,7 +178,8 @@ Object List_PushBack(Object _self, Object _object)
 Object List_PushSorted(Object _self, Object _object)
 {
 	DPUSHS ("List: PushSorted begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	while((Logic_And(Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator))), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData((((List) (_self->entity))->_iterator)), _object) == _less))) != _false)
 	{
@@ -192,7 +195,8 @@ Object List_PushSorted(Object _self, Object _object)
 Object List_PeekFront(Object _self)
 {
 	DPUSHS ("List: PeekFront begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -203,7 +207,8 @@ Object List_PeekFront(Object _self)
 Object List_PeekBack(Object _self)
 {
 	DPUSHS ("List: PeekBack begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -214,7 +219,8 @@ Object List_PeekBack(Object _self)
 Object List_PopFront(Object _self)
 {
 	DPUSHS ("List: PopFront begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
@@ -226,7 +232,8 @@ Object List_PopFront(Object _self)
 Object List_PopBack(Object _self)
 {
 	DPUSHS ("List: PopBack begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	Object def = Object_Autorelease(Object_Retain(ListIterator_ThisData((((List) (_self->entity))->_iterator))));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
@@ -238,7 +245,8 @@ Object List_PopBack(Object _self)
 Object List_RemoveFront(Object _self)
 {
 	DPUSHS ("List: RemoveFront begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -250,7 +258,8 @@ Object List_RemoveFront(Object _self)
 Object List_RemoveBack(Object _self)
 {
 	DPUSHS ("List: RemoveBack begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -262,7 +271,8 @@ Object List_RemoveBack(Object _self)
 Object List_AddAfterPosition(Object _self, Object _position, Object _object)
 {
 	DPUSHS ("List: AddAfterPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -274,7 +284,8 @@ Object List_AddAfterPosition(Object _self, Object _position, Object _object)
 Object List_AddBeforePosition(Object _self, Object _position, Object _object)
 {
 	DPUSHS ("List: AddBeforePosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -286,7 +297,8 @@ Object List_AddBeforePosition(Object _self, Object _position, Object _object)
 Object List_ObjectAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ObjectAtPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -297,7 +309,7 @@ Object List_ObjectAtPosition(Object _self, Object _position)
 Object List_ObjectAtPositionIfExists(Object _self, Object _position)
 {
 	DPUSHS ("List: ObjectAtPositionIfExists begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(_self), _position) == _greater)) != _false)
 	{
 		Object toReturn = List_ObjectAtPosition(_self, _position);
@@ -315,7 +327,8 @@ Object List_ObjectAtPositionIfExists(Object _self, Object _position)
 Object List_RemoveObjectAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: RemoveObjectAtPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -327,7 +340,8 @@ Object List_RemoveObjectAtPosition(Object _self, Object _position)
 Object List_ReplaceAtPositionWithObject(Object _self, Object _position, Object _object)
 {
 	DPUSHS ("List: ReplaceAtPositionWithObject begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_ThisSetData((((List) (_self->entity))->_iterator), _object);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -339,7 +353,8 @@ Object List_ReplaceAtPositionWithObject(Object _self, Object _position, Object _
 Object List_Contains(Object _self, Object _object)
 {
 	DPUSHS ("List: Contains begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	Object def = Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)));
@@ -351,7 +366,8 @@ Object List_Contains(Object _self, Object _object)
 Object List_RemoveFirst(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveFirst begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	if((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
@@ -367,7 +383,8 @@ Object List_RemoveFirst(Object _self, Object _object)
 Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveFirstWithConfirmation begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -386,7 +403,8 @@ Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
 Object List_RemoveLast(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveLast begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_SearchBackward((((List) (_self->entity))->_iterator), _object);
 	if((Logic_Not(ListIterator_ThisBegin((((List) (_self->entity))->_iterator)))) != _false)
@@ -402,7 +420,8 @@ Object List_RemoveLast(Object _self, Object _object)
 Object List_RemoveLastWithConfirmation(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveLastWithConfirmation begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
@@ -421,7 +440,8 @@ Object List_RemoveLastWithConfirmation(Object _self, Object _object)
 Object List_RemoveEvery(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveEvery begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	ListIterator_SearchForward((((List) (_self->entity))->_iterator), _object);
 	while((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
@@ -438,7 +458,8 @@ Object List_RemoveEvery(Object _self, Object _object)
 Object List_RemoveEveryWithConfirmation(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveEveryWithConfirmation begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	Object _confirmation;
 	_confirmation = _false;
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -458,7 +479,7 @@ Object List_RemoveEveryWithConfirmation(Object _self, Object _object)
 Object List_Last(Object _self)
 {
 	DPUSHS ("List: Last begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_tail)->entity))->_prev));
@@ -470,7 +491,7 @@ Object List_Last(Object _self)
 Object List_First(Object _self)
 {
 	DPUSHS ("List: First begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = Object_Autorelease(ListIterator_Create());
 	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next));
@@ -482,7 +503,7 @@ Object List_First(Object _self)
 Object List_SystemIterator(Object _self)
 {
 	DPUSHS ("List: SystemIterator begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = ListIterator_Create();
 	ListIterator_SystemInitWithListAndNode(_iterator, _self, _nil);
@@ -494,7 +515,7 @@ Object List_SystemIterator(Object _self)
 Object List_ListMapAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ListMapAtPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object toReturn = List_ObjectAtPosition(_self, _position);
 	DPOPS ("List: ListMapAtPosition ended.")
 	return toReturn;
@@ -503,7 +524,8 @@ Object List_ListMapAtPosition(Object _self, Object _position)
 Object List_Search(Object _self, Object _object)
 {
 	DPUSHS ("List: Search begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object _list;
 	_list = Object_Autorelease(List_Create());
@@ -521,7 +543,7 @@ Object List_Search(Object _self, Object _object)
 Object List_IteratorFromPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: IteratorFromPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object toReturn = ListIterator_ToPosition(List_First(_self), _position);
 	DPOPS ("List: IteratorFromPosition ended.")
 	return toReturn;
@@ -530,7 +552,7 @@ Object List_IteratorFromPosition(Object _self, Object _position)
 Object List_CreatingIteratorFromPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: CreatingIteratorFromPosition begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = List_First(_self);
 	Object _currentPosition;
@@ -556,7 +578,8 @@ Object List_CreatingIteratorFromPosition(Object _self, Object _position)
 Object List_SearchPositions(Object _self, Object _object)
 {
 	DPUSHS ("List: SearchPositions begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	Object _list;
 	_list = List_Create();
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
@@ -580,7 +603,7 @@ Object List_SearchPositions(Object _self, Object _object)
 Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _positionTo)
 {
 	DPUSHS ("List: SublistBetweenPositions begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _positionFrom);
 	Object _list;
 	_list = Object_Autorelease(List_Create());
@@ -602,7 +625,7 @@ Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _
 Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _positionTo)
 {
 	DPUSHS ("List: SublistBetweenIterators begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = Object_Clone(_positionFrom);
 	Object _list;
@@ -621,7 +644,7 @@ Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _
 Object List_Size(Object _self)
 {
 	DPUSHS ("List: Size begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object _iterator;
 	_iterator = Object_Clone((((List) (_self->entity))->_iterator));
 	ListIterator_ToBegin(_iterator);
@@ -641,7 +664,8 @@ Object List_Size(Object _self)
 Object List_Empty(Object _self)
 {
 	DPUSHS ("List: Empty begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
 	Object def = ListIterator_ThisEnd((((List) (_self->entity))->_iterator));
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -652,7 +676,8 @@ Object List_Empty(Object _self)
 Object List_Concatenate(Object _self, Object _list)
 {
 	DPUSHS ("List: Concatenate begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddListAfter((((List) (_self->entity))->_iterator), _list);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
@@ -664,8 +689,18 @@ Object List_Concatenate(Object _self, Object _list)
 Object List_SortInPlace(Object _self)
 {
 	DPUSHS ("List: SortInPlace begined.")
-	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ulll )
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
 	Object toReturn = _self;
 	DPOPS ("List: SortInPlace ended.")
+	return toReturn;
+}
+
+Object List_PrintLn(Object _self)
+{
+	DPUSHS ("List: PrintLn begined.")
+	ASSERT_C ( "Checking for correct object type", _self->gid ==  3732711262168886272ull )
+	Console_WriteLnString(_console, _self);
+	Object toReturn = _self;
+	DPOPS ("List: PrintLn ended.")
 	return toReturn;
 }

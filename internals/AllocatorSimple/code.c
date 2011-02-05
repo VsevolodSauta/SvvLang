@@ -1,13 +1,15 @@
 #include "internals/basics.h"
 #include "internals/Undestroyable/interface.h"
 
-static char arr[1048576];
+#define SpaceInAllocator 10485760ull
+
+static char arr[SpaceInAllocator];
 static int position = 0;
 static char* pool;
 
 Object Allocator_Create()
 {
-	pool = OSmappingMap((void*) 0x100000, 512 * 1048576, 7, 34, -1, 0);
+	pool = OSmappingMap((void*) 0x100000, 512 * SpaceInAllocator, 7, 34, -1, 0);
 	return Undestroyable_Create();
 }
 

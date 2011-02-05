@@ -22,7 +22,7 @@ ExternalObjectManipulator SetMachine <Machine> machine
 
 ExternalObjectManipulator <List> CreateUIDObject
 	autoreleasePool ++
-	uid = self.machine ImportUID "Объект"
+	uid = self.machine ImportUID "Объект" 
 	self SetBasicMethodWithNameForUID &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонировать" uid
 	self.objectMasterCopy = (self.machine UIDToObject uid) DeepClone
 	autoreleasePool --
@@ -31,11 +31,12 @@ ExternalObjectManipulator <List> CreateUIDObject
 ExternalObjectManipulator <List> SetBasicMethodWithNameForUID <Method> method <List> name <List> uid
 	object = self.machine ObjectByUID uid
 	methods = object ListMapAt ("Методы")
-	method = <ListMap>
-	method AtPut ("Базовый метод") method
-	method AtPut ("Базовый") true
-	methods AtPut name method
-	method Release
+	methodEntity = <ListMap>
+	methodEntity AtPut ("Базовый метод") method
+	methodEntity AtPut ("Базовый") true
+	methodEntity AtPut ("Сущность") self
+	methods AtPut name methodEntity
+	methodEntity Release
 	return self
 
 ExternalObjectManipulator <List> SetMethodWithNameForUID <List> methodBody <List> name <List> uid
