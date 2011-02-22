@@ -50,3 +50,4 @@ Object List_Concatenate(Object _self, Object _list);
 Object List_Set(Object _self, Object _list);
 Object List_SortInPlace(Object _self);
 Object List_PrintLn(Object _self);
+Object List_Print(Object _self);

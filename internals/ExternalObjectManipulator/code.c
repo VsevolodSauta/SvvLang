@@ -102,10 +102,9 @@ Object ExternalObjectManipulator_CloneUIDObjectInternalRoutine(Object _self, Obj
 	_uidToReturn = Machine_GenerateUID((((ExternalObjectManipulator) (_self->entity))->_machine));
 	Object _objectToReturn;
 	_objectToReturn = Object_DeepClone((((ExternalObjectManipulator) (_self->entity))->_objectMasterCopy));
-	ListMap_DumpKeys(ListMap_ObjectMethods(_object));
-	ListMap_ObjectResetMethods(_objectToReturn, Object_TempDeepClone(ListMap_ObjectMethods(_object)));
-	ListMap_ObjectResetFields(_objectToReturn, Object_TempDeepClone(ListMap_ObjectFields(_object)));
-	ListMap_ObjectResetIdentifiers(_objectToReturn);
+	ListMap_ObjectResetMethodsDestructive(_objectToReturn, Object_TempDeepClone(ListMap_ObjectMethods(_object)));
+	ListMap_ObjectResetFieldsDestructive(_objectToReturn, Object_TempDeepClone(ListMap_ObjectFields(_object)));
+	ListMap_ObjectRemoveAllIdentifiers(_objectToReturn);
 	Machine_SetUIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uidToReturn, _objectToReturn);
 	Object_Release(_objectToReturn);
 	Object toReturn = _uidToReturn;
@@ -113,15 +112,15 @@ Object ExternalObjectManipulator_CloneUIDObjectInternalRoutine(Object _self, Obj
 	return toReturn;
 }
 
-Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object _parameters, Object _processor)
+Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object _processor)
 {
 	DPUSHS ("ExternalObjectManipulator: CloneUIDObjectBasicMethod begined.")
 	ASSERT_C ( "ExternalObjectManipulator:CloneUIDObjectBasicMethod --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
 	Object _uidToReturn;
-	_uidToReturn = ExternalObjectManipulator_CloneUIDObjectInternalRoutine(_self, Processor_ContextObject(_processor));
+	_uidToReturn = ExternalObjectManipulator_CloneUIDObjectInternalRoutine(_self, (((Processor) (_processor->entity))->_contextUID));
 	Object _replyMessage;
 	_replyMessage = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
-	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Тип", 6), StringFactory_FromUTF8(_stringFactory, "Ответ", 10));
+	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10));
 	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Клон", 8), _uidToReturn);
 	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Запрос на клонирование", 42));
 	Object toReturn = _self;

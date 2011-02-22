@@ -58,8 +58,6 @@ Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Obje
 	Object _contents;
 	_contents = File_ReadContentsOfFile(_file);
 	File_Close(_file);
-	Console_WriteLnNumber(_console, List_Size(_contents));
-	Console_WriteLnString(_console, _contents);
 	Object _parsedObject;
 	_parsedObject = JSON_ParseObject(_json, List_First(_contents));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_parsedObject, (((JSON) (_json->entity))->_error)) == _equal)) != _false)
@@ -74,11 +72,7 @@ Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Obje
 	_uid = UIDGenerator_GenerateUID((((Machine) (_self->entity))->_uidGenerator));
 	Machine_SetUIDToObject(_self, _uid, _parsedObject);
 	Machine_ScheduleUID(_self, _uid);
-	Object _synonim;
-	_synonim = Synonim_Create();
-	Synonim_SetUID(_synonim, _uid);
-	Synonim_AddToNamespaceWithName(_synonim, _namespace, ListMap_ListAt(ListMap_ListMapAt(_parsedObject, StringFactory_FromUTF8(_stringFactory, "Свойства", 16)), StringFactory_FromUTF8(_stringFactory, "Имя", 6)));
-	Object_Release(_synonim);
+	Machine_DefineFieldHelper(_self, _uid, ListMap_ListAt(ListMap_ObjectProperties(_parsedObject), StringFactory_FromUTF8(_stringFactory, "Имя", 6)), _namespace);
 	AutoreleasePool_PopFrame(_autoreleasePool);
 	Object toReturn = _uid;
 	DPOPS ("Machine: LoadUIDWithNameToNamespace ended.")
@@ -91,6 +85,34 @@ Object Machine_ImportUID(Object _self, Object _objectName)
 	ASSERT_C ( "Machine:ImportUID --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
 	Object toReturn = Machine_LoadUIDWithNameToNamespace(_self, _objectName, (((Machine) (_self->entity))->_globalContext));
 	DPOPS ("Machine: ImportUID ended.")
+	return toReturn;
+}
+
+Object Machine_RegisterAtGlobalContext(Object _self, Object _uid, Object _name)
+{
+	DPUSHS ("Machine: RegisterAtGlobalContext begined.")
+	ASSERT_C ( "Machine:RegisterAtGlobalContext --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
+	Object toReturn = Machine_DefineFieldHelper(_self, _uid, _name, (((Machine) (_self->entity))->_globalContext));
+	DPOPS ("Machine: RegisterAtGlobalContext ended.")
+	return toReturn;
+}
+
+Object Machine_DefineFieldHelper(Object _self, Object _uid, Object _fieldName, Object _nameSpace)
+{
+	DPUSHS ("Machine: DefineFieldHelper begined.")
+	ASSERT_C ( "Machine:DefineFieldHelper --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
+	Object _synonim;
+	_synonim = Synonim_Create();
+	Synonim_SetUID(_synonim, _uid);
+	Object _reference;
+	_reference = ListMap_Create();
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _nameSpace);
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _fieldName);
+	Synonim_AddReference(_synonim, _reference);
+	Object_Release(_reference);
+	Object_Release(_synonim);
+	Object toReturn = _self;
+	DPOPS ("Machine: DefineFieldHelper ended.")
 	return toReturn;
 }
 
@@ -108,7 +130,7 @@ Object Machine_SetUIDToObject(Object _self, Object _uid, Object _object)
 	DPUSHS ("Machine: SetUIDToObject begined.")
 	ASSERT_C ( "Machine:SetUIDToObject --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
 	ListMap_Add((((Machine) (_self->entity))->_objectsByUIDs), _uid, _object);
-	List_PushBack(ListMap_ListAt(ListMap_ListMapAt(_object, StringFactory_FromUTF8(_stringFactory, "Свойства", 16)), StringFactory_FromUTF8(_stringFactory, "Идентификаторы", 28)), _uid);
+	List_PushBack(ListMap_ListAt(ListMap_ObjectProperties(_object), StringFactory_FromUTF8(_stringFactory, "Идентификаторы", 28)), _uid);
 	Object toReturn = _self;
 	DPOPS ("Machine: SetUIDToObject ended.")
 	return toReturn;
@@ -159,7 +181,6 @@ Object Machine_Run(Object _self)
 		}
 		else
 		{
-			Console_WriteLnString(_console, _uid);
 			Processor_ProcessUID((((Machine) (_self->entity))->_processor), _uid);
 		}
 	}

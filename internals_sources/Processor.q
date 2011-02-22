@@ -82,7 +82,6 @@ Processor Init
 	return self
 
 Processor Do <ListMap> toDo
-	console PrintLnString (toDo ListAt ("Действие"))
 	method = self.processorCodes MethodAt (toDo ListAt ("Действие"))
 	if method == nil
 		console PrintLnString ("Некорректное toDo: Действие не задано либо отсутствует в системе комманд.")
@@ -257,14 +256,7 @@ Processor DefineGlobalFieldCode <ListMap> toDo
 Processor DefineFieldHelper <ListMap> toDo <ListMap> nameSpace
 	uid = self GetNamedEntityFromToDoOrStack ("Идентификатор") toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
-	synonim = <Synonim>
-	synonim SetUID uid
-	reference = <ListMap>
-	reference AtPut ("Пространство имен") nameSpace
-	reference AtPut ("Имя поля") fieldName
-	synonim AddReference reference
-	reference Release
-	synonim Release
+	self.machine DefineFieldHelper uid fieldName nameSpace
 	return self
 
 Processor SetFieldCode <ListMap> toDo
@@ -469,7 +461,7 @@ Processor <List> FieldNameToUID <List> fieldName
 
 
 Processor SendMessage <ListMap> message
-	uid = message MessageSender
+	uid = message MessageReceiver
 	receiver = self.machine ObjectByUID uid
 	self ProcessMessageForObject message receiver
 	self.machine ScheduleUID uid
@@ -483,8 +475,8 @@ Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
 	replyMessage MessageSetSender self.contextUID
 	replyMessage MessageSetReceiver receiver
 	replyMessage MessageSetRequest reqest
-	replyMessage MessageSetType ("Ответ")
-	self SendMessage message
+	replyMessage MessageSetTypeAnswer
+	self SendMessage replyMessage
 	return self
 
 Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
@@ -493,30 +485,31 @@ Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	if method == nil
 		console PrintLnString ("Ошибка! Вызов несуществующего метода.")
 	else
+		namespace = <ListMap>
+		self.localNamespaces Push namespace
+		namespace AddListMap parameters
+		namespace Release
 		if method LogicAt ("Базовый")
 			basicMethod = method MethodAt ("Базовый метод")
 			objectEntity = method ObjectAt ("Сущность")
-			basicMethod Invoke objectEntity parameters self
+			basicMethod Invoke objectEntity self
 		else
-			namespace = <ListMap>
-			self.localNamespaces Push namespace
-			namespace AddListMap parameters
-			namespace Release
 			methodBody = method ListAt ("Тело")
 			iterator = methodBody First
 			while iterator NotThisEnd
 				self Do (iterator ListMapData)
 				iterator ++
-			self.localNamespaces Pop
+		self.localNamespaces Pop
 	autoreleasePool --
 	return self
 
 
 Processor MessageConfirmsToParameter <ListMap> message <ListMap> parameter
 	checkingMethod = parameter At ("Метод проверки")
-	if checkingMethod == ("Совпадение")
-		if (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
-			return true
+	if checkingMethod == "Совпадение"
+		return (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
+	elif checkingMethod == "Наличие"
+		return (message Contains (parameter At ("Ключ")))
 	return false
 
 

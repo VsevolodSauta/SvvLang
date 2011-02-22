@@ -1,5 +1,10 @@
 #pragma once
 
+#define DEBUG 0
+#define MEMORY_DEBUG 0
+#define STDLIB 0
+#define DEBUG_ASSERT 0
+
 extern int DLEVEL;
 
 static inline int DEBUG_strlen(char* arg)
@@ -50,11 +55,6 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 	OSfileWrite(2, arg, DEBUG_strlen(arg)); \
 	OSfileWrite(2, "\n", 1); \
 }
-
-#define DEBUG 0
-#define MEMORY_DEBUG 0
-#define STDLIB 0
-#define DEBUG_ASSERT 1
 
 #if DEBUG_ASSERT
 

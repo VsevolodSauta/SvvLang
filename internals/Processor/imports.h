@@ -6,6 +6,7 @@
 #include "internals/Machine/interface.h"
 #include "internals/ExternalObjectManipulator/interface.h"
 #include "internals/ExternalConsoleManipulator/interface.h"
+#include "internals/ExternalFileManipulator/interface.h"
 #include "internals/ExternalMachineManipulator/interface.h"
 #include "internals/Stack/interface.h"
 #include "internals/Synonim/interface.h"

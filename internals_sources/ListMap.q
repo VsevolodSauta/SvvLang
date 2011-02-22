@@ -5,8 +5,8 @@ ListMap Init
 	self.underClonning = no
 	return self
 
-ListMap <Comparation> Compare <ListMap> listSet
-	return self.root ? listSet.root
+ListMap <Comparation> Compare <ListMap> listMap
+	return self.root ? listMap.root
 
 ListMap Destroy
 	self.root Release
@@ -65,7 +65,7 @@ ListMap RemoveAll
 	self.root = <ListMapNode>
 	return self
 
-ListMap ResetWithListMap <ListMap> listMap
+ListMap ResetWithListMapDestructive <ListMap> listMap
 	self.root = listMap.root
 	listMap.root = <ListMapNode>
 	return self
@@ -161,6 +161,16 @@ ListMap DumpKeys
 		iterator ++
 	return self
 
+ListMap DumpListToListMap (MessageDump)
+	iterator = self First
+	while iterator NotThisEnd
+		console PrintString "\""
+		console PrintString (iterator Key)
+		console PrintString "\":\""
+		console PrintString (iterator Value)
+		console PrintLnString "\""
+		iterator ++
+	return self
 
 
 
@@ -214,25 +224,33 @@ ListMap ObjectSetBasicMethod <Object> entity <Method> basicMethod <List> methodN
 ListMap ObjectSetJob <ListMap> job <List> jobName
 	(self ObjectJobs) AtPut jobName job
 	return self
+
+ListMap ObjectSetProperty <List> propertyName value
+	(self ObjectProperties) AtPut propertyName value
+	return self
 	
 ListMap ObjectRemoveJob <List> jobName
 	(self ObjectJobs) Remove jobName
 	return self
 
-ListMap ObjectResetMethods <ListMap> newMethods
-	self AtPut "Методы" newMethods // (self ObjectMethods) ResetWithListMap newMethods
+ListMap ObjectResetMethodsDestructive <ListMap> newMethods
+	self AtPut "Методы" newMethods // (self ObjectMethods) ResetWithListMapDestructive newMethods
 	return self
 
-ListMap ObjectResetFields <ListMap> newFields
-	self AtPut "Поля" newFields // (self ObjectFields) ResetWithListMap newFields
+ListMap ObjectResetFieldsDestructive <ListMap> newFields
+	self AtPut "Поля" newFields // (self ObjectFields) ResetWithListMapDestructive newFields
 	return self
 
-ListMap ObjectResetIdentifiers
+ListMap ObjectRemoveAllIdentifiers
 	((self ObjectProperties) ListAt ("Идентификаторы")) RemoveAll
 	return self
 
 ListMap ObjectJob <List> jobName
 	return (self ObjectJobs) ListMapAt jobName
+	
+	
+ListMap <Object> ObjectProperty <List> propertyName
+	return (self ObjectProperties) At propertyName
 
 
 ListMap JobStages
@@ -261,6 +279,16 @@ ListMap JobRemoveStage <List> stageName
 	(self JobStages) Remove stageName
 	return self
 
+ListMap JobRemoveStageAndMessageSlots <List> stageName
+	stage = (self JobStages) ListMapAt stageName
+	stageMessageSlotsIterator = stage StageMessageSlotsIterator
+	while stageMessageSlotsIterator NotThisEnd
+		messageSlotName = stageMessageSlotsIterator ListData
+		self JobRemoveMessageSlot messageSlotName
+		stageMessageSlotsIterator ++
+	(self JobStages) RemoveAt stageName
+	return self
+
 ListMap JobSetMessageSlot <ListMap> messageSlot <List> messageSlotName
 	(self JobMessageSlots) AtPut messageSlotName messageSlot
 	return self
@@ -282,6 +310,32 @@ ListMap JobRemoveAllStages
 ListMap JobRemoveAllMessageSlots
 	(self JobMessageSlots) RemoveAll
 	return self
+	
+ListMap JobCreateStageWithNameMethodRequestMessageSlot <List> stageName <List> methodName <List> messageSlotName <List> messageSlotRequestName
+	stage = entitiesFactory CreateEmptyJobStage
+	stage StageSetMethod methodName
+	stage StageSetMessageSlot messageSlotName
+	stage StageIncrementMessagesCounter
+	self JobSetStage stage stageName
+
+	messageSlot = entitiesFactory CreateEmptyMessageSlot
+	messageSlot MessageSlotSetStage stageName
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Тип" "Запрос")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Запрос" messageSlotRequestName)
+	self JobSetMessageSlot messageSlot messageSlotName
+
+	return self
+
+ListMap JobCreateStageWithNameMethodMessageSlotNameAndEntity <List> stageName <List> methodName <List> messageSlotName <ListMap> messageSlot
+	stage = entitiesFactory CreateEmptyJobStage
+	stage StageSetMethod methodName
+	stage StageSetMessageSlot messageSlotName
+	stage StageIncrementMessagesCounter
+	messageSlot MessageSlotSetStage stageName
+	self JobSetStage stage stageName
+	self JobSetMessageSlot messageSlot messageSlotName
+	return self
+
 
 
 
@@ -309,11 +363,23 @@ ListMap MessageSetReceiver <List> receiver
 ListMap MessageSetType <List> type
 	return self AtPut "Тип" type
 	
+ListMap MessageSetTypeReply (MessageSetTypeAnswer)
+	return self MessageSetType "Ответ"
+
+ListMap MessageSetTypeRequest
+	return self MessageSetType "Запрос"
+
 ListMap MessageSetRequest <List> reqest
 	return self AtPut "Запрос" reqest
 
-ListMap MessageSetReply <List> reply
+ListMap MessageSetReply (MessageSetAnswer) <List> reply
 	return self AtPut "Ответ" reply
+
+ListMap MessageSetReplySuccess (MessageSetAnswerSuccess)
+	return self MessageSetReply "Успех"
+
+ListMap MessageSetReplyFail (MessageSetAnswerFail)
+	return self MessageSetReply "Неудача"
 
 
 
@@ -355,6 +421,9 @@ ListMap StageSetMessageSlot <List> messageSlotName
 
 ListMap <List> StageMessageSlots
 	return self ListAt ("Сообщения")
+
+ListMap <ListIterator> StageMessageSlotsIterator
+	return (self ListAt ("Сообщения")) First
 
 ListMap <List> StageMethod
 	return self ListAt ("Метод")

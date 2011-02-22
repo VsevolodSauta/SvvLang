@@ -90,8 +90,8 @@ Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Ob
 	ListMap_StageSetMessageSlot(_stage, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	ListMap_StageIncrementMessagesCounter(_stage);
 	ListMap_MessageSlotSetStage(_messageSlot, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
-	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionWithKeyValue(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Тип", 6), StringFactory_FromUTF8(_stringFactory, "Запрос", 12)));
-	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionWithKeyValue(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), StringFactory_FromUTF8(_stringFactory, "Вывести", 14)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Тип", 6), StringFactory_FromUTF8(_stringFactory, "Запрос", 12)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), StringFactory_FromUTF8(_stringFactory, "Вывести", 14)));
 	ListMap_JobSetMessageSlot(_job, _messageSlot, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	ListMap_JobSetStage(_job, _stage, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
 	ListMap_ObjectSetJob(_object, _job, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
@@ -100,7 +100,7 @@ Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Ob
 	return toReturn;
 }
 
-Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Object _uid, Object _parameters, Object _processor)
+Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Object _processor)
 {
 	DPUSHS ("ExternalConsoleManipulator: WriteUIDConsoleBasicMethod begined.")
 	ASSERT_C ( "ExternalConsoleManipulator:WriteUIDConsoleBasicMethod --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
@@ -109,7 +109,7 @@ Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Objec
 	Console_WriteLnString(_console, _string);
 	Object _replyMessage;
 	_replyMessage = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
-	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10));
+	ListMap_MessageSetReplySuccess(_replyMessage);
 	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	Object toReturn = _self;
 	DPOPS ("ExternalConsoleManipulator: WriteUIDConsoleBasicMethod ended.")

@@ -48,6 +48,7 @@ add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
 add_subdirectory(ExternalObjectManipulator)
+add_subdirectory(ExternalFileManipulator)
 add_subdirectory(ExternalConsoleManipulator)
 add_subdirectory(ExternalMachineManipulator)
 add_subdirectory(ExternalEntitiesFactory)

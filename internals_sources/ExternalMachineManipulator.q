@@ -1,13 +1,15 @@
-<ExternalMachineManipulator> <Machine> machine <ExternalObjectManipulator> object <ExternalConsoleManipulator> console
+<ExternalMachineManipulator> <Machine> machine <ExternalObjectManipulator> object <ExternalConsoleManipulator> console <ExternalFileManipulator> file
 
 ExternalMachineManipulator Init
 	self.object = <ExternalObjectManipulator>
 	self.console = <ExternalConsoleManipulator>
+	self.file = <ExternalFileManipulator>
 	return self
 
 ExternalMachineManipulator Destroy
 	self.object Release
 	self.console Release
+	self.file Release
 	return self Destroy
 
 ExternalMachineManipulator Clone
@@ -16,19 +18,26 @@ ExternalMachineManipulator Clone
 ExternalMachineManipulator DeepClone
 	return self Retain
 
-ExternalMachineManipulator Compare <ExternalMachineManipulator> machineManipulator
-	return self
+ExternalMachineManipulator <Comparation> Compare <ExternalMachineManipulator> machineManipulator
+	return equal
 
 ExternalMachineManipulator SetMachine <Machine> machine
 	self.machine = machine
 	self.object SetMachine machine
 	self.console SetMachine machine
+	self.file SetMachine machine
 	return self
 
 ExternalMachineManipulator CreateAll
 	objectUID = self.object CreateUIDObject
-	"Object created." PrintLn
+
 	consoleUID = self.object CloneUIDObjectInternalRoutine objectUID
-	"Console created." PrintLn
 	self.console CreateUIDConsoleFromUIDObject consoleUID
+	self.machine RegisterAtGlobalContext consoleUID "Консоль"
+
+	fileUID = self.object CloneUIDObjectInternalRoutine objectUID
+	self.file CreateUIDFileFromUIDObject fileUID
+	self.machine RegisterAtGlobalContext fileUID "Файл"
+	
 	return self
+	

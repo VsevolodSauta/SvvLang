@@ -31,10 +31,7 @@ Object Allocator_Delete(Object _self, void* toDelete)
 {
 	if(toDelete == 0) return _self;
 	int intPtr = (((long) toDelete) - ((long) pool)) / 512;
-	if(arr[intPtr] == 1)
-	{
-		DMSG("Allocator: Double free.");
-	}
+	ASSERT_C("Allocator: Double free.", arr[intPtr] == 0);
 	arr[intPtr] = 1;
 	return _self;
 }

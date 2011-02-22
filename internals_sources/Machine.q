@@ -24,8 +24,6 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 		console PrintLnString "Возникла ошибка при загрузке объекта. Невозможно прочитать контейнер объекта (файл)."
 	contents = file ReadContentsOfFile
 	file Close
-	console PrintLnNumber (contents Size)
-	console PrintLnString contents
 	parsedObject = json ParseObject (contents First)
 	if parsedObject == json.error
 		console PrintLnString "Некорректный текст приложения. Невозможно провести грамматический разбор."
@@ -34,23 +32,34 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	uid = self.uidGenerator GenerateUID
 	self SetUIDToObject uid parsedObject
 	self ScheduleUID uid
-	synonim = <Synonim>
-	synonim SetUID uid
-	synonim AddToNamespaceWithName namespace ((parsedObject ListMapAt "Свойства") ListAt "Имя")
-	synonim Release
+	self DefineFieldHelper uid ((parsedObject ObjectProperties) ListAt "Имя") namespace
 	autoreleasePool --
 	return uid
 
 Machine <List> ImportUID (LoadUID) <List> objectName
 	return self LoadUIDWithNameToNamespace objectName self.globalContext
 
+Machine RegisterAtGlobalContext <List> uid <List> name
+	return self DefineFieldHelper uid name self.globalContext
+	
+
+Machine DefineFieldHelper <List> uid <List> fieldName <ListMap> nameSpace
+	synonim = <Synonim>
+	synonim SetUID uid
+	reference = <ListMap>
+	reference AtPut ("Пространство имен") nameSpace
+	reference AtPut ("Имя поля") fieldName
+	synonim AddReference reference
+	reference Release
+	synonim Release
+	return self
 
 Machine <ListMap> UIDToObject (ObjectByUID ObjectFormUID) <List> uid
 	return ((self.objectsByUIDs At uid) AsListMap)
 
 Machine SetUIDToObject <List> uid <ListMap> object
 	self.objectsByUIDs AtPut uid object
-	((object ListMapAt ("Свойства")) ListAt ("Идентификаторы")) PushBack uid
+	((object ObjectProperties) ListAt ("Идентификаторы")) PushBack uid
 	return self
 
 Machine <List> GenerateUID (GetUID)
@@ -74,7 +83,6 @@ Machine Run
 			console PrintLnString ("Планировщик времени не выдал объект. Следовало бы уйти в ожидание, но событий больше никаких не произойдет. Выходим.")
 			break
 		else
-			console PrintLnString uid
 			self.processor ProcessUID uid
 	return self
 

@@ -40,14 +40,14 @@ ExternalEntitiesFactory <ListMap> CreateEmptyJobStage
 	toReturn AtPut "Необходимо сообщений" 0
 	return toReturn
 
-ExternalEntitiesFactory <ListMap> CreateEmptyCondition
+ExternalEntitiesFactory <ListMap> CreateConditionPresence <List> key
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод проверки" "Совпадение"
 	toReturn AtPut "Ключ" ""
 	toReturn AtPut "Значение" ""
 	return toReturn
 	
-ExternalEntitiesFactory <ListMap> CreateConditionWithKeyValue <List> key value
+ExternalEntitiesFactory <ListMap> CreateConditionEquality (CreateConditionWithKeyValue) <List> key value
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод проверки" "Совпадение"
 	toReturn AtPut "Ключ" (key TempClone)
@@ -58,6 +58,12 @@ ExternalEntitiesFactory <ListMap> CreateEmptyMessageSlot
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод идентификации" (self CreateEmptyList)
 	toReturn AtPut "Стадии" (self CreateEmptyList)
+	return toReturn
+
+ExternalEntitiesFactory <ListMap> CreateRequestMessageSlot <List> request
+	toReturn = self CreateEmptyMessageSlot
+	toReturn MessageSlotSetCondition (self CreateConditionWithKeyValue "Тип" "Запрос")
+	toReturn MessageSlotSetCondition (self CreateConditionWithKeyValue "Запрос" request)
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateObject

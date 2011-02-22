@@ -33,19 +33,18 @@ ExternalObjectManipulator CloneUIDObjectInternalRoutine <List> uid
 	object = self.machine UIDToObject uid
 	uidToReturn = self.machine GenerateUID
 	objectToReturn = self.objectMasterCopy DeepClone
-	(object ObjectMethods) DumpKeys
-	objectToReturn ObjectResetMethods ((object ObjectMethods) TempDeepClone)
-	objectToReturn ObjectResetFields ((object ObjectFields) TempDeepClone)
-	objectToReturn ObjectResetIdentifiers
+	objectToReturn ObjectResetMethodsDestructive ((object ObjectMethods) TempDeepClone)
+	objectToReturn ObjectResetFieldsDestructive ((object ObjectFields) TempDeepClone)
+	objectToReturn ObjectRemoveAllIdentifiers
 	self.machine SetUIDToObject uidToReturn objectToReturn
 	objectToReturn Release
 	return uidToReturn
 
 
-ExternalObjectManipulator CloneUIDObjectBasicMethod <ListMap> parameters <Processor> processor
-	uidToReturn = self CloneUIDObjectInternalRoutine (processor ContextObject)
+ExternalObjectManipulator CloneUIDObjectBasicMethod <Processor> processor
+	uidToReturn = self CloneUIDObjectInternalRoutine processor.contextUID
 	replyMessage = entitiesFactory CreateEmptyListMap
-	replyMessage AtPut "Тип" "Ответ"
+	replyMessage AtPut "Ответ" "Успех"
 	replyMessage AtPut "Клон" uidToReturn
 	processor SendReplyForMessage replyMessage "Запрос на клонирование"
 	return self

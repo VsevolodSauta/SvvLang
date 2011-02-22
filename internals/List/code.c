@@ -739,3 +739,13 @@ Object List_PrintLn(Object _self)
 	DPOPS ("List: PrintLn ended.")
 	return toReturn;
 }
+
+Object List_Print(Object _self)
+{
+	DPUSHS ("List: Print begined.")
+	ASSERT_C ( "List:Print --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	Console_WriteString(_console, _self);
+	Object toReturn = _self;
+	DPOPS ("List: Print ended.")
+	return toReturn;
+}

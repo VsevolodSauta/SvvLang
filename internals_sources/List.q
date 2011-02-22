@@ -355,3 +355,8 @@ List SortInPlace
 List PrintLn
 	console PrintLnString self
 	return self
+
+List Print
+	console PrintString self
+	return self
+
