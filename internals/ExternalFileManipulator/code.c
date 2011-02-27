@@ -79,12 +79,12 @@ Object ExternalFileManipulator_CreateUIDFileFromUIDObject(Object _self, Object _
 	ASSERT_C ( "ExternalFileManipulator:CreateUIDFileFromUIDObject --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalFileManipulator) (_self->entity))->_machine), _uid);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_AssociateUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя файла", 44));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для чтения", 43));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для записи", 43));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_CloseUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_ReadStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать строку", 29));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_AssociateUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя файла ", 45));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для чтения ", 44));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для записи ", 44));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_CloseUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Закрыть файл ", 24));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_ReadStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Прочитать строку ", 32));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать строку ", 30));
 	Object _job;
 	_job = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
 	ListMap_ObjectSetJob(_object, _job, StringFactory_FromUTF8(_stringFactory, "Основная работа файла", 40));

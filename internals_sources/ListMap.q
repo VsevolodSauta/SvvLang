@@ -257,7 +257,7 @@ ListMap JobStages
 	return self ListMapAt ("Стадии")
 
 ListMap JobMessageSlots
-	return self ListMapAt ("Сообщения")
+	return self ListMapAt ("Ожидаемые сообщения")
 
 ListMap JobStage <List> stageName
 	return (self JobStages) ListMapAt stageName
@@ -387,6 +387,9 @@ ListMap MessageSetReplyFail (MessageSetAnswerFail)
 ListMap <List> MessageSlotStages
 	return self ListAt ("Стадии")
 
+ListMap <ListIterator> MessageSlotStagesIterator
+	return (self ListAt ("Стадии")) First
+
 ListMap MessageSlotMessage
 	return self ListMapAt ("Сообщение")
 
@@ -407,6 +410,28 @@ ListMap MessageSlotSetCondition <ListMap> condition
 	(self MessageSlotConditions) Append condition
 	return self
 
+ListMap <Logic> MessageSlotIsBlocked
+	return (self At "Состояние") == "Заблокировано"
+
+ListMap <Logic> MessageSlotIsClosed
+	return (self At "Состояние") == "Закрыто"
+
+ListMap <Logic> MessageSlotIsOpened
+	return (self At "Состояние") == "Открыто"
+
+ListMap MessageSlotBlock
+	self AtPut "Состояние" "Заблокировано"
+	return self
+
+ListMap MessageSlotOpen
+	self AtPut "Состояние" "Открыто"
+	return self
+
+ListMap MessageSlotClose
+	self AtPut "Состояние" "Закрыто"
+	return self
+	
+
 
 ListMap <Logic> StageContainsMessageSlot <List> messageSlotName
 	return (self StageMessageSlots) Contains messageSlotName
@@ -420,10 +445,10 @@ ListMap StageSetMessageSlot <List> messageSlotName
 	return self
 
 ListMap <List> StageMessageSlots
-	return self ListAt ("Сообщения")
+	return self ListAt ("Ожидаемые сообщения")
 
 ListMap <ListIterator> StageMessageSlotsIterator
-	return (self ListAt ("Сообщения")) First
+	return (self ListAt ("Ожидаемые сообщения")) First
 
 ListMap <List> StageMethod
 	return self ListAt ("Метод")
@@ -442,6 +467,23 @@ ListMap <Number> StageMessagesCounter
 ListMap StageSetMessagesCounter <Number> newMessagesCounter
 	self AtPut ("Необходимо сообщений") newMessagesCounter
 	return self
+	
+ListMap StageSetBlocked
+	return self AtPut "Состояние" "Заблокировано"
 
+ListMap StageSetReady
+	return self AtPut "Состояние" "Ожидание"
+
+ListMap StageSetWaiting
+	return self AtPut "Состояние" "Готово"
+
+ListMap <Logic> StageIsWaiting
+	return (self At "Состояние") == "Ожидание"
+
+ListMap <Logic> StageIsReady
+	return (self At "Состояние") == "Готово"
+	
+ListMap <Logic> StageIsBlocked
+	return (self At "Состояние") == "Заблокировано"
 
 

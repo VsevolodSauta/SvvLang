@@ -82,7 +82,7 @@ Object ExternalEntitiesFactory_CreateEmptyJob(Object _self)
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Поля", 8), ExternalEntitiesFactory_CreateEmptyListMap(_self));
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), ExternalEntitiesFactory_CreateEmptyListMap(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37), ExternalEntitiesFactory_CreateEmptyListMap(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyListMap(_self));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateEmptyJob ended.")
@@ -108,9 +108,10 @@ Object ExternalEntitiesFactory_CreateEmptyJobStage(Object _self)
 	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyJobStage --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37), ExternalEntitiesFactory_CreateEmptyList(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод", 10), ExternalEntitiesFactory_CreateEmptyList(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Необходимо сообщений", 39), NumberFactory_FromLong(_numberFactory, 0));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Готово", 12));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateEmptyJobStage ended.")
 	return toReturn;
@@ -152,6 +153,7 @@ Object ExternalEntitiesFactory_CreateEmptyMessageSlot(Object _self)
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод идентификации", 37), ExternalEntitiesFactory_CreateEmptyList(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Открыто", 14));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateEmptyMessageSlot ended.")
 	return toReturn;

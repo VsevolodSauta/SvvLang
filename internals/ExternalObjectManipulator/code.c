@@ -84,7 +84,7 @@ Object ExternalObjectManipulator_CreateUIDObject(Object _self)
 	_uid = Machine_ImportUID((((ExternalObjectManipulator) (_self->entity))->_machine), StringFactory_FromUTF8(_stringFactory, "Объект", 12));
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalObjectManipulator_CloneUIDObjectBasicMethod), StringFactory_FromUTF8(_stringFactory, "Клонировать", 22));
+	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalObjectManipulator_CloneUIDObjectBasicMethod), StringFactory_FromUTF8(_stringFactory, "Клонирование Тип=ЗапросЗапрос=Клонировать", 79));
 	(((ExternalObjectManipulator) (_self->entity))->_objectMasterCopy) = Object_DeepClone(Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid));
 	AutoreleasePool_PopFrame(_autoreleasePool);
 	Object toReturn = _uid;
@@ -122,7 +122,7 @@ Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object 
 	_replyMessage = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
 	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10));
 	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Клон", 8), _uidToReturn);
-	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Запрос на клонирование", 42));
+	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Клонировать ", 23));
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: CloneUIDObjectBasicMethod ended.")
 	return toReturn;

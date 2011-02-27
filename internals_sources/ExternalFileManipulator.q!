@@ -22,12 +22,12 @@ ExternalFileManipulator SetMachine <Machine> machine
 ExternalFileManipulator CreateUIDFileFromUIDObject <List> uid
 	object = self.machine ObjectByUID uid
 	
-	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя файла "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку "
+	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя файла"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку"
 	
 	job = entitiesFactory CreateEmptyJob
 	object ObjectSetJob job "Основная работа файла"

@@ -613,7 +613,7 @@ Object ListMap_JobMessageSlots(Object _self)
 {
 	DPUSHS ("ListMap: JobMessageSlots begined.")
 	ASSERT_C ( "ListMap:JobMessageSlots --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
+	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37));
 	DPOPS ("ListMap: JobMessageSlots ended.")
 	return toReturn;
 }
@@ -926,6 +926,15 @@ Object ListMap_MessageSlotStages(Object _self)
 	return toReturn;
 }
 
+Object ListMap_MessageSlotStagesIterator(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotStagesIterator begined.")
+	ASSERT_C ( "ListMap:MessageSlotStagesIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = List_First(ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Стадии", 12)));
+	DPOPS ("ListMap: MessageSlotStagesIterator ended.")
+	return toReturn;
+}
+
 Object ListMap_MessageSlotMessage(Object _self)
 {
 	DPUSHS ("ListMap: MessageSlotMessage begined.")
@@ -982,6 +991,63 @@ Object ListMap_MessageSlotSetCondition(Object _self, Object _condition)
 	return toReturn;
 }
 
+Object ListMap_MessageSlotIsBlocked(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotIsBlocked begined.")
+	ASSERT_C ( "ListMap:MessageSlotIsBlocked --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Заблокировано", 26)) == _equal);
+	DPOPS ("ListMap: MessageSlotIsBlocked ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotIsClosed(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotIsClosed begined.")
+	ASSERT_C ( "ListMap:MessageSlotIsClosed --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Закрыто", 14)) == _equal);
+	DPOPS ("ListMap: MessageSlotIsClosed ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotIsOpened(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotIsOpened begined.")
+	ASSERT_C ( "ListMap:MessageSlotIsOpened --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Открыто", 14)) == _equal);
+	DPOPS ("ListMap: MessageSlotIsOpened ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotBlock(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotBlock begined.")
+	ASSERT_C ( "ListMap:MessageSlotBlock --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Заблокировано", 26));
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSlotBlock ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotOpen(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotOpen begined.")
+	ASSERT_C ( "ListMap:MessageSlotOpen --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Открыто", 14));
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSlotOpen ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotClose(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotClose begined.")
+	ASSERT_C ( "ListMap:MessageSlotClose --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Закрыто", 14));
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSlotClose ended.")
+	return toReturn;
+}
+
 Object ListMap_StageContainsMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: StageContainsMessageSlot begined.")
@@ -1015,7 +1081,7 @@ Object ListMap_StageMessageSlots(Object _self)
 {
 	DPUSHS ("ListMap: StageMessageSlots begined.")
 	ASSERT_C ( "ListMap:StageMessageSlots --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
+	Object toReturn = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37));
 	DPOPS ("ListMap: StageMessageSlots ended.")
 	return toReturn;
 }
@@ -1024,7 +1090,7 @@ Object ListMap_StageMessageSlotsIterator(Object _self)
 {
 	DPUSHS ("ListMap: StageMessageSlotsIterator begined.")
 	ASSERT_C ( "ListMap:StageMessageSlotsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = List_First(ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18)));
+	Object toReturn = List_First(ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)));
 	DPOPS ("ListMap: StageMessageSlotsIterator ended.")
 	return toReturn;
 }
@@ -1074,5 +1140,59 @@ Object ListMap_StageSetMessagesCounter(Object _self, Object _newMessagesCounter)
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Необходимо сообщений", 39), _newMessagesCounter);
 	Object toReturn = _self;
 	DPOPS ("ListMap: StageSetMessagesCounter ended.")
+	return toReturn;
+}
+
+Object ListMap_StageSetBlocked(Object _self)
+{
+	DPUSHS ("ListMap: StageSetBlocked begined.")
+	ASSERT_C ( "ListMap:StageSetBlocked --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Заблокировано", 26));
+	DPOPS ("ListMap: StageSetBlocked ended.")
+	return toReturn;
+}
+
+Object ListMap_StageSetReady(Object _self)
+{
+	DPUSHS ("ListMap: StageSetReady begined.")
+	ASSERT_C ( "ListMap:StageSetReady --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Ожидание", 16));
+	DPOPS ("ListMap: StageSetReady ended.")
+	return toReturn;
+}
+
+Object ListMap_StageSetWaiting(Object _self)
+{
+	DPUSHS ("ListMap: StageSetWaiting begined.")
+	ASSERT_C ( "ListMap:StageSetWaiting --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Готово", 12));
+	DPOPS ("ListMap: StageSetWaiting ended.")
+	return toReturn;
+}
+
+Object ListMap_StageIsWaiting(Object _self)
+{
+	DPUSHS ("ListMap: StageIsWaiting begined.")
+	ASSERT_C ( "ListMap:StageIsWaiting --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Ожидание", 16)) == _equal);
+	DPOPS ("ListMap: StageIsWaiting ended.")
+	return toReturn;
+}
+
+Object ListMap_StageIsReady(Object _self)
+{
+	DPUSHS ("ListMap: StageIsReady begined.")
+	ASSERT_C ( "ListMap:StageIsReady --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Готово", 12)) == _equal);
+	DPOPS ("ListMap: StageIsReady ended.")
+	return toReturn;
+}
+
+Object ListMap_StageIsBlocked(Object _self)
+{
+	DPUSHS ("ListMap: StageIsBlocked begined.")
+	ASSERT_C ( "ListMap:StageIsBlocked --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18)), StringFactory_FromUTF8(_stringFactory, "Заблокировано", 26)) == _equal);
+	DPOPS ("ListMap: StageIsBlocked ended.")
 	return toReturn;
 }

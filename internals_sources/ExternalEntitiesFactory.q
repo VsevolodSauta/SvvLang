@@ -23,7 +23,7 @@ ExternalEntitiesFactory <List> CreateEmptyList
 ExternalEntitiesFactory <ListMap> CreateEmptyJob
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Поля" (self CreateEmptyListMap)
-	toReturn AtPut "Сообщения" (self CreateEmptyListMap)
+	toReturn AtPut "Ожидаемые сообщения" (self CreateEmptyListMap)
 	toReturn AtPut "Стадии" (self CreateEmptyListMap)
 	return toReturn
 
@@ -35,9 +35,10 @@ ExternalEntitiesFactory <ListMap> CreateEmptyMethod
 
 ExternalEntitiesFactory <ListMap> CreateEmptyJobStage
 	toReturn = self CreateEmptyListMap
-	toReturn AtPut "Сообщения" (self CreateEmptyList)
+	toReturn AtPut "Ожидаемые сообщения" (self CreateEmptyList)
 	toReturn AtPut "Метод" (self CreateEmptyList)
 	toReturn AtPut "Необходимо сообщений" 0
+	toReturn AtPut "Состояние" "Готово"
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateConditionPresence <List> key
@@ -58,6 +59,7 @@ ExternalEntitiesFactory <ListMap> CreateEmptyMessageSlot
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод идентификации" (self CreateEmptyList)
 	toReturn AtPut "Стадии" (self CreateEmptyList)
+	toReturn AtPut "Состояние" "Открыто"
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateRequestMessageSlot <List> request

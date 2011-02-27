@@ -56,6 +56,7 @@ Processor Init
 	self.processorCodes AtPut ("Поменять местами вершинные элементы") &Processor_SwapTopInStackCode
 	self.processorCodes AtPut ("Послать сообщение объекту с идентификатором") &Processor_SendMessageToUIDCode
 	self.processorCodes AtPut ("Послать сообщение объекту из поля") &Processor_SendMessageToFieldCode
+	self.processorCodes AtPut ("Послать сообщение объекту из поля сообщения") &Processor_SendMessageToMessageFieldCode
 	self.processorCodes AtPut ("Послать ответ на сообщение") &Processor_SendReplyForMessageCode
 	self.processorCodes AtPut ("Вызвать метод с параметрами") &Processor_InvokeMethodCode
 	self.processorCodes AtPut ("Определить метод") &Processor_DefineMethodCode
@@ -69,6 +70,10 @@ Processor Init
 	self.processorCodes AtPut ("Удалить поле") &Processor_UnDefineFieldCode
 	self.processorCodes AtPut ("Добавить работу") &Processor_AddJobCode
 	self.processorCodes AtPut ("Добавить стадию") &Processor_AddJobStageCode
+	self.processorCodes AtPut ("Заблокировать стадию") &Processor_BlockStageCode
+	self.processorCodes AtPut ("Разблокировать стадию") &Processor_UnBlockStageCode
+	self.processorCodes AtPut ("Заблокировать ожидаемое сообщение") &Processor_BlockMessageSlotCode
+	self.processorCodes AtPut ("Разблокировать ожидаемое сообщение") &Processor_UnBlockMessageSlotCode
 	self.processorCodes AtPut ("Удалить стадию") &Processor_RemoveJobStageCode
 	self.processorCodes AtPut ("Очистить стадии") &Processor_RemoveAllJobStagesCode
 	self.processorCodes AtPut ("Очистить ожидаемые сообщения") &Processor_RemoveAllMessageSlotsCode
@@ -85,7 +90,8 @@ Processor Do <ListMap> toDo
 	method = self.processorCodes MethodAt (toDo ListAt ("Действие"))
 	if method == nil
 		console PrintLnString ("Некорректное toDo: Действие не задано либо отсутствует в системе комманд.")
-	method Invoke self toDo
+	else
+		method Invoke self toDo
 	return self
 
 Processor <Object> GetNamedEntityFromToDoOrStack <List> entityName <ListMap> toDo
@@ -194,8 +200,8 @@ Processor SwapTopInStackCode <ListMap> toDo
 	return self
 
 Processor SendMessageToUIDCode <ListMap> toDo
-	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	receiver = self GetNamedEntityFromToDoOrStack ("Получатель") toDo
+	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	message MessageSetSender self.contextUID
 	message MessageSetReceiver receiver
 	self SendMessage message
@@ -210,9 +216,19 @@ Processor SendMessageToFieldCode <ListMap> toDo
 	self SendMessage message
 	return self
 
+Processor SendMessageToMessageFieldCode <ListMap> toDo
+	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
+	fieldName = (self GetNamedEntityFromToDoOrStack ("Имя поля") toDo) AsList
+	messageSlotName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsList
+	receiver = (((self ContextJob) JobMessageInMessageSlot messageSlotName) At fieldName)
+	message MessageSetSender self.contextUID
+	message MessageSetReceiver receiver
+	self SendMessage message
+	return self
+
 Processor SendReplyForMessageCode <ListMap> toDo
 	reply = (self GetNamedEntityFromToDoOrStack ("Ответ") toDo) AsListMap
-	messageName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsListMap
+	messageName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsList
 	message = (self ContextJob) JobMessageInMessageSlot messageName
 	receiver = message MessageSender
 	reqest = message MessageRequest
@@ -301,6 +317,31 @@ Processor AddMessageSlotCode <ListMap> toDo
 	message = self GetNamedEntityFromToDoOrStack ("Сообщение") toDo
 	(self ContextJob) JobSetMessageSlot message messageName
 	return self
+	
+Processor BlockStageCode <ListMap> toDo
+	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	((self ContextJob) JobStage stageName) StageSetBlocked
+	return self
+	
+Processor UnBlockStageCode <ListMap> toDo
+	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	stage = ((self ContextJob) JobStage stageName)
+	if (stage StageMessagesCounter) == 0
+		stage StageSetReady
+	else
+		stage StageSetWaiting
+	return self
+
+Processor BlockMessageSlotCode <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	((self ContextJob) JobMessageSlot messageSlotName) MessageSlotBlock
+	return self
+
+Processor UnBlockMessageSlotCode <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	((self ContextJob) JobMessageSlot messageSlotName) MessageSlotOpen
+	return self
+	
 
 Processor RemoveJobStageCode <ListMap> toDo
 	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
@@ -321,6 +362,8 @@ Processor RemoveMessageSlotCode <ListMap> toDo
 			stage = stagesIterator ListMapData
 			if (stage StageMessageSlots) RemoveFirstWithConfirmation messageSlotName
 				stage StageDecrementMessagesCounter
+				if (stage StageIsWaiting) And ((stage StageMessagesCounter) == 0)
+					stage StageSetReady
 			stagesIterator ++
 	else
 		stagesIterator = (self ContextJob) JobStagesIterator
@@ -336,11 +379,12 @@ Processor RemoveMessageInSlotCode <ListMap> toDo
 	messageSlot = (self ContextJob) JobMessageSlot messageSlotName
 	if (messageSlot MessageSlotMessage) != nil
 		messageSlot MessageSlotSetMessage nil
-		stagesIterator = (self ContextJob) JobStagesIterator
+		stagesIterator = messageSlot MessageSlotStagesIterator
 		while stagesIterator NotThisEnd
-			stage = stagesIterator ListMapData
-			if stage StageContainsMessageSlot messageSlotName
-				stage StageDecrementMessagesCounter
+			stage = (self ContextJob) JobStage (stagesIterator ListData)
+			stage StageDecrementMessagesCounter
+			if stage StageIsReady
+				stage StageSetWaiting
 			stagesIterator ++
 	return nil
 
@@ -373,6 +417,7 @@ Processor RemoveAllMessageSlotsCode <ListMap> toDo
 		jobStage = (jobStagesIterator Data) AsListMap
 		(jobStage StageMessageSlots) RemoveAll
 		(jobStage StageSetMessagesCounter 0)
+		jobStage StageSetBlocked
 		jobStagesIterator ++
 	return self
 
@@ -406,6 +451,8 @@ Processor AttachToStageMessageSlot <List> stageName <List> messageName
 		stagesInMessageSlot Append stageName 
 		messageSlotsInStage Append messageName
 		stage StageIncrementMessagesCounter
+		if stage StageIsReady
+			stage StageSetWaiting
 	return self
 
 
@@ -467,6 +514,7 @@ Processor SendMessage <ListMap> message
 	self.machine ScheduleUID uid
 	return self
 
+
 Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
 	message = (self ContextJob) JobMessageInMessageSlot messageSlotName
 	receiver = message MessageSender
@@ -478,6 +526,7 @@ Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
 	replyMessage MessageSetTypeAnswer
 	self SendMessage replyMessage
 	return self
+
 
 Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	autoreleasePool ++
@@ -508,6 +557,8 @@ Processor MessageConfirmsToParameter <ListMap> message <ListMap> parameter
 	checkingMethod = parameter At ("Метод проверки")
 	if checkingMethod == "Совпадение"
 		return (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
+	elif checkingMethod == "Совпадение с полем"
+		return (message At (parameter At ("Ключ"))) == (self FieldNameToSynonim (parameter At ("Значение")))
 	elif checkingMethod == "Наличие"
 		return (message Contains (parameter At ("Ключ")))
 	return false
@@ -528,6 +579,8 @@ Processor TryLinkMessageWithMessageSlotAndJob <ListMap> message <ListMap> messag
 		while waitingStageNamesIterator NotThisEnd
 			jobStage = (job JobStages) ListMapAt (waitingStageNamesIterator ListData)
 			jobStage StageDecrementMessagesCounter
+			if ((jobStage StageMessagesCounter) == 0) And (jobStage StageIsWaiting)
+				jobStage StageSetReady
 			waitingStageNamesIterator ++
 	return self
 
@@ -538,7 +591,9 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 		job = jobsIterator ListMapData
 		messageSlotsIterator = job JobMessageSlotsIterator
 		while messageSlotsIterator NotThisEnd
-			self TryLinkMessageWithMessageSlotAndJob message (messageSlotsIterator ListMapData) job
+			messageSlot = messageSlotsIterator ListMapData
+			if messageSlot MessageSlotIsOpened
+				self TryLinkMessageWithMessageSlotAndJob message messageSlot job
 			messageSlotsIterator ++
 		jobsIterator ++
 	return self
@@ -551,7 +606,7 @@ Processor ProcessOneJobIfAny
 		jobStagesIterator = job JobStagesIterator
 		while jobStagesIterator NotThisEnd
 			jobStage = jobStagesIterator ListMapData
-			if (jobStage StageMessagesCounter) == 0
+			if jobStage StageIsReady
 				self.contextJobStageName = jobStagesIterator Key
 				self.contextJobName = jobsIterator Key
 				emptyParameters = <ListMap>
@@ -573,4 +628,5 @@ Processor ProcessUID <List> uid
 	self.contextUID = nil
 	autoreleasePool --
 	return self
+
 

@@ -28,6 +28,24 @@ Actor fullActor := method(fullActorName, fullActorType, fullActorProperties,
 )
 
 Actor with := method(name,
+	name stringUnescapedSize := method(
+		toReturn := 0
+		escaped := false
+		foreach(code, 
+			char := code asCharacter
+			if(escaped,
+				escaped = false
+				toReturn = toReturn + 1
+				continue
+			)
+			if(char == "\\", 
+				escaped = true,
+				toReturn = toReturn + 1
+			)
+		)
+		toReturn - 2
+	)
+	
 	toReturn := Actor clone
 	
 	if(name isCreator,
@@ -46,7 +64,7 @@ Actor with := method(name,
 	
 	if(name isString,
 		toReturn actorType = "List"
-		toReturn actorName copy("StringFactory_FromUTF8(_stringFactory, \"#{name outOfBrackets asMutable escape}\", #{name outOfBrackets size})" interpolate)
+		toReturn actorName copy("StringFactory_FromUTF8(_stringFactory, \"#{name outOfBrackets asMutable}\", #{name stringUnescapedSize})" interpolate)
 		return toReturn
 	)
 	

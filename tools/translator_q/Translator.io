@@ -34,7 +34,12 @@ Translator blockDidEnd := method(
 )
 
 Translator translateLevel := method(
-	if((currentLevel == 0) and (Translator line ?tokens ?size != 0),
+	if(Translator line ?tokens ?size == 0, return)
+	if((currentLevel == 0),
+		while(currentLevel < previousLevel,
+			BlockDelegatesHandling blockWillEnd
+			BlockDelegatesHandling blockDidEnd
+		)
 		if(line tokens first isCreator not,
 			BlockDelegatesHandling blockWillBegin
 		),
@@ -72,8 +77,8 @@ Translator translateClass := method(objectClassName,
 		line = SourceFile getLine
 		if(line isNil, break)
 		currentLevel = line getLevel
-		translateLevel
 		if(line tokens ?size == 0, continue)
+		translateLevel
 		if(currentLevel == 0,
 			if(line tokens first isCreator,
 				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName))

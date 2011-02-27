@@ -130,6 +130,7 @@ Object Processor_Init(Object _self)
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Поменять местами вершинные элементы", 67), MethodFactory_FromPointer(_methodFactory, &Processor_SwapTopInStackCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать сообщение объекту с идентификатором", 82), MethodFactory_FromPointer(_methodFactory, &Processor_SendMessageToUIDCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать сообщение объекту из поля", 62), MethodFactory_FromPointer(_methodFactory, &Processor_SendMessageToFieldCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать сообщение объекту из поля сообщения", 81), MethodFactory_FromPointer(_methodFactory, &Processor_SendMessageToMessageFieldCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать ответ на сообщение", 49), MethodFactory_FromPointer(_methodFactory, &Processor_SendReplyForMessageCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Вызвать метод с параметрами", 51), MethodFactory_FromPointer(_methodFactory, &Processor_InvokeMethodCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод", 31), MethodFactory_FromPointer(_methodFactory, &Processor_DefineMethodCode));
@@ -143,6 +144,10 @@ Object Processor_Init(Object _self)
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Удалить поле", 23), MethodFactory_FromPointer(_methodFactory, &Processor_UnDefineFieldCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Добавить работу", 29), MethodFactory_FromPointer(_methodFactory, &Processor_AddJobCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Добавить стадию", 29), MethodFactory_FromPointer(_methodFactory, &Processor_AddJobStageCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Заблокировать стадию", 39), MethodFactory_FromPointer(_methodFactory, &Processor_BlockStageCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Разблокировать стадию", 41), MethodFactory_FromPointer(_methodFactory, &Processor_UnBlockStageCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Заблокировать ожидаемое сообщение", 64), MethodFactory_FromPointer(_methodFactory, &Processor_BlockMessageSlotCode));
+	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Разблокировать ожидаемое сообщение", 66), MethodFactory_FromPointer(_methodFactory, &Processor_UnBlockMessageSlotCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Удалить стадию", 27), MethodFactory_FromPointer(_methodFactory, &Processor_RemoveJobStageCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Очистить стадии", 29), MethodFactory_FromPointer(_methodFactory, &Processor_RemoveAllJobStagesCode));
 	ListMap_Add((((Processor) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Очистить ожидаемые сообщения", 54), MethodFactory_FromPointer(_methodFactory, &Processor_RemoveAllMessageSlotsCode));
@@ -168,7 +173,10 @@ Object Processor_Do(Object _self, Object _toDo)
 	{
 		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное toDo: Действие не задано либо отсутствует в системе комманд.", 131));
 	}
-	Method_Invoke(_method, _self, _toDo);
+	else
+	{
+		Method_Invoke(_method, _self, _toDo);
+	}
 	Object toReturn = _self;
 	DPOPS ("Processor: Do ended.")
 	return toReturn;
@@ -427,10 +435,10 @@ Object Processor_SendMessageToUIDCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: SendMessageToUIDCode begined.")
 	ASSERT_C ( "Processor:SendMessageToUIDCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
-	Object _message;
-	_message = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _toDo);
 	Object _receiver;
 	_receiver = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Получатель", 20), _toDo);
+	Object _message;
+	_message = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _toDo);
 	ListMap_MessageSetSender(_message, (((Processor) (_self->entity))->_contextUID));
 	ListMap_MessageSetReceiver(_message, _receiver);
 	Processor_SendMessage(_self, _message);
@@ -454,6 +462,26 @@ Object Processor_SendMessageToFieldCode(Object _self, Object _toDo)
 	Processor_SendMessage(_self, _message);
 	Object toReturn = _self;
 	DPOPS ("Processor: SendMessageToFieldCode ended.")
+	return toReturn;
+}
+
+Object Processor_SendMessageToMessageFieldCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: SendMessageToMessageFieldCode begined.")
+	ASSERT_C ( "Processor:SendMessageToMessageFieldCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	Object _message;
+	_message = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _toDo);
+	Object _fieldName;
+	_fieldName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _toDo);
+	Object _messageSlotName;
+	_messageSlotName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя сообщения", 25), _toDo);
+	Object _receiver;
+	_receiver = ListMap_ObjectAt(ListMap_JobMessageInMessageSlot(Processor_ContextJob(_self), _messageSlotName), _fieldName);
+	ListMap_MessageSetSender(_message, (((Processor) (_self->entity))->_contextUID));
+	ListMap_MessageSetReceiver(_message, _receiver);
+	Processor_SendMessage(_self, _message);
+	Object toReturn = _self;
+	DPOPS ("Processor: SendMessageToMessageFieldCode ended.")
 	return toReturn;
 }
 
@@ -667,6 +695,63 @@ Object Processor_AddMessageSlotCode(Object _self, Object _toDo)
 	return toReturn;
 }
 
+Object Processor_BlockStageCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: BlockStageCode begined.")
+	ASSERT_C ( "Processor:BlockStageCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	Object _stageName;
+	_stageName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя стадии", 19), _toDo);
+	ListMap_StageSetBlocked(ListMap_JobStage(Processor_ContextJob(_self), _stageName));
+	Object toReturn = _self;
+	DPOPS ("Processor: BlockStageCode ended.")
+	return toReturn;
+}
+
+Object Processor_UnBlockStageCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: UnBlockStageCode begined.")
+	ASSERT_C ( "Processor:UnBlockStageCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	Object _stageName;
+	_stageName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя стадии", 19), _toDo);
+	Object _stage;
+	_stage = ListMap_JobStage(Processor_ContextJob(_self), _stageName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_stage), NumberFactory_FromLong(_numberFactory, 0)) == _equal)) != _false)
+	{
+		ListMap_StageSetReady(_stage);
+	}
+	else
+	{
+		ListMap_StageSetWaiting(_stage);
+	}
+	Object toReturn = _self;
+	DPOPS ("Processor: UnBlockStageCode ended.")
+	return toReturn;
+}
+
+Object Processor_BlockMessageSlotCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: BlockMessageSlotCode begined.")
+	ASSERT_C ( "Processor:BlockMessageSlotCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	Object _messageSlotName;
+	_messageSlotName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя сообщения", 25), _toDo);
+	ListMap_MessageSlotBlock(ListMap_JobMessageSlot(Processor_ContextJob(_self), _messageSlotName));
+	Object toReturn = _self;
+	DPOPS ("Processor: BlockMessageSlotCode ended.")
+	return toReturn;
+}
+
+Object Processor_UnBlockMessageSlotCode(Object _self, Object _toDo)
+{
+	DPUSHS ("Processor: UnBlockMessageSlotCode begined.")
+	ASSERT_C ( "Processor:UnBlockMessageSlotCode --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	Object _messageSlotName;
+	_messageSlotName = Processor_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя сообщения", 25), _toDo);
+	ListMap_MessageSlotOpen(ListMap_JobMessageSlot(Processor_ContextJob(_self), _messageSlotName));
+	Object toReturn = _self;
+	DPOPS ("Processor: UnBlockMessageSlotCode ended.")
+	return toReturn;
+}
+
 Object Processor_RemoveJobStageCode(Object _self, Object _toDo)
 {
 	DPUSHS ("Processor: RemoveJobStageCode begined.")
@@ -707,6 +792,10 @@ Object Processor_RemoveMessageSlotCode(Object _self, Object _toDo)
 			if((List_RemoveFirstWithConfirmation(ListMap_StageMessageSlots(_stage), _messageSlotName)) != _false)
 			{
 				ListMap_StageDecrementMessagesCounter(_stage);
+				if((Logic_And(ListMap_StageIsWaiting(_stage), LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_stage), NumberFactory_FromLong(_numberFactory, 0)) == _equal))) != _false)
+				{
+					ListMap_StageSetReady(_stage);
+				}
 			}
 			ListMapIterator_Next(_stagesIterator);
 		}
@@ -741,16 +830,17 @@ Object Processor_RemoveMessageInSlotCode(Object _self, Object _toDo)
 	{
 		ListMap_MessageSlotSetMessage(_messageSlot, _nil);
 		Object _stagesIterator;
-		_stagesIterator = ListMap_JobStagesIterator(Processor_ContextJob(_self));
-		while((Logic_Not(ListMapIterator_ThisEnd(_stagesIterator))) != _false)
+		_stagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
+		while((Logic_Not(ListIterator_ThisEnd(_stagesIterator))) != _false)
 		{
 			Object _stage;
-			_stage = ListMapIterator_ListMapData(_stagesIterator);
-			if((ListMap_StageContainsMessageSlot(_stage, _messageSlotName)) != _false)
+			_stage = ListMap_JobStage(Processor_ContextJob(_self), ListIterator_ListData(_stagesIterator));
+			ListMap_StageDecrementMessagesCounter(_stage);
+			if((ListMap_StageIsReady(_stage)) != _false)
 			{
-				ListMap_StageDecrementMessagesCounter(_stage);
+				ListMap_StageSetWaiting(_stage);
 			}
-			ListMapIterator_Next(_stagesIterator);
+			ListIterator_Next(_stagesIterator);
 		}
 	}
 	Object toReturn = _nil;
@@ -817,6 +907,7 @@ Object Processor_RemoveAllMessageSlotsCode(Object _self, Object _toDo)
 		_jobStage = ListMapIterator_ThisValue(_jobStagesIterator);
 		List_Clean(ListMap_StageMessageSlots(_jobStage));
 		ListMap_StageSetMessagesCounter(_jobStage, NumberFactory_FromLong(_numberFactory, 0));
+		ListMap_StageSetBlocked(_jobStage);
 		ListMapIterator_Next(_jobStagesIterator);
 	}
 	Object toReturn = _self;
@@ -874,6 +965,10 @@ Object Processor_AttachToStageMessageSlot(Object _self, Object _stageName, Objec
 		List_PushBack(_stagesInMessageSlot, _stageName);
 		List_PushBack(_messageSlotsInStage, _messageName);
 		ListMap_StageIncrementMessagesCounter(_stage);
+		if((ListMap_StageIsReady(_stage)) != _false)
+		{
+			ListMap_StageSetWaiting(_stage);
+		}
 	}
 	Object toReturn = _self;
 	DPOPS ("Processor: AttachToStageMessageSlot ended.")
@@ -1103,6 +1198,12 @@ Object Processor_MessageConfirmsToParameter(Object _self, Object _message, Objec
 		DPOPS ("Processor: MessageConfirmsToParameter ended.")
 		return toReturn;
 	}
+	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Совпадение с полем", 34)) == _equal)) != _false)
+	{
+		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), Processor_FieldNameToSynonim(_self, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16)))) == _equal);
+		DPOPS ("Processor: MessageConfirmsToParameter ended.")
+		return toReturn;
+	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Наличие", 14)) == _equal)) != _false)
 	{
 		Object toReturn = ListMap_Contains(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8)));
@@ -1143,6 +1244,10 @@ Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _messa
 			Object _jobStage;
 			_jobStage = ListMap_ListMapAt(ListMap_JobStages(_job), ListIterator_ListData(_waitingStageNamesIterator));
 			ListMap_StageDecrementMessagesCounter(_jobStage);
+			if((Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_jobStage), NumberFactory_FromLong(_numberFactory, 0)) == _equal), ListMap_StageIsWaiting(_jobStage))) != _false)
+			{
+				ListMap_StageSetReady(_jobStage);
+			}
 			ListIterator_Next(_waitingStageNamesIterator);
 		}
 	}
@@ -1165,7 +1270,12 @@ Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _
 		_messageSlotsIterator = ListMap_JobMessageSlotsIterator(_job);
 		while((Logic_Not(ListMapIterator_ThisEnd(_messageSlotsIterator))) != _false)
 		{
-			Processor_TryLinkMessageWithMessageSlotAndJob(_self, _message, ListMapIterator_ListMapData(_messageSlotsIterator), _job);
+			Object _messageSlot;
+			_messageSlot = ListMapIterator_ListMapData(_messageSlotsIterator);
+			if((ListMap_MessageSlotIsOpened(_messageSlot)) != _false)
+			{
+				Processor_TryLinkMessageWithMessageSlotAndJob(_self, _message, _messageSlot, _job);
+			}
 			ListMapIterator_Next(_messageSlotsIterator);
 		}
 		ListMapIterator_Next(_jobsIterator);
@@ -1191,7 +1301,7 @@ Object Processor_ProcessOneJobIfAny(Object _self)
 		{
 			Object _jobStage;
 			_jobStage = ListMapIterator_ListMapData(_jobStagesIterator);
-			if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_jobStage), NumberFactory_FromLong(_numberFactory, 0)) == _equal)) != _false)
+			if((ListMap_StageIsReady(_jobStage)) != _false)
 			{
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobStageName), ListMapIterator_ThisKey(_jobStagesIterator));
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobName), ListMapIterator_ThisKey(_jobsIterator));
