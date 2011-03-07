@@ -1,7 +1,7 @@
 #include "internals/basics.h"
 #include "internals/Undestroyable/interface.h"
 
-#define SpaceInAllocator 10485760ull
+#define SpaceInAllocator 1048576ull
 
 static char arr[SpaceInAllocator];
 static int position = 0;

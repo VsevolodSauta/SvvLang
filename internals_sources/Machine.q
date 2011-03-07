@@ -21,12 +21,12 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	file = <File>
 	file OpenForReading objectName
 	if file ErrorWhileOpenning
-		console PrintLnString "Возникла ошибка при загрузке объекта. Невозможно прочитать контейнер объекта (файл)."
+		console PrintLnString "Возникла ошибка при загрузке объекта. Невозможно прочитать контейнер объекта (как правило файл)."
 	contents = file ReadContentsOfFile
 	file Close
 	parsedObject = json ParseObject (contents First)
 	if parsedObject == json.error
-		console PrintLnString "Некорректный текст приложения. Невозможно провести грамматический разбор."
+		console PrintLnString "Некорректный текст объекта. Невозможно провести грамматический разбор."
 		autoreleasePool --
 		return self
 	uid = self.uidGenerator GenerateUID

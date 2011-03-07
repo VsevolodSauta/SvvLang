@@ -97,6 +97,7 @@ Object AutoreleasePool_Compare(Object _self, Object _autoreleasePool)
 {
 	DPUSHS ("AutoreleasePool: Compare begined.")
 	ASSERT_C ( "AutoreleasePool:Compare --- Checking for correct object type failed.", _self->gid ==  6558146264612776960ull )
+	ASSERT_C ( "AutoreleasePool:Compare --- Checking for correct parameter type failed at parameter _autoreleasePool.", _autoreleasePool->gid ==  6558146264612776960ull || _autoreleasePool == _nil )
 	Object toReturn = Object_Compare((((AutoreleasePool) (_self->entity))->_stack), (((AutoreleasePool) (_autoreleasePool->entity))->_stack));
 	DPOPS ("AutoreleasePool: Compare ended.")
 	return toReturn;

@@ -3,7 +3,7 @@
 #define DEBUG 0
 #define MEMORY_DEBUG 0
 #define STDLIB 0
-#define DEBUG_ASSERT 0
+#define DEBUG_ASSERT 1
 
 extern int DLEVEL;
 
@@ -62,6 +62,7 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 	if(!(assertion)) \
 	{ \
 		DPRINT(message); \
+		OSkill(0, 6); \
 		OSexit(-1); \
 	}
 
@@ -69,6 +70,7 @@ static inline char* DEBUG_ptrToStr(void* argPtr)
 	if((assertion) != _true) \
 	{ \
 		DPRINTS(message); \
+		OSkill(0, 6); \
 		OSexit(-1); \
 	}
 

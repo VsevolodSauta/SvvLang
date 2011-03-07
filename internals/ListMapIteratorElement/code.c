@@ -24,6 +24,7 @@ Object ListMapIteratorElement_AdvancingValue(Object _self, Object _prevElement)
 {
 	DPUSHS ("ListMapIteratorElement: AdvancingValue begined.")
 	ASSERT_C ( "ListMapIteratorElement:AdvancingValue --- Checking for correct object type failed.", _self->gid ==  5141019124093965312ull )
+	ASSERT_C ( "ListMapIteratorElement:AdvancingValue --- Checking for correct parameter type failed at parameter _prevElement.", _prevElement->gid ==  5141019124093965312ull || _prevElement == _nil )
 	MapIterator_Next((((ListMapIteratorElement) (_self->entity))->_iterator));
 	(((ListMapIteratorElement) (_self->entity))->_nextExists) = Logic_Not(MapIterator_NextEnd((((ListMapIteratorElement) (_self->entity))->_iterator)));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_prevElement, _nil) != _equal)) != _false)
@@ -40,6 +41,7 @@ Object ListMapIteratorElement_ReturningValue(Object _self, Object _prevElement)
 {
 	DPUSHS ("ListMapIteratorElement: ReturningValue begined.")
 	ASSERT_C ( "ListMapIteratorElement:ReturningValue --- Checking for correct object type failed.", _self->gid ==  5141019124093965312ull )
+	ASSERT_C ( "ListMapIteratorElement:ReturningValue --- Checking for correct parameter type failed at parameter _prevElement.", _prevElement->gid ==  5141019124093965312ull || _prevElement == _nil )
 	MapIterator_Prev((((ListMapIteratorElement) (_self->entity))->_iterator));
 	(((ListMapIteratorElement) (_self->entity))->_nextExists) = _yes;
 	(((ListMapIteratorElement) (_self->entity))->_prevExists) = Logic_Not(MapIterator_PrevBegin((((ListMapIteratorElement) (_self->entity))->_iterator)));
@@ -86,6 +88,7 @@ Object ListMapIteratorElement_Compare(Object _self, Object _element)
 {
 	DPUSHS ("ListMapIteratorElement: Compare begined.")
 	ASSERT_C ( "ListMapIteratorElement:Compare --- Checking for correct object type failed.", _self->gid ==  5141019124093965312ull )
+	ASSERT_C ( "ListMapIteratorElement:Compare --- Checking for correct parameter type failed at parameter _element.", _element->gid ==  5141019124093965312ull || _element == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapIteratorElement) (_self->entity))->_node), (((ListMapIteratorElement) (_element->entity))->_node));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) == _equal)) != _false)

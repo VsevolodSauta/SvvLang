@@ -69,6 +69,7 @@ Object Stack_ObjectAtPositionIfExists(Object _self, Object _position)
 {
 	DPUSHS ("Stack: ObjectAtPositionIfExists begined.")
 	ASSERT_C ( "Stack:ObjectAtPositionIfExists --- Checking for correct object type failed.", _self->gid ==  6822298517081180160ull )
+	ASSERT_C ( "Stack:ObjectAtPositionIfExists --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	Object toReturn = List_ObjectAtPositionIfExists((((Stack) (_self->entity))->_list), _position);
 	DPOPS ("Stack: ObjectAtPositionIfExists ended.")
 	return toReturn;
@@ -97,6 +98,7 @@ Object Stack_Compare(Object _self, Object _stack)
 {
 	DPUSHS ("Stack: Compare begined.")
 	ASSERT_C ( "Stack:Compare --- Checking for correct object type failed.", _self->gid ==  6822298517081180160ull )
+	ASSERT_C ( "Stack:Compare --- Checking for correct parameter type failed at parameter _stack.", _stack->gid ==  6822298517081180160ull || _stack == _nil )
 	Object toReturn = Object_Compare((((Stack) (_self->entity))->_list), (((Stack) (_stack->entity))->_list));
 	DPOPS ("Stack: Compare ended.")
 	return toReturn;

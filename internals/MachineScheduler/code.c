@@ -50,6 +50,7 @@ Object MachineScheduler_ScheduleUID(Object _self, Object _uid)
 {
 	DPUSHS ("MachineScheduler: ScheduleUID begined.")
 	ASSERT_C ( "MachineScheduler:ScheduleUID --- Checking for correct object type failed.", _self->gid ==  4460415907327830016ull )
+	ASSERT_C ( "MachineScheduler:ScheduleUID --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	Queue_Push((((MachineScheduler) (_self->entity))->_queue), _uid);
 	Object toReturn = _self;
 	DPOPS ("MachineScheduler: ScheduleUID ended.")
@@ -88,6 +89,7 @@ Object MachineScheduler_Compare(Object _self, Object _scheduler)
 {
 	DPUSHS ("MachineScheduler: Compare begined.")
 	ASSERT_C ( "MachineScheduler:Compare --- Checking for correct object type failed.", _self->gid ==  4460415907327830016ull )
+	ASSERT_C ( "MachineScheduler:Compare --- Checking for correct parameter type failed at parameter _scheduler.", _scheduler->gid ==  4460415907327830016ull || _scheduler == _nil )
 	Object toReturn = _equal;
 	DPOPS ("MachineScheduler: Compare ended.")
 	return toReturn;

@@ -33,7 +33,7 @@ void _start(void)
 		Machine_ImportUID(_machine, _objectToImportName);
 	}
 #else
-	Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, "Приложение");
+	Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, "SvvLanguage_C/externals/Приложение");
 	Machine_ImportUID(_machine, _objectToImportName);
 #endif
 	AutoreleasePool_PopFrame(_autoreleasePool);

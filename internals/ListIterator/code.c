@@ -23,6 +23,7 @@ Object ListIterator_Compare(Object _self, Object _iterator)
 {
 	DPUSHS ("ListIterator: Compare begined.")
 	ASSERT_C ( "ListIterator:Compare --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:Compare --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	Object toReturn = Object_Compare((((ListIterator) (_self->entity))->_node), (((ListIterator) (_iterator->entity))->_node));
 	DPOPS ("ListIterator: Compare ended.")
 	return toReturn;
@@ -74,6 +75,8 @@ Object ListIterator_InitWithListAndNode(Object _self, Object _list, Object _node
 {
 	DPUSHS ("ListIterator: InitWithListAndNode begined.")
 	ASSERT_C ( "ListIterator:InitWithListAndNode --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:InitWithListAndNode --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
+	ASSERT_C ( "ListIterator:InitWithListAndNode --- Checking for correct parameter type failed at parameter _node.", _node->gid ==  1592307763146065920ull || _node == _nil )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	(((ListIterator) (_self->entity))->_system) = _false;
@@ -86,6 +89,8 @@ Object ListIterator_SystemInitWithListAndNode(Object _self, Object _list, Object
 {
 	DPUSHS ("ListIterator: SystemInitWithListAndNode begined.")
 	ASSERT_C ( "ListIterator:SystemInitWithListAndNode --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:SystemInitWithListAndNode --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
+	ASSERT_C ( "ListIterator:SystemInitWithListAndNode --- Checking for correct parameter type failed at parameter _node.", _node->gid ==  1592307763146065920ull || _node == _nil )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_list), _list);
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	(((ListIterator) (_self->entity))->_system) = _true;
@@ -99,6 +104,7 @@ Object ListIterator_ResetNode(Object _self, Object _node)
 {
 	DPUSHS ("ListIterator: ResetNode begined.")
 	ASSERT_C ( "ListIterator:ResetNode --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:ResetNode --- Checking for correct parameter type failed at parameter _node.", _node->gid ==  1592307763146065920ull || _node == _nil )
 	Object_SetRetaining(&(((ListIterator) (_self->entity))->_node), _node);
 	Object toReturn = _self;
 	DPOPS ("ListIterator: ResetNode ended.")
@@ -168,6 +174,7 @@ Object ListIterator_ToPosition(Object _self, Object _position)
 {
 	DPUSHS ("ListIterator: ToPosition begined.")
 	ASSERT_C ( "ListIterator:ToPosition --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:ToPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_position, NumberFactory_FromLong(_numberFactory, 0)) != _less)) != _false)
 	{
 		ListIterator_ToBegin(_self);
@@ -199,6 +206,8 @@ Object ListIterator_FromPositionToPosition(Object _self, Object _positionFrom, O
 {
 	DPUSHS ("ListIterator: FromPositionToPosition begined.")
 	ASSERT_C ( "ListIterator:FromPositionToPosition --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:FromPositionToPosition --- Checking for correct parameter type failed at parameter _positionFrom.", _positionFrom->gid == 15425740279749906432ull || _positionFrom == _nil )
+	ASSERT_C ( "ListIterator:FromPositionToPosition --- Checking for correct parameter type failed at parameter _positionTo.", _positionTo->gid == 15425740279749906432ull || _positionTo == _nil )
 	Object _quantity;
 	_quantity = Number_Sub(_positionTo, _positionFrom);
 	while((LogicFactory_FromLong(_logicFactory, Object_Compare(_quantity, NumberFactory_FromLong(_numberFactory, 0)) == _less)) != _false)
@@ -247,6 +256,40 @@ Object ListIterator_SearchBackward(Object _self, Object _object)
 	}
 	Object toReturn = _self;
 	DPOPS ("ListIterator: SearchBackward ended.")
+	return toReturn;
+}
+
+Object ListIterator_SearchForwardExactlySame(Object _self, Object _object)
+{
+	DPUSHS ("ListIterator: SearchForwardExactlySame begined.")
+	ASSERT_C ( "ListIterator:SearchForwardExactlySame --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	while((Logic_Not(ListIterator_ThisEnd(_self))) != _false)
+	{
+		if((Object_Is(ListIterator_ThisData(_self), _object)) != _false)
+		{
+			break;
+		}
+		ListIterator_Next(_self);
+	}
+	Object toReturn = _self;
+	DPOPS ("ListIterator: SearchForwardExactlySame ended.")
+	return toReturn;
+}
+
+Object ListIterator_SearchBackwardExactlySame(Object _self, Object _object)
+{
+	DPUSHS ("ListIterator: SearchBackwardExactlySame begined.")
+	ASSERT_C ( "ListIterator:SearchBackwardExactlySame --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	while((Logic_Not(ListIterator_ThisBegin(_self))) != _false)
+	{
+		if((Object_Is(ListIterator_ThisData(_self), _object)) != _false)
+		{
+			break;
+		}
+		ListIterator_Prev(_self);
+	}
+	Object toReturn = _self;
+	DPOPS ("ListIterator: SearchBackwardExactlySame ended.")
 	return toReturn;
 }
 
@@ -490,6 +533,7 @@ Object ListIterator_AddListBefore(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBefore begined.")
 	ASSERT_C ( "ListIterator:AddListBefore --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListBefore --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -506,6 +550,7 @@ Object ListIterator_AddListAfter(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfter begined.")
 	ASSERT_C ( "ListIterator:AddListAfter --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListAfter --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -522,6 +567,7 @@ Object ListIterator_AddListBeforeClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBeforeClonning begined.")
 	ASSERT_C ( "ListIterator:AddListBeforeClonning --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListBeforeClonning --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -538,6 +584,7 @@ Object ListIterator_AddListAfterClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfterClonning begined.")
 	ASSERT_C ( "ListIterator:AddListAfterClonning --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListAfterClonning --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -554,6 +601,7 @@ Object ListIterator_AddListBeforeDeepClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListBeforeDeepClonning begined.")
 	ASSERT_C ( "ListIterator:AddListBeforeDeepClonning --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListBeforeDeepClonning --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_First(_list);
 	while((Logic_Not(ListIterator_ThisEnd(_listIterator))) != _false)
@@ -570,6 +618,7 @@ Object ListIterator_AddListAfterDeepClonning(Object _self, Object _list)
 {
 	DPUSHS ("ListIterator: AddListAfterDeepClonning begined.")
 	ASSERT_C ( "ListIterator:AddListAfterDeepClonning --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:AddListAfterDeepClonning --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _listIterator;
 	_listIterator = List_Last(_list);
 	while((Logic_Not(ListIterator_ThisBegin(_listIterator))) != _false)
@@ -586,6 +635,7 @@ Object ListIterator_RemoveCount(Object _self, Object _count)
 {
 	DPUSHS ("ListIterator: RemoveCount begined.")
 	ASSERT_C ( "ListIterator:RemoveCount --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
+	ASSERT_C ( "ListIterator:RemoveCount --- Checking for correct parameter type failed at parameter _count.", _count->gid == 15425740279749906432ull || _count == _nil )
 	Object _savedPrev;
 	_savedPrev = (((ListNode) ((((ListIterator) (_self->entity))->_node)->entity))->_prev);
 	Object _deletedCount;

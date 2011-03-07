@@ -66,6 +66,7 @@ Object MultiSet_Compare(Object _self, Object _multiset)
 {
 	DPUSHS ("MultiSet: Compare begined.")
 	ASSERT_C ( "MultiSet:Compare --- Checking for correct object type failed.", _self->gid ==  8253887558225682432ull )
+	ASSERT_C ( "MultiSet:Compare --- Checking for correct parameter type failed at parameter _multiset.", _multiset->gid ==  8253887558225682432ull || _multiset == _nil )
 	Object toReturn = Object_Compare((((MultiSet) (_self->entity))->_list), (((MultiSet) (_multiset->entity))->_list));
 	DPOPS ("MultiSet: Compare ended.")
 	return toReturn;

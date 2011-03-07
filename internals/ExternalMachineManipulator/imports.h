@@ -4,3 +4,5 @@
 #include "internals/ExternalFileManipulator/interface.h"
 #include "internals/ExternalMachineManipulator/interface.h"
 #include "internals/List/interface.h"
+#include "internals/Console/interface.h"
+#include "internals/ListMap/interface.h"

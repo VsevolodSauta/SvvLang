@@ -10,6 +10,13 @@
 OSexit:
 	kernel 60
 	ret
+
+// ; Signals
+.globl OSkill
+OSkill:
+	kernel 62
+	ret
+
 // ; Files handling
 .globl OSfileOpen
 OSfileOpen:

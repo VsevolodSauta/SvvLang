@@ -22,9 +22,9 @@ ExternalObjectManipulator SetMachine <Machine> machine
 
 ExternalObjectManipulator <List> CreateUIDObject
 	autoreleasePool ++
-	uid = self.machine ImportUID "Объект" 
+	uid = self.machine ImportUID "SvvLanguage_C/externals/Объект" 
 	object = self.machine ObjectByUID uid
-	object ObjectSetBasicMethod self &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонирование Тип=ЗапросЗапрос=Клонировать" 
+	object ObjectSetBasicMethod self &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонирование Тип=ЗапросЗапрос=Клонировать"
 	self.objectMasterCopy = (self.machine UIDToObject uid) DeepClone
 	autoreleasePool --
 	return uid
@@ -43,8 +43,8 @@ ExternalObjectManipulator CloneUIDObjectInternalRoutine <List> uid
 
 ExternalObjectManipulator CloneUIDObjectBasicMethod <Processor> processor
 	uidToReturn = self CloneUIDObjectInternalRoutine processor.contextUID
-	replyMessage = entitiesFactory CreateEmptyListMap
-	replyMessage AtPut "Ответ" "Успех"
+	replyMessage = entitiesFactory CreateEmptyMessage
+	replyMessage MessageSetAnswerSuccess
 	replyMessage AtPut "Клон" uidToReturn
 	processor SendReplyForMessage replyMessage "Клонировать "
 	return self

@@ -75,6 +75,7 @@ Object ListMapNode_Compare(Object _self, Object _listMapNode)
 {
 	DPUSHS ("ListMapNode: Compare begined.")
 	ASSERT_C ( "ListMapNode:Compare --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:Compare --- Checking for correct parameter type failed at parameter _listMapNode.", _listMapNode->gid ==  5883107801261346816ull || _listMapNode == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapNode) (_self->entity))->_mapped), (((ListMapNode) (_listMapNode->entity))->_mapped));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)
@@ -102,6 +103,7 @@ Object ListMapNode_MergeRecursiveStrong(Object _self, Object _listMapNode)
 {
 	DPUSHS ("ListMapNode: MergeRecursiveStrong begined.")
 	ASSERT_C ( "ListMapNode:MergeRecursiveStrong --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
+	ASSERT_C ( "ListMapNode:MergeRecursiveStrong --- Checking for correct parameter type failed at parameter _listMapNode.", _listMapNode->gid ==  5883107801261346816ull || _listMapNode == _nil )
 	if(((((ListMapNode) (_listMapNode->entity))->_mapped)) != _false)
 	{
 		(((ListMapNode) (_self->entity))->_mapped) = _true;

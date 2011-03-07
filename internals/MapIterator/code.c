@@ -23,6 +23,7 @@ Object MapIterator_SetMap(Object _self, Object _map)
 {
 	DPUSHS ("MapIterator: SetMap begined.")
 	ASSERT_C ( "MapIterator:SetMap --- Checking for correct object type failed.", _self->gid ==  2171829371942269696ull )
+	ASSERT_C ( "MapIterator:SetMap --- Checking for correct parameter type failed at parameter _map.", _map->gid ==  7784561639000363008ull || _map == _nil )
 	Object_SetRetaining(&(((MapIterator) (_self->entity))->_map), _map);
 	Object toReturn = _self;
 	DPOPS ("MapIterator: SetMap ended.")
@@ -167,6 +168,7 @@ Object MapIterator_Compare(Object _self, Object _mapIterator)
 {
 	DPUSHS ("MapIterator: Compare begined.")
 	ASSERT_C ( "MapIterator:Compare --- Checking for correct object type failed.", _self->gid ==  2171829371942269696ull )
+	ASSERT_C ( "MapIterator:Compare --- Checking for correct parameter type failed at parameter _mapIterator.", _mapIterator->gid ==  2171829371942269696ull || _mapIterator == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((MapIterator) (_self->entity))->_keysIterator), (((MapIterator) (_mapIterator->entity))->_keysIterator));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) == _equal)) != _false)

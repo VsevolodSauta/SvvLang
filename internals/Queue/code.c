@@ -114,6 +114,7 @@ Object Queue_Compare(Object _self, Object _queue)
 {
 	DPUSHS ("Queue: Compare begined.")
 	ASSERT_C ( "Queue:Compare --- Checking for correct object type failed.", _self->gid ==  5026058259973625856ull )
+	ASSERT_C ( "Queue:Compare --- Checking for correct parameter type failed at parameter _queue.", _queue->gid ==  5026058259973625856ull || _queue == _nil )
 	Object toReturn = Object_Compare((((Queue) (_self->entity))->_list), (((Queue) (_queue->entity))->_list));
 	DPOPS ("Queue: Compare ended.")
 	return toReturn;

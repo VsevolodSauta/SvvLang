@@ -43,9 +43,8 @@ ExternalEntitiesFactory <ListMap> CreateEmptyJobStage
 
 ExternalEntitiesFactory <ListMap> CreateConditionPresence <List> key
 	toReturn = self CreateEmptyListMap
-	toReturn AtPut "Метод проверки" "Совпадение"
-	toReturn AtPut "Ключ" ""
-	toReturn AtPut "Значение" ""
+	toReturn AtPut "Метод проверки" "Наличие"
+	toReturn AtPut "Ключ" key
 	return toReturn
 	
 ExternalEntitiesFactory <ListMap> CreateConditionEquality (CreateConditionWithKeyValue) <List> key value
@@ -60,6 +59,7 @@ ExternalEntitiesFactory <ListMap> CreateEmptyMessageSlot
 	toReturn AtPut "Метод идентификации" (self CreateEmptyList)
 	toReturn AtPut "Стадии" (self CreateEmptyList)
 	toReturn AtPut "Состояние" "Открыто"
+	toReturn AtPut "Сообщения" (self CreateEmptyList)
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateRequestMessageSlot <List> request
@@ -76,6 +76,13 @@ ExternalEntitiesFactory <ListMap> CreateObject
 	toReturn AtPut "Работы" (self CreateEmptyJobs)
 	return toReturn
 
+ExternalEntitiesFactory <ListMap> CreateEmptyMessage
+	toReturn = self CreateEmptyListMap
+	attribs = self CreateEmptyListMap
+	attribs AtPut "Ожидаемые сообщения" (self CreateEmptyList)
+	toReturn AtPut "Атрибуты" attribs
+	return toReturn
+
 ExternalEntitiesFactory <ListMap> CreateEmptyFields
 	return self CreateEmptyListMap
 
@@ -90,4 +97,4 @@ ExternalEntitiesFactory <ListMap> CreateEmptyProperties
 	toReturn AtPut "Идентификаторы" (self CreateEmptyList)
 	toReturn AtPut "Имя" (self CreateEmptyList)
 	return toReturn
-
+	

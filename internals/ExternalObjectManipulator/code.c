@@ -60,6 +60,7 @@ Object ExternalObjectManipulator_Compare(Object _self, Object _manipulator)
 {
 	DPUSHS ("ExternalObjectManipulator: Compare begined.")
 	ASSERT_C ( "ExternalObjectManipulator:Compare --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
+	ASSERT_C ( "ExternalObjectManipulator:Compare --- Checking for correct parameter type failed at parameter _manipulator.", _manipulator->gid ==  8518571086308177920ull || _manipulator == _nil )
 	Object toReturn = _equal;
 	DPOPS ("ExternalObjectManipulator: Compare ended.")
 	return toReturn;
@@ -69,6 +70,7 @@ Object ExternalObjectManipulator_SetMachine(Object _self, Object _machine)
 {
 	DPUSHS ("ExternalObjectManipulator: SetMachine begined.")
 	ASSERT_C ( "ExternalObjectManipulator:SetMachine --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
+	ASSERT_C ( "ExternalObjectManipulator:SetMachine --- Checking for correct parameter type failed at parameter _machine.", _machine->gid ==  6547848715907434496ull || _machine == _nil )
 	(((ExternalObjectManipulator) (_self->entity))->_machine) = _machine;
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: SetMachine ended.")
@@ -81,7 +83,7 @@ Object ExternalObjectManipulator_CreateUIDObject(Object _self)
 	ASSERT_C ( "ExternalObjectManipulator:CreateUIDObject --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Object _uid;
-	_uid = Machine_ImportUID((((ExternalObjectManipulator) (_self->entity))->_machine), StringFactory_FromUTF8(_stringFactory, "Объект", 12));
+	_uid = Machine_ImportUID((((ExternalObjectManipulator) (_self->entity))->_machine), StringFactory_FromUTF8(_stringFactory, "SvvLanguage_C/externals/Объект", 36));
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalObjectManipulator_CloneUIDObjectBasicMethod), StringFactory_FromUTF8(_stringFactory, "Клонирование Тип=ЗапросЗапрос=Клонировать", 79));
@@ -96,6 +98,7 @@ Object ExternalObjectManipulator_CloneUIDObjectInternalRoutine(Object _self, Obj
 {
 	DPUSHS ("ExternalObjectManipulator: CloneUIDObjectInternalRoutine begined.")
 	ASSERT_C ( "ExternalObjectManipulator:CloneUIDObjectInternalRoutine --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
+	ASSERT_C ( "ExternalObjectManipulator:CloneUIDObjectInternalRoutine --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uid);
 	Object _uidToReturn;
@@ -116,11 +119,12 @@ Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object 
 {
 	DPUSHS ("ExternalObjectManipulator: CloneUIDObjectBasicMethod begined.")
 	ASSERT_C ( "ExternalObjectManipulator:CloneUIDObjectBasicMethod --- Checking for correct object type failed.", _self->gid ==  8518571086308177920ull )
+	ASSERT_C ( "ExternalObjectManipulator:CloneUIDObjectBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _uidToReturn;
 	_uidToReturn = ExternalObjectManipulator_CloneUIDObjectInternalRoutine(_self, (((Processor) (_processor->entity))->_contextUID));
 	Object _replyMessage;
-	_replyMessage = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
-	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10));
+	_replyMessage = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetReplySuccess(_replyMessage);
 	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Клон", 8), _uidToReturn);
 	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Клонировать ", 23));
 	Object toReturn = _self;

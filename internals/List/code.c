@@ -86,6 +86,7 @@ Object List_Compare(Object _self, Object _list)
 {
 	DPUSHS ("List: Compare begined.")
 	ASSERT_C ( "List:Compare --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:Compare --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _selfIterator;
 	_selfIterator = List_First(_self);
 	Object _listIterator;
@@ -296,6 +297,7 @@ Object List_AddAfterPosition(Object _self, Object _position, Object _object)
 {
 	DPUSHS ("List: AddAfterPosition begined.")
 	ASSERT_C ( "List:AddAfterPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:AddAfterPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddAfter((((List) (_self->entity))->_iterator), _object);
@@ -309,6 +311,7 @@ Object List_AddBeforePosition(Object _self, Object _position, Object _object)
 {
 	DPUSHS ("List: AddBeforePosition begined.")
 	ASSERT_C ( "List:AddBeforePosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:AddBeforePosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_AddBefore((((List) (_self->entity))->_iterator), _object);
@@ -322,6 +325,7 @@ Object List_ObjectAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ObjectAtPosition begined.")
 	ASSERT_C ( "List:ObjectAtPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:ObjectAtPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	Object def = ListIterator_ThisData((((List) (_self->entity))->_iterator));
@@ -334,6 +338,7 @@ Object List_ObjectAtPositionIfExists(Object _self, Object _position)
 {
 	DPUSHS ("List: ObjectAtPositionIfExists begined.")
 	ASSERT_C ( "List:ObjectAtPositionIfExists --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:ObjectAtPositionIfExists --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(_self), _position) == _greater)) != _false)
 	{
 		Object toReturn = List_ObjectAtPosition(_self, _position);
@@ -352,6 +357,7 @@ Object List_RemoveObjectAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: RemoveObjectAtPosition begined.")
 	ASSERT_C ( "List:RemoveObjectAtPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:RemoveObjectAtPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
@@ -365,6 +371,7 @@ Object List_ReplaceAtPositionWithObject(Object _self, Object _position, Object _
 {
 	DPUSHS ("List: ReplaceAtPositionWithObject begined.")
 	ASSERT_C ( "List:ReplaceAtPositionWithObject --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:ReplaceAtPositionWithObject --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _position);
 	ListIterator_ThisSetData((((List) (_self->entity))->_iterator), _object);
@@ -404,6 +411,23 @@ Object List_RemoveFirst(Object _self, Object _object)
 	return toReturn;
 }
 
+Object List_RemoveFirstExactlySame(Object _self, Object _object)
+{
+	DPUSHS ("List: RemoveFirstExactlySame begined.")
+	ASSERT_C ( "List:RemoveFirstExactlySame --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
+	ListIterator_ToBegin((((List) (_self->entity))->_iterator));
+	ListIterator_SearchForwardExactlySame((((List) (_self->entity))->_iterator), _object);
+	if((Logic_Not(ListIterator_ThisEnd((((List) (_self->entity))->_iterator)))) != _false)
+	{
+		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	}
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	Object toReturn = _self;
+	DPOPS ("List: RemoveFirstExactlySame ended.")
+	return toReturn;
+}
+
 Object List_RemoveFirstWithConfirmation(Object _self, Object _object)
 {
 	DPUSHS ("List: RemoveFirstWithConfirmation begined.")
@@ -438,6 +462,23 @@ Object List_RemoveLast(Object _self, Object _object)
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	Object toReturn = _self;
 	DPOPS ("List: RemoveLast ended.")
+	return toReturn;
+}
+
+Object List_RemoveLastExactlySame(Object _self, Object _object)
+{
+	DPUSHS ("List: RemoveLastExactlySame begined.")
+	ASSERT_C ( "List:RemoveLastExactlySame --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
+	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
+	ListIterator_SearchBackwardExactlySame((((List) (_self->entity))->_iterator), _object);
+	if((Logic_Not(ListIterator_ThisBegin((((List) (_self->entity))->_iterator)))) != _false)
+	{
+		ListIterator_ThisRemove((((List) (_self->entity))->_iterator));
+	}
+	ListIterator_Hide((((List) (_self->entity))->_iterator));
+	Object toReturn = _self;
+	DPOPS ("List: RemoveLastExactlySame ended.")
 	return toReturn;
 }
 
@@ -540,6 +581,7 @@ Object List_ListMapAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ListMapAtPosition begined.")
 	ASSERT_C ( "List:ListMapAtPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:ListMapAtPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	Object toReturn = List_ObjectAtPosition(_self, _position);
 	DPOPS ("List: ListMapAtPosition ended.")
 	return toReturn;
@@ -568,6 +610,7 @@ Object List_IteratorFromPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: IteratorFromPosition begined.")
 	ASSERT_C ( "List:IteratorFromPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:IteratorFromPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	Object toReturn = ListIterator_ToPosition(List_First(_self), _position);
 	DPOPS ("List: IteratorFromPosition ended.")
 	return toReturn;
@@ -577,6 +620,7 @@ Object List_CreatingIteratorFromPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: CreatingIteratorFromPosition begined.")
 	ASSERT_C ( "List:CreatingIteratorFromPosition --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:CreatingIteratorFromPosition --- Checking for correct parameter type failed at parameter _position.", _position->gid == 15425740279749906432ull || _position == _nil )
 	Object _iterator;
 	_iterator = List_First(_self);
 	Object _currentPosition;
@@ -628,6 +672,8 @@ Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _
 {
 	DPUSHS ("List: SublistBetweenPositions begined.")
 	ASSERT_C ( "List:SublistBetweenPositions --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:SublistBetweenPositions --- Checking for correct parameter type failed at parameter _positionFrom.", _positionFrom->gid == 15425740279749906432ull || _positionFrom == _nil )
+	ASSERT_C ( "List:SublistBetweenPositions --- Checking for correct parameter type failed at parameter _positionTo.", _positionTo->gid == 15425740279749906432ull || _positionTo == _nil )
 	ListIterator_ToPosition((((List) (_self->entity))->_iterator), _positionFrom);
 	Object _list;
 	_list = Object_Autorelease(List_Create());
@@ -650,6 +696,8 @@ Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _
 {
 	DPUSHS ("List: SublistBetweenIterators begined.")
 	ASSERT_C ( "List:SublistBetweenIterators --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:SublistBetweenIterators --- Checking for correct parameter type failed at parameter _positionFrom.", _positionFrom->gid ==   807984642922801280ull || _positionFrom == _nil )
+	ASSERT_C ( "List:SublistBetweenIterators --- Checking for correct parameter type failed at parameter _positionTo.", _positionTo->gid ==   807984642922801280ull || _positionTo == _nil )
 	Object _iterator;
 	_iterator = Object_Clone(_positionFrom);
 	Object _list;
@@ -701,6 +749,7 @@ Object List_Concatenate(Object _self, Object _list)
 {
 	DPUSHS ("List: Concatenate begined.")
 	ASSERT_C ( "List:Concatenate --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:Concatenate --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddListAfter((((List) (_self->entity))->_iterator), _list);
@@ -714,6 +763,7 @@ Object List_Set(Object _self, Object _list)
 {
 	DPUSHS ("List: Set begined.")
 	ASSERT_C ( "List:Set --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:Set --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	List_Clean(_self);
 	List_Concatenate(_self, _list);
 	Object toReturn = _self;

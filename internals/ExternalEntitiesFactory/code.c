@@ -48,6 +48,7 @@ Object ExternalEntitiesFactory_Compare(Object _self, Object _entitiesFactory)
 {
 	DPUSHS ("ExternalEntitiesFactory: Compare begined.")
 	ASSERT_C ( "ExternalEntitiesFactory:Compare --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	ASSERT_C ( "ExternalEntitiesFactory:Compare --- Checking for correct parameter type failed at parameter _entitiesFactory.", _entitiesFactory->gid ==  4514905638553083904ull || _entitiesFactory == _nil )
 	Object toReturn = _equal;
 	DPOPS ("ExternalEntitiesFactory: Compare ended.")
 	return toReturn;
@@ -121,11 +122,11 @@ Object ExternalEntitiesFactory_CreateConditionPresence(Object _self, Object _key
 {
 	DPUSHS ("ExternalEntitiesFactory: CreateConditionPresence begined.")
 	ASSERT_C ( "ExternalEntitiesFactory:CreateConditionPresence --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	ASSERT_C ( "ExternalEntitiesFactory:CreateConditionPresence --- Checking for correct parameter type failed at parameter _key.", _key->gid ==  3732711262168886272ull || _key == _nil )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27), StringFactory_FromUTF8(_stringFactory, "Совпадение", 20));
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ключ", 8), StringFactory_FromUTF8(_stringFactory, "", 0));
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Значение", 16), StringFactory_FromUTF8(_stringFactory, "", 0));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27), StringFactory_FromUTF8(_stringFactory, "Наличие", 14));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ключ", 8), _key);
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateConditionPresence ended.")
 	return toReturn;
@@ -135,6 +136,7 @@ Object ExternalEntitiesFactory_CreateConditionEquality(Object _self, Object _key
 {
 	DPUSHS ("ExternalEntitiesFactory: CreateConditionEquality begined.")
 	ASSERT_C ( "ExternalEntitiesFactory:CreateConditionEquality --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	ASSERT_C ( "ExternalEntitiesFactory:CreateConditionEquality --- Checking for correct parameter type failed at parameter _key.", _key->gid ==  3732711262168886272ull || _key == _nil )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27), StringFactory_FromUTF8(_stringFactory, "Совпадение", 20));
@@ -154,6 +156,7 @@ Object ExternalEntitiesFactory_CreateEmptyMessageSlot(Object _self)
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Метод идентификации", 37), ExternalEntitiesFactory_CreateEmptyList(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyList(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Открыто", 14));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), ExternalEntitiesFactory_CreateEmptyList(_self));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateEmptyMessageSlot ended.")
 	return toReturn;
@@ -163,6 +166,7 @@ Object ExternalEntitiesFactory_CreateRequestMessageSlot(Object _self, Object _re
 {
 	DPUSHS ("ExternalEntitiesFactory: CreateRequestMessageSlot begined.")
 	ASSERT_C ( "ExternalEntitiesFactory:CreateRequestMessageSlot --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	ASSERT_C ( "ExternalEntitiesFactory:CreateRequestMessageSlot --- Checking for correct parameter type failed at parameter _request.", _request->gid ==  3732711262168886272ull || _request == _nil )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyMessageSlot(_self);
 	ListMap_MessageSlotSetCondition(_toReturn, ExternalEntitiesFactory_CreateConditionEquality(_self, StringFactory_FromUTF8(_stringFactory, "Тип", 6), StringFactory_FromUTF8(_stringFactory, "Запрос", 12)));
@@ -184,6 +188,21 @@ Object ExternalEntitiesFactory_CreateObject(Object _self)
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Работы", 12), ExternalEntitiesFactory_CreateEmptyJobs(_self));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateObject ended.")
+	return toReturn;
+}
+
+Object ExternalEntitiesFactory_CreateEmptyMessage(Object _self)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyMessage begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyMessage --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	Object _attribs;
+	_attribs = ExternalEntitiesFactory_CreateEmptyListMap(_self);
+	ListMap_Add(_attribs, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37), ExternalEntitiesFactory_CreateEmptyList(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Атрибуты", 16), _attribs);
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyMessage ended.")
 	return toReturn;
 }
 

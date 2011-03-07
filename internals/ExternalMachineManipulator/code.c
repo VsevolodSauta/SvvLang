@@ -67,6 +67,7 @@ Object ExternalMachineManipulator_Compare(Object _self, Object _machineManipulat
 {
 	DPUSHS ("ExternalMachineManipulator: Compare begined.")
 	ASSERT_C ( "ExternalMachineManipulator:Compare --- Checking for correct object type failed.", _self->gid ==  4316978841904643584ull )
+	ASSERT_C ( "ExternalMachineManipulator:Compare --- Checking for correct parameter type failed at parameter _machineManipulator.", _machineManipulator->gid ==  4316978841904643584ull || _machineManipulator == _nil )
 	Object toReturn = _equal;
 	DPOPS ("ExternalMachineManipulator: Compare ended.")
 	return toReturn;
@@ -76,6 +77,7 @@ Object ExternalMachineManipulator_SetMachine(Object _self, Object _machine)
 {
 	DPUSHS ("ExternalMachineManipulator: SetMachine begined.")
 	ASSERT_C ( "ExternalMachineManipulator:SetMachine --- Checking for correct object type failed.", _self->gid ==  4316978841904643584ull )
+	ASSERT_C ( "ExternalMachineManipulator:SetMachine --- Checking for correct parameter type failed at parameter _machine.", _machine->gid ==  6547848715907434496ull || _machine == _nil )
 	(((ExternalMachineManipulator) (_self->entity))->_machine) = _machine;
 	ExternalObjectManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_object), _machine);
 	ExternalConsoleManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_console), _machine);
@@ -99,6 +101,13 @@ Object ExternalMachineManipulator_CreateAll(Object _self)
 	_fileUID = ExternalObjectManipulator_CloneUIDObjectInternalRoutine((((ExternalMachineManipulator) (_self->entity))->_object), _objectUID);
 	ExternalFileManipulator_CreateUIDFileFromUIDObject((((ExternalMachineManipulator) (_self->entity))->_file), _fileUID);
 	Machine_RegisterAtGlobalContext((((ExternalMachineManipulator) (_self->entity))->_machine), _fileUID, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
+	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _objectUID)));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
+	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _consoleUID)));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
+	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _fileUID)));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
 	Object toReturn = _self;
 	DPOPS ("ExternalMachineManipulator: CreateAll ended.")
 	return toReturn;

@@ -174,7 +174,6 @@ ListMap DumpListToListMap (MessageDump)
 
 
 
-
 ListMap ObjectMethods
 	return self ListMapAt ("Методы")
 
@@ -251,6 +250,7 @@ ListMap ObjectJob <List> jobName
 	
 ListMap <Object> ObjectProperty <List> propertyName
 	return (self ObjectProperties) At propertyName
+
 
 
 ListMap JobStages
@@ -338,7 +338,6 @@ ListMap JobCreateStageWithNameMethodMessageSlotNameAndEntity <List> stageName <L
 
 
 
-
 ListMap <List> MessageSender
 	return self ListAt "Отправитель"
 
@@ -381,6 +380,15 @@ ListMap MessageSetReplySuccess (MessageSetAnswerSuccess)
 ListMap MessageSetReplyFail (MessageSetAnswerFail)
 	return self MessageSetReply "Неудача"
 
+ListMap MessageSetJobNameAndMessageSlotName <List> jobName <List> messageSlotName
+	listmap = entitiesFactory CreateEmptyListMap
+	listmap AtPut "Работа" jobName
+	listmap AtPut "Ожидаемое сообщение" messageSlotName
+	((self ListMapAt "Атрибуты") ListAt "Ожидаемые сообщения") Append listmap
+	return self
+
+ListMap MessageAttributesMessageSlots 
+	return ((self ListMapAt "Атрибуты") ListAt "Ожидаемые сообщения")
 
 
 
@@ -391,10 +399,26 @@ ListMap <ListIterator> MessageSlotStagesIterator
 	return (self ListAt ("Стадии")) First
 
 ListMap MessageSlotMessage
-	return self ListMapAt ("Сообщение")
+	return (self ListAt ("Сообщения")) PeekFront
 
 ListMap MessageSlotSetMessage <ListMap> message
-	return self AtPut ("Сообщение") message
+	list = self ListAt ("Сообщения") 
+	list PushBack message
+	return self
+
+ListMap MessageSlotRemoveMessage <ListMap> message
+	list = self ListAt ("Сообщения") 
+	if message == nil
+		list RemoveFront
+	else
+		list RemoveFirstExactlySame message
+	return self
+
+ListMap MessageSlotRemoveAllMessages
+	list = <List>
+	self AtPut ("Сообщения") list
+	list Release
+	return self
 
 ListMap <Object> MessageSlotField <List> fieldName
 	return (self MessageSlotMessage) ObjectAt fieldName
@@ -430,7 +454,8 @@ ListMap MessageSlotOpen
 ListMap MessageSlotClose
 	self AtPut "Состояние" "Закрыто"
 	return self
-	
+
+
 
 
 ListMap <Logic> StageContainsMessageSlot <List> messageSlotName
@@ -472,10 +497,10 @@ ListMap StageSetBlocked
 	return self AtPut "Состояние" "Заблокировано"
 
 ListMap StageSetReady
-	return self AtPut "Состояние" "Ожидание"
+	return self AtPut "Состояние" "Готово"
 
 ListMap StageSetWaiting
-	return self AtPut "Состояние" "Готово"
+	return self AtPut "Состояние" "Ожидание"
 
 ListMap <Logic> StageIsWaiting
 	return (self At "Состояние") == "Ожидание"

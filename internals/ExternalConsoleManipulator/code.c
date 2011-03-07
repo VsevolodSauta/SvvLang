@@ -58,6 +58,7 @@ Object ExternalConsoleManipulator_Compare(Object _self, Object _consoleManipulat
 {
 	DPUSHS ("ExternalConsoleManipulator: Compare begined.")
 	ASSERT_C ( "ExternalConsoleManipulator:Compare --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
+	ASSERT_C ( "ExternalConsoleManipulator:Compare --- Checking for correct parameter type failed at parameter _consoleManipulator.", _consoleManipulator->gid ==   220283697601632256ull || _consoleManipulator == _nil )
 	Object toReturn = _equal;
 	DPOPS ("ExternalConsoleManipulator: Compare ended.")
 	return toReturn;
@@ -67,6 +68,7 @@ Object ExternalConsoleManipulator_SetMachine(Object _self, Object _machine)
 {
 	DPUSHS ("ExternalConsoleManipulator: SetMachine begined.")
 	ASSERT_C ( "ExternalConsoleManipulator:SetMachine --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
+	ASSERT_C ( "ExternalConsoleManipulator:SetMachine --- Checking for correct parameter type failed at parameter _machine.", _machine->gid ==  6547848715907434496ull || _machine == _nil )
 	(((ExternalConsoleManipulator) (_self->entity))->_machine) = _machine;
 	Object toReturn = _self;
 	DPOPS ("ExternalConsoleManipulator: SetMachine ended.")
@@ -77,6 +79,7 @@ Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Ob
 {
 	DPUSHS ("ExternalConsoleManipulator: CreateUIDConsoleFromUIDObject begined.")
 	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDObject --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
+	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDObject --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalConsoleManipulator) (_self->entity))->_machine), _uid);
 	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalConsoleManipulator_WriteUIDConsoleBasicMethod), StringFactory_FromUTF8(_stringFactory, "Вывести", 14));
@@ -104,11 +107,12 @@ Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Objec
 {
 	DPUSHS ("ExternalConsoleManipulator: WriteUIDConsoleBasicMethod begined.")
 	ASSERT_C ( "ExternalConsoleManipulator:WriteUIDConsoleBasicMethod --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
+	ASSERT_C ( "ExternalConsoleManipulator:WriteUIDConsoleBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _string;
 	_string = ListMap_JobFieldInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "Строка", 12), StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	Console_WriteLnString(_console, _string);
 	Object _replyMessage;
-	_replyMessage = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
+	_replyMessage = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_replyMessage);
 	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	Object toReturn = _self;

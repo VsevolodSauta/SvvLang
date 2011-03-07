@@ -102,6 +102,20 @@ ListIterator SearchBackward object
 		self Prev
 	return self
 
+ListIterator SearchForwardExactlySame object
+	while self NotThisEnd
+		if (self ThisData) Is object
+			break
+		self Next
+	return self
+
+ListIterator SearchBackwardExactlySame object
+	while self NotThisBegin
+		if (self ThisData) Is object
+			break
+		self Prev
+	return self
+
 ListIterator <Number> SearchForwardOffset object
 	position = 0
 	while self NotThisEnd

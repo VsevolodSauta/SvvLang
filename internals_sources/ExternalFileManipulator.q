@@ -22,12 +22,12 @@ ExternalFileManipulator SetMachine <Machine> machine
 ExternalFileManipulator CreateUIDFileFromUIDObject <List> uid
 	object = self.machine ObjectByUID uid
 	
-	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя файла "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку "
-	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку "
+	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя фала"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку"
+	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку"
 	
 	job = entitiesFactory CreateEmptyJob
 	object ObjectSetJob job "Основная работа файла"
@@ -48,10 +48,9 @@ ExternalFileManipulator AssociateUIDFileBasicMethod <Processor> processor
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Доступ" "Запись")
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Открытие файла для записи" "Открыть файл для записи" "Запрос на открытие файла для записи"  messageSlot
 	
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на ассоциирование"
-	reply Release
 	return self
 
 
@@ -75,10 +74,9 @@ ExternalFileManipulator OpenForReadingUIDFileBasicMethod <Processor> processor
 	job JobRemoveStageAndMessageSlots "Открыть для чтения"
 	job JobRemoveStageAndMessageSlots "Открыть для записи"
 
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на открытие файла"
-	reply Release
 	return self
 
 
@@ -102,10 +100,9 @@ ExternalFileManipulator OpenForWritingUIDFileBasicMethod <Processor> processor
 	job JobRemoveStageAndMessageSlots "Открыть для чтения"
 	job JobRemoveStageAndMessageSlots "Открыть для записи"
 
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на открытие файла"
-	reply Release
 	return self
 
 ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
@@ -131,10 +128,9 @@ ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
 	job JobRemoveStageAndMessageSlots "Прочитать строку"
 	job JobRemoveStageAndMessageSlots "Закрытие файла"
 
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на закрытие файла"
-	reply Release
 	return self
 
 
@@ -143,10 +139,9 @@ ExternalFileManipulator WriteStringUIDFileBasicMethod <Processor> processor
 	job = (processor ContextJob)
 	file = (fileObject ObjectProperty "Файл") AsFile
 	file WriteNakedString (job JobFieldInMessageSlot "Строка" "Запрос для записи строки")
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос для записи строки"
-	reply Release
 	return self
 
 
@@ -154,11 +149,10 @@ ExternalFileManipulator ReadStringUIDFileBasicMethod <Processor> processor
 	fileObject = (processor ContextObject)
 	file = (fileObject ObjectProperty "Файл") AsFile
 	string = file ReadString
-	reply = <ListMap>
+	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply AtPut "Строка" string
 	processor SendReplyForMessage reply "Запрос для чтения строки"
-	reply Release
 	return self
 
 

@@ -48,5 +48,6 @@ Object Undestroyable_Compare(Object _self, Object _undestroyable)
 {
 	DPUSHS ("Undestroyable: Compare begined.")
 	ASSERT_C ( "Undestroyable:Compare --- Checking for correct object type failed.", _self->gid ==  3814824931964230656ull )
+	ASSERT_C ( "Undestroyable:Compare --- Checking for correct parameter type failed at parameter _undestroyable.", _undestroyable->gid ==  3814824931964230656ull || _undestroyable == _nil )
 	return ( _self < _undestroyable ) ? _less : ( ( _self > _undestroyable ) ? _greater : _equal ) ; 
 }

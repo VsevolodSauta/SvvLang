@@ -37,6 +37,7 @@ Object ListMapIterator_SetListMap(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMapIterator: SetListMap begined.")
 	ASSERT_C ( "ListMapIterator:SetListMap --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:SetListMap --- Checking for correct parameter type failed at parameter _listMap.", _listMap->gid ==  2108332898258556672ull || _listMap == _nil )
 	Object_SetRetaining(&(((ListMapIterator) (_self->entity))->_listMap), _listMap);
 	Object toReturn = _self;
 	DPOPS ("ListMapIterator: SetListMap ended.")
@@ -85,6 +86,7 @@ Object ListMapIterator_MoreThanOneElementInNode(Object _self, Object _node)
 {
 	DPUSHS ("ListMapIterator: MoreThanOneElementInNode begined.")
 	ASSERT_C ( "ListMapIterator:MoreThanOneElementInNode --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:MoreThanOneElementInNode --- Checking for correct parameter type failed at parameter _node.", _node->gid ==  5883107801261346816ull || _node == _nil )
 	if((Logic_And((((ListMapNode) (_node->entity))->_mapped), Logic_Not(Map_Empty((((ListMapNode) (_node->entity))->_nextMap))))) != _false)
 	{
 		Object toReturn = _true;
@@ -140,6 +142,7 @@ Object ListMapIterator_NextAnyWithElement(Object _self, Object _element)
 {
 	DPUSHS ("ListMapIterator: NextAnyWithElement begined.")
 	ASSERT_C ( "ListMapIterator:NextAnyWithElement --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:NextAnyWithElement --- Checking for correct parameter type failed at parameter _element.", _element->gid ==  5141019124093965312ull || _element == _nil )
 	Object _nextElement;
 	_nextElement = ListMapIteratorElement_Create();
 	Object_SetRetaining(&(((ListMapIteratorElement) (_nextElement->entity))->_node), ListMapIteratorElement_AdvancingValue(_element, Stack_ObjectAtPositionIfExists((((ListMapIterator) (_self->entity))->_elementStack), NumberFactory_FromLong(_numberFactory, 1))));
@@ -319,6 +322,7 @@ Object ListMapIterator_PrevAnyWithElement(Object _self, Object _element)
 {
 	DPUSHS ("ListMapIterator: PrevAnyWithElement begined.")
 	ASSERT_C ( "ListMapIterator:PrevAnyWithElement --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:PrevAnyWithElement --- Checking for correct parameter type failed at parameter _element.", _element->gid ==  5141019124093965312ull || _element == _nil )
 	Object _nextElement;
 	_nextElement = ListMapIteratorElement_Create();
 	Object_SetRetaining(&(((ListMapIteratorElement) (_nextElement->entity))->_node), ListMapIteratorElement_ReturningValue(_element, Stack_ObjectAtPositionIfExists((((ListMapIterator) (_self->entity))->_elementStack), NumberFactory_FromLong(_numberFactory, 1))));
@@ -355,6 +359,7 @@ Object ListMapIterator_Compare(Object _self, Object _iterator)
 {
 	DPUSHS ("ListMapIterator: Compare begined.")
 	ASSERT_C ( "ListMapIterator:Compare --- Checking for correct object type failed.", _self->gid ==  3251886107095273472ull )
+	ASSERT_C ( "ListMapIterator:Compare --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==  3251886107095273472ull || _iterator == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((ListMapIterator) (_self->entity))->_listMap), (((ListMapIterator) (_iterator->entity))->_listMap));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) == _equal)) != _false)

@@ -71,6 +71,7 @@ Object Map_Compare(Object _self, Object _map)
 {
 	DPUSHS ("Map: Compare begined.")
 	ASSERT_C ( "Map:Compare --- Checking for correct object type failed.", _self->gid ==  7784561639000363008ull )
+	ASSERT_C ( "Map:Compare --- Checking for correct parameter type failed at parameter _map.", _map->gid ==  7784561639000363008ull || _map == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((Map) (_self->entity))->_keys), (((Map) (_map->entity))->_keys));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)

@@ -9,3 +9,4 @@ int OSfileSeek(int fd, long offset, int origin);
 int OSfileTruncate(int fd, long length);
 void* OSmappingMap(void* addr, long length, long prot, long flags, long fd, long offset);
 int OSmappingUnmap(void* addr, long length);
+int OSkill(int pid, int code);

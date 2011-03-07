@@ -77,6 +77,7 @@ Object Runtime_Compare(Object _self, Object _runtime)
 {
 	DPUSHS ("Runtime: Compare begined.")
 	ASSERT_C ( "Runtime:Compare --- Checking for correct object type failed.", _self->gid ==  5367970674748323840ull )
+	ASSERT_C ( "Runtime:Compare --- Checking for correct parameter type failed at parameter _runtime.", _runtime->gid ==  5367970674748323840ull || _runtime == _nil )
 	Object toReturn = _equal;
 	DPOPS ("Runtime: Compare ended.")
 	return toReturn;

@@ -39,5 +39,13 @@ ExternalMachineManipulator CreateAll
 	self.file CreateUIDFileFromUIDObject fileUID
 	self.machine RegisterAtGlobalContext fileUID "Файл"
 	
+	console PrintLnString "==============="
+	((self.machine UIDToObject objectUID) ObjectJobs) DumpKeys
+	console PrintLnString "==============="
+	((self.machine UIDToObject consoleUID) ObjectJobs) DumpKeys
+	console PrintLnString "==============="
+	((self.machine UIDToObject fileUID) ObjectJobs) DumpKeys
+	console PrintLnString "==============="
+	
 	return self
 	

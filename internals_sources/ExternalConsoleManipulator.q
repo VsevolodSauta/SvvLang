@@ -39,7 +39,7 @@ ExternalConsoleManipulator CreateUIDConsoleFromUIDObject <List> uid
 ExternalConsoleManipulator WriteUIDConsoleBasicMethod <Processor> processor
 	string = (processor ContextJob) JobFieldInMessageSlot "Строка" "Запрос на вывод"
 	console PrintLnString string
-	replyMessage = entitiesFactory CreateEmptyListMap
+	replyMessage = entitiesFactory CreateEmptyMessage
 	replyMessage MessageSetReplySuccess
 	processor SendReplyForMessage replyMessage "Запрос на вывод"
 	return self

@@ -17,6 +17,7 @@ Object ExternalEntitiesFactory_CreateConditionEquality(Object _self, Object _key
 Object ExternalEntitiesFactory_CreateEmptyMessageSlot(Object _self);
 Object ExternalEntitiesFactory_CreateRequestMessageSlot(Object _self, Object _request);
 Object ExternalEntitiesFactory_CreateObject(Object _self);
+Object ExternalEntitiesFactory_CreateEmptyMessage(Object _self);
 Object ExternalEntitiesFactory_CreateEmptyFields(Object _self);
 Object ExternalEntitiesFactory_CreateEmptyMethods(Object _self);
 Object ExternalEntitiesFactory_CreateEmptyJobs(Object _self);

@@ -61,6 +61,7 @@ Object ListNode_Compare(Object _self, Object _listNode)
 {
 	DPUSHS ("ListNode: Compare begined.")
 	ASSERT_C ( "ListNode:Compare --- Checking for correct object type failed.", _self->gid ==  1592307763146065920ull )
+	ASSERT_C ( "ListNode:Compare --- Checking for correct parameter type failed at parameter _listNode.", _listNode->gid ==  1592307763146065920ull || _listNode == _nil )
 	Object _candidate;
 	_candidate = Object_Compare((((ListNode) (_self->entity))->_data), (((ListNode) (_listNode->entity))->_data));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _equal) != _equal)) != _false)

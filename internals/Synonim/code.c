@@ -34,6 +34,7 @@ Object Synonim_SetUID(Object _self, Object _uid)
 {
 	DPUSHS ("Synonim: SetUID begined.")
 	ASSERT_C ( "Synonim:SetUID --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:SetUID --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	Object_SetRetaining(&(((Synonim) (_self->entity))->_uid), _uid);
 	Object toReturn = _self;
 	DPOPS ("Synonim: SetUID ended.")
@@ -53,6 +54,7 @@ Object Synonim_Unite(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Unite begined.")
 	ASSERT_C ( "Synonim:Unite --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:Unite --- Checking for correct parameter type failed at parameter _synonim.", _synonim->gid ==  6761424502691563520ull || _synonim == _nil )
 	Object _iterator;
 	_iterator = List_First((((Synonim) (_synonim->entity))->_references));
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -72,6 +74,8 @@ Object Synonim_AddToNamespaceWithName(Object _self, Object _namespace, Object _n
 {
 	DPUSHS ("Synonim: AddToNamespaceWithName begined.")
 	ASSERT_C ( "Synonim:AddToNamespaceWithName --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:AddToNamespaceWithName --- Checking for correct parameter type failed at parameter _namespace.", _namespace->gid ==  2108332898258556672ull || _namespace == _nil )
+	ASSERT_C ( "Synonim:AddToNamespaceWithName --- Checking for correct parameter type failed at parameter _name.", _name->gid ==  3732711262168886272ull || _name == _nil )
 	Object _reference;
 	_reference = ListMap_Create();
 	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _namespace);
@@ -88,6 +92,7 @@ Object Synonim_AddReference(Object _self, Object _location)
 {
 	DPUSHS ("Synonim: AddReference begined.")
 	ASSERT_C ( "Synonim:AddReference --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:AddReference --- Checking for correct parameter type failed at parameter _location.", _location->gid ==  2108332898258556672ull || _location == _nil )
 	List_PushSorted((((Synonim) (_self->entity))->_references), _location);
 	ListMap_Add(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)), _self);
 	Object toReturn = _self;
@@ -99,6 +104,7 @@ Object Synonim_RemoveReference(Object _self, Object _location)
 {
 	DPUSHS ("Synonim: RemoveReference begined.")
 	ASSERT_C ( "Synonim:RemoveReference --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:RemoveReference --- Checking for correct parameter type failed at parameter _location.", _location->gid ==  2108332898258556672ull || _location == _nil )
 	if((List_RemoveFirstWithConfirmation((((Synonim) (_self->entity))->_references), _location)) != _false)
 	{
 		ListMap_Remove(ListMap_ListMapAt(_location, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33)), ListMap_ListAt(_location, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15)));
@@ -112,6 +118,7 @@ Object Synonim_RemoveNamespace(Object _self, Object _namespace)
 {
 	DPUSHS ("Synonim: RemoveNamespace begined.")
 	ASSERT_C ( "Synonim:RemoveNamespace --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:RemoveNamespace --- Checking for correct parameter type failed at parameter _namespace.", _namespace->gid ==  2108332898258556672ull || _namespace == _nil )
 	Object _iterator;
 	_iterator = List_First((((Synonim) (_self->entity))->_references));
 	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
@@ -169,6 +176,7 @@ Object Synonim_Compare(Object _self, Object _synonim)
 {
 	DPUSHS ("Synonim: Compare begined.")
 	ASSERT_C ( "Synonim:Compare --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
+	ASSERT_C ( "Synonim:Compare --- Checking for correct parameter type failed at parameter _synonim.", _synonim->gid ==  6761424502691563520ull || _synonim == _nil )
 	Object toReturn = Object_Compare((((Synonim) (_self->entity))->_uid), (((Synonim) (_synonim->entity))->_uid));
 	DPOPS ("Synonim: Compare ended.")
 	return toReturn;

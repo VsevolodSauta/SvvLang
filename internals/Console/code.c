@@ -34,6 +34,7 @@ Object Console_WriteLnString(Object _self, Object _string)
 {
 	DPUSHS ("Console: WriteLnString begined.")
 	ASSERT_C ( "Console:WriteLnString --- Checking for correct object type failed.", _self->gid ==  2102628007026497536ull )
+	ASSERT_C ( "Console:WriteLnString --- Checking for correct parameter type failed at parameter _string.", _string->gid ==  3732711262168886272ull || _string == _nil )
 	File_WriteLnString((((Console) (_self->entity))->_toWrite), _string);
 	Object toReturn = _self;
 	DPOPS ("Console: WriteLnString ended.")
@@ -44,6 +45,7 @@ Object Console_WriteString(Object _self, Object _string)
 {
 	DPUSHS ("Console: WriteString begined.")
 	ASSERT_C ( "Console:WriteString --- Checking for correct object type failed.", _self->gid ==  2102628007026497536ull )
+	ASSERT_C ( "Console:WriteString --- Checking for correct parameter type failed at parameter _string.", _string->gid ==  3732711262168886272ull || _string == _nil )
 	File_WriteNakedString((((Console) (_self->entity))->_toWrite), _string);
 	Object toReturn = _self;
 	DPOPS ("Console: WriteString ended.")
@@ -54,6 +56,7 @@ Object Console_WriteLnNumber(Object _self, Object _number)
 {
 	DPUSHS ("Console: WriteLnNumber begined.")
 	ASSERT_C ( "Console:WriteLnNumber --- Checking for correct object type failed.", _self->gid ==  2102628007026497536ull )
+	ASSERT_C ( "Console:WriteLnNumber --- Checking for correct parameter type failed at parameter _number.", _number->gid == 15425740279749906432ull || _number == _nil )
 	File_WriteLnNumber((((Console) (_self->entity))->_toWrite), _number);
 	Object toReturn = _self;
 	DPOPS ("Console: WriteLnNumber ended.")
@@ -92,6 +95,7 @@ Object Console_Compare(Object _self, Object _console)
 {
 	DPUSHS ("Console: Compare begined.")
 	ASSERT_C ( "Console:Compare --- Checking for correct object type failed.", _self->gid ==  2102628007026497536ull )
+	ASSERT_C ( "Console:Compare --- Checking for correct parameter type failed at parameter _console.", _console->gid ==  2102628007026497536ull || _console == _nil )
 	Object toReturn = _equal;
 	DPOPS ("Console: Compare ended.")
 	return toReturn;

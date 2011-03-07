@@ -32,6 +32,7 @@ Object Char_Compare(Object _self, Object _char)
 {
 	DPUSHS ("Char: Compare begined.")
 	ASSERT_C ( "Char:Compare --- Checking for correct object type failed.", _self->gid ==  6707630545906071552ull )
+	ASSERT_C ( "Char:Compare --- Checking for correct parameter type failed at parameter _char.", _char->gid ==  6707630545906071552ull || _char == _nil )
 	Object toReturn = Object_Compare((((Char) (_self->entity))->_code), (((Char) (_char->entity))->_code));
 	DPOPS ("Char: Compare ended.")
 	return toReturn;
@@ -75,6 +76,7 @@ Object Char_SetCode(Object _self, Object _code)
 {
 	DPUSHS ("Char: SetCode begined.")
 	ASSERT_C ( "Char:SetCode --- Checking for correct object type failed.", _self->gid ==  6707630545906071552ull )
+	ASSERT_C ( "Char:SetCode --- Checking for correct parameter type failed at parameter _code.", _code->gid == 15425740279749906432ull || _code == _nil )
 	Number_Set((((Char) (_self->entity))->_code), _code);
 	Object toReturn = _self;
 	DPOPS ("Char: SetCode ended.")

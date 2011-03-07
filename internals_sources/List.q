@@ -191,6 +191,15 @@ List RemoveFirst object
 	self.iterator Hide
 	return self
 
+List RemoveFirstExactlySame object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
+	self.iterator ToBegin
+	self.iterator SearchForwardExactlySame object
+	if self.iterator NotThisEnd
+		self.iterator ThisRemove
+	self.iterator Hide
+	return self
+
 List <Logic> RemoveFirstWithConfirmation object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	confirmation = false
@@ -206,6 +215,15 @@ List RemoveLast object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator SearchBackward object
+	if self.iterator NotThisBegin
+		self.iterator ThisRemove
+	self.iterator Hide
+	return self
+
+List RemoveLastExactlySame object
+	assert "Список занят. Итератор не на месте." self.iterator Hidden
+	self.iterator ToEnd
+	self.iterator SearchBackwardExactlySame object
 	if self.iterator NotThisBegin
 		self.iterator ThisRemove
 	self.iterator Hide

@@ -32,6 +32,7 @@ Object JSON_Compare(Object _self, Object _json)
 {
 	DPUSHS ("JSON: Compare begined.")
 	ASSERT_C ( "JSON:Compare --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:Compare --- Checking for correct parameter type failed at parameter _json.", _json->gid ==  6371882041780686848ull || _json == _nil )
 	Object toReturn = _equal;
 	DPOPS ("JSON: Compare ended.")
 	return toReturn;
@@ -69,6 +70,7 @@ Object JSON_ParseString(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseString begined.")
 	ASSERT_C ( "JSON:ParseString --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseString --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) != _equal))) != _false)
 	{
@@ -158,6 +160,7 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseObject begined.")
 	ASSERT_C ( "JSON:ParseObject --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseObject --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = ListMap_Create();
@@ -217,6 +220,7 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseArray begined.")
 	ASSERT_C ( "JSON:ParseArray --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseArray --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = List_Create();
@@ -268,6 +272,7 @@ Object JSON_ParseValue(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseValue begined.")
 	ASSERT_C ( "JSON:ParseValue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseValue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((ListIterator_ThisEnd(_iterator)) != _false)
 	{
@@ -329,6 +334,7 @@ Object JSON_ParseTrue(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseTrue begined.")
 	ASSERT_C ( "JSON:ParseTrue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseTrue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 't')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -366,6 +372,7 @@ Object JSON_ParseFalse(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseFalse begined.")
 	ASSERT_C ( "JSON:ParseFalse --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseFalse --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'f')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -410,6 +417,7 @@ Object JSON_ParseNull(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseNull begined.")
 	ASSERT_C ( "JSON:ParseNull --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseNull --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'n')) != _equal)) != _false)
 	{
 		Object toReturn = (((JSON) (_self->entity))->_error);
@@ -447,6 +455,7 @@ Object JSON_ParseNumber(Object _self, Object _iterator)
 {
 	DPUSHS ("JSON: ParseNumber begined.")
 	ASSERT_C ( "JSON:ParseNumber --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	ASSERT_C ( "JSON:ParseNumber --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _negative;
 	_negative = _false;

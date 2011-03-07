@@ -34,6 +34,7 @@ Object ListMap_Compare(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMap: Compare begined.")
 	ASSERT_C ( "ListMap:Compare --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:Compare --- Checking for correct parameter type failed at parameter _listMap.", _listMap->gid ==  2108332898258556672ull || _listMap == _nil )
 	Object toReturn = Object_Compare((((ListMap) (_self->entity))->_root), (((ListMap) (_listMap->entity))->_root));
 	DPOPS ("ListMap: Compare ended.")
 	return toReturn;
@@ -102,6 +103,7 @@ Object ListMap_Add(Object _self, Object _list, Object _object)
 {
 	DPUSHS ("ListMap: Add begined.")
 	ASSERT_C ( "ListMap:Add --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:Add --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _iterator;
 	_iterator = List_First(_list);
 	Object _node;
@@ -133,6 +135,7 @@ Object ListMap_AddListMap(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMap: AddListMap begined.")
 	ASSERT_C ( "ListMap:AddListMap --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:AddListMap --- Checking for correct parameter type failed at parameter _listMap.", _listMap->gid ==  2108332898258556672ull || _listMap == _nil )
 	ListMapNode_MergeRecursiveStrong((((ListMap) (_self->entity))->_root), (((ListMap) (_listMap->entity))->_root));
 	Object toReturn = _self;
 	DPOPS ("ListMap: AddListMap ended.")
@@ -143,6 +146,7 @@ Object ListMap_Remove(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: Remove begined.")
 	ASSERT_C ( "ListMap:Remove --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:Remove --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	ListMap_RemoveKeyWithConfirmation(_self, _list);
 	Object toReturn = _self;
 	DPOPS ("ListMap: Remove ended.")
@@ -163,6 +167,7 @@ Object ListMap_ResetWithListMapDestructive(Object _self, Object _listMap)
 {
 	DPUSHS ("ListMap: ResetWithListMapDestructive begined.")
 	ASSERT_C ( "ListMap:ResetWithListMapDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ResetWithListMapDestructive --- Checking for correct parameter type failed at parameter _listMap.", _listMap->gid ==  2108332898258556672ull || _listMap == _nil )
 	(((ListMap) (_self->entity))->_root) = (((ListMap) (_listMap->entity))->_root);
 	(((ListMap) (_listMap->entity))->_root) = ListMapNode_Create();
 	Object toReturn = _self;
@@ -174,6 +179,7 @@ Object ListMap_RemoveKeyWithConfirmation(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: RemoveKeyWithConfirmation begined.")
 	ASSERT_C ( "ListMap:RemoveKeyWithConfirmation --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:RemoveKeyWithConfirmation --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _stack;
 	_stack = Stack_Create();
 	Object _iterator;
@@ -225,6 +231,7 @@ Object ListMap_ObjectAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ObjectAt begined.")
 	ASSERT_C ( "ListMap:ObjectAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _node;
 	_node = (((ListMap) (_self->entity))->_root);
 	Object _iterator;
@@ -261,6 +268,7 @@ Object ListMap_Contains(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: Contains begined.")
 	ASSERT_C ( "ListMap:Contains --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:Contains --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object _node;
 	_node = (((ListMap) (_self->entity))->_root);
 	Object _iterator;
@@ -287,6 +295,7 @@ Object ListMap_ListMapAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ListMapAt begined.")
 	ASSERT_C ( "ListMap:ListMapAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ListMapAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: ListMapAt ended.")
 	return toReturn;
@@ -296,6 +305,7 @@ Object ListMap_ListAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: ListAt begined.")
 	ASSERT_C ( "ListMap:ListAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ListAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: ListAt ended.")
 	return toReturn;
@@ -305,6 +315,7 @@ Object ListMap_QueueAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: QueueAt begined.")
 	ASSERT_C ( "ListMap:QueueAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:QueueAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: QueueAt ended.")
 	return toReturn;
@@ -314,6 +325,7 @@ Object ListMap_LogicAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: LogicAt begined.")
 	ASSERT_C ( "ListMap:LogicAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:LogicAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: LogicAt ended.")
 	return toReturn;
@@ -323,6 +335,7 @@ Object ListMap_NumberAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: NumberAt begined.")
 	ASSERT_C ( "ListMap:NumberAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:NumberAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: NumberAt ended.")
 	return toReturn;
@@ -332,6 +345,7 @@ Object ListMap_SynonimAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: SynonimAt begined.")
 	ASSERT_C ( "ListMap:SynonimAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:SynonimAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: SynonimAt ended.")
 	return toReturn;
@@ -341,6 +355,7 @@ Object ListMap_MethodAt(Object _self, Object _list)
 {
 	DPUSHS ("ListMap: MethodAt begined.")
 	ASSERT_C ( "ListMap:MethodAt --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MethodAt --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	Object toReturn = ListMap_ObjectAt(_self, _list);
 	DPOPS ("ListMap: MethodAt ended.")
 	return toReturn;
@@ -448,6 +463,7 @@ Object ListMap_ObjectField(Object _self, Object _fieldName)
 {
 	DPUSHS ("ListMap: ObjectField begined.")
 	ASSERT_C ( "ListMap:ObjectField --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	Object toReturn = ListMap_SynonimAt(ListMap_ObjectFields(_self), _fieldName);
 	DPOPS ("ListMap: ObjectField ended.")
 	return toReturn;
@@ -457,6 +473,7 @@ Object ListMap_ObjectFieldUID(Object _self, Object _fieldName)
 {
 	DPUSHS ("ListMap: ObjectFieldUID begined.")
 	ASSERT_C ( "ListMap:ObjectFieldUID --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectFieldUID --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	Object toReturn = Synonim_GetUID(ListMap_ObjectField(_self, _fieldName));
 	DPOPS ("ListMap: ObjectFieldUID ended.")
 	return toReturn;
@@ -466,6 +483,7 @@ Object ListMap_ObjectMethod(Object _self, Object _methodName)
 {
 	DPUSHS ("ListMap: ObjectMethod begined.")
 	ASSERT_C ( "ListMap:ObjectMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	Object toReturn = ListMap_ListMapAt(ListMap_ObjectMethods(_self), _methodName);
 	DPOPS ("ListMap: ObjectMethod ended.")
 	return toReturn;
@@ -475,6 +493,7 @@ Object ListMap_ObjectRemoveMethod(Object _self, Object _methodName)
 {
 	DPUSHS ("ListMap: ObjectRemoveMethod begined.")
 	ASSERT_C ( "ListMap:ObjectRemoveMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectRemoveMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	ListMap_Remove(ListMap_ObjectMethods(_self), _methodName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectRemoveMethod ended.")
@@ -485,6 +504,8 @@ Object ListMap_ObjectSetMethod(Object _self, Object _method, Object _methodName)
 {
 	DPUSHS ("ListMap: ObjectSetMethod begined.")
 	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
+	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	ListMap_Add(ListMap_ObjectMethods(_self), _methodName, _method);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectSetMethod ended.")
@@ -495,6 +516,8 @@ Object ListMap_ObjectSetMethodBody(Object _self, Object _methodBody, Object _met
 {
 	DPUSHS ("ListMap: ObjectSetMethodBody begined.")
 	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct parameter type failed at parameter _methodBody.", _methodBody->gid ==  3732711262168886272ull || _methodBody == _nil )
+	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	Object _method;
 	_method = ListMap_Create();
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _false);
@@ -510,6 +533,8 @@ Object ListMap_ObjectSetBasicMethod(Object _self, Object _entity, Object _basicM
 {
 	DPUSHS ("ListMap: ObjectSetBasicMethod begined.")
 	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
+	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	Object _method;
 	_method = ListMap_Create();
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _true);
@@ -526,6 +551,8 @@ Object ListMap_ObjectSetJob(Object _self, Object _job, Object _jobName)
 {
 	DPUSHS ("ListMap: ObjectSetJob begined.")
 	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
 	ListMap_Add(ListMap_ObjectJobs(_self), _jobName, _job);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectSetJob ended.")
@@ -536,6 +563,7 @@ Object ListMap_ObjectSetProperty(Object _self, Object _propertyName, Object _val
 {
 	DPUSHS ("ListMap: ObjectSetProperty begined.")
 	ASSERT_C ( "ListMap:ObjectSetProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectSetProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
 	ListMap_Add(ListMap_ObjectProperties(_self), _propertyName, _value);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectSetProperty ended.")
@@ -546,6 +574,7 @@ Object ListMap_ObjectRemoveJob(Object _self, Object _jobName)
 {
 	DPUSHS ("ListMap: ObjectRemoveJob begined.")
 	ASSERT_C ( "ListMap:ObjectRemoveJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectRemoveJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
 	ListMap_Remove(ListMap_ObjectJobs(_self), _jobName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectRemoveJob ended.")
@@ -556,6 +585,7 @@ Object ListMap_ObjectResetMethodsDestructive(Object _self, Object _newMethods)
 {
 	DPUSHS ("ListMap: ObjectResetMethodsDestructive begined.")
 	ASSERT_C ( "ListMap:ObjectResetMethodsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectResetMethodsDestructive --- Checking for correct parameter type failed at parameter _newMethods.", _newMethods->gid ==  2108332898258556672ull || _newMethods == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Методы", 12), _newMethods);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectResetMethodsDestructive ended.")
@@ -566,6 +596,7 @@ Object ListMap_ObjectResetFieldsDestructive(Object _self, Object _newFields)
 {
 	DPUSHS ("ListMap: ObjectResetFieldsDestructive begined.")
 	ASSERT_C ( "ListMap:ObjectResetFieldsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectResetFieldsDestructive --- Checking for correct parameter type failed at parameter _newFields.", _newFields->gid ==  2108332898258556672ull || _newFields == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Поля", 8), _newFields);
 	Object toReturn = _self;
 	DPOPS ("ListMap: ObjectResetFieldsDestructive ended.")
@@ -586,6 +617,7 @@ Object ListMap_ObjectJob(Object _self, Object _jobName)
 {
 	DPUSHS ("ListMap: ObjectJob begined.")
 	ASSERT_C ( "ListMap:ObjectJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
 	Object toReturn = ListMap_ListMapAt(ListMap_ObjectJobs(_self), _jobName);
 	DPOPS ("ListMap: ObjectJob ended.")
 	return toReturn;
@@ -595,6 +627,7 @@ Object ListMap_ObjectProperty(Object _self, Object _propertyName)
 {
 	DPUSHS ("ListMap: ObjectProperty begined.")
 	ASSERT_C ( "ListMap:ObjectProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
 	Object toReturn = ListMap_ObjectAt(ListMap_ObjectProperties(_self), _propertyName);
 	DPOPS ("ListMap: ObjectProperty ended.")
 	return toReturn;
@@ -622,6 +655,7 @@ Object ListMap_JobStage(Object _self, Object _stageName)
 {
 	DPUSHS ("ListMap: JobStage begined.")
 	ASSERT_C ( "ListMap:JobStage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobStage --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	Object toReturn = ListMap_ListMapAt(ListMap_JobStages(_self), _stageName);
 	DPOPS ("ListMap: JobStage ended.")
 	return toReturn;
@@ -631,6 +665,8 @@ Object ListMap_JobFieldInMessageSlot(Object _self, Object _fieldName, Object _me
 {
 	DPUSHS ("ListMap: JobFieldInMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobFieldInMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobFieldInMessageSlot --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	ASSERT_C ( "ListMap:JobFieldInMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	Object toReturn = ListMap_ObjectAt(ListMap_JobMessageInMessageSlot(_self, _messageSlotName), _fieldName);
 	DPOPS ("ListMap: JobFieldInMessageSlot ended.")
 	return toReturn;
@@ -640,6 +676,7 @@ Object ListMap_JobMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: JobMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	Object toReturn = ListMap_ListMapAt(ListMap_JobMessageSlots(_self), _messageSlotName);
 	DPOPS ("ListMap: JobMessageSlot ended.")
 	return toReturn;
@@ -649,6 +686,7 @@ Object ListMap_JobMessageInMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: JobMessageInMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobMessageInMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobMessageInMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	Object toReturn = ListMap_MessageSlotMessage(ListMap_JobMessageSlot(_self, _messageSlotName));
 	DPOPS ("ListMap: JobMessageInMessageSlot ended.")
 	return toReturn;
@@ -658,6 +696,8 @@ Object ListMap_JobSetStage(Object _self, Object _stage, Object _stageName)
 {
 	DPUSHS ("ListMap: JobSetStage begined.")
 	ASSERT_C ( "ListMap:JobSetStage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobSetStage --- Checking for correct parameter type failed at parameter _stage.", _stage->gid ==  2108332898258556672ull || _stage == _nil )
+	ASSERT_C ( "ListMap:JobSetStage --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	ListMap_Add(ListMap_JobStages(_self), _stageName, _stage);
 	Object toReturn = _self;
 	DPOPS ("ListMap: JobSetStage ended.")
@@ -668,6 +708,7 @@ Object ListMap_JobRemoveStage(Object _self, Object _stageName)
 {
 	DPUSHS ("ListMap: JobRemoveStage begined.")
 	ASSERT_C ( "ListMap:JobRemoveStage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobRemoveStage --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	ListMap_Remove(ListMap_JobStages(_self), _stageName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: JobRemoveStage ended.")
@@ -678,6 +719,7 @@ Object ListMap_JobRemoveStageAndMessageSlots(Object _self, Object _stageName)
 {
 	DPUSHS ("ListMap: JobRemoveStageAndMessageSlots begined.")
 	ASSERT_C ( "ListMap:JobRemoveStageAndMessageSlots --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobRemoveStageAndMessageSlots --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	Object _stage;
 	_stage = ListMap_ListMapAt(ListMap_JobStages(_self), _stageName);
 	Object _stageMessageSlotsIterator;
@@ -699,6 +741,8 @@ Object ListMap_JobSetMessageSlot(Object _self, Object _messageSlot, Object _mess
 {
 	DPUSHS ("ListMap: JobSetMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobSetMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobSetMessageSlot --- Checking for correct parameter type failed at parameter _messageSlot.", _messageSlot->gid ==  2108332898258556672ull || _messageSlot == _nil )
+	ASSERT_C ( "ListMap:JobSetMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	ListMap_Add(ListMap_JobMessageSlots(_self), _messageSlotName, _messageSlot);
 	Object toReturn = _self;
 	DPOPS ("ListMap: JobSetMessageSlot ended.")
@@ -709,6 +753,7 @@ Object ListMap_JobRemoveMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: JobRemoveMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobRemoveMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobRemoveMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	ListMap_Remove(ListMap_JobMessageSlots(_self), _messageSlotName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: JobRemoveMessageSlot ended.")
@@ -757,6 +802,10 @@ Object ListMap_JobCreateStageWithNameMethodRequestMessageSlot(Object _self, Obje
 {
 	DPUSHS ("ListMap: JobCreateStageWithNameMethodRequestMessageSlot begined.")
 	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodRequestMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodRequestMessageSlot --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodRequestMessageSlot --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodRequestMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodRequestMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotRequestName.", _messageSlotRequestName->gid ==  3732711262168886272ull || _messageSlotRequestName == _nil )
 	Object _stage;
 	_stage = ExternalEntitiesFactory_CreateEmptyJobStage(_entitiesFactory);
 	ListMap_StageSetMethod(_stage, _methodName);
@@ -778,6 +827,10 @@ Object ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(Object _self
 {
 	DPUSHS ("ListMap: JobCreateStageWithNameMethodMessageSlotNameAndEntity begined.")
 	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodMessageSlotNameAndEntity --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodMessageSlotNameAndEntity --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodMessageSlotNameAndEntity --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodMessageSlotNameAndEntity --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
+	ASSERT_C ( "ListMap:JobCreateStageWithNameMethodMessageSlotNameAndEntity --- Checking for correct parameter type failed at parameter _messageSlot.", _messageSlot->gid ==  2108332898258556672ull || _messageSlot == _nil )
 	Object _stage;
 	_stage = ExternalEntitiesFactory_CreateEmptyJobStage(_entitiesFactory);
 	ListMap_StageSetMethod(_stage, _methodName);
@@ -840,6 +893,7 @@ Object ListMap_MessageSetSender(Object _self, Object _sender)
 {
 	DPUSHS ("ListMap: MessageSetSender begined.")
 	ASSERT_C ( "ListMap:MessageSetSender --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetSender --- Checking for correct parameter type failed at parameter _sender.", _sender->gid ==  3732711262168886272ull || _sender == _nil )
 	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _sender);
 	DPOPS ("ListMap: MessageSetSender ended.")
 	return toReturn;
@@ -849,6 +903,7 @@ Object ListMap_MessageSetReceiver(Object _self, Object _receiver)
 {
 	DPUSHS ("ListMap: MessageSetReceiver begined.")
 	ASSERT_C ( "ListMap:MessageSetReceiver --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetReceiver --- Checking for correct parameter type failed at parameter _receiver.", _receiver->gid ==  3732711262168886272ull || _receiver == _nil )
 	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Получатель", 20), _receiver);
 	DPOPS ("ListMap: MessageSetReceiver ended.")
 	return toReturn;
@@ -858,6 +913,7 @@ Object ListMap_MessageSetType(Object _self, Object _type)
 {
 	DPUSHS ("ListMap: MessageSetType begined.")
 	ASSERT_C ( "ListMap:MessageSetType --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetType --- Checking for correct parameter type failed at parameter _type.", _type->gid ==  3732711262168886272ull || _type == _nil )
 	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Тип", 6), _type);
 	DPOPS ("ListMap: MessageSetType ended.")
 	return toReturn;
@@ -885,6 +941,7 @@ Object ListMap_MessageSetRequest(Object _self, Object _reqest)
 {
 	DPUSHS ("ListMap: MessageSetRequest begined.")
 	ASSERT_C ( "ListMap:MessageSetRequest --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetRequest --- Checking for correct parameter type failed at parameter _reqest.", _reqest->gid ==  3732711262168886272ull || _reqest == _nil )
 	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), _reqest);
 	DPOPS ("ListMap: MessageSetRequest ended.")
 	return toReturn;
@@ -894,6 +951,7 @@ Object ListMap_MessageSetReply(Object _self, Object _reply)
 {
 	DPUSHS ("ListMap: MessageSetReply begined.")
 	ASSERT_C ( "ListMap:MessageSetReply --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetReply --- Checking for correct parameter type failed at parameter _reply.", _reply->gid ==  3732711262168886272ull || _reply == _nil )
 	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), _reply);
 	DPOPS ("ListMap: MessageSetReply ended.")
 	return toReturn;
@@ -914,6 +972,31 @@ Object ListMap_MessageSetReplyFail(Object _self)
 	ASSERT_C ( "ListMap:MessageSetReplyFail --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
 	Object toReturn = ListMap_MessageSetReply(_self, StringFactory_FromUTF8(_stringFactory, "Неудача", 14));
 	DPOPS ("ListMap: MessageSetReplyFail ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSetJobNameAndMessageSlotName(Object _self, Object _jobName, Object _messageSlotName)
+{
+	DPUSHS ("ListMap: MessageSetJobNameAndMessageSlotName begined.")
+	ASSERT_C ( "ListMap:MessageSetJobNameAndMessageSlotName --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSetJobNameAndMessageSlotName --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
+	ASSERT_C ( "ListMap:MessageSetJobNameAndMessageSlotName --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
+	Object _listmap;
+	_listmap = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
+	ListMap_Add(_listmap, StringFactory_FromUTF8(_stringFactory, "Работа", 12), _jobName);
+	ListMap_Add(_listmap, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение", 37), _messageSlotName);
+	List_PushBack(ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Атрибуты", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)), _listmap);
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSetJobNameAndMessageSlotName ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageAttributesMessageSlots(Object _self)
+{
+	DPUSHS ("ListMap: MessageAttributesMessageSlots begined.")
+	ASSERT_C ( "ListMap:MessageAttributesMessageSlots --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Атрибуты", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37));
+	DPOPS ("ListMap: MessageAttributesMessageSlots ended.")
 	return toReturn;
 }
 
@@ -939,7 +1022,7 @@ Object ListMap_MessageSlotMessage(Object _self)
 {
 	DPUSHS ("ListMap: MessageSlotMessage begined.")
 	ASSERT_C ( "ListMap:MessageSlotMessage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18));
+	Object toReturn = List_PeekFront(ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18)));
 	DPOPS ("ListMap: MessageSlotMessage ended.")
 	return toReturn;
 }
@@ -948,8 +1031,45 @@ Object ListMap_MessageSlotSetMessage(Object _self, Object _message)
 {
 	DPUSHS ("ListMap: MessageSlotSetMessage begined.")
 	ASSERT_C ( "ListMap:MessageSlotSetMessage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _message);
+	ASSERT_C ( "ListMap:MessageSlotSetMessage --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
+	Object _list;
+	_list = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
+	List_PushBack(_list, _message);
+	Object toReturn = _self;
 	DPOPS ("ListMap: MessageSlotSetMessage ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotRemoveMessage(Object _self, Object _message)
+{
+	DPUSHS ("ListMap: MessageSlotRemoveMessage begined.")
+	ASSERT_C ( "ListMap:MessageSlotRemoveMessage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSlotRemoveMessage --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
+	Object _list;
+	_list = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_message, _nil) == _equal)) != _false)
+	{
+		List_RemoveFront(_list);
+	}
+	else
+	{
+		List_RemoveFirstExactlySame(_list, _message);
+	}
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSlotRemoveMessage ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageSlotRemoveAllMessages(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotRemoveAllMessages begined.")
+	ASSERT_C ( "ListMap:MessageSlotRemoveAllMessages --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object _list;
+	_list = List_Create();
+	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18), _list);
+	Object_Release(_list);
+	Object toReturn = _self;
+	DPOPS ("ListMap: MessageSlotRemoveAllMessages ended.")
 	return toReturn;
 }
 
@@ -957,6 +1077,7 @@ Object ListMap_MessageSlotField(Object _self, Object _fieldName)
 {
 	DPUSHS ("ListMap: MessageSlotField begined.")
 	ASSERT_C ( "ListMap:MessageSlotField --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSlotField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	Object toReturn = ListMap_ObjectAt(ListMap_MessageSlotMessage(_self), _fieldName);
 	DPOPS ("ListMap: MessageSlotField ended.")
 	return toReturn;
@@ -966,6 +1087,7 @@ Object ListMap_MessageSlotSetStage(Object _self, Object _stageName)
 {
 	DPUSHS ("ListMap: MessageSlotSetStage begined.")
 	ASSERT_C ( "ListMap:MessageSlotSetStage --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSlotSetStage --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	List_PushBackIfAbsent(ListMap_MessageSlotStages(_self), _stageName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: MessageSlotSetStage ended.")
@@ -985,6 +1107,7 @@ Object ListMap_MessageSlotSetCondition(Object _self, Object _condition)
 {
 	DPUSHS ("ListMap: MessageSlotSetCondition begined.")
 	ASSERT_C ( "ListMap:MessageSlotSetCondition --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:MessageSlotSetCondition --- Checking for correct parameter type failed at parameter _condition.", _condition->gid ==  2108332898258556672ull || _condition == _nil )
 	List_PushBack(ListMap_MessageSlotConditions(_self), _condition);
 	Object toReturn = _self;
 	DPOPS ("ListMap: MessageSlotSetCondition ended.")
@@ -1052,6 +1175,7 @@ Object ListMap_StageContainsMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: StageContainsMessageSlot begined.")
 	ASSERT_C ( "ListMap:StageContainsMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:StageContainsMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	Object toReturn = List_Contains(ListMap_StageMessageSlots(_self), _messageSlotName);
 	DPOPS ("ListMap: StageContainsMessageSlot ended.")
 	return toReturn;
@@ -1061,6 +1185,7 @@ Object ListMap_StageSetMethod(Object _self, Object _methodName)
 {
 	DPUSHS ("ListMap: StageSetMethod begined.")
 	ASSERT_C ( "ListMap:StageSetMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:StageSetMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Метод", 10), _methodName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: StageSetMethod ended.")
@@ -1071,6 +1196,7 @@ Object ListMap_StageSetMessageSlot(Object _self, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: StageSetMessageSlot begined.")
 	ASSERT_C ( "ListMap:StageSetMessageSlot --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:StageSetMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	List_PushBackIfAbsent(ListMap_StageMessageSlots(_self), _messageSlotName);
 	Object toReturn = _self;
 	DPOPS ("ListMap: StageSetMessageSlot ended.")
@@ -1137,6 +1263,7 @@ Object ListMap_StageSetMessagesCounter(Object _self, Object _newMessagesCounter)
 {
 	DPUSHS ("ListMap: StageSetMessagesCounter begined.")
 	ASSERT_C ( "ListMap:StageSetMessagesCounter --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:StageSetMessagesCounter --- Checking for correct parameter type failed at parameter _newMessagesCounter.", _newMessagesCounter->gid == 15425740279749906432ull || _newMessagesCounter == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Необходимо сообщений", 39), _newMessagesCounter);
 	Object toReturn = _self;
 	DPOPS ("ListMap: StageSetMessagesCounter ended.")
@@ -1156,7 +1283,7 @@ Object ListMap_StageSetReady(Object _self)
 {
 	DPUSHS ("ListMap: StageSetReady begined.")
 	ASSERT_C ( "ListMap:StageSetReady --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Ожидание", 16));
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Готово", 12));
 	DPOPS ("ListMap: StageSetReady ended.")
 	return toReturn;
 }
@@ -1165,7 +1292,7 @@ Object ListMap_StageSetWaiting(Object _self)
 {
 	DPUSHS ("ListMap: StageSetWaiting begined.")
 	ASSERT_C ( "ListMap:StageSetWaiting --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Готово", 12));
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Состояние", 18), StringFactory_FromUTF8(_stringFactory, "Ожидание", 16));
 	DPOPS ("ListMap: StageSetWaiting ended.")
 	return toReturn;
 }

@@ -22,6 +22,8 @@ Object ListIterator_ToPosition(Object _self, Object _position);
 Object ListIterator_FromPositionToPosition(Object _self, Object _positionFrom, Object _positionTo);
 Object ListIterator_SearchForward(Object _self, Object _object);
 Object ListIterator_SearchBackward(Object _self, Object _object);
+Object ListIterator_SearchForwardExactlySame(Object _self, Object _object);
+Object ListIterator_SearchBackwardExactlySame(Object _self, Object _object);
 Object ListIterator_SearchForwardOffset(Object _self, Object _object);
 Object ListIterator_ThisRemove(Object _self);
 Object ListIterator_PrevRemove(Object _self);
