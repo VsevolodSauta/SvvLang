@@ -4,6 +4,9 @@ Translator := Object clone
 Translator previousLevel := 0
 Translator currentLevel := 0
 Translator line := nil
+Translator isImporting := method(
+	TableOfSymbols listOfBeingImportedObjects isEmpty not
+)
 
 Translator putNLevels := method(n,
 	n repeat(

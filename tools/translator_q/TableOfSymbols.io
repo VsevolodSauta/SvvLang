@@ -84,8 +84,9 @@ TableOfSymbols classMethods := Map with(
 TableOfSymbols listOfBeingImportedObjects := List clone
 TableOfSymbols mapOfGids := Map with(
 	"Object", "Object" hash asString(20, 0) .. "ull",
-	"Number", "Number" hash asString(20, 0) .. "ull"
-	"File", "File" hash asString(20, 0) .. "ull"
+	"Number", "Number" hash asString(20, 0) .. "ull",
+	"File", "File" hash asString(20, 0) .. "ull",
+	"Method", "Method" hash asString(20, 0) .. "ull"
 )
 
 TableOfSymbols mapOfMethodAliases := Map with(

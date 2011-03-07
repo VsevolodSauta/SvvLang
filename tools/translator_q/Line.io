@@ -232,6 +232,16 @@ Line translateMethodSignature := method(contextObject,
 			)
 			token = "_" .. token
 			TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter, propertyList))
+			if((Translator isImporting not) and (typeOfParameter != "Object"),
+				a := Object clone
+				a parameterType := typeOfParameter
+				a parameterName := token
+				a blockDidBegin := method(
+					Translator putNLevels(1)
+					DestinationFile write("ASSERT_C ( \"#{Translator currentClassName}:#{Translator currentMethodName} --- Checking for correct parameter type failed at parameter #{parameterName}.\", #{parameterName}->gid == #{TableOfSymbols getClassId(parameterType)} || #{parameterName} == _nil )\n" interpolate)
+				)
+				BlockDelegatesHandling afterThisBlockBegins(a, 4)
+			)
 			propertyList = List clone
 			typeOfParameter = "Object"
 			parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)

@@ -22,7 +22,11 @@ BlockDelegatesHandling beforeBlockEnds := method(delegate, prio,
 )
 
 BlockDelegatesHandling afterOneBlockBegins := method(delegate, prio,
-	delegatesAfterEachBlockBegins first at(prio) push(delegate)
+	delegatesAfterOneBlockBegins first at(prio) push(delegate)
+)
+
+BlockDelegatesHandling afterThisBlockBegins := method(delegate, prio,
+	delegatesAfterOneBlockBegins second at(prio) push(delegate)
 )
 
 BlockDelegatesHandling afterEachBlockBegins := method(delegate, prio,
@@ -56,13 +60,13 @@ BlockDelegatesHandling blockWillBegin := method(
 	delegatesBeforeEachBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
 	delegatesAfterOneBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
 	delegatesAfterEachBlockBegins prepend(list(list(), list(), list(), list(), list(), list()))
-	poppingHandleWithListAndName(delegatesBeforeOneBlockBegins, "blockWillBegin", 1)
 	peekingHandleWithListAndName(delegatesBeforeEachBlockBegins, "blockWillBegin", 1)
+	poppingHandleWithListAndName(delegatesBeforeOneBlockBegins, "blockWillBegin", 1)
 )
 
 BlockDelegatesHandling blockDidBegin := method(
-	poppingHandleWithListAndName(delegatesAfterOneBlockBegins, "blockDidBegin", 1)
 	peekingHandleWithListAndName(delegatesAfterEachBlockBegins, "blockDidBegin", 1)
+	poppingHandleWithListAndName(delegatesAfterOneBlockBegins, "blockDidBegin", 1)
 )
 
 BlockDelegatesHandling blockWillEnd := method(
