@@ -62,6 +62,8 @@ translateJobSignature := method(line,
 translateStageSignature := method(line,
 	messageSlotInProcess = Map clone
 	messageSlotInProcess atPut("Метод идентификации", identificationMethod := List clone)
+	messageSlotInProcess atPut("Стадии", list())
+	messageSlotInProcess atPut("Сообщения", list())
 	methodInProcess = List clone
 	stageInProcess = Map clone
 	
@@ -79,8 +81,8 @@ translateStageSignature := method(line,
 			"*=",
 				binaryOperator = "Совпадение с полем" // SVV!
 				waitingForBinaryOperator = false
-				waitingForOperand = true,				
-
+				waitingForOperand = true,
+				
 				RTranslatorError with("Invalid binary operator: #{token}" interpolate, line)
 			)
 			continue
@@ -114,6 +116,7 @@ translateStageSignature := method(line,
 	)
 	
 	messageSlotNameInProcess = methodNameInProcess = line tokens clone atInsert(1, " ") join
+	messageSlotInProcess at("Стадии") append(messageSlotNameInProcess)
 	methods atPut(methodNameInProcess, Map with("Базовый", false, "Тело", methodInProcess))
 	if(messageSlotInProcess at("Метод идентификации") isEmpty,
 		stageInProcess atPut("Необходимо сообщений", 0) // SVV!
@@ -124,14 +127,14 @@ translateStageSignature := method(line,
 		messageSlots atPut(messageSlotNameInProcess, messageSlotInProcess)
 	)
 	stageInProcess atPut("Метод", methodNameInProcess)
+	messageSlotInProcess atPut("Состояние", "Открыто")
 	if(stageNameInProcess == defaultStage,
 		if(messageSlotInProcess at("Метод идентификации") isEmpty,
 			stageInProcess atPut("Состояние", "Готово"),
 			stageInProcess atPut("Состояние", "Ожидание")
-			messageSlotInProcess atPut("Состояние", "Открыто")
 		),
 		stageInProcess atPut("Состояние", "Заблокировано")
-		messageSlotInProcess atPut("Состояние", "Заблокировано")
+//		messageSlotInProcess atPut("Состояние", "Заблокировано")
 	)
 	stages atPut(methodNameInProcess, stageInProcess)
 )
@@ -148,7 +151,7 @@ translateBodyLine := method(line,
 			token switch(
 			"ВЫХОД",
 				mode = "EXIT read"
-				action atPut("Действие", "Завершить"), // SVV!
+				action atPut("Действие", "Завершить текущую работу"), // SVV!
 			"ПЕРЕЙТИ",
 				mode = "TO reading",
 				
@@ -167,6 +170,7 @@ translateBodyLine := method(line,
 			token switch(
 			"+-?",
 				messageInProcess = Map clone
+				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля") // SVV!
@@ -185,6 +189,7 @@ translateBodyLine := method(line,
 				mode = "Reading request",
 			"+-.",
 				messageInProcess = Map clone
+				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля сообщения") // SVV!
@@ -204,6 +209,7 @@ translateBodyLine := method(line,
 				mode = "Reading request",
 			"+-!",
 				messageInProcess = Map clone
+				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля сообщения") // SVV!
@@ -269,7 +275,7 @@ translateBodyLine := method(line,
 			)
 			if((token isField) or (token isMessageField),
 				RTranslatorError with("Field to set object must start with name resolution."),
-				action atPut("Объект", object)				
+				action atPut("Объект", object)
 			),
 		"Set 2",
 			RTranslatorError with("Garbage after setting field operation.", line),
@@ -319,7 +325,39 @@ processTO := method(
 )
 
 writeEntityTo := method(file,
-	file write(entity asJson asUTF8)
+	inEdit := entity asJson asMutable
+	loop(
+		masterCopy := inEdit asSymbol
+		inEdit replaceMap(Map with(
+			",", ",\n", 
+			"}", "\n}", 
+			"]", "\n]", 
+			"{", "{\n",
+			"[", "[\n")) replaceMap(Map with("\n\n", "\n", "\n\n\n", "\n", "[\n\n]", "[]", "{\n\n}", "{}"))
+		if(masterCopy == inEdit,
+			break
+		)
+	)
+	level := 0
+	inEdit2 := "" asMutable
+	inEdit asSymbol foreach(charCode,
+		char := charCode asCharacter
+		inEdit2 appendSeq(char)
+		char switch(
+		"{",
+			level = level + 1,
+		"[",
+			level = level + 1,
+		"}",
+			level = level - 1,
+		"]",
+			level = level - 1,
+		"\n",
+			level repeat(inEdit2 appendSeq("\t"))
+		)
+	)
+	inEdit2 replaceMap(Map with("\t}", "}", "\t]", "]"))
+	file write(inEdit2 asUTF8)
 )
 
 if(System args size == 1,
@@ -342,7 +380,7 @@ fileNamesForProcessing foreach(_inputFileName,
 	lines := inputFile readLines
 	inputFile close
 
-	outputFileName := inputFileName exclusiveSlice(0, inputFileName size - 2)
+	outputFileName := inputFileName lastPathComponent exclusiveSlice(0, inputFileName lastPathComponent size - 2)
 	initEntity(outputFileName asUCS2)
 
 	lines foreach(rawLineNumber, rawLine,
