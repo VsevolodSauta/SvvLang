@@ -35,7 +35,7 @@ Object File_OpenForAppending(Object _self, Object _filename)
 	File entity = _self->entity;
 	char buffer[4096];
 	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, 1024);
-	entity->_descriptor = OSfileOpen(buffer, 2);
+	entity->_descriptor = OSfileOpen(buffer, 66, 0777);
 	return _self;
 }
 

@@ -11,6 +11,10 @@ Machine Init
 	self.machineManipulator = <ExternalMachineManipulator>
 	self.machineManipulator SetMachine self
 	self.machineManipulator CreateAll
+	file = <File>
+	file OpenForAppending "Vasia"
+	file WriteNakedString "Vasia porosya"
+	file Close
 	return self
 
 

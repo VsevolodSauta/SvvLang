@@ -273,6 +273,7 @@ Object ListMap_Contains(Object _self, Object _list)
 	_node = (((ListMap) (_self->entity))->_root);
 	Object _iterator;
 	_iterator = List_First(_list);
+	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
 	{
 		if((Map_ContainsKey((((ListMapNode) (_node->entity))->_nextMap), ListIterator_ThisData(_iterator))) != _false)
 		{
@@ -450,6 +451,15 @@ Object ListMap_ObjectJobs(Object _self)
 	return toReturn;
 }
 
+Object ListMap_ObjectJobsIterator(Object _self)
+{
+	DPUSHS ("ListMap: ObjectJobsIterator begined.")
+	ASSERT_C ( "ListMap:ObjectJobsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_First(ListMap_ObjectJobs(_self));
+	DPOPS ("ListMap: ObjectJobsIterator ended.")
+	return toReturn;
+}
+
 Object ListMap_ObjectProperties(Object _self)
 {
 	DPUSHS ("ListMap: ObjectProperties begined.")
@@ -603,6 +613,50 @@ Object ListMap_ObjectResetFieldsDestructive(Object _self, Object _newFields)
 	return toReturn;
 }
 
+Object ListMap_ObjectResetJobsDestructive(Object _self, Object _newJobs)
+{
+	DPUSHS ("ListMap: ObjectResetJobsDestructive begined.")
+	ASSERT_C ( "ListMap:ObjectResetJobsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectResetJobsDestructive --- Checking for correct parameter type failed at parameter _newJobs.", _newJobs->gid ==  2108332898258556672ull || _newJobs == _nil )
+	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Работы", 12), _newJobs);
+	Object _jobsIterator;
+	_jobsIterator = ListMap_ObjectJobsIterator(_self);
+	while((Logic_Not(ListMapIterator_ThisEnd(_jobsIterator))) != _false)
+	{
+		Object _job;
+		_job = ListMapIterator_ListMapData(_jobsIterator);
+		Object _messageSlotsIterator;
+		_messageSlotsIterator = ListMap_JobMessageSlotsIterator(_job);
+		Object _stagesIterator;
+		_stagesIterator = ListMap_JobStagesIterator(_job);
+		while((Logic_Not(ListMapIterator_ThisEnd(_stagesIterator))) != _false)
+		{
+			Object _stage;
+			_stage = ListMapIterator_ListMapData(_stagesIterator);
+			ListMap_StageSetMessagesCounter(_stage, List_Size(ListMap_StageMessageSlots(_stage)));
+			if((ListMap_StageIsReady(_stage)) != _false)
+			{
+				if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_stage), NumberFactory_FromLong(_numberFactory, 0)) != _equal)) != _false)
+				{
+					ListMap_StageSetWaiting(_stage);
+				}
+			}
+			ListMapIterator_Next(_stagesIterator);
+		}
+		while((Logic_Not(ListMapIterator_ThisEnd(_messageSlotsIterator))) != _false)
+		{
+			Object _messageSlot;
+			_messageSlot = ListMapIterator_ListMapData(_messageSlotsIterator);
+			ListMap_MessageSlotRemoveAllMessages(_messageSlot);
+			ListMapIterator_Next(_messageSlotsIterator);
+		}
+		ListMapIterator_Next(_jobsIterator);
+	}
+	Object toReturn = _self;
+	DPOPS ("ListMap: ObjectResetJobsDestructive ended.")
+	return toReturn;
+}
+
 Object ListMap_ObjectRemoveAllIdentifiers(Object _self)
 {
 	DPUSHS ("ListMap: ObjectRemoveAllIdentifiers begined.")
@@ -722,6 +776,12 @@ Object ListMap_JobRemoveStageAndMessageSlots(Object _self, Object _stageName)
 	ASSERT_C ( "ListMap:JobRemoveStageAndMessageSlots --- Checking for correct parameter type failed at parameter _stageName.", _stageName->gid ==  3732711262168886272ull || _stageName == _nil )
 	Object _stage;
 	_stage = ListMap_ListMapAt(ListMap_JobStages(_self), _stageName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_stage, _nil) == _equal)) != _false)
+	{
+		Object toReturn = _self;
+		DPOPS ("ListMap: JobRemoveStageAndMessageSlots ended.")
+		return toReturn;
+	}
 	Object _stageMessageSlotsIterator;
 	_stageMessageSlotsIterator = ListMap_StageMessageSlotsIterator(_stage);
 	while((Logic_Not(ListIterator_ThisEnd(_stageMessageSlotsIterator))) != _false)
@@ -836,6 +896,7 @@ Object ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(Object _self
 	ListMap_StageSetMethod(_stage, _methodName);
 	ListMap_StageSetMessageSlot(_stage, _messageSlotName);
 	ListMap_StageIncrementMessagesCounter(_stage);
+	ListMap_StageSetWaiting(_stage);
 	ListMap_MessageSlotSetStage(_messageSlot, _stageName);
 	ListMap_JobSetStage(_self, _stage, _stageName);
 	ListMap_JobSetMessageSlot(_self, _messageSlot, _messageSlotName);
@@ -1027,6 +1088,15 @@ Object ListMap_MessageSlotMessage(Object _self)
 	return toReturn;
 }
 
+Object ListMap_MessageSlotMessages(Object _self)
+{
+	DPUSHS ("ListMap: MessageSlotMessages begined.")
+	ASSERT_C ( "ListMap:MessageSlotMessages --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
+	DPOPS ("ListMap: MessageSlotMessages ended.")
+	return toReturn;
+}
+
 Object ListMap_MessageSlotSetMessage(Object _self, Object _message)
 {
 	DPUSHS ("ListMap: MessageSlotSetMessage begined.")
@@ -1049,7 +1119,10 @@ Object ListMap_MessageSlotRemoveMessage(Object _self, Object _message)
 	_list = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Сообщения", 18));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_message, _nil) == _equal)) != _false)
 	{
-		List_RemoveFront(_list);
+		if((Logic_Not(List_Empty(_list))) != _false)
+		{
+			List_RemoveFront(_list);
+		}
 	}
 	else
 	{

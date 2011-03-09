@@ -145,14 +145,14 @@ Object ExternalFileManipulator_OpenForReadingUIDFileBasicMethod(Object _self, Ob
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Объект чтения", 25), StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
 	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Чтение строки", 25), StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31), StringFactory_FromUTF8(_stringFactory, "Запрос для чтения строки", 45), _messageSlot);
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Закрыть", 14));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие", 16), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23), StringFactory_FromUTF8(_stringFactory, "Запрос на закрытие", 34), _messageSlot);
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциировать", 26));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открыть для чтения", 34));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открыть для записи", 34));
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие файла", 27), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23), StringFactory_FromUTF8(_stringFactory, "Запрос на закрытие файла", 45), _messageSlot);
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
-	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Запрос на открытие файла", 45));
+	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Запрос на открытие файла для чтения", 65));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциирование файла", 39));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открытие файла для чтения", 47));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открытие файла для записи", 47));
 	Object toReturn = _self;
 	DPOPS ("ExternalFileManipulator: OpenForReadingUIDFileBasicMethod ended.")
 	return toReturn;
@@ -178,14 +178,14 @@ Object ExternalFileManipulator_OpenForWritingUIDFileBasicMethod(Object _self, Ob
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
 	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Запись строки", 25), StringFactory_FromUTF8(_stringFactory, "Записать строку", 29), StringFactory_FromUTF8(_stringFactory, "Запрос для записи строки", 45), _messageSlot);
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Закрыть", 14));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие файла", 27), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23), StringFactory_FromUTF8(_stringFactory, "Запрос на закрытие", 34), _messageSlot);
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциировать", 26));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открыть для чтения", 34));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открыть для записи", 34));
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие файла", 27), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23), StringFactory_FromUTF8(_stringFactory, "Запрос на закрытие файла", 45), _messageSlot);
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
-	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Запрос на открытие файла", 45));
+	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Запрос на открытие файла для записи", 65));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциирование файла", 39));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открытие файла для чтения", 47));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Открытие файла для записи", 47));
 	Object toReturn = _self;
 	DPOPS ("ExternalFileManipulator: OpenForWritingUIDFileBasicMethod ended.")
 	return toReturn;
@@ -214,13 +214,13 @@ Object ExternalFileManipulator_CloseUIDFileBasicMethod(Object _self, Object _pro
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ассоциировать", 26));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
 	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциирование файла", 39), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя фала", 42), StringFactory_FromUTF8(_stringFactory, "Запрос на ассоциирование", 46), _messageSlot);
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Записать строку", 29));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31));
-	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие файла", 27));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
 	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Запрос на закрытие файла", 45));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Записать строку", 29));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31));
+	ListMap_JobRemoveStageAndMessageSlots(_job, StringFactory_FromUTF8(_stringFactory, "Закрытие файла", 27));
 	Object toReturn = _self;
 	DPOPS ("ExternalFileManipulator: CloseUIDFileBasicMethod ended.")
 	return toReturn;

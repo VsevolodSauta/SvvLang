@@ -111,9 +111,10 @@ ListMap <Object> ObjectAt (AtGet GetValueForKey At GetAt) <List> list
 	else
 		return nil
 
-ListMap <Logic> Contains (HasKey Has) <List> list
+ListMap <Logic> Contains (ContainsKey HasKey Has) <List> list
 	node = self.root
 	iterator = list First
+	while iterator NotThisEnd
 		if node.nextMap HasKey (iterator ThisData)
 			node = (node.nextMap GetValueForKey (iterator ThisData)) AsListMapNode
 		else
@@ -183,6 +184,9 @@ ListMap ObjectFields (JobFields)
 ListMap ObjectJobs
 	return self ListMapAt ("Работы")
 
+ListMap <ListMapIterator> ObjectJobsIterator
+	return (self ObjectJobs) First
+
 ListMap ObjectProperties
 	return self ListMapAt ("Свойства")
 
@@ -240,6 +244,27 @@ ListMap ObjectResetFieldsDestructive <ListMap> newFields
 	self AtPut "Поля" newFields // (self ObjectFields) ResetWithListMapDestructive newFields
 	return self
 
+ListMap ObjectResetJobsDestructive <ListMap> newJobs
+	self AtPut "Работы" newJobs // (self ObjectJobs) ResetWithListMapDestructive newJobs
+	jobsIterator = self ObjectJobsIterator
+	while jobsIterator NotThisEnd
+		job = jobsIterator ListMapData
+		messageSlotsIterator = job JobMessageSlotsIterator
+		stagesIterator = job JobStagesIterator
+		while stagesIterator NotThisEnd
+			stage = stagesIterator ListMapData
+			stage StageSetMessagesCounter ((stage StageMessageSlots) Size)
+			if stage StageIsReady
+				if (stage StageMessagesCounter) != 0
+					stage StageSetWaiting
+			stagesIterator ++
+		while messageSlotsIterator NotThisEnd
+			messageSlot = messageSlotsIterator ListMapData
+			messageSlot MessageSlotRemoveAllMessages
+			messageSlotsIterator ++
+		jobsIterator ++
+	return self
+
 ListMap ObjectRemoveAllIdentifiers
 	((self ObjectProperties) ListAt ("Идентификаторы")) RemoveAll
 	return self
@@ -281,6 +306,8 @@ ListMap JobRemoveStage <List> stageName
 
 ListMap JobRemoveStageAndMessageSlots <List> stageName
 	stage = (self JobStages) ListMapAt stageName
+	if stage == nil
+		return self
 	stageMessageSlotsIterator = stage StageMessageSlotsIterator
 	while stageMessageSlotsIterator NotThisEnd
 		messageSlotName = stageMessageSlotsIterator ListData
@@ -331,6 +358,7 @@ ListMap JobCreateStageWithNameMethodMessageSlotNameAndEntity <List> stageName <L
 	stage StageSetMethod methodName
 	stage StageSetMessageSlot messageSlotName
 	stage StageIncrementMessagesCounter
+	stage StageSetWaiting
 	messageSlot MessageSlotSetStage stageName
 	self JobSetStage stage stageName
 	self JobSetMessageSlot messageSlot messageSlotName
@@ -401,15 +429,19 @@ ListMap <ListIterator> MessageSlotStagesIterator
 ListMap MessageSlotMessage
 	return (self ListAt ("Сообщения")) PeekFront
 
+ListMap <List> MessageSlotMessages
+	return (self ListAt ("Сообщения"))
+
 ListMap MessageSlotSetMessage <ListMap> message
-	list = self ListAt ("Сообщения") 
+	list = self ListAt ("Сообщения")
 	list PushBack message
 	return self
 
 ListMap MessageSlotRemoveMessage <ListMap> message
 	list = self ListAt ("Сообщения") 
 	if message == nil
-		list RemoveFront
+		if list NotIsEmpty
+			list RemoveFront
 	else
 		list RemoveFirstExactlySame message
 	return self

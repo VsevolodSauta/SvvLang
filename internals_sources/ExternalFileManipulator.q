@@ -47,10 +47,12 @@ ExternalFileManipulator AssociateUIDFileBasicMethod <Processor> processor
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Открыть"
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Доступ" "Запись")
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Открытие файла для записи" "Открыть файл для записи" "Запрос на открытие файла для записи"  messageSlot
-	
+
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на ассоциирование"
+
+//	job JobRemoveStageAndMessageSlots "Ассоциирование файла"
 	return self
 
 
@@ -68,15 +70,15 @@ ExternalFileManipulator OpenForReadingUIDFileBasicMethod <Processor> processor
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Чтение строки" "Прочитать строку" "Запрос для чтения строки" messageSlot
 	
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Закрыть"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Закрытие" "Закрыть файл" "Запрос на закрытие" messageSlot
-	
-	job JobRemoveStageAndMessageSlots "Ассоциировать"
-	job JobRemoveStageAndMessageSlots "Открыть для чтения"
-	job JobRemoveStageAndMessageSlots "Открыть для записи"
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Закрытие файла" "Закрыть файл" "Запрос на закрытие файла" messageSlot
 
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
-	processor SendReplyForMessage reply "Запрос на открытие файла"
+	processor SendReplyForMessage reply "Запрос на открытие файла для чтения"
+	
+	job JobRemoveStageAndMessageSlots "Ассоциирование файла"
+	job JobRemoveStageAndMessageSlots "Открытие файла для чтения"
+	job JobRemoveStageAndMessageSlots "Открытие файла для записи"
 	return self
 
 
@@ -94,15 +96,15 @@ ExternalFileManipulator OpenForWritingUIDFileBasicMethod <Processor> processor
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Запись строки" "Записать строку" "Запрос для записи строки" messageSlot
 	
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Закрыть"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Закрытие файла" "Закрыть файл" "Запрос на закрытие" messageSlot
-
-	job JobRemoveStageAndMessageSlots "Ассоциировать"
-	job JobRemoveStageAndMessageSlots "Открыть для чтения"
-	job JobRemoveStageAndMessageSlots "Открыть для записи"
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Закрытие файла" "Закрыть файл" "Запрос на закрытие файла" messageSlot
 
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
-	processor SendReplyForMessage reply "Запрос на открытие файла"
+	processor SendReplyForMessage reply "Запрос на открытие файла для записи"
+
+	job JobRemoveStageAndMessageSlots "Ассоциирование файла"
+	job JobRemoveStageAndMessageSlots "Открытие файла для чтения"
+	job JobRemoveStageAndMessageSlots "Открытие файла для записи"
 	return self
 
 ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
@@ -124,13 +126,13 @@ ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Имя файла")
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Ассоциирование файла" "Ассоциировать имя фала" "Запрос на ассоциирование" messageSlot
 
-	job JobRemoveStageAndMessageSlots "Записать строку"
-	job JobRemoveStageAndMessageSlots "Прочитать строку"
-	job JobRemoveStageAndMessageSlots "Закрытие файла"
-
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	processor SendReplyForMessage reply "Запрос на закрытие файла"
+
+	job JobRemoveStageAndMessageSlots "Записать строку"
+	job JobRemoveStageAndMessageSlots "Прочитать строку"
+	job JobRemoveStageAndMessageSlots "Закрытие файла"
 	return self
 
 

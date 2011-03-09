@@ -77,12 +77,13 @@ Object Processor_EntityFromNamedMessageField(Object _self, Object _messageName, 
 Object Processor_NamespaceNameToNamespace(Object _self, Object _locationType);
 Object Processor_FieldNameToNamespaceName(Object _self, Object _fieldName);
 Object Processor_FieldNameToSynonim(Object _self, Object _fieldName);
+Object Processor_FieldNameToSynonimInJobObject(Object _self, Object _fieldName, Object _job, Object _object);
 Object Processor_FieldNameToUID(Object _self, Object _fieldName);
 Object Processor_SendMessage(Object _self, Object _message);
 Object Processor_SendReplyForMessage(Object _self, Object _replyMessage, Object _messageSlotName);
 Object Processor_InvokeMethodWithParameters(Object _self, Object _methodName, Object _parameters);
-Object Processor_MessageConfirmsToParameter(Object _self, Object _message, Object _parameter);
-Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _message, Object _messageSlot, Object _job, Object _messageSlotName, Object _jobName);
+Object Processor_MessageConfirmsToParameterInJobObject(Object _self, Object _message, Object _parameter, Object _job, Object _object);
+Object Processor_TryLinkMessageWithMessageSlotInJobObject(Object _self, Object _message, Object _messageSlot, Object _job, Object _object, Object _messageSlotName, Object _jobName);
 Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _object);
 Object Processor_ProcessOneJobIfAny(Object _self);
 Object Processor_ProcessUID(Object _self, Object _uid);

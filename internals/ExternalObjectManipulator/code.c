@@ -107,6 +107,7 @@ Object ExternalObjectManipulator_CloneUIDObjectInternalRoutine(Object _self, Obj
 	_objectToReturn = Object_DeepClone((((ExternalObjectManipulator) (_self->entity))->_objectMasterCopy));
 	ListMap_ObjectResetMethodsDestructive(_objectToReturn, Object_TempDeepClone(ListMap_ObjectMethods(_object)));
 	ListMap_ObjectResetFieldsDestructive(_objectToReturn, Object_TempDeepClone(ListMap_ObjectFields(_object)));
+	ListMap_ObjectResetJobsDestructive(_objectToReturn, Object_TempDeepClone(ListMap_ObjectJobs(_object)));
 	ListMap_ObjectRemoveAllIdentifiers(_objectToReturn);
 	Machine_SetUIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), _uidToReturn, _objectToReturn);
 	Object_Release(_objectToReturn);
@@ -126,7 +127,7 @@ Object ExternalObjectManipulator_CloneUIDObjectBasicMethod(Object _self, Object 
 	_replyMessage = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_replyMessage);
 	ListMap_Add(_replyMessage, StringFactory_FromUTF8(_stringFactory, "Клон", 8), _uidToReturn);
-	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Клонировать ", 23));
+	Processor_SendReplyForMessage(_processor, _replyMessage, StringFactory_FromUTF8(_stringFactory, "Клонирование Тип=ЗапросЗапрос=Клонировать", 79));
 	Object toReturn = _self;
 	DPOPS ("ExternalObjectManipulator: CloneUIDObjectBasicMethod ended.")
 	return toReturn;

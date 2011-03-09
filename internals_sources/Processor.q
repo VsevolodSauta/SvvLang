@@ -381,7 +381,7 @@ Processor RemoveMessageInSlotCode <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
 	messageSlot = (self ContextJob) JobMessageSlot messageSlotName
 	if (messageSlot MessageSlotMessage) != nil
-		messageSlot MessageSlotSetMessage nil
+		messageSlot MessageSlotRemoveMessage nil
 		stagesIterator = messageSlot MessageSlotStagesIterator
 		while stagesIterator NotThisEnd
 			stage = (self ContextJob) JobStage (stagesIterator ListData)
@@ -410,7 +410,6 @@ Processor RemoveAllMessagesOfCurrentStageForAllStagesCode <ListMap> toDo
 		while messageMessageSlotsIterator NotThisEnd
 			messageMessageSlot = (self ContextJob) JobMessageSlot (messageMessageSlotsIterator ListData) 
 			messageMessageSlot MessageSlotRemoveMessage message 
-			// TODO: add "message" to MessageSlotRemoveMessage
 			messageMessageSlotsIterator ++
 		messageSlotsIterator ++
 	return self
@@ -433,7 +432,7 @@ Processor RemoveAllReceivedMessagesCode <ListMap> toDo
 		stagesIterator ++
 	while messageSlotsIterator NotThisEnd
 		messageSlot = messageSlotsIterator ListMapData
-		messageSlot MessageSlotSetMessage nil
+		messageSlot MessageSlotRemoveAllMessages
 		messageSlotsIterator ++
 	return self
 
@@ -535,7 +534,19 @@ Processor <Synonim> FieldNameToSynonim <List> fieldName
 	candidate = (self.machine.globalContext) SynonimAt fieldName
 	if candidate != nil
 		return candidate
-	console PrintLnString ("Взятие отсутствующего поля")
+	console PrintLnString ("!!!!!!!!! Ошибка! Взятие отсутствующего поля.")
+	return nil
+
+Processor <Synonim> FieldNameToSynonimInJobObject <List> fieldName <ListMap> job <ListMap> object
+	candidate = (job JobFields)  SynonimAt fieldName
+	if candidate != nil
+		return candidate
+	candidate = (object ObjectFields) SynonimAt fieldName
+	if candidate != nil
+		return candidate
+	candidate = (self.machine.globalContext) SynonimAt fieldName
+	if candidate != nil
+		return candidate
 	return nil
 
 
@@ -568,7 +579,7 @@ Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	autoreleasePool ++
 	method = (self ContextObject) ObjectMethod methodName
 	if method == nil
-		console PrintLnString ("Ошибка! Вызов несуществующего метода.")
+		console PrintLnString ("!!!!!!!! Ошибка! Вызов несуществующего метода.")
 	else
 		console PrintString "Процессор вызывает метод: "
 		console PrintLnString methodName
@@ -591,35 +602,30 @@ Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	return self
 
 
-Processor MessageConfirmsToParameter <ListMap> message <ListMap> parameter
-	console PrintLnString ""
-	parameter DumpListToListMap
+Processor MessageConfirmsToParameterInJobObject <ListMap> message <ListMap> parameter <ListMap> job <ListMap> object
 	checkingMethod = parameter At ("Метод проверки")
 	if checkingMethod == "Совпадение"
 		return (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
 	elif checkingMethod == "Совпадение с полем"
-		return (message At (parameter At ("Ключ"))) == (self FieldNameToUID (parameter At ("Значение")))
+		synonim = self FieldNameToSynonimInJobObject (parameter At ("Значение")) job object
+		if synonim Is nil
+			return false
+		return (message At (parameter At ("Ключ"))) == (synonim UID)
 	elif checkingMethod == "Наличие"
-		return (message Contains (parameter At ("Ключ")))
+		return (message ContainsKey (parameter At ("Ключ")))
 	return false
 
 
-Processor <Logic> TryLinkMessageWithMessageSlotAndJob <ListMap> message <ListMap> messageSlot <ListMap> job <List> messageSlotName <List> jobName
+Processor <Logic> TryLinkMessageWithMessageSlotInJobObject <ListMap> message <ListMap> messageSlot <ListMap> job <ListMap> object <List> messageSlotName <List> jobName
 	confirms = true
 	parametersIterator = (messageSlot ListAt ("Метод идентификации")) First
-	console PrintLnString "=================="
 	while parametersIterator NotThisEnd
 		parameter = parametersIterator ListMapData
-		if self NotMessageConfirmsToParameter message parameter
+		if self NotMessageConfirmsToParameterInJobObject message parameter job object
 			confirms = false
 			break
 		parametersIterator ++
 	if confirms
-		console PrintLnString "++++++++++++++++++"
-		console PrintString jobName
-		console PrintString ":"
-		console PrintLnString messageSlotName
-		console PrintLnString "++++++++++++++++++"
 		messageSlot MessageSlotSetMessage message
 		message MessageSetJobNameAndMessageSlotName jobName messageSlotName
 		waitingStageNamesIterator = (messageSlot MessageSlotStages) First
@@ -644,12 +650,18 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 			messageSlot = messageSlotsIterator ListMapData
 			messageSlotName = messageSlotsIterator Key
 			if messageSlot MessageSlotIsOpened
-				assigned = (self TryLinkMessageWithMessageSlotAndJob message messageSlot job messageSlotName jobName) Or assigned
+				assignedRightNow = self TryLinkMessageWithMessageSlotInJobObject message messageSlot job object messageSlotName jobName
+				if assignedRightNow
+					console PrintString "Сообщение прикреплено к "
+					console PrintString jobName
+					console PrintString ":"
+					console PrintLnString messageSlotName
+				assigned = assignedRightNow Or assigned
 			messageSlotsIterator ++
 		jobsIterator ++
 	if assigned Not
 		// Скорее всего эту ситуацию надо будет обрабатывать посылкой "неудачного" сообщения в ответ.
-		console PrintLnString "Процессор: сообщение не обработано объектом."
+		console PrintLnString "!!!!!!!! Ошибка! Сообщение не обработано объектом."
 	return self
 
 
@@ -664,6 +676,9 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 
 
 Processor ProcessOneJobIfAny
+	
+	// Да, я знаю, что этот метод выглядит ужасно. Но рефакторинга не предвидится в ближайшее время. 07.03.2011
+	
 	jobsIterator = ((self ContextObject) ObjectJobs) First
 	while jobsIterator NotThisEnd
 		job = (jobsIterator ListMapData)
@@ -685,8 +700,32 @@ Processor ProcessOneJobIfAny
 					while messageSlotsIterator NotThisEnd
 						messageSlotName = messageSlotsIterator ListData
 						messageSlot = (self ContextJob) JobMessageSlot messageSlotName
-						messageSlot MessageSlotRemoveMessage nil
+						if messageSlot != nil
+							if (messageSlot MessageSlotMessages) NotIsEmpty
+								messageSlot MessageSlotRemoveMessage nil
+								if (messageSlot MessageSlotMessages) IsEmpty
+									slotStagesIterator = messageSlot MessageSlotStagesIterator
+									while slotStagesIterator NotThisEnd
+										slotStage = (self ContextJob) JobStage (slotStagesIterator ThisData)
+										if slotStage != nil
+											slotStage StageIncrementMessagesCounter
+											if slotStage StageIsReady
+												console PrintLnString "Стадия переведена в состояние ожидания"
+												slotStage StageSetWaiting
+											else
+												console PrintLnString "Стадия не была готова."
+										else
+											console PrintLnString "Стадия, подписанная да это сообщение, удалена."
+										slotStagesIterator ++
+								else
+									console PrintLnString "Ожидаемое сообщение несет более одного сообщения."
+							else
+								console PrintLnString "Ожидаемое сообщение не несет реальных сообщений."
+						else
+							console PrintLnString "Ожидаемое сообщение удалено."
 						messageSlotsIterator ++
+				else
+					console PrintLnString "Контекстная работа удалена."
 				self.contextJobStageName = nil
 				self.contextJobName = nil
 				return self
@@ -703,5 +742,3 @@ Processor ProcessUID <List> uid
 	self.contextUID = nil
 	autoreleasePool --
 	return self
-
-

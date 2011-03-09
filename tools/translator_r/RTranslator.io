@@ -259,7 +259,7 @@ translateBodyLine := method(line,
 				methodInProcess append(Map with("Действие", "Добавить сущность в отображение", "Ключ", attributeName)),
 			
 			if(token isMessageField,
-				methodInProcess append(Map with("Действие", "Сущность поля сообщения", "Имя поля", token name))
+				methodInProcess append(Map with("Действие", "Сущность поля сообщения", "Имя поля", token name, "Имя сообщения", messageSlotNameInProcess))
 				methodInProcess append(Map with("Действие", "Добавить сущность в отображение", "Ключ", attributeName)),
 
 				messageInProcess atPut(attributeName, token)
@@ -273,9 +273,14 @@ translateBodyLine := method(line,
 				RTranslatorError with("Field to set name may not start with name resolution."),
 				action atPut("Имя поля", token)
 			)
-			if((token isField) or (token isMessageField),
+			if(((object isField) or (object isMessageField)) not,
 				RTranslatorError with("Field to set object must start with name resolution."),
-				action atPut("Объект", object)
+				if(object isField,
+					methodInProcess append(Map with("Действие", "Идентификатор поля", "Имя поля", object name))
+				)
+				if(object isMessageField,
+					methodInProcess append(Map with("Действие", "Сущность поля сообщения", "Имя поля", object name, "Имя сообщения", messageSlotNameInProcess))
+				)
 			),
 		"Set 2",
 			RTranslatorError with("Garbage after setting field operation.", line),

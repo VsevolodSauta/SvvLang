@@ -880,7 +880,7 @@ Object Processor_RemoveMessageInSlotCode(Object _self, Object _toDo)
 	_messageSlot = ListMap_JobMessageSlot(Processor_ContextJob(_self), _messageSlotName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_MessageSlotMessage(_messageSlot), _nil) != _equal)) != _false)
 	{
-		ListMap_MessageSlotSetMessage(_messageSlot, _nil);
+		ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
 		Object _stagesIterator;
 		_stagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
 		while((Logic_Not(ListIterator_ThisEnd(_stagesIterator))) != _false)
@@ -994,7 +994,7 @@ Object Processor_RemoveAllReceivedMessagesCode(Object _self, Object _toDo)
 	{
 		Object _messageSlot;
 		_messageSlot = ListMapIterator_ListMapData(_messageSlotsIterator);
-		ListMap_MessageSlotSetMessage(_messageSlot, _nil);
+		ListMap_MessageSlotRemoveAllMessages(_messageSlot);
 		ListMapIterator_Next(_messageSlotsIterator);
 	}
 	Object toReturn = _self;
@@ -1228,9 +1228,43 @@ Object Processor_FieldNameToSynonim(Object _self, Object _fieldName)
 		DPOPS ("Processor: FieldNameToSynonim ended.")
 		return toReturn;
 	}
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Взятие отсутствующего поля", 50));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!!! Ошибка! Взятие отсутствующего поля.", 75));
 	Object toReturn = _nil;
 	DPOPS ("Processor: FieldNameToSynonim ended.")
+	return toReturn;
+}
+
+Object Processor_FieldNameToSynonimInJobObject(Object _self, Object _fieldName, Object _job, Object _object)
+{
+	DPUSHS ("Processor: FieldNameToSynonimInJobObject begined.")
+	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
+	Object _candidate;
+	_candidate = ListMap_SynonimAt(ListMap_ObjectFields(_job), _fieldName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
+	{
+		Object toReturn = _candidate;
+		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		return toReturn;
+	}
+	_candidate = ListMap_SynonimAt(ListMap_ObjectFields(_object), _fieldName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
+	{
+		Object toReturn = _candidate;
+		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		return toReturn;
+	}
+	_candidate = ListMap_SynonimAt((((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext), _fieldName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
+	{
+		Object toReturn = _candidate;
+		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		return toReturn;
+	}
+	Object toReturn = _nil;
+	DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
 	return toReturn;
 }
 
@@ -1294,7 +1328,7 @@ Object Processor_InvokeMethodWithParameters(Object _self, Object _methodName, Ob
 	_method = ListMap_ObjectMethod(Processor_ContextObject(_self), _methodName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_method, _nil) == _equal)) != _false)
 	{
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ошибка! Вызов несуществующего метода.", 69));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!! Ошибка! Вызов несуществующего метода.", 78));
 	}
 	else
 	{
@@ -1333,58 +1367,66 @@ Object Processor_InvokeMethodWithParameters(Object _self, Object _methodName, Ob
 	return toReturn;
 }
 
-Object Processor_MessageConfirmsToParameter(Object _self, Object _message, Object _parameter)
+Object Processor_MessageConfirmsToParameterInJobObject(Object _self, Object _message, Object _parameter, Object _job, Object _object)
 {
-	DPUSHS ("Processor: MessageConfirmsToParameter begined.")
-	ASSERT_C ( "Processor:MessageConfirmsToParameter --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
-	ASSERT_C ( "Processor:MessageConfirmsToParameter --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
-	ASSERT_C ( "Processor:MessageConfirmsToParameter --- Checking for correct parameter type failed at parameter _parameter.", _parameter->gid ==  2108332898258556672ull || _parameter == _nil )
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "", 0));
-	ListMap_DumpListToListMap(_parameter);
+	DPUSHS ("Processor: MessageConfirmsToParameterInJobObject begined.")
+	ASSERT_C ( "Processor:MessageConfirmsToParameterInJobObject --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:MessageConfirmsToParameterInJobObject --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
+	ASSERT_C ( "Processor:MessageConfirmsToParameterInJobObject --- Checking for correct parameter type failed at parameter _parameter.", _parameter->gid ==  2108332898258556672ull || _parameter == _nil )
+	ASSERT_C ( "Processor:MessageConfirmsToParameterInJobObject --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "Processor:MessageConfirmsToParameterInJobObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
 	Object _checkingMethod;
 	_checkingMethod = ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Совпадение", 20)) == _equal)) != _false)
 	{
 		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16))) == _equal);
-		DPOPS ("Processor: MessageConfirmsToParameter ended.")
+		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Совпадение с полем", 34)) == _equal)) != _false)
 	{
-		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), Processor_FieldNameToUID(_self, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16)))) == _equal);
-		DPOPS ("Processor: MessageConfirmsToParameter ended.")
+		Object _synonim;
+		_synonim = Processor_FieldNameToSynonimInJobObject(_self, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16)), _job, _object);
+		if((Object_Is(_synonim, _nil)) != _false)
+		{
+			Object toReturn = _false;
+			DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
+			return toReturn;
+		}
+		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), Synonim_GetUID(_synonim)) == _equal);
+		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Наличие", 14)) == _equal)) != _false)
 	{
 		Object toReturn = ListMap_Contains(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8)));
-		DPOPS ("Processor: MessageConfirmsToParameter ended.")
+		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
 	Object toReturn = _false;
-	DPOPS ("Processor: MessageConfirmsToParameter ended.")
+	DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 	return toReturn;
 }
 
-Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _message, Object _messageSlot, Object _job, Object _messageSlotName, Object _jobName)
+Object Processor_TryLinkMessageWithMessageSlotInJobObject(Object _self, Object _message, Object _messageSlot, Object _job, Object _object, Object _messageSlotName, Object _jobName)
 {
-	DPUSHS ("Processor: TryLinkMessageWithMessageSlotAndJob begined.")
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct parameter type failed at parameter _messageSlot.", _messageSlot->gid ==  2108332898258556672ull || _messageSlot == _nil )
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
-	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotAndJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
+	DPUSHS ("Processor: TryLinkMessageWithMessageSlotInJobObject begined.")
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _messageSlot.", _messageSlot->gid ==  2108332898258556672ull || _messageSlot == _nil )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
+	ASSERT_C ( "Processor:TryLinkMessageWithMessageSlotInJobObject --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
 	Object _confirms;
 	_confirms = _true;
 	Object _parametersIterator;
 	_parametersIterator = List_First(ListMap_ListAt(_messageSlot, StringFactory_FromUTF8(_stringFactory, "Метод идентификации", 37)));
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "==================", 18));
 	while((Logic_Not(ListIterator_ThisEnd(_parametersIterator))) != _false)
 	{
 		Object _parameter;
 		_parameter = ListIterator_ListMapData(_parametersIterator);
-		if((Logic_Not(Processor_MessageConfirmsToParameter(_self, _message, _parameter))) != _false)
+		if((Logic_Not(Processor_MessageConfirmsToParameterInJobObject(_self, _message, _parameter, _job, _object))) != _false)
 		{
 			_confirms = _false;
 			break;
@@ -1393,11 +1435,6 @@ Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _messa
 	}
 	if((_confirms) != _false)
 	{
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "++++++++++++++++++", 18));
-		Console_WriteString(_console, _jobName);
-		Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, ":", 1));
-		Console_WriteLnString(_console, _messageSlotName);
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "++++++++++++++++++", 18));
 		ListMap_MessageSlotSetMessage(_messageSlot, _message);
 		ListMap_MessageSetJobNameAndMessageSlotName(_message, _jobName, _messageSlotName);
 		Object _waitingStageNamesIterator;
@@ -1415,7 +1452,7 @@ Object Processor_TryLinkMessageWithMessageSlotAndJob(Object _self, Object _messa
 		}
 	}
 	Object toReturn = _confirms;
-	DPOPS ("Processor: TryLinkMessageWithMessageSlotAndJob ended.")
+	DPOPS ("Processor: TryLinkMessageWithMessageSlotInJobObject ended.")
 	return toReturn;
 }
 
@@ -1446,7 +1483,16 @@ Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _
 			_messageSlotName = ListMapIterator_ThisKey(_messageSlotsIterator);
 			if((ListMap_MessageSlotIsOpened(_messageSlot)) != _false)
 			{
-				_assigned = Logic_Or(Processor_TryLinkMessageWithMessageSlotAndJob(_self, _message, _messageSlot, _job, _messageSlotName, _jobName), _assigned);
+				Object _assignedRightNow;
+				_assignedRightNow = Processor_TryLinkMessageWithMessageSlotInJobObject(_self, _message, _messageSlot, _job, _object, _messageSlotName, _jobName);
+				if((_assignedRightNow) != _false)
+				{
+					Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "Сообщение прикреплено к ", 45));
+					Console_WriteString(_console, _jobName);
+					Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, ":", 1));
+					Console_WriteLnString(_console, _messageSlotName);
+				}
+				_assigned = Logic_Or(_assignedRightNow, _assigned);
 			}
 			ListMapIterator_Next(_messageSlotsIterator);
 		}
@@ -1454,7 +1500,7 @@ Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _
 	}
 	if((Logic_Not(_assigned)) != _false)
 	{
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Процессор: сообщение не обработано объектом.", 82));
+		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!! Ошибка! Сообщение не обработано объектом.", 85));
 	}
 	Object toReturn = _self;
 	DPOPS ("Processor: ProcessMessageForObject ended.")
@@ -1495,9 +1541,59 @@ Object Processor_ProcessOneJobIfAny(Object _self)
 						_messageSlotName = ListIterator_ListData(_messageSlotsIterator);
 						Object _messageSlot;
 						_messageSlot = ListMap_JobMessageSlot(Processor_ContextJob(_self), _messageSlotName);
-						ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
+						if((LogicFactory_FromLong(_logicFactory, Object_Compare(_messageSlot, _nil) != _equal)) != _false)
+						{
+							if((Logic_Not(List_Empty(ListMap_MessageSlotMessages(_messageSlot)))) != _false)
+							{
+								ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
+								if((List_Empty(ListMap_MessageSlotMessages(_messageSlot))) != _false)
+								{
+									Object _slotStagesIterator;
+									_slotStagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
+									while((Logic_Not(ListIterator_ThisEnd(_slotStagesIterator))) != _false)
+									{
+										Object _slotStage;
+										_slotStage = ListMap_JobStage(Processor_ContextJob(_self), ListIterator_ThisData(_slotStagesIterator));
+										if((LogicFactory_FromLong(_logicFactory, Object_Compare(_slotStage, _nil) != _equal)) != _false)
+										{
+											ListMap_StageIncrementMessagesCounter(_slotStage);
+											if((ListMap_StageIsReady(_slotStage)) != _false)
+											{
+												Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия переведена в состояние ожидания", 72));
+												ListMap_StageSetWaiting(_slotStage);
+											}
+											else
+											{
+												Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия не была готова.", 40));
+											}
+										}
+										else
+										{
+											Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия, подписанная да это сообщение, удалена.", 84));
+										}
+										ListIterator_Next(_slotStagesIterator);
+									}
+								}
+								else
+								{
+									Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение несет более одного сообщения.", 92));
+								}
+							}
+							else
+							{
+								Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение не несет реальных сообщений.", 90));
+							}
+						}
+						else
+						{
+							Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение удалено.", 53));
+						}
 						ListIterator_Next(_messageSlotsIterator);
 					}
+				}
+				else
+				{
+					Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Контекстная работа удалена.", 51));
 				}
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobStageName), _nil);
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobName), _nil);
