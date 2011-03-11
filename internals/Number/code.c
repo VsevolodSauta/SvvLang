@@ -229,6 +229,11 @@ Object Number_Inv(Object _self)
 	return toReturn;
 }
 
+Object Number_IsInteger(Object _self)
+{
+	return (((Number) (_self->entity))->_div == 1) ? _true : _false;
+}
+
 Object Number_IsOdd(Object _self)
 {
 	return ((((Number) (_self->entity))->_long & 1) && (((Number) (_self->entity))->_div == 1)) ? _true : _false;

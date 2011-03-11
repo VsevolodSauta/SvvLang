@@ -1,81 +1,81 @@
 #include "internals/basics.h"
-#include "internals/JSON/imports.h"
+#include "internals/JSONParser/imports.h"
 
 
-Object JSON_Create(void)
+Object JSONParser_Create(void)
 {
 	Object _self = Object_Create();
-	DPUSHS ("JSON: Create begined.")
-	_self->entity = Allocator_New(_allocator, sizeof(struct JSON));
-	_self->gid =  6371882041780686848ull;
-	Object_SetComparator(_self, &JSON_Compare);
-	Object_SetDestructor(_self, &JSON_Destroy);
-	Object_SetCloner(_self, &JSON_Clone);
-	Object_SetDeepCloner(_self, &JSON_DeepClone);
-	((JSON) (_self->entity))->_error = _nil;
-	_self = JSON_Init(_self);
-	DPOPS ("JSON: Create ended.")
+	DPUSHS ("JSONParser: Create begined.")
+	_self->entity = Allocator_New(_allocator, sizeof(struct JSONParser));
+	_self->gid =   932129127216689152ull;
+	Object_SetComparator(_self, &JSONParser_Compare);
+	Object_SetDestructor(_self, &JSONParser_Destroy);
+	Object_SetCloner(_self, &JSONParser_Clone);
+	Object_SetDeepCloner(_self, &JSONParser_DeepClone);
+	((JSONParser) (_self->entity))->_error = _nil;
+	_self = JSONParser_Init(_self);
+	DPOPS ("JSONParser: Create ended.")
 	return _self;
 }
 
-Object JSON_Init(Object _self)
+Object JSONParser_Init(Object _self)
 {
-	DPUSHS ("JSON: Init begined.")
-	ASSERT_C ( "JSON:Init --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	(((JSON) (_self->entity))->_error) = Object_Create();
+	DPUSHS ("JSONParser: Init begined.")
+	ASSERT_C ( "JSONParser:Init --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	(((JSONParser) (_self->entity))->_error) = Object_Create();
 	Object toReturn = _self;
-	DPOPS ("JSON: Init ended.")
+	DPOPS ("JSONParser: Init ended.")
 	return toReturn;
 }
 
-Object JSON_Compare(Object _self, Object _json)
+Object JSONParser_Compare(Object _self, Object _jsonParser)
 {
-	DPUSHS ("JSON: Compare begined.")
-	ASSERT_C ( "JSON:Compare --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:Compare --- Checking for correct parameter type failed at parameter _json.", _json->gid ==  6371882041780686848ull || _json == _nil )
+	DPUSHS ("JSONParser: Compare begined.")
+	ASSERT_C ( "JSONParser:Compare --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:Compare --- Checking for correct parameter type failed at parameter _jsonParser.", _jsonParser->gid ==   932129127216689152ull || _jsonParser == _nil )
 	Object toReturn = _equal;
-	DPOPS ("JSON: Compare ended.")
+	DPOPS ("JSONParser: Compare ended.")
 	return toReturn;
 }
 
-Object JSON_Clone(Object _self)
+Object JSONParser_Clone(Object _self)
 {
-	DPUSHS ("JSON: Clone begined.")
-	ASSERT_C ( "JSON:Clone --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	DPUSHS ("JSONParser: Clone begined.")
+	ASSERT_C ( "JSONParser:Clone --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
 	Object toReturn = _self;
-	DPOPS ("JSON: Clone ended.")
+	DPOPS ("JSONParser: Clone ended.")
 	return toReturn;
 }
 
-Object JSON_DeepClone(Object _self)
+Object JSONParser_DeepClone(Object _self)
 {
-	DPUSHS ("JSON: DeepClone begined.")
-	ASSERT_C ( "JSON:DeepClone --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
+	DPUSHS ("JSONParser: DeepClone begined.")
+	ASSERT_C ( "JSONParser:DeepClone --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
 	Object toReturn = _self;
-	DPOPS ("JSON: DeepClone ended.")
+	DPOPS ("JSONParser: DeepClone ended.")
 	return toReturn;
 }
 
-Object JSON_Destroy(Object _self)
+Object JSONParser_Destroy(Object _self)
 {
-	DPUSHS ("JSON: Destroy begined.")
-	ASSERT_C ( "JSON:Destroy --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	Object_Release((((JSON) (_self->entity))->_error));
+	DPUSHS ("JSONParser: Destroy begined.")
+	ASSERT_C ( "JSONParser:Destroy --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	Object_Release((((JSONParser) (_self->entity))->_error));
 	Object toReturn = Object_Destroy(_self);
-	DPOPS ("JSON: Destroy ended.")
+	DPOPS ("JSONParser: Destroy ended.")
 	return toReturn;
 }
 
-Object JSON_ParseString(Object _self, Object _iterator)
+Object JSONParser_ParseString(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseString begined.")
-	ASSERT_C ( "JSON:ParseString --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseString --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseString begined.")
+	ASSERT_C ( "JSONParser:ParseString --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseString --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) != _equal))) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseString ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseString ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
@@ -88,7 +88,7 @@ Object JSON_ParseString(Object _self, Object _iterator)
 		{
 			ListIterator_Next(_iterator);
 			Object toReturn = _toReturn;
-			DPOPS ("JSON: ParseString ended.")
+			DPOPS ("JSONParser: ParseString ended.")
 			return toReturn;
 		}
 		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '\\')) == _equal)) != _false)
@@ -151,24 +151,24 @@ Object JSON_ParseString(Object _self, Object _iterator)
 		}
 		ListIterator_Next(_iterator);
 	}
-	Object toReturn = (((JSON) (_self->entity))->_error);
-	DPOPS ("JSON: ParseString ended.")
+	Object toReturn = (((JSONParser) (_self->entity))->_error);
+	DPOPS ("JSONParser: ParseString ended.")
 	return toReturn;
 }
 
-Object JSON_ParseObject(Object _self, Object _iterator)
+Object JSONParser_ParseObject(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseObject begined.")
-	ASSERT_C ( "JSON:ParseObject --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseObject --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseObject begined.")
+	ASSERT_C ( "JSONParser:ParseObject --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseObject --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = ListMap_Create();
 	Object_Autorelease(_toReturn);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '{')) != _equal))) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseObject ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseObject ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
@@ -179,12 +179,12 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 		{
 			ListIterator_Next(_iterator);
 			Object toReturn = _toReturn;
-			DPOPS ("JSON: ParseObject ended.")
+			DPOPS ("JSONParser: ParseObject ended.")
 			return toReturn;
 		}
 		Object _string;
-		_string = JSON_ParseString(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_string, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
+		_string = JSONParser_ParseString(_self, _iterator);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_string, (((JSONParser) (_self->entity))->_error)) == _equal)) != _false)
 		{
 			break;
 		}
@@ -195,8 +195,8 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 		}
 		ListIterator_Next(_iterator);
 		Object _value;
-		_value = JSON_ParseValue(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
+		_value = JSONParser_ParseValue(_self, _iterator);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSONParser) (_self->entity))->_error)) == _equal)) != _false)
 		{
 			break;
 		}
@@ -211,24 +211,24 @@ Object JSON_ParseObject(Object _self, Object _iterator)
 			break;
 		}
 	}
-	Object toReturn = (((JSON) (_self->entity))->_error);
-	DPOPS ("JSON: ParseObject ended.")
+	Object toReturn = (((JSONParser) (_self->entity))->_error);
+	DPOPS ("JSONParser: ParseObject ended.")
 	return toReturn;
 }
 
-Object JSON_ParseArray(Object _self, Object _iterator)
+Object JSONParser_ParseArray(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseArray begined.")
-	ASSERT_C ( "JSON:ParseArray --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseArray --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseArray begined.")
+	ASSERT_C ( "JSONParser:ParseArray --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseArray --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _toReturn;
 	_toReturn = List_Create();
 	Object_Autorelease(_toReturn);
 	if((Logic_Or(ListIterator_ThisEnd(_iterator), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '[')) != _equal))) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseArray ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseArray ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
@@ -239,15 +239,15 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 		{
 			ListIterator_Next(_iterator);
 			Object toReturn = _toReturn;
-			DPOPS ("JSON: ParseArray ended.")
+			DPOPS ("JSONParser: ParseArray ended.")
 			return toReturn;
 		}
 		Object _value;
-		_value = JSON_ParseValue(_self, _iterator);
-		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSON) (_self->entity))->_error)) == _equal)) != _false)
+		_value = JSONParser_ParseValue(_self, _iterator);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, (((JSONParser) (_self->entity))->_error)) == _equal)) != _false)
 		{
-			Object toReturn = (((JSON) (_self->entity))->_error);
-			DPOPS ("JSON: ParseArray ended.")
+			Object toReturn = (((JSONParser) (_self->entity))->_error);
+			DPOPS ("JSONParser: ParseArray ended.")
 			return toReturn;
 		}
 		ListIterator_StringSkipWhiteSpace(_iterator);
@@ -258,204 +258,204 @@ Object JSON_ParseArray(Object _self, Object _iterator)
 		}
 		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, ']')) != _equal)) != _false)
 		{
-			Object toReturn = (((JSON) (_self->entity))->_error);
-			DPOPS ("JSON: ParseArray ended.")
+			Object toReturn = (((JSONParser) (_self->entity))->_error);
+			DPOPS ("JSONParser: ParseArray ended.")
 			return toReturn;
 		}
 	}
-	Object toReturn = (((JSON) (_self->entity))->_error);
-	DPOPS ("JSON: ParseArray ended.")
+	Object toReturn = (((JSONParser) (_self->entity))->_error);
+	DPOPS ("JSONParser: ParseArray ended.")
 	return toReturn;
 }
 
-Object JSON_ParseValue(Object _self, Object _iterator)
+Object JSONParser_ParseValue(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseValue begined.")
-	ASSERT_C ( "JSON:ParseValue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseValue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseValue begined.")
+	ASSERT_C ( "JSONParser:ParseValue --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseValue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	if((ListIterator_ThisEnd(_iterator)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '"')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseString(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseString(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '{')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseObject(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseObject(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '[')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseArray(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseArray(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((Logic_Or(LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '-')) == _equal), Char_IsDigit(ListIterator_CharData(_iterator)))) != _false)
 	{
-		Object toReturn = JSON_ParseNumber(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseNumber(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 't')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseTrue(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseTrue(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'f')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseFalse(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseFalse(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'n')) == _equal)) != _false)
 	{
-		Object toReturn = JSON_ParseNull(_self, _iterator);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = JSONParser_ParseNull(_self, _iterator);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 	else
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseValue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseValue ended.")
 		return toReturn;
 	}
 }
 
-Object JSON_ParseTrue(Object _self, Object _iterator)
+Object JSONParser_ParseTrue(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseTrue begined.")
-	ASSERT_C ( "JSON:ParseTrue --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseTrue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseTrue begined.")
+	ASSERT_C ( "JSONParser:ParseTrue --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseTrue --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 't')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseTrue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseTrue ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'r')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseTrue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseTrue ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'u')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseTrue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseTrue ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'e')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseTrue ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseTrue ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	Object toReturn = _true;
-	DPOPS ("JSON: ParseTrue ended.")
+	DPOPS ("JSONParser: ParseTrue ended.")
 	return toReturn;
 }
 
-Object JSON_ParseFalse(Object _self, Object _iterator)
+Object JSONParser_ParseFalse(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseFalse begined.")
-	ASSERT_C ( "JSON:ParseFalse --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseFalse --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseFalse begined.")
+	ASSERT_C ( "JSONParser:ParseFalse --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseFalse --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'f')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseFalse ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseFalse ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'a')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseFalse ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseFalse ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseFalse ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseFalse ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 's')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseFalse ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseFalse ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'e')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseFalse ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseFalse ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	Object toReturn = _false;
-	DPOPS ("JSON: ParseFalse ended.")
+	DPOPS ("JSONParser: ParseFalse ended.")
 	return toReturn;
 }
 
-Object JSON_ParseNull(Object _self, Object _iterator)
+Object JSONParser_ParseNull(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseNull begined.")
-	ASSERT_C ( "JSON:ParseNull --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseNull --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseNull begined.")
+	ASSERT_C ( "JSONParser:ParseNull --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseNull --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'n')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseNull ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNull ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'u')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseNull ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNull ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseNull ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNull ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, 'l')) != _equal)) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseNull ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNull ended.")
 		return toReturn;
 	}
 	ListIterator_Next(_iterator);
 	Object toReturn = _nil;
-	DPOPS ("JSON: ParseNull ended.")
+	DPOPS ("JSONParser: ParseNull ended.")
 	return toReturn;
 }
 
-Object JSON_ParseNumber(Object _self, Object _iterator)
+Object JSONParser_ParseNumber(Object _self, Object _iterator)
 {
-	DPUSHS ("JSON: ParseNumber begined.")
-	ASSERT_C ( "JSON:ParseNumber --- Checking for correct object type failed.", _self->gid ==  6371882041780686848ull )
-	ASSERT_C ( "JSON:ParseNumber --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
+	DPUSHS ("JSONParser: ParseNumber begined.")
+	ASSERT_C ( "JSONParser:ParseNumber --- Checking for correct object type failed.", _self->gid ==   932129127216689152ull )
+	ASSERT_C ( "JSONParser:ParseNumber --- Checking for correct parameter type failed at parameter _iterator.", _iterator->gid ==   807984642922801280ull || _iterator == _nil )
 	ListIterator_StringSkipWhiteSpace(_iterator);
 	Object _negative;
 	_negative = _false;
@@ -468,8 +468,8 @@ Object JSON_ParseNumber(Object _self, Object _iterator)
 	}
 	if((Logic_Not(Char_IsDigit(ListIterator_CharData(_iterator)))) != _false)
 	{
-		Object toReturn = (((JSON) (_self->entity))->_error);
-		DPOPS ("JSON: ParseNumber ended.")
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNumber ended.")
 		return toReturn;
 	}
 	while((Char_IsDigit(ListIterator_CharData(_iterator))) != _false)
@@ -506,13 +506,13 @@ Object JSON_ParseNumber(Object _self, Object _iterator)
 	if((_negative) != _false)
 	{
 		Object toReturn = Number_Inv(_toReturn);
-		DPOPS ("JSON: ParseNumber ended.")
+		DPOPS ("JSONParser: ParseNumber ended.")
 		return toReturn;
 	}
 	else
 	{
 		Object toReturn = _toReturn;
-		DPOPS ("JSON: ParseNumber ended.")
+		DPOPS ("JSONParser: ParseNumber ended.")
 		return toReturn;
 	}
 }

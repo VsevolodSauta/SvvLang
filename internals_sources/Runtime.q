@@ -15,14 +15,14 @@ Runtime Init
 	autoreleasePool = <AutoreleasePool>
 	autoreleasePool PushFrame
 	console = <Console>
-	json = <JSON>
+	jsonParser = <JSONParser>
 	entitiesFactory = <ExternalEntitiesFactory>
 	return self
 
 Runtime Destroy
 	autoreleasePool Release
 	console Release
-	json Release
+	jsonParser Release
 	return self Destroy
 
 Runtime Clone

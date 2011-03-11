@@ -1,23 +1,23 @@
-<JSON> error
+<JSONParser> error
 
-JSON Init
+JSONParser Init
 	self.error = <Object>
 	return self
 
-JSON Compare <JSON> json
+JSONParser Compare <JSONParser> jsonParser
 	return equal
 
-JSON Clone
+JSONParser Clone
 	return self
 
-JSON DeepClone
+JSONParser DeepClone
 	return self
 
-JSON Destroy
+JSONParser Destroy
 	self.error Release
 	return self Destroy
 
-JSON <List> ParseString <ListIterator> iterator
+JSONParser <List> ParseString <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	if (iterator ThisEnd) Or ((iterator ThisData) != '"')
 		return self.error
@@ -65,7 +65,7 @@ JSON <List> ParseString <ListIterator> iterator
 		iterator ++
 	return self.error
 
-JSON <ListMap> ParseObject <ListIterator> iterator
+JSONParser <ListMap> ParseObject <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	toReturn = <ListMap>
 	toReturn Autorelease
@@ -95,7 +95,7 @@ JSON <ListMap> ParseObject <ListIterator> iterator
 			break
 	return self.error
 	
-JSON <List> ParseArray <ListIterator> iterator
+JSONParser <List> ParseArray <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	toReturn = <List>
 	toReturn Autorelease
@@ -118,7 +118,7 @@ JSON <List> ParseArray <ListIterator> iterator
 			return self.error
 	return self.error
 
-JSON ParseValue <ListIterator> iterator
+JSONParser ParseValue <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	if iterator ThisEnd
 		return self.error
@@ -139,7 +139,7 @@ JSON ParseValue <ListIterator> iterator
 	else
 		return self.error
 
-JSON ParseTrue <ListIterator> iterator
+JSONParser ParseTrue <ListIterator> iterator
 	if (iterator ThisData) != 't'
 		return self.error
 	iterator ++
@@ -154,7 +154,7 @@ JSON ParseTrue <ListIterator> iterator
 	iterator ++
 	return true
 
-JSON ParseFalse <ListIterator> iterator
+JSONParser ParseFalse <ListIterator> iterator
 	if (iterator ThisData) != 'f'
 		return self.error
 	iterator ++
@@ -172,7 +172,7 @@ JSON ParseFalse <ListIterator> iterator
 	iterator ++
 	return false
 
-JSON ParseNull <ListIterator> iterator
+JSONParser ParseNull <ListIterator> iterator
 	if (iterator ThisData) != 'n'
 		return self.error
 	iterator ++
@@ -187,7 +187,7 @@ JSON ParseNull <ListIterator> iterator
 	iterator ++
 	return nil
 
-JSON ParseNumber <ListIterator> iterator
+JSONParser ParseNumber <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	negative = false
 	toReturn = 0

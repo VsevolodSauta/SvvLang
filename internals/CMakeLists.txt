@@ -36,7 +36,7 @@ add_subdirectory(Stack)
 add_subdirectory(Queue)
 add_subdirectory(MultiSet)
 add_subdirectory(UIDGenerator)
-add_subdirectory(JSON)
+add_subdirectory(JSONParser)
 
 #add_subdirectory(Array)
 

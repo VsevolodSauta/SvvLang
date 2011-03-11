@@ -11,7 +11,7 @@ int DLEVEL = 0;
 
 Object _autoreleasePool;
 Object _console;
-Object _json;
+Object _jsonParser;
 Object _entitiesFactory;
 
 #if STDLIB

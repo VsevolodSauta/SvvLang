@@ -28,8 +28,8 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 		console PrintLnString "Возникла ошибка при загрузке объекта. Невозможно прочитать контейнер объекта (как правило файл)."
 	contents = file ReadContentsOfFile
 	file Close
-	parsedObject = json ParseObject (contents First)
-	if parsedObject == json.error
+	parsedObject = jsonParser ParseObject (contents First)
+	if parsedObject == jsonParser.error
 		console PrintLnString "Некорректный текст объекта. Невозможно провести грамматический разбор."
 		autoreleasePool --
 		return self

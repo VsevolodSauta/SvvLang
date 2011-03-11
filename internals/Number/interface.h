@@ -30,6 +30,7 @@ Object Number_Abs(Object _self);
 Object Number_Inv(Object _self);
 Object Number_Power(Object _self, Object arg);
 
+Object Number_IsInteger(Object _self);
 Object Number_IsOdd(Object _self);
 Object Number_IsEven(Object _self);
 Object Number_Set(Object _self, Object arg);

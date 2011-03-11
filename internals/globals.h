@@ -29,5 +29,5 @@ extern Object _false;
 extern Object _no;
 
 extern Object _console;
-extern Object _json;
+extern Object _jsonParser;
 extern Object _entitiesFactory;
