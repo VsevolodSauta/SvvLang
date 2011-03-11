@@ -1,4 +1,5 @@
 #include "internals/basics.h"
+#include "internals/Number/library.h"
 
 Object Number_Create(void)
 {
@@ -8,6 +9,7 @@ Object Number_Create(void)
 	Object_SetComparator(toReturn, &Number_Compare);
 	Object_SetDestructor(toReturn, &Number_Destroy);
 	Object_SetCloner(toReturn, &Number_Clone);
+	Object_SetDeepCloner(toReturn, &Number_Clone);
 	return toReturn;
 }
 
@@ -15,14 +17,19 @@ Object Number_Clone(Object _self)
 {
 	Object toReturn = Number_Create();
 	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long;
+	((Number) (toReturn->entity))->_div = ((Number) (_self->entity))->_div;
 	return toReturn;
 }
 
-Object Number_Compare(Object _self, Object number)
+Object Number_Compare(Object _self, Object _number)
 {
-	if(((Number) (_self->entity))->_long > ((Number) (number->entity))->_long)
+	long lcm = long_lcm(((Number) (_number->entity))->_div, ((Number) (_self->entity))->_div);
+	long first = ((Number) (_self->entity))->_long * (lcm / ((Number) (_self->entity))->_div);
+	long second = ((Number) (_number->entity))->_long * (lcm / ((Number) (_number->entity))->_div);
+	
+	if(first > second)
 		return _greater;
-	if(((Number) (_self->entity))->_long < ((Number) (number->entity))->_long)
+	if(first < second)
 		return _less;
 	return _equal;
 }
@@ -33,124 +40,176 @@ Object Number_Destroy(Object _self)
 }
 
 
-Object Number_Add(Object _self, Object arg)
+Object Number_Add(Object _self, Object _number)
 {
+	long lcm = long_lcm(((Number) (_number->entity))->_div, ((Number) (_self->entity))->_div);
+	long first = ((Number) (_self->entity))->_long * (lcm / ((Number) (_self->entity))->_div);
+	long second = ((Number) (_number->entity))->_long * (lcm / ((Number) (_number->entity))->_div);
+	long value = first + second;
+	long gcd = long_gcd(lcm, value);
+
 	Object toReturn = Number_Create();
 	Object_Autorelease(toReturn);
-	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long + ((Number) (arg->entity))->_long;
+	((Number) (toReturn->entity))->_long = value / gcd;
+	((Number) (toReturn->entity))->_div = lcm / gcd;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
 	return toReturn;
 }
 
-Object Number_Sub(Object _self, Object arg)
+Object Number_Sub(Object _self, Object _number)
 {
+	long lcm = long_lcm(((Number) (_number->entity))->_div, ((Number) (_self->entity))->_div);
+	long first = ((Number) (_self->entity))->_long * (lcm / ((Number) (_self->entity))->_div);
+	long second = ((Number) (_number->entity))->_long * (lcm / ((Number) (_number->entity))->_div);
+	long value = first - second;
+	long gcd = long_gcd(lcm, value);
+
 	Object toReturn = Number_Create();
 	Object_Autorelease(toReturn);
-	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long - ((Number) (arg->entity))->_long;
+	((Number) (toReturn->entity))->_long = value / gcd;
+	((Number) (toReturn->entity))->_div = lcm / gcd;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
 	return toReturn;
 }
 
-Object Number_Mul(Object _self, Object arg)
+Object Number_Mul(Object _self, Object _number)
 {
+	long gcd1 = long_gcd(((Number) (_self->entity))->_long, ((Number) (_number->entity))->_div);
+	long gcd2 = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_long);
+
 	Object toReturn = Number_Create();
 	Object_Autorelease(toReturn);
-	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long * ((Number) (arg->entity))->_long;
+	((Number) (toReturn->entity))->_long = (((Number) (_self->entity))->_long / gcd1) * (((Number) (_number->entity))->_long / gcd2);
+	((Number) (toReturn->entity))->_div = (((Number) (_self->entity))->_div / gcd2) * (((Number) (_number->entity))->_div / gcd1);
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
 	return toReturn;
 }
 
-Object Number_Power(Object _self, Object arg)
+Object Number_Div(Object _self, Object _number)
+{
+	long gcd1 = long_gcd(((Number) (_self->entity))->_long, ((Number) (_number->entity))->_long);
+	long gcd2 = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_div);
+
+	Object toReturn = Number_Create();
+	Object_Autorelease(toReturn);
+	((Number) (toReturn->entity))->_long = (((Number) (_self->entity))->_long / gcd1) * (((Number) (_number->entity))->_div / gcd2);
+	((Number) (toReturn->entity))->_div = (((Number) (_self->entity))->_div / gcd2) * (((Number) (_number->entity))->_div / gcd1);
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
+	return toReturn;
+}
+
+Object Number_Power(Object _self, Object _number)
 {
 	Object toReturn = Number_Create();
 	Object_Autorelease(toReturn);
-	long count = ((Number) (arg->entity))->_long;
-	long result = 1;
+	long count = ((Number) (_number->entity))->_long;
+	long num = 1;
+	long den = 1;
 	while(count--)
 	{
-		result *= ((Number) (_self->entity))->_long;
+		num *= ((Number) (_self->entity))->_long;
+		den *= ((Number) (_self->entity))->_div;
 	}
-	Number_SetLong(toReturn, result);
+	((Number) (toReturn->entity))->_long = num;
+	((Number) (toReturn->entity))->_div = den;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
 	return toReturn;
 }
 
-Object Number_Div(Object _self, Object arg)
+Object Number_Mod(Object _self, Object _number)
 {
+	ASSERT_C ("First _numberument of Mod function is not an integer.", ((Number) (_self->entity))->_div == 1);
+	ASSERT_C ("Second _numberument of Mod function is not an integer.", ((Number) (_number->entity))->_div == 1);
 	Object toReturn = Number_Create();
 	Object_Autorelease(toReturn);
-	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long / ((Number) (arg->entity))->_long;
+	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long % ((Number) (_number->entity))->_long;
+	((Number) (toReturn->entity))->_div = 1;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (toReturn->entity))->_div != 0)
 	return toReturn;
 }
 
-Object Number_Mod(Object _self, Object arg)
+Object Number_AddInPlace(Object _self, Object _number)
 {
-	Object toReturn = Number_Create();
-	Object_Autorelease(toReturn);
-	((Number) (toReturn->entity))->_long = ((Number) (_self->entity))->_long % ((Number) (arg->entity))->_long;
-	return toReturn;
-}
-
-Object Number_AddInPlace(Object _self, Object arg)
-{
-	((Number) (_self->entity))->_long += ((Number) (arg->entity))->_long;
+	long gcd = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_div);
+	long multiplier = ((Number) (_number->entity))->_div / gcd;
+	((Number) (_self->entity))->_long *= multiplier;
+	((Number) (_self->entity))->_long += ((Number) (_number->entity))->_long * (((Number) (_self->entity))->_div / gcd);
+	((Number) (_self->entity))->_div *= multiplier;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
-Object Number_SubInPlace(Object _self, Object arg)
+Object Number_SubInPlace(Object _self, Object _number)
 {
-	((Number) (_self->entity))->_long -= ((Number) (arg->entity))->_long;
+	long gcd = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_div);
+	long multiplier = ((Number) (_number->entity))->_div / gcd;
+	((Number) (_self->entity))->_long *= multiplier;
+	((Number) (_self->entity))->_long -= ((Number) (_number->entity))->_long * (((Number) (_self->entity))->_div / gcd);
+	((Number) (_self->entity))->_div *= multiplier;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
-Object Number_MulInPlace(Object _self, Object arg)
+Object Number_MulInPlace(Object _self, Object _number)
 {
-	((Number) (_self->entity))->_long *= ((Number) (arg->entity))->_long;
+	long gcd1 = long_gcd(((Number) (_self->entity))->_long, ((Number) (_number->entity))->_div);
+	long gcd2 = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_long);
+	((Number) (_self->entity))->_long = (((Number) (_self->entity))->_long / gcd1) * (((Number) (_number->entity))->_long / gcd2);
+	((Number) (_self->entity))->_div = (((Number) (_self->entity))->_div / gcd2) * (((Number) (_number->entity))->_div / gcd1);
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
-Object Number_DivInPlace(Object _self, Object arg)
+Object Number_DivInPlace(Object _self, Object _number)
 {
-	((Number) (_self->entity))->_long /= ((Number) (arg->entity))->_long;
+	long gcd1 = long_gcd(((Number) (_self->entity))->_long, ((Number) (_number->entity))->_long);
+	long gcd2 = long_gcd(((Number) (_self->entity))->_div, ((Number) (_number->entity))->_div);
+	((Number) (_self->entity))->_long = (((Number) (_self->entity))->_long / gcd1) * (((Number) (_number->entity))->_div / gcd2);
+	((Number) (_self->entity))->_div = (((Number) (_self->entity))->_div / gcd2) * (((Number) (_number->entity))->_long / gcd1);
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
-Object Number_ModInPlace(Object _self, Object arg)
+Object Number_ModInPlace(Object _self, Object _number)
 {
-	((Number) (_self->entity))->_long %= ((Number) (arg->entity))->_long;
+	// TODO!!!
+	((Number) (_self->entity))->_long %= ((Number) (_number->entity))->_long;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
 Object Number_Inc(Object _self)
 {
-	((Number) (_self->entity))->_long++;
+	((Number) (_self->entity))->_long += ((Number) (_self->entity))->_div;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
 Object Number_Dec(Object _self)
 {
-	((Number) (_self->entity))->_long--;
+	((Number) (_self->entity))->_long -= ((Number) (_self->entity))->_div;
+	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;
 }
 
-Object Number_Min(Object _self, Object arg)
+Object Number_Min(Object _self, Object _number)
 {
-	Object toReturn;
-	if(((Number) (_self->entity))->_long < ((Number) (arg->entity))->_long)
-	{
-		toReturn = _self;
+	Object comparation = Number_Compare(_self, _number);
+	if(comparation == _less) {
+		return Object_TempClone(_self);
 	} else {
-		toReturn = arg;
+		return Object_TempClone(_number);
 	}
-	return Object_TempClone(toReturn);
 }
 
-Object Number_Max(Object _self, Object arg)
+Object Number_Max(Object _self, Object _number)
 {
-	Object toReturn;
-	if(((Number) (_self->entity))->_long > ((Number) (arg->entity))->_long)
-	{
-		toReturn = _self;
+	Object comparation = Number_Compare(_self, _number);
+	if(comparation != _less) {
+		return Object_TempClone(_self);
 	} else {
-		toReturn = arg;
+		return Object_TempClone(_number);
 	}
-	return Object_TempClone(toReturn);
 }
 
 Object Number_Abs(Object _self)
@@ -172,17 +231,18 @@ Object Number_Inv(Object _self)
 
 Object Number_IsOdd(Object _self)
 {
-	return (((Number) (_self->entity))->_long & 1) ? _true : _false;
+	return ((((Number) (_self->entity))->_long & 1) && (((Number) (_self->entity))->_div == 1)) ? _true : _false;
 }
 
 Object Number_IsEven(Object _self)
 {
-	return !(((Number) (_self->entity))->_long & 1) ? _true : _false;
+	return (!(((Number) (_self->entity))->_long & 1) && (((Number) (_self->entity))->_div == 1)) ? _true : _false;
 }
 
-Object Number_Set(Object _self, Object arg)
+Object Number_Set(Object _self, Object _number)
 {
-	((Number) (_self->entity))->_long = ((Number) (arg->entity))->_long;
+	((Number) (_self->entity))->_long = ((Number) (_number->entity))->_long;
+	((Number) (_self->entity))->_div = ((Number) (_number->entity))->_div;
 	return _self;
 }
 

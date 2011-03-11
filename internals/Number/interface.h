@@ -4,6 +4,7 @@
 
 typedef struct Number {
 	long		_long;
+	long		_div;
 } *Number;
 
 Object Number_Create();
@@ -35,12 +36,13 @@ Object Number_Set(Object _self, Object arg);
 
 static inline long Number_GetLong(Object _self)
 {
-	return ((Number) (_self->entity))->_long;
-};
+	return ((Number) (_self->entity))->_long / ((Number) (_self->entity))->_div;
+}
 
 inline static Object Number_SetLong(Object _self, long toSet)
 {
 	((Number) (_self->entity))->_long = toSet;
+	((Number) (_self->entity))->_div = 1;
 	return _self;
-};
+}
 
