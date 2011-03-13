@@ -19,7 +19,7 @@ ExternalFileManipulator SetMachine <Machine> machine
 	self.machine = machine
 	return self
 	
-ExternalFileManipulator CreateUIDFileFromUIDObject <List> uid
+ExternalFileManipulator <List> CreateUIDFileFromUIDObject <List> uid
 	object = self.machine ObjectByUID uid
 	
 	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя фала"

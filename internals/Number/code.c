@@ -172,7 +172,8 @@ Object Number_DivInPlace(Object _self, Object _number)
 
 Object Number_ModInPlace(Object _self, Object _number)
 {
-	// TODO!!!
+	ASSERT_C ("First _numberument of Mod function is not an integer.", ((Number) (_self->entity))->_div == 1);
+	ASSERT_C ("Second _numberument of Mod function is not an integer.", ((Number) (_number->entity))->_div == 1);
 	((Number) (_self->entity))->_long %= ((Number) (_number->entity))->_long;
 	ASSERT_C("Знаменатель равен нулю", ((Number) (_self->entity))->_div != 0)
 	return _self;

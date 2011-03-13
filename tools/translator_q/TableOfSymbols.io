@@ -22,7 +22,7 @@ TableOfSymbols globalObjects := Map with(
 	"_charFactory",			"CharFactory",
 	"_stringFactory",		"StringFactory",
 	"_console",			"Console",
-	"_jsonParset",			"JSONParser",
+	"_jsonParser",			"JSONParser",
 	"_methodFactory",		"MethodFactory",
 	"_entitiesFactory",		"ExternalEntitiesFactory"
 )

@@ -36,7 +36,6 @@ Object Runtime_Init(Object _self)
 	_autoreleasePool = AutoreleasePool_Create();
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	_console = Console_Create();
-	Object _jsonParser;
 	_jsonParser = JSONParser_Create();
 	_entitiesFactory = ExternalEntitiesFactory_Create();
 	Object toReturn = _self;
@@ -50,7 +49,6 @@ Object Runtime_Destroy(Object _self)
 	ASSERT_C ( "Runtime:Destroy --- Checking for correct object type failed.", _self->gid ==  5367970674748323840ull )
 	Object_Release(_autoreleasePool);
 	Object_Release(_console);
-	Object _jsonParser;
 	Object_Release(_jsonParser);
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("Runtime: Destroy ended.")

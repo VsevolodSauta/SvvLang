@@ -176,6 +176,20 @@ Object ExternalEntitiesFactory_CreateRequestMessageSlot(Object _self, Object _re
 	return toReturn;
 }
 
+Object ExternalEntitiesFactory_CreateReplyMessageSlot(Object _self, Object _request)
+{
+	DPUSHS ("ExternalEntitiesFactory: CreateReplyMessageSlot begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateReplyMessageSlot --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	ASSERT_C ( "ExternalEntitiesFactory:CreateReplyMessageSlot --- Checking for correct parameter type failed at parameter _request.", _request->gid ==  3732711262168886272ull || _request == _nil )
+	Object _toReturn;
+	_toReturn = ExternalEntitiesFactory_CreateEmptyMessageSlot(_self);
+	ListMap_MessageSlotSetCondition(_toReturn, ExternalEntitiesFactory_CreateConditionEquality(_self, StringFactory_FromUTF8(_stringFactory, "Тип", 6), StringFactory_FromUTF8(_stringFactory, "Ответ", 10)));
+	ListMap_MessageSlotSetCondition(_toReturn, ExternalEntitiesFactory_CreateConditionEquality(_self, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), _request));
+	Object toReturn = _toReturn;
+	DPOPS ("ExternalEntitiesFactory: CreateReplyMessageSlot ended.")
+	return toReturn;
+}
+
 Object ExternalEntitiesFactory_CreateObject(Object _self)
 {
 	DPUSHS ("ExternalEntitiesFactory: CreateObject begined.")

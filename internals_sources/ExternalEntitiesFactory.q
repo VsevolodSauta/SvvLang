@@ -68,6 +68,12 @@ ExternalEntitiesFactory <ListMap> CreateRequestMessageSlot <List> request
 	toReturn MessageSlotSetCondition (self CreateConditionWithKeyValue "Запрос" request)
 	return toReturn
 
+ExternalEntitiesFactory <ListMap> CreateReplyMessageSlot <List> request
+	toReturn = self CreateEmptyMessageSlot
+	toReturn MessageSlotSetCondition (self CreateConditionWithKeyValue "Тип" "Ответ")
+	toReturn MessageSlotSetCondition (self CreateConditionWithKeyValue "Запрос" request)
+	return toReturn
+
 ExternalEntitiesFactory <ListMap> CreateObject
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Методы" (self CreateEmptyMethods)
