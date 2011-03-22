@@ -455,3 +455,109 @@ Object ExternalNumberManipulator_Absolute(Object _self, Object _processor)
 	DPOPS ("ExternalNumberManipulator: Absolute ended.")
 	return toReturn;
 }
+
+Object ExternalNumberManipulator_Notify(Object _self, Object _processor)
+{
+	DPUSHS ("ExternalNumberManipulator: Notify begined.")
+	ASSERT_C ( "ExternalNumberManipulator:Notify --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:Notify --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _object;
+	_object = Processor_ContextObject(_processor);
+	Object _notifications;
+	_notifications = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Оповещения", 20));
+	Object _job;
+	_job = Processor_ContextJob(_processor);
+	Object _request;
+	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
+	List_PushBack(_notifications, _request);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
+	Object toReturn = _self;
+	DPOPS ("ExternalNumberManipulator: Notify ended.")
+	return toReturn;
+}
+
+Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _processor)
+{
+	DPUSHS ("ExternalNumberManipulator: CheckForNotifications begined.")
+	ASSERT_C ( "ExternalNumberManipulator:CheckForNotifications --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:CheckForNotifications --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _object;
+	_object = Processor_ContextObject(_processor);
+	Object _notifications;
+	_notifications = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Оповещения", 20));
+	Object _currentValue;
+	_currentValue = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
+	Object _notificationsIterator;
+	_notificationsIterator = List_First(_notifications);
+	while((Logic_Not(ListIterator_ThisEnd(_notificationsIterator))) != _false)
+	{
+		Object _request;
+		_request = ListIterator_ListMapData(_notificationsIterator);
+		Object _condition;
+		_condition = ListMap_ObjectAt(_request, StringFactory_FromUTF8(_stringFactory, "Условие", 14));
+		Object _value;
+		_value = ListMap_ObjectAt(_request, StringFactory_FromUTF8(_stringFactory, "Значение", 16));
+		Object _valuesValue;
+		_valuesValue = _nil;
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) != _equal)) != _false)
+		{
+			_valuesValue = ListMap_ObjectAt(ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Значения на оповещения", 42)), _value);
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_valuesValue, _nil) == _equal)) != _false)
+			{
+				ListIterator_Next(_notificationsIterator);
+				continue;
+			}
+		}
+		Object _shouldNotify;
+		_shouldNotify = _false;
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, ">", 1)) == _equal)) != _false)
+		{
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentValue, _valuesValue) == _greater)) != _false)
+			{
+				_shouldNotify = _true;
+			}
+		}
+		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, "<", 1)) == _equal)) != _false)
+		{
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentValue, _valuesValue) == _less)) != _false)
+			{
+				_shouldNotify = _true;
+			}
+		}
+		else if((Logic_Or(LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, "=", 1)) == _equal), LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, "==", 2)) == _equal))) != _false)
+		{
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentValue, _valuesValue) == _equal)) != _false)
+			{
+				_shouldNotify = _true;
+			}
+		}
+		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, "Значение изменилось", 37)) == _equal)) != _false)
+		{
+			_shouldNotify = _true;
+		}
+		else
+		{
+			Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное условие на оповещение: ", 67));
+			Console_WriteLnString(_console, _condition);
+			ListIterator_ThisRemove(_notificationsIterator);
+			ListIterator_Prev(_notificationsIterator);
+		}
+		if((_shouldNotify) != _false)
+		{
+			Object _notifyMessage;
+			_notifyMessage = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+			ListMap_MessageSetTypeNotification(_notifyMessage);
+			ListMap_Add(_notifyMessage, StringFactory_FromUTF8(_stringFactory, "Условие", 14), _condition);
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) != _equal)) != _false)
+			{
+				ListMap_Add(_notifyMessage, StringFactory_FromUTF8(_stringFactory, "Значение", 16), _value);
+			}
+			ListMap_Add(_notifyMessage, StringFactory_FromUTF8(_stringFactory, "Текущее значение", 31), _currentValue);
+			ListMap_MessageSetReceiver(_notifyMessage, ListMap_MessageSender(_request));
+			Processor_SendMessage(_processor, _notifyMessage);
+			ListIterator_ThisRemove(_notificationsIterator);
+			ListIterator_Prev(_notificationsIterator);
+		}
+		ListIterator_Next(_notificationsIterator);
+	}
+}

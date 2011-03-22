@@ -175,6 +175,8 @@ ListMap DumpListToListMap (MessageDump)
 
 
 
+// Управление объектами
+
 ListMap ObjectMethods
 	return self ListMapAt ("Методы")
 
@@ -277,6 +279,7 @@ ListMap <Object> ObjectProperty <List> propertyName
 	return (self ObjectProperties) At propertyName
 
 
+// Управление работами
 
 ListMap JobStages
 	return self ListMapAt ("Стадии")
@@ -365,6 +368,7 @@ ListMap JobCreateStageWithNameMethodMessageSlotNameAndEntity <List> stageName <L
 	return self
 
 
+// Управление сообщениями
 
 ListMap <List> MessageSender
 	return self ListAt "Отправитель"
@@ -396,6 +400,9 @@ ListMap MessageSetTypeReply (MessageSetTypeAnswer)
 ListMap MessageSetTypeRequest
 	return self MessageSetType "Запрос"
 
+ListMap MessageSetTypeNotification
+	return self MessageSetType "Оповещение"
+
 ListMap MessageSetRequest <List> reqest
 	return self AtPut "Запрос" reqest
 
@@ -419,6 +426,7 @@ ListMap MessageAttributesMessageSlots
 	return ((self ListMapAt "Атрибуты") ListAt "Ожидаемые сообщения")
 
 
+// Управление ожидаемыми сообщениями
 
 ListMap <List> MessageSlotStages
 	return self ListAt ("Стадии")
@@ -488,7 +496,7 @@ ListMap MessageSlotClose
 	return self
 
 
-
+// Управление стадиями
 
 ListMap <Logic> StageContainsMessageSlot <List> messageSlotName
 	return (self StageMessageSlots) Contains messageSlotName

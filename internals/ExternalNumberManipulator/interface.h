@@ -23,3 +23,5 @@ Object ExternalNumberManipulator_DivInPlaceSimple(Object _self, Object _processo
 Object ExternalNumberManipulator_Increment(Object _self, Object _processor);
 Object ExternalNumberManipulator_Decrement(Object _self, Object _processor);
 Object ExternalNumberManipulator_Absolute(Object _self, Object _processor);
+Object ExternalNumberManipulator_Notify(Object _self, Object _processor);
+Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _processor);

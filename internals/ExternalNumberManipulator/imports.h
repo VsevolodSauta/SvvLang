@@ -13,3 +13,5 @@
 #include "internals/ExternalMachineManipulator/interface.h"
 #include "internals/ExternalNumberManipulator/interface.h"
 #include "internals/ExternalEntitiesFactory/interface.h"
+#include "internals/ListIterator/interface.h"
+#include "internals/Console/interface.h"

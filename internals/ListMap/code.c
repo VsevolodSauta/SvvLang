@@ -998,6 +998,15 @@ Object ListMap_MessageSetTypeRequest(Object _self)
 	return toReturn;
 }
 
+Object ListMap_MessageSetTypeNotification(Object _self)
+{
+	DPUSHS ("ListMap: MessageSetTypeNotification begined.")
+	ASSERT_C ( "ListMap:MessageSetTypeNotification --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_MessageSetType(_self, StringFactory_FromUTF8(_stringFactory, "Оповещение", 20));
+	DPOPS ("ListMap: MessageSetTypeNotification ended.")
+	return toReturn;
+}
+
 Object ListMap_MessageSetRequest(Object _self, Object _reqest)
 {
 	DPUSHS ("ListMap: MessageSetRequest begined.")

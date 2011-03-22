@@ -36,11 +36,6 @@ Object Machine_Init(Object _self)
 	(((Machine) (_self->entity))->_machineManipulator) = ExternalMachineManipulator_Create();
 	ExternalMachineManipulator_SetMachine((((Machine) (_self->entity))->_machineManipulator), _self);
 	ExternalMachineManipulator_CreateAll((((Machine) (_self->entity))->_machineManipulator));
-	Object _file;
-	_file = File_Create();
-	File_OpenForAppending(_file, StringFactory_FromUTF8(_stringFactory, "Vasia", 5));
-	File_WriteNakedString(_file, StringFactory_FromUTF8(_stringFactory, "Vasia porosya", 13));
-	File_Close(_file);
 	Object toReturn = _self;
 	DPOPS ("Machine: Init ended.")
 	return toReturn;

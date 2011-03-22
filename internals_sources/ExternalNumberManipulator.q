@@ -274,3 +274,60 @@ ExternalNumberManipulator Absolute <Processor> processor
 	processor SendReplyForMessage reply "Модуль"
 	return self
 
+ExternalNumberManipulator Notify <Processor> processor
+	object = processor ContextObject
+	notifications = (object ObjectProperty "Оповещения") AsList
+	
+	job = processor ContextJob
+	request = job JobMessageInMessageSlot "Оповестить"
+	notifications Append request
+	
+	self CheckForNotifications processor
+	return self
+
+ExternalNumberManipulator CheckForNotifications <Processor> processor
+	object = processor ContextObject
+	notifications = (object ObjectProperty "Оповещения") AsList
+	currentValue = (object ObjectProperty "Число") AsNumber
+
+	notificationsIterator = notifications First
+	while notificationsIterator NotThisEnd
+		request = notificationsIterator ListMapData
+		condition = request At "Условие"
+		value = request At "Значение"
+		valuesValue = nil
+		if value != nil
+			valuesValue = ((object ObjectProperty "Значения на оповещения") AsListMap) At value
+			if valuesValue == nil
+				notificationsIterator ++
+				continue
+		shouldNotify = false
+		if (condition == ">") 
+			if (currentValue > valuesValue)
+				shouldNotify = true
+		elif (condition == "<") 
+			if (currentValue < valuesValue)
+				shouldNotify = true
+		elif ((condition == "=") Or (condition == "==")) 
+			if (currentValue == valuesValue)		
+				shouldNotify = true
+		elif (condition == "Значение изменилось")
+			shouldNotify = true
+		else
+			console PrintString "Некорректное условие на оповещение: "
+			console PrintLnString condition
+			notificationsIterator Remove
+			notificationsIterator --
+		if shouldNotify		
+			notifyMessage = entitiesFactory CreateEmptyMessage
+			notifyMessage MessageSetTypeNotification
+			notifyMessage AtPut "Условие" condition
+			if value != nil
+				notifyMessage AtPut "Значение" value
+			notifyMessage AtPut "Текущее значение" currentValue
+			notifyMessage MessageSetReceiver (request MessageSender)
+			processor SendMessage notifyMessage
+			notificationsIterator Remove
+			notificationsIterator --
+		notificationsIterator ++
+

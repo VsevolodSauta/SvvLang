@@ -36,57 +36,57 @@ Processor Init
 	self.localNamespaces = <Stack>
 	self.helperStack = <Stack>
 	self.processorCodes = <ListMap>
-	self.processorCodes AtPut ("Выполнить") &Processor_DoCode
-	self.processorCodes AtPut ("Сущность поля сообщения") &Processor_EntityFromMessageFieldCode
-	self.processorCodes AtPut ("Идентификатор поля") &Processor_UIDFromFieldCode
-	self.processorCodes AtPut ("Текущий объект") &Processor_AddCurrentUIDToStackCode
-	self.processorCodes AtPut ("Текущая работа") &Processor_AddCurrentJobToStackCode
-	self.processorCodes AtPut ("Текущая стадия") &Processor_AddCurrentJobStageToStackCode
-	self.processorCodes AtPut ("Список") &Processor_AddListToStackCode
-	self.processorCodes AtPut ("Отображение") &Processor_AddListMapToStackCode
-	self.processorCodes AtPut ("Удалить вершину") &Processor_RemoveFromStackCode
-	self.processorCodes AtPut ("Добавить сущность в отображение") &Processor_AddEntityToListMapCode
-	self.processorCodes AtPut ("Удалить сущность из отображения по ключу") &Processor_RemoveEntityFromListMapByKeyCode
-	self.processorCodes AtPut ("Удалить сущность из отображения по значению") &Processor_RemoveEntityFromListMapByValueCode
-	self.processorCodes AtPut ("Добавить сущность в список") &Processor_AddEntityToListCode
-	self.processorCodes AtPut ("Удалить сущность из списка на позиции") &Processor_RemoveEntityFromListByPositionCode
-	self.processorCodes AtPut ("Удалить сущность из списка по значению") &Processor_RemoveEntityFromListByValueCode
-	self.processorCodes AtPut ("Добавить сущность в вершину") &Processor_AddEntityToStackCode
-	self.processorCodes AtPut ("Дублировать вершину") &Processor_DuplicateTopInStackCode
-	self.processorCodes AtPut ("Поменять местами вершинные элементы") &Processor_SwapTopInStackCode
-	self.processorCodes AtPut ("Послать сообщение объекту с идентификатором") &Processor_SendMessageToUIDCode
-	self.processorCodes AtPut ("Послать сообщение объекту из поля") &Processor_SendMessageToFieldCode
-	self.processorCodes AtPut ("Послать сообщение объекту из поля сообщения") &Processor_SendMessageToMessageFieldCode
-	self.processorCodes AtPut ("Послать ответ на сообщение") &Processor_SendReplyForMessageCode
-	self.processorCodes AtPut ("Вызвать метод с параметрами") &Processor_InvokeMethodCode
-	self.processorCodes AtPut ("Определить метод") &Processor_DefineMethodCode
-	self.processorCodes AtPut ("Удалить метод с именем") &Processor_UnDefineMethodCode
-	self.processorCodes AtPut ("Установить ТВА") &Processor_DefineLocalFieldCode
-	self.processorCodes AtPut ("Установить поле работы") &Processor_DefineJobFieldCode
-	self.processorCodes AtPut ("Установить поле объекта") &Processor_DefineObjectFieldCode
-	self.processorCodes AtPut ("Установить глобальное поле") &Processor_DefineGlobalFieldCode
-	self.processorCodes AtPut ("Присвоить полю идентификатор") &Processor_SetFieldCode
-	self.processorCodes AtPut ("Перемежить поле прибытия с полем отправления") &Processor_UniteFieldCode
-	self.processorCodes AtPut ("Удалить поле") &Processor_UnDefineFieldCode
-	self.processorCodes AtPut ("Добавить работу") &Processor_AddJobCode
-	self.processorCodes AtPut ("Добавить стадию") &Processor_AddJobStageCode
-	self.processorCodes AtPut ("Заблокировать стадию") &Processor_BlockStageCode
-	self.processorCodes AtPut ("Разблокировать стадию") &Processor_UnBlockStageCode
-	self.processorCodes AtPut ("Заблокировать ожидаемое сообщение") &Processor_BlockMessageSlotCode
-	self.processorCodes AtPut ("Разблокировать ожидаемое сообщение") &Processor_UnBlockMessageSlotCode
-	self.processorCodes AtPut ("Удалить стадию") &Processor_RemoveJobStageCode
-	self.processorCodes AtPut ("Очистить стадии") &Processor_RemoveAllJobStagesCode
-	self.processorCodes AtPut ("Очистить ожидаемые сообщения") &Processor_RemoveAllMessageSlotsCode
-	self.processorCodes AtPut ("Очистить стадии и ожидаемые сообщения") &Processor_RemoveAllJobStagesAndMessageSlotsCode
-	self.processorCodes AtPut ("Добавить ожидаемое сообщение") &Processor_AddMessageSlotCode
-	self.processorCodes AtPut ("Удалить ожидаемое сообщение") &Processor_RemoveMessageSlotCode
-	self.processorCodes AtPut ("Установить стадии ожидаемое сообщение") &Processor_AttachToStageMessageSlotCode
-	self.processorCodes AtPut ("Удалить сообщения текущей стадии для текущей стадии") &Processor_RemoveAllMessagesOfCurrentStageForCurrentStageCode 
-	self.processorCodes AtPut ("Удалить сообщения текущей стадии") &Processor_RemoveAllMessagesOfCurrentStageForAllStagesCode
-	self.processorCodes AtPut ("Удалить сообщения всех разблокированных стадий") &Processor_RemoveAllMessagesOfOpenedStagesCode
-	self.processorCodes AtPut ("Удалить полученное сообщение") &Processor_RemoveMessageInSlotCode
-	self.processorCodes AtPut ("Удалить полученные сообщения") &Processor_RemoveAllReceivedMessagesCode
-	self.processorCodes AtPut ("Завершить текущую работу") &Processor_FinishThisJobCode
+	self.processorCodes AtPut ("Выполнить") &Processor_CodeDo
+	self.processorCodes AtPut ("Сущность поля сообщения") &Processor_CodeEntityFromMessageField
+	self.processorCodes AtPut ("Идентификатор поля") &Processor_CodeUIDFromField
+	self.processorCodes AtPut ("Текущий объект") &Processor_CodeAddCurrentUIDToStack
+	self.processorCodes AtPut ("Текущая работа") &Processor_CodeAddCurrentJobToStack
+	self.processorCodes AtPut ("Текущая стадия") &Processor_CodeAddCurrentJobStageToStack
+	self.processorCodes AtPut ("Список") &Processor_CodeAddListToStack
+	self.processorCodes AtPut ("Отображение") &Processor_CodeAddListMapToStack
+	self.processorCodes AtPut ("Удалить вершину") &Processor_CodeRemoveFromStack
+	self.processorCodes AtPut ("Добавить сущность в отображение") &Processor_CodeAddEntityToListMap
+	self.processorCodes AtPut ("Удалить сущность из отображения по ключу") &Processor_CodeRemoveEntityFromListMapByKey
+	self.processorCodes AtPut ("Удалить сущность из отображения по значению") &Processor_CodeRemoveEntityFromListMapByValue
+	self.processorCodes AtPut ("Добавить сущность в список") &Processor_CodeAddEntityToList
+	self.processorCodes AtPut ("Удалить сущность из списка на позиции") &Processor_CodeRemoveEntityFromListByPosition
+	self.processorCodes AtPut ("Удалить сущность из списка по значению") &Processor_CodeRemoveEntityFromListByValue
+	self.processorCodes AtPut ("Добавить сущность в вершину") &Processor_CodeAddEntityToStack
+	self.processorCodes AtPut ("Дублировать вершину") &Processor_CodeDuplicateTopInStack
+	self.processorCodes AtPut ("Поменять местами вершинные элементы") &Processor_CodeSwapTopInStack
+	self.processorCodes AtPut ("Послать сообщение объекту с идентификатором") &Processor_CodeSendMessageToUID
+	self.processorCodes AtPut ("Послать сообщение объекту из поля") &Processor_CodeSendMessageToField
+	self.processorCodes AtPut ("Послать сообщение объекту из поля сообщения") &Processor_CodeSendMessageToMessageField
+	self.processorCodes AtPut ("Послать ответ на сообщение") &Processor_CodeSendReplyForMessage
+	self.processorCodes AtPut ("Вызвать метод с параметрами") &Processor_CodeInvokeMethod
+	self.processorCodes AtPut ("Определить метод") &Processor_CodeDefineMethod
+	self.processorCodes AtPut ("Удалить метод с именем") &Processor_CodeUnDefineMethod
+	self.processorCodes AtPut ("Установить ТВА") &Processor_CodeDefineLocalField
+	self.processorCodes AtPut ("Установить поле работы") &Processor_CodeDefineJobField
+	self.processorCodes AtPut ("Установить поле объекта") &Processor_CodeDefineObjectField
+	self.processorCodes AtPut ("Установить глобальное поле") &Processor_CodeDefineGlobalField
+	self.processorCodes AtPut ("Присвоить полю идентификатор") &Processor_CodeSetField
+	self.processorCodes AtPut ("Перемежить поле прибытия с полем отправления") &Processor_CodeUniteField
+	self.processorCodes AtPut ("Удалить поле") &Processor_CodeUnDefineField
+	self.processorCodes AtPut ("Добавить работу") &Processor_CodeAddJob
+	self.processorCodes AtPut ("Добавить стадию") &Processor_CodeAddJobStage
+	self.processorCodes AtPut ("Заблокировать стадию") &Processor_CodeBlockStage
+	self.processorCodes AtPut ("Разблокировать стадию") &Processor_CodeUnBlockStage
+	self.processorCodes AtPut ("Заблокировать ожидаемое сообщение") &Processor_CodeBlockMessageSlot
+	self.processorCodes AtPut ("Разблокировать ожидаемое сообщение") &Processor_CodeUnBlockMessageSlot
+	self.processorCodes AtPut ("Удалить стадию") &Processor_CodeRemoveJobStage
+	self.processorCodes AtPut ("Очистить стадии") &Processor_CodeRemoveAllStages
+	self.processorCodes AtPut ("Очистить ожидаемые сообщения") &Processor_CodeRemoveAllMessageSlots
+	self.processorCodes AtPut ("Очистить стадии и ожидаемые сообщения") &Processor_CodeRemoveAllStagesAndMessageSlots
+	self.processorCodes AtPut ("Добавить ожидаемое сообщение") &Processor_CodeAddMessageSlot
+	self.processorCodes AtPut ("Удалить ожидаемое сообщение") &Processor_CodeRemoveMessageSlot
+	self.processorCodes AtPut ("Установить стадии ожидаемое сообщение") &Processor_CodeAttachToStageMessageSlot
+	self.processorCodes AtPut ("Удалить сообщения текущей стадии для текущей стадии") &Processor_CodeRemoveAllMessagesOfCurrentStageForCurrentStage
+	self.processorCodes AtPut ("Удалить сообщения текущей стадии") &Processor_CodeRemoveAllMessagesOfCurrentStageForAllStages
+	self.processorCodes AtPut ("Удалить сообщения всех разблокированных стадий") &Processor_CodeRemoveAllMessagesOfAllOpenedStages
+	self.processorCodes AtPut ("Удалить полученное сообщение") &Processor_CodeRemoveMessageInMessageSlot
+	self.processorCodes AtPut ("Удалить полученные сообщения") &Processor_CodeRemoveAllReceivedMessages
+	self.processorCodes AtPut ("Завершить текущую работу") &Processor_CodeFinishThisJob
 	return self
 
 Processor Do <ListMap> toDo
@@ -103,62 +103,76 @@ Processor <Object> GetNamedEntityFromToDoOrStack <List> entityName <ListMap> toD
 		object = self.helperStack Pop
 	return object
 	
-Processor DoCode <ListMap> toDo
+
+// ============================================
+// Обработчики кодов ВМ
+
+Processor CodeDo <ListMap> toDo
 	action = self GetNamedEntityFromToDoOrStack ("Действие") toDo
 	self Do action
 	return self
 
-Processor EntityFromMessageFieldCode <ListMap> toDo
+Processor CodeEntityFromMessageField <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
-	self.helperStack Push ((self ContextJob) JobFieldInMessageSlot fieldName messageSlotName)
+	self.helperStack Push (self EntityFromMessageField fieldName messageSlotName)
 	return self
 
-Processor UIDFromFieldCode <ListMap> toDo
+
+Processor CodeUIDFromField <ListMap> toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
 	self.helperStack Push (self FieldNameToUID fieldName)
 	return self
 
-Processor AddCurrentUIDToStackCode <ListMap> toDo
+
+Processor CodeAddCurrentUIDToStack <ListMap> toDo
 	self.helperStack Push self.contextUID
 	return self
 
-Processor AddCurrentJobToStackCode <ListMap> toDo
+
+Processor CodeAddCurrentJobToStack <ListMap> toDo
 	self.helperStack Push self.contextJobName
 	return self
 
-Processor AddCurrentJobStageToStackCode <ListMap> toDo
+
+Processor CodeAddCurrentJobStageToStack <ListMap> toDo
 	self.helperStack Push self.contextJobStageName
 	return self
 
-Processor AddListToStackCode <ListMap> toDo
+
+Processor CodeAddListToStack <ListMap> toDo
 	list = <List>
 	self.helperStack Push list
 	list Release
 	return self
 
-Processor AddListMapToStackCode <ListMap> toDo
+
+Processor CodeAddListMapToStack <ListMap> toDo
 	listMap = <ListMap>
 	self.helperStack Push listMap
 	listMap Release
 	return self
 
-Processor RemoveFromStackCode <ListMap> toDo
+
+Processor CodeRemoveFromStack <ListMap> toDo
 	self.helperStack Remove
 	return self
 
-Processor AddEntityToListMapCode <ListMap> toDo
+
+Processor CodeAddEntityToListMap <ListMap> toDo
 	value = self GetNamedEntityFromToDoOrStack ("Значение") toDo
 	key = self GetNamedEntityFromToDoOrStack ("Ключ") toDo
 	((self.helperStack Peek) AsListMap) AtPut key value
 	return self
 
-Processor RemoveEntityFromListMapByKeyCode <ListMap> toDo
+
+Processor CodeRemoveEntityFromListMapByKey <ListMap> toDo
 	key = self GetNamedEntityFromToDoOrStack ("Ключ") toDo
 	((self.helperStack Peek) AsListMap) RemoveKey key
 	return self
 
-Processor RemoveEntityFromListMapByValueCode <ListMap> toDo
+
+Processor CodeRemoveEntityFromListMapByValue <ListMap> toDo
 	value = self GetNamedEntityFromToDoOrStack ("Значение") toDo
 	iterator = ((self.helperStack Peek) AsListMap) First
 	while iterator NotThisEnd
@@ -167,7 +181,8 @@ Processor RemoveEntityFromListMapByValueCode <ListMap> toDo
 			break
 	return self
 
-Processor AddEntityToListCode <ListMap> toDo
+
+Processor CodeAddEntityToList <ListMap> toDo
 	value = self GetNamedEntityFromToDoOrStack ("Значение") toDo
 	position = toDo NumberAt ("Позиция")
 	if position == nil
@@ -176,33 +191,39 @@ Processor AddEntityToListCode <ListMap> toDo
 		((self.helperStack Peek) AsList) InsertAtPositionObject position value
 	return self
 
-Processor RemoveEntityFromListByPositionCode <ListMap> toDo
+
+Processor CodeRemoveEntityFromListByPosition <ListMap> toDo
 	position = self GetNamedEntityFromToDoOrStack ("Позиция") toDo
 	if position != nil
 		((self.helperStack Peek) AsList) RemoveAt position
 	return self
 
-Processor RemoveEntityFromListByValueCode <ListMap> toDo
+
+Processor CodeRemoveEntityFromListByValue <ListMap> toDo
 	value = self GetNamedEntityFromToDoOrStack ("Значение") toDo
 	((self.helperStack Peek) AsList) RemoveFirst value
 	return self
 
-Processor AddEntityToStackCode <ListMap> toDo
+
+Processor CodeAddEntityToStack <ListMap> toDo
 	self.helperStack Push ((toDo ObjectAt ("Значение")) TempClone)
 	return self
 
-Processor DuplicateTopInStackCode <ListMap> toDo
+
+Processor CodeDuplicateTopInStack <ListMap> toDo
 	self.helperStack Push ((self.helperStack Peek) TempClone)
 	return self
 
-Processor SwapTopInStackCode <ListMap> toDo
+
+Processor CodeSwapTopInStack <ListMap> toDo
 	a = self.helperStack Pop
 	b = self.helperStack Pop
 	self.helperStack Push a
 	self.helperStack Push b
 	return self
 
-Processor SendMessageToUIDCode <ListMap> toDo
+
+Processor CodeSendMessageToUID <ListMap> toDo
 	receiver = self GetNamedEntityFromToDoOrStack ("Получатель") toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	message MessageSetSender self.contextUID
@@ -210,7 +231,8 @@ Processor SendMessageToUIDCode <ListMap> toDo
 	self SendMessage message
 	return self
 
-Processor SendMessageToFieldCode <ListMap> toDo
+
+Processor CodeSendMessageToField <ListMap> toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
 	receiver = self FieldNameToUID fieldName
@@ -219,80 +241,207 @@ Processor SendMessageToFieldCode <ListMap> toDo
 	self SendMessage message
 	return self
 
-Processor SendMessageToMessageFieldCode <ListMap> toDo
+
+Processor CodeSendMessageToMessageField <ListMap> toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	fieldName = (self GetNamedEntityFromToDoOrStack ("Имя поля") toDo) AsList
 	messageSlotName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsList
-	receiver = (((self ContextJob) JobMessageInMessageSlot messageSlotName) At fieldName)
-	message MessageSetSender self.contextUID
-	message MessageSetReceiver receiver
-	self SendMessage message
+	self SendMessageToMessageField message messageSlotName fieldName
 	return self
 
-Processor SendReplyForMessageCode <ListMap> toDo
+
+Processor CodeSendReplyForMessage <ListMap> toDo
 	reply = (self GetNamedEntityFromToDoOrStack ("Ответ") toDo) AsListMap
 	messageName = (self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo) AsList
-	message = (self ContextJob) JobMessageInMessageSlot messageName
-	receiver = message MessageSender
-	reqest = message MessageRequest
-	reply = reply TempDeepClone
-	reply MessageSetSender self.contextUID
-	reply MessageSetReceiver receiver
-	reply MessageSetRequest reqest
-	reply MessageSetType ("Ответ")
-	self SendMessage reply
+	self SendReplyForMessage reply messageName
 	return self
 
-Processor InvokeMethodCode <ListMap> toDo
+
+Processor CodeInvokeMethod <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
 	parameters = self GetNamedEntityFromToDoOrStack ("Параметры") toDo
 	self InvokeMethodWithParameters methodName parameters
 	return self
 
-Processor DefineMethodCode <ListMap> toDo
+
+Processor CodeDefineMethod <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
 	method = self GetNamedEntityFromToDoOrStack ("Метод") toDo
-	(self ContextObject) ObjectSetMethod method methodName
+	self DefineMethod method methodName
 	return self
 
-Processor UnDefineMethodCode <ListMap> toDo
-	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
-	(self ContextObject) ObjectRemoveMethod methodName
+Processor CodeUnDefineMethod <ListMap> toDo
+	self UnDefineMethod (self GetNamedEntityFromToDoOrStack ("Имя метода") toDo)
 	return self
 
-Processor DefineLocalFieldCode <ListMap> toDo
+
+Processor CodeDefineLocalField <ListMap> toDo
 	return self DefineFieldHelper toDo ((self.localNamespaces Peek) AsListMap)
 
-Processor DefineJobFieldCode <ListMap> toDo
+
+Processor CodeDefineJobField <ListMap> toDo
 	return self DefineFieldHelper toDo ((self ContextJob) JobFields)
 
-Processor DefineObjectFieldCode <ListMap> toDo
+
+Processor CodeDefineObjectField <ListMap> toDo
 	return self DefineFieldHelper toDo ((self ContextObject) ObjectFields)
 
-Processor DefineGlobalFieldCode <ListMap> toDo
+
+Processor CodeDefineGlobalField <ListMap> toDo
 	return self DefineFieldHelper toDo self.machine.globalContext
+
 
 Processor DefineFieldHelper <ListMap> toDo <ListMap> nameSpace
 	uid = self GetNamedEntityFromToDoOrStack ("Идентификатор") toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
-	self.machine DefineFieldHelper uid fieldName nameSpace
+	self DefineFieldInNameSpaceWithUID fieldName nameSpace uid
 	return self
 
-Processor SetFieldCode <ListMap> toDo
+
+Processor CodeSetField <ListMap> toDo
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
 	uid = self GetNamedEntityFromToDoOrStack ("Идентификатор") toDo
+	self SetField fieldName uid
+	return self
+
+Processor CodeUniteField <ListMap> toDo
+	destinationFieldName = self GetNamedEntityFromToDoOrStack ("Имя поля прибытия") toDo
+	sourceFieldName = self GetNamedEntityFromToDoOrStack ("Имя поля отправления") toDo
+	self UniteField destinationFieldName sourceFieldName
+	return self
+
+Processor CodeUnDefineField <ListMap> toDo
+	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
+	locationType = toDo ListAt ("Пространство имен")
+	self UnDefineFieldInNamespace fieldName locationType
+	return self
+
+
+Processor CodeAddJob <ListMap> toDo
+	jobName = self GetNamedEntityFromToDoOrStack ("Имя работы") toDo
+	job = self GetNamedEntityFromToDoOrStack ("Работа") toDo
+	self AddJobWithName job jobName
+	return self
+
+Processor CodeFinishThisJob <ListMap> toDo
+	self FinishThisJob
+	return self
+
+
+Processor CodeAddJobStage <ListMap> toDo
+	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	jobStage = self GetNamedEntityFromToDoOrStack ("Стадия") toDo
+	self AddJobStage jobStage jobStageName
+	return self
+	
+Processor CodeAddMessageSlot <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	messageSlot = self GetNamedEntityFromToDoOrStack ("Сообщение") toDo
+	self AddMessageSlot messageSlot messageSlotName
+	return self
+	
+Processor CodeBlockStage <ListMap> toDo
+	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	self BlockStage stageName
+	return self
+	
+Processor CodeUnBlockStage <ListMap> toDo
+	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	self UnBlockStage stageName
+	return self
+
+Processor CodeBlockMessageSlot <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	self BlockMessageSlot messageSlotName
+	return self
+
+
+Processor CodeUnBlockMessageSlot <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	self UnBlockMessageSlot messageSlotName
+	return self
+	
+
+Processor CodeRemoveJobStage <ListMap> toDo
+	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	self RemoveJobStage jobStageName
+	return self
+
+
+Processor CodeRemoveMessageSlot <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	self RemoveMessageSlot messageSlotName
+	return self
+
+Processor CodeRemoveMessageInMessageSlot <ListMap> toDo
+	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	self RemoveMessageInMessageSlot messageSlotName
+	return self
+
+Processor CodeRemoveAllMessagesOfCurrentStageForCurrentStage <ListMap> toDo
+	self RemoveAllMessagesOfCurrentStageForCurrentStage
+	return self
+
+Processor CodeRemoveAllMessagesOfCurrentStageForAllStages <ListMap> toDo
+	self RemoveAllMessagesOfCurrentStageForAllStages
+	return self
+
+Processor CodeRemoveAllMessagesOfAllOpenedStages <ListMap> toDo
+	self RemoveAllMessagesOfAllOpenedStages
+	return self
+
+Processor CodeRemoveAllReceivedMessages <ListMap> toDo
+	self RemoveAllReceivedMessages
+	return self
+
+Processor CodeRemoveAllStages <ListMap> toDo
+	self RemoveAllStages
+	return self
+
+Processor CodeRemoveAllMessageSlots <ListMap> toDo
+	self RemoveAllMessageSlots
+	return self
+
+Processor CodeRemoveAllStagesAndMessageSlots <ListMap> toDo
+	self RemoveAllStagesAndMessageSlots
+	return self
+
+Processor CodeAttachToStageMessageSlot <ListMap> toDo
+	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
+	messageName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
+	self AttachToStageMessageSlot stageName messageName
+	return self
+
+
+
+// ============================================
+// Управление методами
+
+Processor DefineMethod <ListMap> method <List> methodName
+	(self ContextObject) ObjectSetMethod method methodName
+	return self
+
+Processor UnDefineMethod <List> methodName
+	(self ContextObject) ObjectRemoveMethod methodName
+	return self
+
+
+// ============================================
+// Управление полями
+
+Processor DefineFieldInNameSpaceWithUID <List> fieldName <ListMap> nameSpace <List> uid
+	self.machine DefineFieldHelper uid fieldName nameSpace
+	return self	
+
+Processor SetField <List> fieldName <List> uid
 	(self FieldNameToSynonim fieldName) SetUID uid
 	return self
 
-Processor UniteFieldCode <ListMap> toDo
-	destinationFieldName = self GetNamedEntityFromToDoOrStack ("Имя поля прибытия") toDo
-	sourceFieldName = self GetNamedEntityFromToDoOrStack ("Имя поля отправления") toDo
+Processor UniteField <List> destinationFieldName <List> sourceFieldName
 	(self FieldNameToSynonim destinationFieldName) Unite (self FieldNameToSynonim sourceFieldName)
 	return self
-
-Processor UnDefineFieldCode <ListMap> toDo
-	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
-	locationType = toDo ListAt ("Пространство имен")
+	
+Processor UnDefineFieldInNamespace <List> fieldName <List> locationType
 	if locationType == nil
 		locationType = self FieldNameToNamespaceName fieldName
 	place = <ListMap>
@@ -303,64 +452,160 @@ Processor UnDefineFieldCode <ListMap> toDo
 	place Release
 	return self
 
-Processor AddJobCode <ListMap> toDo
-	jobName = self GetNamedEntityFromToDoOrStack ("Имя работы") toDo
-	job = self GetNamedEntityFromToDoOrStack ("Работа") toDo
+
+// ============================================
+// Управление работами
+
+Processor AddJobWithName <ListMap> job <List> jobName
 	(self ContextObject) ObjectSetJob job jobName
 	return self
 
-Processor AddJobStageCode <ListMap> toDo
-	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	jobStage = self GetNamedEntityFromToDoOrStack ("Стадия") toDo
-	(self ContextJob) JobSetStage jobStage jobStageName
+Processor FinishThisJob
+	((self ContextObject) ObjectRemoveJob (self.contextJobName)
+	return self	
+
+
+// ============================================
+// Управление стадиями
+
+Processor AddJobStage <List> jobStage <List> jobStageName
+	self AddJobStageInJob jobStage jobStageName self.contextJobName
 	return self
 
-Processor AddMessageSlotCode <ListMap> toDo
-	messageName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	message = self GetNamedEntityFromToDoOrStack ("Сообщение") toDo
-	(self ContextJob) JobSetMessageSlot message messageName
+Processor BlockStage <List> stageName
+	self BlockStageInJob stageName self.contextJobName
 	return self
-	
-Processor BlockStageCode <ListMap> toDo
-	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	((self ContextJob) JobStage stageName) StageSetBlocked
+
+Processor UnBlockStage <List> stageName
+	self UnBlockStageInJob stageName self.contextJobName
 	return self
-	
-Processor UnBlockStageCode <ListMap> toDo
-	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	stage = ((self ContextJob) JobStage stageName)
+
+Processor RemoveJobStage <List> jobStageName
+	self RemoveJobStageInJob jobStageName self.contextJobName
+	return self
+
+Processor RemoveAllStages
+	self RemoveAllStagesInJob self.contextJobName
+	return self
+
+
+// ============================================
+// Управление ожидаемыми сообщениями
+
+Processor AddMessageSlot <List> messageSlot <List> messageSlotName
+	self AddMessageSlotInJob messageSlot messageSlotName self.contextJobName
+	return self
+
+Processor BlockMessageSlot <List> messageSlotName
+	self BlockMessageSlotInJob messageSlotName self.contextJobName
+	return self
+
+Processor UnBlockMessageSlot <List> messageSlotName
+	self UnBlockMessageSlotInJob messageSlotName self.contextJobName
+	return self
+
+Processor RemoveMessageSlot <List> messageSlotName
+	self RemoveMessageSlotInJob messageSlotName self.contextJobName
+	return self
+
+Processor RemoveAllMessageSlots
+	self RemoveAllMessageSlotsInJob self.contextJobName
+	return self
+
+
+// ============================================
+// Управление стадиями и ожидаемыми сообщениями
+
+Processor AttachToStageMessageSlot <List> stageName <List> messageName
+	self AttachToStageMessageSlotInJob stageName messageName self.contextJobName
+	return self
+
+Processor RemoveAllStagesAndMessageSlots
+	self RemoveAllStagesAndMessageSlotsInJob self.contextJobName
+	return self
+
+
+// ============================================
+// Управление полученными сообщениями
+
+Processor RemoveMessageInMessageSlot <List> messageSlotName
+	self RemoveMessageInMessageSlotInJob messageSlotName self.contextJobName
+	return self
+
+Processor RemoveAllMessagesOfCurrentStageForCurrentStage
+	self RemoveAllMessagesOfCurrentStageForAllStagesInJob self.contextJobName
+	return self
+
+Processor RemoveAllMessagesOfCurrentStageForAllStages
+	self RemoveAllMessagesOfCurrentStageForAllStagesInJob self.contextJobName
+	return self
+
+Processor RemoveAllMessagesOfAllOpenedStages
+	self RemoveAllMessagesOfAllOpenedStagesInJob self.contextJobName
+	return self
+
+Processor RemoveAllReceivedMessages
+	self RemoveAllReceivedMessagesInJob self.contextJobName
+	return self
+
+
+// ============================================
+// Управление стадиями в произвольной работе
+
+Processor AddJobStageInJob <List> jobStage <List> jobStageName <List> jobName
+	((self ContextObject) ObjectJob jobName) JobSetStage jobStage jobStageName
+	return self
+
+Processor BlockStageInJob <List> stageName <List> jobName
+	(((self ContextObject) ObjectJob jobName) JobStage stageName) StageSetBlocked
+	return self
+
+Processor UnBlockStageInJob <List> stageName <List> jobName
+	stage = (((self ContextObject) ObjectJob jobName) JobStage stageName)
 	if (stage StageMessagesCounter) == 0
 		stage StageSetReady
 	else
 		stage StageSetWaiting
 	return self
 
-Processor BlockMessageSlotCode <ListMap> toDo
-	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	((self ContextJob) JobMessageSlot messageSlotName) MessageSlotBlock
-	return self
-
-Processor UnBlockMessageSlotCode <ListMap> toDo
-	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	((self ContextJob) JobMessageSlot messageSlotName) MessageSlotOpen
-	return self
-	
-
-Processor RemoveJobStageCode <ListMap> toDo
-	jobStageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	iterator = (self ContextJob) JobMessageSlotsIterator
+Processor RemoveJobStageInJob <List> jobStageName <List> jobName
+	iterator = ((self ContextObject) ObjectJob jobName) JobMessageSlotsIterator
 	while iterator NotThisEnd
 		messageSlot = (iterator Data) AsListMap
 		stages = messageSlot MessageSlotStages
 		stages RemoveFirst jobStageName
 		iterator ++
-	(self ContextJob) JobRemoveStage jobStageName
+	((self ContextObject) ObjectJob jobName) JobRemoveStage jobStageName
 	return self
 
-Processor RemoveMessageSlotCode <ListMap> toDo
-	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	if ((self ContextJob) JobMessageInMessageSlot messageSlotName) != nil
-		stagesIterator = (self ContextJob) JobStagesIterator
+Processor RemoveAllStagesInJob <List> jobName
+	((self ContextObject) ObjectJob jobName) JobRemoveAllStages
+	messageSlotsIterator = ((self ContextObject) ObjectJob jobName) JobMessageSlotsIterator
+	while messageSlotsIterator NotThisEnd
+		messageSlot = messageSlotsIterator ListMapData
+		(messageSlot MessageSlotStages) RemoveAll
+		messageSlotsIterator ++
+	return self
+
+
+// ============================================
+// Управление ожидаемыми сообщениями в произвольной работе
+
+Processor AddMessageSlotInJob <List> messageSlot <List> messageSlotName <List> jobName
+	((self ContextObject) ObjectJob jobName) JobSetMessageSlot messageSlot messageSlotName
+	return self
+
+Processor BlockMessageSlotInJob <List> messageSlotName <List> jobName
+	(((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName) MessageSlotBlock
+	return self
+
+Processor UnBlockMessageSlotInJob <List> messageSlotName <List> jobName
+	(((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName) MessageSlotOpen
+	return self
+
+Processor RemoveMessageSlotInJob <List> messageSlotName <List> jobName
+	if (((self ContextObject) ObjectJob jobName) JobMessageInMessageSlot messageSlotName) != nil
+		stagesIterator = ((self ContextObject) ObjectJob jobName) JobStagesIterator
 		while stagesIterator NotThisEnd
 			stage = stagesIterator ListMapData
 			if (stage StageMessageSlots) RemoveFirstWithConfirmation messageSlotName
@@ -369,63 +614,98 @@ Processor RemoveMessageSlotCode <ListMap> toDo
 					stage StageSetReady
 			stagesIterator ++
 	else
-		stagesIterator = (self ContextJob) JobStagesIterator
+		stagesIterator = ((self ContextObject) ObjectJob jobName) JobStagesIterator
 		while stagesIterator NotThisEnd
 			stage = stagesIterator ListMapData
 			(stage StageMessageSlots) RemoveFirst messageSlotName
 			stagesIterator ++
-	(self ContextJob) JobRemoveMessageSlot messageSlotName
+	((self ContextObject) ObjectJob jobName) JobRemoveMessageSlot messageSlotName
 	return self
 
-Processor RemoveMessageInSlotCode <ListMap> toDo
-	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	messageSlot = (self ContextJob) JobMessageSlot messageSlotName
+Processor RemoveAllMessageSlotsInJob <List> jobName
+	((self ContextObject) ObjectJob jobName) JobRemoveAllMessageSlots
+	jobStagesIterator = ((self ContextObject) ObjectJob jobName) JobStagesIterator
+	while jobStagesIterator NotThisEnd
+		jobStage = (jobStagesIterator Data) AsListMap
+		(jobStage StageMessageSlots) RemoveAll
+		(jobStage StageSetMessagesCounter 0)
+		jobStage StageSetBlocked
+		jobStagesIterator ++
+	return self
+
+
+// ============================================
+// Управление стадиями и ожидаемыми сообщениями в произвольной работе
+
+Processor AttachToStageMessageSlotInJob <List> stageName <List> messageName <List> jobName
+	stage = ((self ContextObject) ObjectJob jobName) JobStage stageName
+	stagesInMessageSlot = (((self ContextObject) ObjectJob jobName) JobMessageSlot messageName) MessageSlotStages
+	if stagesInMessageSlot NotContains stageName
+		messageSlotsInStage = stage StageMessageSlots
+		stagesInMessageSlot Append stageName
+		messageSlotsInStage Append messageName
+		stage StageIncrementMessagesCounter
+		if stage StageIsReady
+			stage StageSetWaiting
+	return self
+
+Processor RemoveAllStagesAndMessageSlotsInJob <List> jobName
+	((self ContextObject) ObjectJob jobName) JobRemoveAllStages
+	((self ContextObject) ObjectJob jobName) JobRemoveAllMessageSlots
+	return self
+
+
+// ============================================
+// Управление полученными сообщениями в произвольной работе
+
+Processor RemoveMessageInMessageSlotInJob <List> messageSlotName <List> jobName
+	messageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName
 	if (messageSlot MessageSlotMessage) != nil
-		messageSlot MessageSlotRemoveMessage nil
-		stagesIterator = messageSlot MessageSlotStagesIterator
-		while stagesIterator NotThisEnd
-			stage = (self ContextJob) JobStage (stagesIterator ListData)
-			stage StageDecrementMessagesCounter
-			if stage StageIsReady
-				stage StageSetWaiting
-			stagesIterator ++
+	messageSlot MessageSlotRemoveMessage nil
+	stagesIterator = messageSlot MessageSlotStagesIterator
+	while stagesIterator NotThisEnd
+		stage = ((self ContextObject) ObjectJob jobName) JobStage (stagesIterator ListData)
+		stage StageDecrementMessagesCounter
+		if stage StageIsReady
+			stage StageSetWaiting
+		stagesIterator ++
 	return self
 
-Processor RemoveAllMessagesOfCurrentStageForCurrentStageCode <ListMap> toDo
+Processor RemoveAllMessagesOfCurrentStageForCurrentStageInJob <List> jobName
 	messageSlotsIterator = (self ContextJobStage) StageMessageSlotsIterator
 	while messageSlotsIterator NotThisEnd
 		messageSlotName = messageSlotsIterator ListData
-		messageSlot = (self ContextJob) JobMessageSlot messageSlotName
+		messageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName
 		messageSlot MessageSlotRemoveMessage nil
 		messageSlotsIterator ++
 	return self
 
-Processor RemoveAllMessagesOfCurrentStageForAllStagesCode <ListMap> toDo
+Processor RemoveAllMessagesOfCurrentStageForAllStagesInJob <List> jobName
 	messageSlotsIterator = (self ContextJobStage) StageMessageSlotsIterator
 	while messageSlotsIterator NotThisEnd
 		messageSlotName = messageSlotsIterator ListData
-		messageSlot = (self ContextJob) JobMessageSlot messageSlotName
+		messageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName
 		message = messageSlot MessageSlotMessage
 		messageMessageSlotsIterator = (message MessageAttributesMessageSlots) First
 		while messageMessageSlotsIterator NotThisEnd
-			messageMessageSlot = (self ContextJob) JobMessageSlot (messageMessageSlotsIterator ListData) 
-			messageMessageSlot MessageSlotRemoveMessage message 
+			messageMessageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot (messageMessageSlotsIterator ListData)
+			messageMessageSlot MessageSlotRemoveMessage message
 			messageMessageSlotsIterator ++
 		messageSlotsIterator ++
 	return self
 
-Processor RemoveAllMessagesOfOpenedStagesCode <ListMap> toDo
+Processor RemoveAllMessagesOfAllOpenedStagesInJob <List> jobName
 	messageSlotsIterator = (self ContextJobStage) StageMessageSlotsIterator
 	while messageSlotsIterator NotThisEnd
-		messageSlot = (self ContextJob) JobMessageSlot (messageSlotsIterator ListData)
+		messageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot (messageSlotsIterator ListData)
 		if messageSlot MessageSlotIsOpened
 			messageSlot MessageSlotRemoveAllMessages
 		messageSlotsIterator ++
 	return self
 
-Processor RemoveAllReceivedMessagesCode <ListMap> toDo
-	messageSlotsIterator = (self ContextJob) JobMessageSlotsIterator
-	stagesIterator = (self ContextJob) JobStagesIterator
+Processor RemoveAllReceivedMessagesInJob <List> jobName
+	messageSlotsIterator = ((self ContextObject) ObjectJob jobName) JobMessageSlotsIterator
+	stagesIterator = ((self ContextObject) ObjectJob jobName) JobStagesIterator
 	while stagesIterator NotThisEnd
 		stage = stagesIterator ListMapData
 		stage StageSetMessagesCounter ((stage StageMessageSlots) Size)
@@ -436,60 +716,11 @@ Processor RemoveAllReceivedMessagesCode <ListMap> toDo
 		messageSlotsIterator ++
 	return self
 
-Processor RemoveAllJobStagesCode <ListMap> toDo
-	(self ContextJob) JobRemoveAllStages
-	messageSlotsIterator = (self ContextJob) JobMessageSlotsIterator
-	while messageSlotsIterator NotThisEnd
-		messageSlot = messageSlotsIterator ListMapData
-		(messageSlot MessageSlotStages) RemoveAll
-		messageSlotsIterator ++
-	return self
-
-Processor RemoveAllMessageSlotsCode <ListMap> toDo
-	(self ContextJob) JobRemoveAllMessageSlots
-	jobStagesIterator = (self ContextJob) JobStagesIterator
-	while jobStagesIterator NotThisEnd
-		jobStage = (jobStagesIterator Data) AsListMap
-		(jobStage StageMessageSlots) RemoveAll
-		(jobStage StageSetMessagesCounter 0)
-		jobStage StageSetBlocked
-		jobStagesIterator ++
-	return self
-
-Processor RemoveAllJobStagesAndMessageSlotsCode <ListMap> toDo
-	(self ContextJob) JobRemoveAllStages
-	(self ContextJob) JobRemoveAllMessageSlots
-	return self
-
-Processor AttachToStageMessageSlotCode <ListMap> toDo
-	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
-	messageName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
-	self AttachToStageMessageSlot stageName messageName
-	return self
-
-Processor FinishThisJobCode <ListMap> toDo
-	((self ContextObject) ObjectRemoveJob (self.contextJobName)
-	return self
 
 
 
-
-
-
-
-
-Processor AttachToStageMessageSlot <List> stageName <List> messageName
-	stage = (self ContextJob) JobStage stageName
-	stagesInMessageSlot = ((self ContextJob) JobMessageSlot messageName) MessageSlotStages
-	if stagesInMessageSlot NotContains stageName
-		messageSlotsInStage = stage StageMessageSlots
-		stagesInMessageSlot Append stageName 
-		messageSlotsInStage Append messageName
-		stage StageIncrementMessagesCounter
-		if stage StageIsReady
-			stage StageSetWaiting
-	return self
-
+// ============================================
+// Всякая ерунда (не систематизировано)
 
 Processor <Object> EntityFromNamedMessageField <List> messageName <List> fieldName
 	return ((self ContextJob) JobMessageInMessageSlot messageName) ObjectAt fieldName
@@ -554,11 +785,23 @@ Processor <List> FieldNameToUID <List> fieldName
 	return (self FieldNameToSynonim fieldName) UID
 
 
+Processor <Object> EntityFromMessageField <List> fieldName <List> messageSlotName
+	return ((self ContextJob) JobFieldInMessageSlot fieldName messageSlotName)
+
+
 Processor SendMessage <ListMap> message
 	uid = message MessageReceiver
 	receiver = self.machine ObjectByUID uid
 	self ProcessMessageForObject message receiver
 	self.machine ScheduleUID uid
+	return self
+
+
+Processor SendMessageToMessageField <ListMap> message <List> messageSlotName <List> fieldName
+	receiver = (((self ContextJob) JobMessageInMessageSlot messageSlotName) At fieldName)
+	message MessageSetSender self.contextUID
+	message MessageSetReceiver receiver
+	self SendMessage message
 	return self
 
 
@@ -672,7 +915,9 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 // Далее происходит удаление обработанных на стадии сообщений из соответствующих слотов.
 
 // Что должно происходить при удалении сущности А из объекта на этапе выполнения метода?
-// 
+// Наиболее правильное решение состоит в том, чтобы поддерживать множество удаленных сущностей
+// и по завершению метода удалять эти сущности реально.
+
 
 
 Processor ProcessOneJobIfAny

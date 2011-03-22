@@ -77,6 +77,7 @@ Object ListMap_MessageSetReceiver(Object _self, Object _receiver);
 Object ListMap_MessageSetType(Object _self, Object _type);
 Object ListMap_MessageSetTypeReply(Object _self);
 Object ListMap_MessageSetTypeRequest(Object _self);
+Object ListMap_MessageSetTypeNotification(Object _self);
 Object ListMap_MessageSetRequest(Object _self, Object _reqest);
 Object ListMap_MessageSetReply(Object _self, Object _reply);
 Object ListMap_MessageSetReplySuccess(Object _self);
