@@ -25,6 +25,7 @@ ExternalEntitiesFactory <ListMap> CreateEmptyJob
 	toReturn AtPut "Поля" (self CreateEmptyListMap)
 	toReturn AtPut "Ожидаемые сообщения" (self CreateEmptyListMap)
 	toReturn AtPut "Стадии" (self CreateEmptyListMap)
+	toReturn AtPut "Методы" (self CreateEmptyListMap)
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateEmptyMethod

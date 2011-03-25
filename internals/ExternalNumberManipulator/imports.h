@@ -4,6 +4,7 @@
 #include "internals/Machine/interface.h"
 #include "internals/Stack/interface.h"
 #include "internals/Processor/interface.h"
+#include "internals/ProcessorCommandSystem/interface.h"
 #include "internals/Synonim/interface.h"
 #include "internals/Queue/interface.h"
 #include "internals/MachineScheduler/interface.h"

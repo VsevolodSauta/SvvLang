@@ -95,10 +95,10 @@ Machine Destroy
 	return self Destroy
 
 Machine Clone
-	return self
+	return self Retain
 
 Machine DeepClone
-	return self
+	return self Retain
 
 Machine <Comparation> Compare <Machine> machine
 	return equal

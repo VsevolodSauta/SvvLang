@@ -788,7 +788,14 @@ Object ListMap_JobRemoveStageAndMessageSlots(Object _self, Object _stageName)
 	{
 		Object _messageSlotName;
 		_messageSlotName = ListIterator_ListData(_stageMessageSlotsIterator);
-		ListMap_JobRemoveMessageSlot(_self, _messageSlotName);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(ListMap_MessageSlotStages(ListMap_JobMessageSlot(_self, _messageSlotName))), NumberFactory_FromLong(_numberFactory, 1)) == _equal)) != _false)
+		{
+			ListMap_JobRemoveMessageSlot(_self, _messageSlotName);
+		}
+		else
+		{
+			List_RemoveFirst(ListMap_MessageSlotStages(ListMap_JobMessageSlot(_self, _messageSlotName)), _stageName);
+		}
 		ListIterator_Next(_stageMessageSlotsIterator);
 	}
 	ListMap_Remove(ListMap_JobStages(_self), _stageName);

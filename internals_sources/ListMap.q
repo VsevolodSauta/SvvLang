@@ -174,7 +174,13 @@ ListMap DumpListToListMap (MessageDump)
 	return self
 
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// ВНИМАНИЕ! Эти методы должны использоваться только
+// процессором. Ни один другой объект не должен их
+// использовать.
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+// ==========================
 // Управление объектами
 
 ListMap ObjectMethods
@@ -279,6 +285,7 @@ ListMap <Object> ObjectProperty <List> propertyName
 	return (self ObjectProperties) At propertyName
 
 
+// ==========================
 // Управление работами
 
 ListMap JobStages
@@ -314,7 +321,10 @@ ListMap JobRemoveStageAndMessageSlots <List> stageName
 	stageMessageSlotsIterator = stage StageMessageSlotsIterator
 	while stageMessageSlotsIterator NotThisEnd
 		messageSlotName = stageMessageSlotsIterator ListData
-		self JobRemoveMessageSlot messageSlotName
+		if ((((self JobMessageSlot messageSlotName) MessageSlotStages) Size) == 1
+			self JobRemoveMessageSlot messageSlotName
+		else
+			((self JobMessageSlot messageSlotName) MessageSlotStages) RemoveFirst stageName
 		stageMessageSlotsIterator ++
 	(self JobStages) RemoveAt stageName
 	return self
@@ -368,6 +378,7 @@ ListMap JobCreateStageWithNameMethodMessageSlotNameAndEntity <List> stageName <L
 	return self
 
 
+// ==========================
 // Управление сообщениями
 
 ListMap <List> MessageSender
@@ -426,6 +437,7 @@ ListMap MessageAttributesMessageSlots
 	return ((self ListMapAt "Атрибуты") ListAt "Ожидаемые сообщения")
 
 
+// ==========================
 // Управление ожидаемыми сообщениями
 
 ListMap <List> MessageSlotStages
@@ -495,7 +507,7 @@ ListMap MessageSlotClose
 	self AtPut "Состояние" "Закрыто"
 	return self
 
-
+// ==========================
 // Управление стадиями
 
 ListMap <Logic> StageContainsMessageSlot <List> messageSlotName

@@ -85,6 +85,7 @@ Object ExternalEntitiesFactory_CreateEmptyJob(Object _self)
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Поля", 8), ExternalEntitiesFactory_CreateEmptyListMap(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37), ExternalEntitiesFactory_CreateEmptyListMap(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Стадии", 12), ExternalEntitiesFactory_CreateEmptyListMap(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Методы", 12), ExternalEntitiesFactory_CreateEmptyListMap(_self));
 	Object toReturn = _toReturn;
 	DPOPS ("ExternalEntitiesFactory: CreateEmptyJob ended.")
 	return toReturn;

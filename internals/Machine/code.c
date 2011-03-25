@@ -218,7 +218,7 @@ Object Machine_Clone(Object _self)
 {
 	DPUSHS ("Machine: Clone begined.")
 	ASSERT_C ( "Machine:Clone --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
-	Object toReturn = _self;
+	Object toReturn = Object_Retain(_self);
 	DPOPS ("Machine: Clone ended.")
 	return toReturn;
 }
@@ -227,7 +227,7 @@ Object Machine_DeepClone(Object _self)
 {
 	DPUSHS ("Machine: DeepClone begined.")
 	ASSERT_C ( "Machine:DeepClone --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
-	Object toReturn = _self;
+	Object toReturn = Object_Retain(_self);
 	DPOPS ("Machine: DeepClone ended.")
 	return toReturn;
 }

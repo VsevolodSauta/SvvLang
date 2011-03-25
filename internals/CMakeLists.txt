@@ -42,8 +42,9 @@ add_subdirectory(JSONParser)
 
 add_subdirectory(Synonim)
 
-add_subdirectory(MachineScheduler)
+add_subdirectory(ProcessorCommandSystem)
 add_subdirectory(Processor)
+add_subdirectory(MachineScheduler)
 add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
