@@ -1,4 +1,4 @@
-<Processor> <List> [Retain] contextUID <List> [Retain] contextJobName <ListMap> [Retain] contextJobStageName <Machine> machine <Stack> localNamespaces  <ProcessorCommandSystem> commandSystem <ListMap> contextMessages <ListMap> processorCodes
+<Processor> <List> [Retain] contextUID <List> [Retain] contextJobName <ListMap> [Retain] contextJobStageName <Machine> machine <Stack> localNamespaces  <ProcessorCommandSystem> commandSystem <ListMap> [Retain] contextMessages <ListMap> processorCodes
 
 Processor <Processor> Clone
 	return <Processor>
@@ -41,21 +41,54 @@ Processor Init
 // ============================================
 // Управление методами
 
-Processor DefineMethod <ListMap> method <List> methodName
+Processor DefineObjectMethod <ListMap> method <List> methodName
 	(self ContextObject) ObjectSetMethod method methodName
 	return self
 
+Processor DefineObjectMethodWithBody <List> methodBody <List> methodName
+	(self ContextObject) ObjectSetMethod (entitiesFactory CreateMethodWithBody methodBody) methodName
+	return self
+
 Processor UnDefineMethod <List> methodName
+	if ((self ContextJob) JobMethods) ContainsKey methodName
+		(self ContextJob) JobRemoveMethod methodName
+	else
+		(self ContextObject) ObjectRemoveMethod methodName
+	return self
+
+Processor UnDefineObjectMethod <List> methodName
 	(self ContextObject) ObjectRemoveMethod methodName
 	return self
 
+Processor DefineJobMethod <ListMap> method <List> methodName
+	(self ContextJob) JobSetMethod method methodName
+	return self
+
+Processor DefineJobMethodWithBody <List> methodBody <List> methodName
+	(self ContextJob) JobSetMethod (entitiesFactory CreateMethodWithBody methodBody) methodName
+	return self
+
+Processor UnDefineJobMethod <List> methodName
+	(self ContextJob) JobRemoveMethod methodName
+	return self
 
 // ============================================
 // Управление полями
 
+
+
 Processor DefineFieldInNameSpaceWithUID <List> fieldName <ListMap> nameSpace <List> uid
-	self.machine DefineFieldHelper uid fieldName nameSpace
-	return self	
+	synonim = <Synonim>
+	synonim SetUID uid
+	reference = <ListMap>
+	reference AtPut ("Пространство имен") nameSpace
+	reference AtPut ("Имя поля") fieldName
+	synonim AddReference reference
+	reference Release
+
+	// Уже выполнено при инициализации синонима
+	// synonim Release
+	return self
 
 Processor SetField <List> fieldName <List> uid
 	(self FieldNameToSynonim fieldName) SetUID uid
@@ -64,7 +97,7 @@ Processor SetField <List> fieldName <List> uid
 Processor UniteField <List> destinationFieldName <List> sourceFieldName
 	(self FieldNameToSynonim destinationFieldName) Unite (self FieldNameToSynonim sourceFieldName)
 	return self
-	
+
 Processor UnDefineFieldInNamespace <List> fieldName <List> locationType
 	if locationType == nil
 		locationType = self FieldNameToNamespaceName fieldName
@@ -86,7 +119,7 @@ Processor AddJobWithName <ListMap> job <List> jobName
 
 Processor FinishThisJob
 	((self ContextObject) ObjectRemoveJob (self.contextJobName)
-	return self	
+	return self
 
 
 // ============================================
@@ -285,14 +318,15 @@ Processor RemoveAllStagesAndMessageSlotsInJob <List> jobName
 Processor RemoveMessageInMessageSlotInJob <List> messageSlotName <List> jobName
 	messageSlot = ((self ContextObject) ObjectJob jobName) JobMessageSlot messageSlotName
 	if (messageSlot MessageSlotMessage) != nil
-	messageSlot MessageSlotRemoveMessage nil
-	stagesIterator = messageSlot MessageSlotStagesIterator
-	while stagesIterator NotThisEnd
-		stage = ((self ContextObject) ObjectJob jobName) JobStage (stagesIterator ListData)
-		stage StageDecrementMessagesCounter
-		if stage StageIsReady
-			stage StageSetWaiting
-		stagesIterator ++
+		messageSlot MessageSlotRemoveMessage nil
+		if ((messageSlot MessageSlotMessages) Size) == 0
+			stagesIterator = messageSlot MessageSlotStagesIterator
+			while stagesIterator NotThisEnd
+				stage = ((self ContextObject) ObjectJob jobName) JobStage (stagesIterator ListData)
+				stage StageIncrementMessagesCounter
+				if stage StageIsReady
+					stage StageSetWaiting
+				stagesIterator ++
 	return self
 
 Processor RemoveAllMessagesOfCurrentStageForCurrentStageInJob <List> jobName
@@ -341,13 +375,45 @@ Processor RemoveAllReceivedMessagesInJob <List> jobName
 	return self
 
 
+// ============================================
+// Помошники для внутренней реализации
+
+Processor <ListMap> CreateStageRequestEntityBasicMethodInJob <List> requestName entity <Method> basicMethod <ListMap> job
+	messageSlot = entitiesFactory CreateRequestMessageSlot requestName
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity requestName requestName requestName messageSlot
+	job JobSetBasicMethod entity basicMethod requestName
+	return messageSlot
+
+Processor <ListMap> CreateStageReplyEntityBasicMethodInJob <List> requestName entity <Method> basicMethod <ListMap> job
+	messageSlot = entitiesFactory CreateReplyMessageSlot requestName
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity requestName requestName requestName messageSlot
+	job JobSetBasicMethod entity basicMethod requestName
+	return messageSlot
+
+Processor <ListMap> CreateStageEmptyEntityBasicMethodInJob <List> requestName entity <Method> basicMethod <ListMap> job
+	messageSlot = entitiesFactory CreateEmptyMessageSlot
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity requestName requestName requestName messageSlot
+	job JobSetBasicMethod entity basicMethod requestName
+	return messageSlot
+
+Processor DefineFieldHelper <List> uid <List> fieldName <ListMap> nameSpace
+	synonim = <Synonim>
+	synonim SetUID uid
+	reference = <ListMap>
+	reference AtPut ("Пространство имен") nameSpace
+	reference AtPut ("Имя поля") fieldName
+	synonim AddReference reference
+	reference Release
+	synonim Release
+	return self
+
 
 
 // ============================================
 // Всякая ерунда (не систематизировано)
 
 Processor <Object> EntityFromNamedMessageField <List> messageName <List> fieldName
-	return ((self ContextJob) JobMessageInMessageSlot messageName) ObjectAt fieldName
+	return (self MessageInMessageSlot messageName) ObjectAt fieldName
 
 
 Processor <ListMap> NamespaceNameToNamespace <List> locationType
@@ -389,31 +455,56 @@ Processor <Synonim> FieldNameToSynonim <List> fieldName
 	candidate = (self.machine.globalContext) SynonimAt fieldName
 	if candidate != nil
 		return candidate
-	console PrintLnString ("!!!!!!!!! Ошибка! Взятие отсутствующего поля.")
+	console PrintLnString ("!!!!!!!!! Ошибка! Взятие синонима отсутствующего поля.")
 	return nil
 
-Processor <Synonim> FieldNameToSynonimInJobObject <List> fieldName <ListMap> job <ListMap> object
-	candidate = (job JobFields)  SynonimAt fieldName
+
+Processor <List> FieldNameToUIDInJobObject <List> fieldName <ListMap> job <ListMap> object
+	candidate = (job JobFields) SynonimAt fieldName
 	if candidate != nil
-		return candidate
+		return candidate UID
 	candidate = (object ObjectFields) SynonimAt fieldName
 	if candidate != nil
-		return candidate
+		return candidate UID
+
 	candidate = (self.machine.globalContext) SynonimAt fieldName
 	if candidate != nil
-		return candidate
+		return candidate UID
+
+	parsedObject = jsonParser ParseValue (fieldName First)
+	if parsedObject != jsonParser.error
+		return objectsFactory CreateValue parsedObject
+
+	console PrintLnString ("!!!!!!!!! Ошибка! Взятие отсутствующего поля.")
 	return nil
 
 
 Processor <List> FieldNameToUID <List> fieldName
-	return (self FieldNameToSynonim fieldName) UID
+	if self.contextUID != nil
+		return self FieldNameToUIDInJobObject fieldName (self ContextJob) (self ContextObject)
+
+	candidate = (self.machine.globalContext) SynonimAt fieldName
+	if candidate != nil
+		return candidate UID
+
+	parsedObject = jsonParser ParseValue (fieldName First)
+	if parsedObject != jsonParser.error
+		return objectsFactory CreateValue parsedObject
+
+	console PrintLnString ("!!!!!!!!! Ошибка! Взятие отсутствующего поля.")
+	return nil
+
 
 
 Processor <Object> EntityFromMessageField <List> fieldName <List> messageSlotName
-	return ((self ContextJob) JobFieldInMessageSlot fieldName messageSlotName)
+	return (self.contextMessages ListMapAt messageSlotName) At fieldName
+
+Processor <ListMap> MessageInMessageSlot <List> messageSlotName
+	return self.contextMessages ListMapAt messageSlotName
 
 
 Processor SendMessage <ListMap> message
+	message MessageSetSender self.contextUID
 	uid = message MessageReceiver
 	receiver = self.machine ObjectByUID uid
 	self ProcessMessageForObject message receiver
@@ -422,21 +513,19 @@ Processor SendMessage <ListMap> message
 
 
 Processor SendMessageToMessageField <ListMap> message <List> messageSlotName <List> fieldName
-	receiver = (((self ContextJob) JobMessageInMessageSlot messageSlotName) At fieldName)
-	message MessageSetSender self.contextUID
+	receiver = ((self MessageInMessageSlot messageSlotName) At fieldName)
 	message MessageSetReceiver receiver
 	self SendMessage message
 	return self
 
 
 Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
-	message = (self ContextJob) JobMessageInMessageSlot messageSlotName
+	message = self MessageInMessageSlot messageSlotName
 	receiver = message MessageSender
-	reqest = message MessageRequest
+	request = message MessageRequest
 	replyMessage = replyMessage TempDeepClone
-	replyMessage MessageSetSender self.contextUID
 	replyMessage MessageSetReceiver receiver
-	replyMessage MessageSetRequest reqest
+	replyMessage MessageSetRequest request
 	replyMessage MessageSetTypeAnswer
 	self SendMessage replyMessage
 	return self
@@ -444,12 +533,18 @@ Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
 
 Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 	autoreleasePool ++
-	method = (self ContextObject) ObjectMethod methodName
+	method = (self ContextJob) JobMethod methodName
+	if method == nil
+		method = (self ContextObject) ObjectMethod methodName
+
 	if method == nil
 		console PrintLnString ("!!!!!!!! Ошибка! Вызов несуществующего метода.")
 	else
-		console PrintString "Процессор вызывает метод: "
-		console PrintLnString methodName
+		// SVV!
+		// console PrintString "Объект: "
+		// console PrintString self.contextUID
+		// console PrintString "  Процессор вызывает метод: "
+		// console PrintLnString methodName
 		namespace = <ListMap>
 		self.localNamespaces Push namespace
 		namespace AddListMap parameters
@@ -472,14 +567,14 @@ Processor InvokeMethodWithParameters <List> methodName <ListMap> parameters
 Processor MessageConfirmsToParameterInJobObject <ListMap> message <ListMap> parameter <ListMap> job <ListMap> object
 	checkingMethod = parameter At ("Метод проверки")
 	if checkingMethod == "Совпадение"
-		return (message At (parameter At ("Ключ"))) == (parameter At ("Значение"))
+		return (message At (parameter ListAt ("Ключ"))) == (parameter At ("Значение"))
 	elif checkingMethod == "Совпадение с полем"
-		synonim = self FieldNameToSynonimInJobObject (parameter At ("Значение")) job object
-		if synonim Is nil
+		uid = self FieldNameToUIDInJobObject (parameter At ("Значение")) job object
+		if uid Is nil
 			return false
-		return (message At (parameter At ("Ключ"))) == (synonim UID)
+		return (message At (parameter ListAt ("Ключ"))) == uid
 	elif checkingMethod == "Наличие"
-		return (message ContainsKey (parameter At ("Ключ")))
+		return (message ContainsKey (parameter ListAt ("Ключ")))
 	return false
 
 
@@ -493,21 +588,24 @@ Processor <Logic> TryLinkMessageWithMessageSlotInJobObject <ListMap> message <Li
 			break
 		parametersIterator ++
 	if confirms
-		messageSlot MessageSlotSetMessage message
-		message MessageSetJobNameAndMessageSlotName jobName messageSlotName
-		waitingStageNamesIterator = (messageSlot MessageSlotStages) First
-		while waitingStageNamesIterator NotThisEnd
-			jobStage = (job JobStages) ListMapAt (waitingStageNamesIterator ListData)
-			jobStage StageDecrementMessagesCounter
-			if ((jobStage StageMessagesCounter) == 0) And (jobStage StageIsWaiting)
-				jobStage StageSetReady
-			waitingStageNamesIterator ++
+		if ((messageSlot MessageSlotMessages) Size) > 0
+			messageSlot MessageSlotSetMessage message
+		else
+			messageSlot MessageSlotSetMessage message
+			message MessageSetJobNameAndMessageSlotName jobName messageSlotName
+			waitingStageNamesIterator = (messageSlot MessageSlotStages) First
+			while waitingStageNamesIterator NotThisEnd
+				jobStage = (job JobStages) ListMapAt (waitingStageNamesIterator ListData)
+				jobStage StageDecrementMessagesCounter
+				if ((jobStage StageMessagesCounter) == 0) And (jobStage StageIsWaiting)
+					jobStage StageSetReady
+				waitingStageNamesIterator ++
 	return confirms
 
 
 Processor ProcessMessageForObject <ListMap> message <ListMap> object
 	assigned = false
-	console PrintLnString (message MessageRequest)
+	// console PrintLnString (message MessageRequest)
 	jobsIterator = (object ObjectJobs) First
 	while jobsIterator NotThisEnd
 		job = jobsIterator ListMapData
@@ -518,36 +616,22 @@ Processor ProcessMessageForObject <ListMap> message <ListMap> object
 			messageSlotName = messageSlotsIterator Key
 			if messageSlot MessageSlotIsOpened
 				assignedRightNow = self TryLinkMessageWithMessageSlotInJobObject message messageSlot job object messageSlotName jobName
-				if assignedRightNow
-					console PrintString "Сообщение прикреплено к "
-					console PrintString jobName
-					console PrintString ":"
-					console PrintLnString messageSlotName
 				assigned = assignedRightNow Or assigned
 			messageSlotsIterator ++
 		jobsIterator ++
-	if assigned Not
+	// if assigned Not
 		// Скорее всего эту ситуацию надо будет обрабатывать посылкой "неудачного" сообщения в ответ.
-		console PrintLnString "!!!!!!!! Ошибка! Сообщение не обработано объектом."
+		// SVV!
+		// console PrintLnString "!!!!!!!!! Ошибка! Сообщение не обработано объектом."
 	return self
 
-
-// Как оно должно работать?
-// Объекту посылаются сообщения.
-// В какой-то момент времени происходит активация некоторой стадии.
-// Далее происходит вызов ассоциированного метода.
-// Далее происходит удаление обработанных на стадии сообщений из соответствующих слотов.
 
 // Что должно происходить при удалении сущности А из объекта на этапе выполнения метода?
 // Наиболее правильное решение состоит в том, чтобы поддерживать множество удаленных сущностей
 // и по завершению метода удалять эти сущности реально.
 
 
-
 Processor ProcessOneJobIfAny
-	
-	// Да, я знаю, что этот метод выглядит ужасно. Но рефакторинга не предвидится в ближайшее время. 07.03.2011
-	
 	jobsIterator = ((self ContextObject) ObjectJobs) First
 	while jobsIterator NotThisEnd
 		job = (jobsIterator ListMapData)
@@ -555,46 +639,19 @@ Processor ProcessOneJobIfAny
 		while jobStagesIterator NotThisEnd
 			jobStage = jobStagesIterator ListMapData
 			if jobStage StageIsReady
+				self.contextMessages = <ListMap>
 				self.contextJobStageName = jobStagesIterator Key
 				self.contextJobName = jobsIterator Key
+				messageSlotsIterator = jobStage StageMessageSlotsIterator
+				while messageSlotsIterator NotThisEnd
+					messageSlotName = messageSlotsIterator ListData
+					message = (job JobMessageSlot messageSlotName) MessageSlotMessage
+					self.contextMessages AtPut messageSlotName message
+					self RemoveMessageInMessageSlot messageSlotName
+					messageSlotsIterator ++
 				emptyParameters = <ListMap>
 				self InvokeMethodWithParameters (jobStage StageMethod) emptyParameters
 				emptyParameters Release
-				
-				// Здесь надо как-то по другому обрабатывать ситуацию, в которой работа была завершена.
-				// В любом случае нужен механизм удаления, который будет непосредственно удалять после окончания текущей стадии.
-				
-				if (self ContextJob) != nil
-					messageSlotsIterator = jobStage StageMessageSlotsIterator
-					while messageSlotsIterator NotThisEnd
-						messageSlotName = messageSlotsIterator ListData
-						messageSlot = (self ContextJob) JobMessageSlot messageSlotName
-						if messageSlot != nil
-							if (messageSlot MessageSlotMessages) NotIsEmpty
-								messageSlot MessageSlotRemoveMessage nil
-								if (messageSlot MessageSlotMessages) IsEmpty
-									slotStagesIterator = messageSlot MessageSlotStagesIterator
-									while slotStagesIterator NotThisEnd
-										slotStage = (self ContextJob) JobStage (slotStagesIterator ThisData)
-										if slotStage != nil
-											slotStage StageIncrementMessagesCounter
-											if slotStage StageIsReady
-												console PrintLnString "Стадия переведена в состояние ожидания"
-												slotStage StageSetWaiting
-											else
-												console PrintLnString "Стадия не была готова."
-										else
-											console PrintLnString "Стадия, подписанная да это сообщение, удалена."
-										slotStagesIterator ++
-								else
-									console PrintLnString "Ожидаемое сообщение несет более одного сообщения."
-							else
-								console PrintLnString "Ожидаемое сообщение не несет реальных сообщений."
-						else
-							console PrintLnString "Ожидаемое сообщение удалено."
-						messageSlotsIterator ++
-				else
-					console PrintLnString "Контекстная работа удалена."
 				self.contextJobStageName = nil
 				self.contextJobName = nil
 				return self
@@ -605,12 +662,9 @@ Processor ProcessOneJobIfAny
 
 Processor ProcessUID <List> uid
 	autoreleasePool ++
-	
-	// SVV: this is workaround... Not very important.
-	self.commandSystem.helperStack Clean
+	self.commandSystem ContextSwitched
 	self.contextUID = uid
 	self ProcessOneJobIfAny
 	self.contextUID = nil
 	autoreleasePool --
 	return self
-

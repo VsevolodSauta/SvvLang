@@ -745,17 +745,17 @@ Object List_Empty(Object _self)
 	return def;
 }
 
-Object List_Concatenate(Object _self, Object _list)
+Object List_ConcatenateRight(Object _self, Object _list)
 {
-	DPUSHS ("List: Concatenate begined.")
-	ASSERT_C ( "List:Concatenate --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
-	ASSERT_C ( "List:Concatenate --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
+	DPUSHS ("List: ConcatenateRight begined.")
+	ASSERT_C ( "List:ConcatenateRight --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	ASSERT_C ( "List:ConcatenateRight --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	ASSERT_Q ( "Список занят. Итератор не на месте.", ListIterator_Hidden((((List) (_self->entity))->_iterator)) )
 	ListIterator_ToEnd((((List) (_self->entity))->_iterator));
 	ListIterator_AddListAfter((((List) (_self->entity))->_iterator), _list);
 	ListIterator_Hide((((List) (_self->entity))->_iterator));
 	Object toReturn = _self;
-	DPOPS ("List: Concatenate ended.")
+	DPOPS ("List: ConcatenateRight ended.")
 	return toReturn;
 }
 
@@ -765,7 +765,7 @@ Object List_Set(Object _self, Object _list)
 	ASSERT_C ( "List:Set --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
 	ASSERT_C ( "List:Set --- Checking for correct parameter type failed at parameter _list.", _list->gid ==  3732711262168886272ull || _list == _nil )
 	List_Clean(_self);
-	List_Concatenate(_self, _list);
+	List_ConcatenateRight(_self, _list);
 	Object toReturn = _self;
 	DPOPS ("List: Set ended.")
 	return toReturn;

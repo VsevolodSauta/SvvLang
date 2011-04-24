@@ -4,7 +4,7 @@ JSONParser Init
 	self.error = <Object>
 	return self
 
-JSONParser Compare <JSONParser> jsonParser
+JSONParser <Comparation> Compare <JSONParser> jsonParser
 	return equal
 
 JSONParser Clone
@@ -94,7 +94,7 @@ JSONParser <ListMap> ParseObject <ListIterator> iterator
 		elif (iterator ThisData) != '}'
 			break
 	return self.error
-	
+
 JSONParser <List> ParseArray <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	toReturn = <List>
@@ -118,7 +118,7 @@ JSONParser <List> ParseArray <ListIterator> iterator
 			return self.error
 	return self.error
 
-JSONParser ParseValue <ListIterator> iterator
+JSONParser <Object> ParseValue <ListIterator> iterator
 	iterator StringSkipWhiteSpace
 	if iterator ThisEnd
 		return self.error
@@ -139,7 +139,7 @@ JSONParser ParseValue <ListIterator> iterator
 	else
 		return self.error
 
-JSONParser ParseTrue <ListIterator> iterator
+JSONParser <Logic> ParseTrue <ListIterator> iterator
 	if (iterator ThisData) != 't'
 		return self.error
 	iterator ++
@@ -154,7 +154,7 @@ JSONParser ParseTrue <ListIterator> iterator
 	iterator ++
 	return true
 
-JSONParser ParseFalse <ListIterator> iterator
+JSONParser <Logic> ParseFalse <ListIterator> iterator
 	if (iterator ThisData) != 'f'
 		return self.error
 	iterator ++
@@ -172,7 +172,7 @@ JSONParser ParseFalse <ListIterator> iterator
 	iterator ++
 	return false
 
-JSONParser ParseNull <ListIterator> iterator
+JSONParser <Object> ParseNull <ListIterator> iterator
 	if (iterator ThisData) != 'n'
 		return self.error
 	iterator ++
@@ -194,12 +194,18 @@ JSONParser ParseNumber <ListIterator> iterator
 	if (iterator ThisData) == '-'
 		negative = true
 		iterator ++
+	if iterator ThisEnd
+		return self.error
 	if (iterator CharData) NotIsDigit
 		return self.error
-	while (iterator CharData) IsDigit
+
+	while iterator NotThisEnd
+		if (iterator CharData) NotIsDigit
+			break
 		toReturn *= 10
 		toReturn += (((iterator CharData) GetCode) - 48)
 		iterator ++
+
 	if (iterator ThisData) == '.'
 		iterator ++
 		toDivide = 1
@@ -215,6 +221,7 @@ JSONParser ParseNumber <ListIterator> iterator
 			exp += (((iterator CharData) GetCode) - 48)
 			iterator ++
 		toReturn * (10 ** exp)
+
 	if negative
 		return toReturn Inv
 	else

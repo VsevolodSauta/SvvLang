@@ -1,12 +1,20 @@
-<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> processor <MachineScheduler> scheduler <ExternalMachineManipulator> machineManipulator
+<Machine> <ListMap> objectsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> fakeProcessor <Processor> processor <MachineScheduler> scheduler <ExternalMachineManipulator> machineManipulator
 
 
 Machine Init
+	objectsFactory = <ExternalObjectsFactory>
+	objectsFactory SetMachine self
+
 	self.objectsByUIDs = <ListMap>
 	self.uidGenerator = <UIDGenerator>
 	self.globalContext = <ListMap>
+
+	self.fakeProcessor = <Processor>
+	self.fakeProcessor SetMachine self
+
 	self.processor = <Processor>
 	self.processor SetMachine self
+
 	self.scheduler = <MachineScheduler>
 	self.machineManipulator = <ExternalMachineManipulator>
 	self.machineManipulator SetMachine self
@@ -32,7 +40,7 @@ Machine <List> LoadUIDWithNameToNamespace <List> objectName <ListMap> namespace
 	uid = self.uidGenerator GenerateUID
 	self SetUIDToObject uid parsedObject
 	self ScheduleUID uid
-	self DefineFieldHelper uid ((parsedObject ObjectProperties) ListAt "Имя") namespace
+	self.fakeProcessor DefineFieldInNameSpaceWithUID ((parsedObject ObjectProperties) ListAt "Имя") namespace uid
 	autoreleasePool --
 	return uid
 
@@ -40,19 +48,9 @@ Machine <List> ImportUID (LoadUID) <List> objectName
 	return self LoadUIDWithNameToNamespace objectName self.globalContext
 
 Machine RegisterAtGlobalContext <List> uid <List> name
-	return self DefineFieldHelper uid name self.globalContext
-	
-
-Machine DefineFieldHelper <List> uid <List> fieldName <ListMap> nameSpace
-	synonim = <Synonim>
-	synonim SetUID uid
-	reference = <ListMap>
-	reference AtPut ("Пространство имен") nameSpace
-	reference AtPut ("Имя поля") fieldName
-	synonim AddReference reference
-	reference Release
-	synonim Release
+	self.fakeProcessor DefineFieldInNameSpaceWithUID name self.globalContext uid
 	return self
+
 
 Machine <ListMap> UIDToObject (ObjectByUID ObjectFormUID) <List> uid
 	return ((self.objectsByUIDs At uid) AsListMap)
@@ -92,6 +90,8 @@ Machine Destroy
 	self.globalContext Release
 	self.uidGenerator Release
 	self.scheduler Release
+	self.processor Release
+	self.fakeProcessor Release
 	return self Destroy
 
 Machine Clone
@@ -102,4 +102,3 @@ Machine DeepClone
 
 Machine <Comparation> Compare <Machine> machine
 	return equal
-

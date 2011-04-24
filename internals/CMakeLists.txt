@@ -48,11 +48,16 @@ add_subdirectory(MachineScheduler)
 add_subdirectory(Machine)
 add_subdirectory(Runtime)
 
-add_subdirectory(ExternalObjectManipulator)
-add_subdirectory(ExternalFileManipulator)
-add_subdirectory(ExternalConsoleManipulator)
 add_subdirectory(ExternalMachineManipulator)
+
+add_subdirectory(ExternalObjectManipulator)
+add_subdirectory(ExternalConsoleManipulator)
+add_subdirectory(ExternalFileManipulator)
+add_subdirectory(ExternalNumberManipulator)
+add_subdirectory(ExternalListManipulator)
+
 add_subdirectory(ExternalEntitiesFactory)
+add_subdirectory(ExternalObjectsFactory)
 
 
 add_executable(VM main.c)

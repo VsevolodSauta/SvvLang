@@ -13,6 +13,8 @@ entity := nil
 
 stages := nil
 jobFields := nil
+jobMethods := nil
+jobProperties := nil
 messageSlots := nil
 
 defaultStage := nil
@@ -37,6 +39,7 @@ initEntity := method(objectName,
 	entity atPut("Работы", jobs = Map clone) // SVV!
 	properties atPut("Имя", objectName) // SVV!
 	properties atPut("Идентификаторы", List clone) // SVV!
+	properties atPut("Запросы на оповещение", List clone) // SVV!
 )
 
 translateJobSignature := method(line,
@@ -46,7 +49,9 @@ translateJobSignature := method(line,
 				if(token isJob,
 					jobs atPut(jobNameInProcess = token name, jobInProcess = Map clone)
 					jobInProcess atPut("Стадии", stages = Map clone) // SVV!
+					jobInProcess atPut("Методы", jobMethods = Map clone) // SVV!
 					jobInProcess atPut("Ожидаемые сообщения", messageSlots = Map clone) // SVV!
+					jobInProcess atPut("Свойства", jobProperties = Map clone) // SVV!
 					jobInProcess atPut("Поля", jobFields = Map clone), // SVV
 				
 					RTranslatorError with("Job name in signature is invalid: #{token}" interpolate, line)
@@ -161,8 +166,8 @@ translateBodyLine := method(line,
 		"EXIT read",
 			RTranslatorError with("Garbage after keyword ВЫХОД", line),
 		"TO reading",
-			action atPut("Действие", "Перейти") // SVV!
-			action atPut("Имя стадии", token) // SVV!
+			action atPut("Действие", "Перейти")	// SVV!
+			action atPut("Имя стадии", token)	// SVV!
 			mode = "TO read",
 		"TO read",
 			RTranslatorError with("Garbage after stage name.", line),
@@ -170,62 +175,62 @@ translateBodyLine := method(line,
 			token switch(
 			"+-?",
 				messageInProcess = Map clone
-				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
+				messageInProcess atPut ("Свойства", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 				)
 				if(object isMessageField,
 					action atPut("Действие", "Послать сообщение объекту из поля сообщения") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 					action atPut("Имя сообщения", messageSlotNameInProcess) // SVV!
 				)
 				if(action at("Действие") isNil,
 					RTranslatorError with("Message receiver must be some kind of field.", line)
 				)
-//				action atPut("Сообщение", messageInProcess) // SVV!
-				messageInProcess atPut("Тип", "Запрос") // SVV!
+//				action atPut("Сообщение", messageInProcess)	// SVV!
+				messageInProcess atPut("Тип", "Запрос")		// SVV!
 				mode = "Reading request",
 			"+-.",
 				messageInProcess = Map clone
-				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
+				messageInProcess atPut ("Свойства", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля сообщения") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 				)
 				if(object isMessageField,
 					action atPut("Действие", "Послать сообщение объекту из поля") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 					action atPut("Имя сообщения", messageSlotNameInProcess) // SVV!
 				)
 				if(action at("Действие") isNil,
 					RTranslatorError with("Message receiver must be some kind of field.", line)
 				)
-//				action atPut("Message", messageInProcess) // SVV!
-				messageInProcess atPut("Тип", "Ответ") // SVV!
-				messageInProcess atPut("Ответ", "Успех") // SVV!
+//				action atPut("Message", messageInProcess)	// SVV!
+				messageInProcess atPut("Тип", "Ответ")		// SVV!
+				messageInProcess atPut("Ответ", "Успех")	// SVV!
 				mode = "Reading request",
 			"+-!",
 				messageInProcess = Map clone
-				messageInProcess atPut ("Атрибуты", Map with("Ожидаемые сообщения", list()))
+				messageInProcess atPut ("Свойства", Map with("Ожидаемые сообщения", list()))
 				methodInProcess append(Map with("Действие", "Добавить сущность в вершину", "Значение", messageInProcess)) // SVV!
 				if(object isField,
 					action atPut("Действие", "Послать сообщение объекту из поля сообщения") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 				)
 				if(object isMessageField,
 					action atPut("Действие", "Послать сообщение объекту из поля") // SVV!
-					action atPut("Имя поля", object name) // SVV!
+					action atPut("Имя поля", object name)	// SVV!
 					action atPut("Имя сообщения", messageSlotNameInProcess) // SVV!
 				)
 				if(action at("Действие") isNil,
 					RTranslatorError with("Message receiver must be some kind of field.", line)
 				)
-//				action atPut("Message", messageInProcess) // SVV!
-				messageInProcess atPut("Тип", "Ответ") // SVV!
-				messageInProcess atPut("Ответ", "Неудача") // SVV!
+//				action atPut("Message", messageInProcess)	// SVV!
+				messageInProcess atPut("Тип", "Ответ")		// SVV!
+				messageInProcess atPut("Ответ", "Неудача")	// SVV!
 				mode = "Reading request",
 			"=+",
 				action atPut("Действие", "Установить ТВА") // SVV!
@@ -331,6 +336,7 @@ processTO := method(
 
 writeEntityTo := method(file,
 	inEdit := entity asJson asMutable
+	i := 0
 	loop(
 		masterCopy := inEdit asSymbol
 		inEdit replaceMap(Map with(
@@ -338,7 +344,9 @@ writeEntityTo := method(file,
 			"}", "\n}", 
 			"]", "\n]", 
 			"{", "{\n",
-			"[", "[\n")) replaceMap(Map with("\n\n", "\n", "\n\n\n", "\n", "[\n\n]", "[]", "{\n\n}", "{}"))
+			"[", "[\n")) 
+		inEdit replaceMap(Map with("[\n\n]", "[]", "{\n\n}", "{}")) 
+		inEdit replaceMap(Map with("\n\n", "\n", "\n\n\n", "\n",  "\n\n\n\n", "\n"))
 		if(masterCopy == inEdit,
 			break
 		)

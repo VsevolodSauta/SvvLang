@@ -466,14 +466,24 @@ Object JSONParser_ParseNumber(Object _self, Object _iterator)
 		_negative = _true;
 		ListIterator_Next(_iterator);
 	}
+	if((ListIterator_ThisEnd(_iterator)) != _false)
+	{
+		Object toReturn = (((JSONParser) (_self->entity))->_error);
+		DPOPS ("JSONParser: ParseNumber ended.")
+		return toReturn;
+	}
 	if((Logic_Not(Char_IsDigit(ListIterator_CharData(_iterator)))) != _false)
 	{
 		Object toReturn = (((JSONParser) (_self->entity))->_error);
 		DPOPS ("JSONParser: ParseNumber ended.")
 		return toReturn;
 	}
-	while((Char_IsDigit(ListIterator_CharData(_iterator))) != _false)
+	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
 	{
+		if((Logic_Not(Char_IsDigit(ListIterator_CharData(_iterator)))) != _false)
+		{
+			break;
+		}
 		Number_MulInPlace(_toReturn, NumberFactory_FromLong(_numberFactory, 10));
 		Number_AddInPlace(_toReturn, Number_Sub(Char_GetCode(ListIterator_CharData(_iterator)), NumberFactory_FromLong(_numberFactory, 48)));
 		ListIterator_Next(_iterator);

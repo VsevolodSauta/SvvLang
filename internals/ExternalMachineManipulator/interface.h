@@ -3,6 +3,8 @@ typedef struct ExternalMachineManipulator {
 	Object _object;
 	Object _console;
 	Object _file;
+	Object _number;
+	Object _list;
 } *ExternalMachineManipulator;
 
 Object ExternalMachineManipulator_Create(void);

@@ -10,6 +10,7 @@ Object ProcessorCommandSystem_DeepClone(Object _self);
 Object ProcessorCommandSystem_Compare(Object _self, Object _processorCommandSystem);
 Object ProcessorCommandSystem_Destroy(Object _self);
 Object ProcessorCommandSystem_SetProcessor(Object _self, Object _processor);
+Object ProcessorCommandSystem_ContextSwitched(Object _self);
 Object ProcessorCommandSystem_Init(Object _self);
 Object ProcessorCommandSystem_Do(Object _self, Object _toDo);
 Object ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(Object _self, Object _entityName, Object _toDo);
@@ -36,7 +37,8 @@ Object ProcessorCommandSystem_CodeSendMessageToField(Object _self, Object _toDo)
 Object ProcessorCommandSystem_CodeSendMessageToMessageField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeSendReplyForMessage(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeInvokeMethod(Object _self, Object _toDo);
-Object ProcessorCommandSystem_CodeDefineMethod(Object _self, Object _toDo);
+Object ProcessorCommandSystem_CodeDefineObjectMethod(Object _self, Object _toDo);
+Object ProcessorCommandSystem_CodeDefineJobMethod(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeUnDefineMethod(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineLocalField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineJobField(Object _self, Object _toDo);

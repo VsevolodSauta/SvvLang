@@ -15,6 +15,7 @@ Object Machine_Create(void)
 	((Machine) (_self->entity))->_objectsByUIDs = _nil;
 	((Machine) (_self->entity))->_uidGenerator = _nil;
 	((Machine) (_self->entity))->_globalContext = _nil;
+	((Machine) (_self->entity))->_fakeProcessor = _nil;
 	((Machine) (_self->entity))->_processor = _nil;
 	((Machine) (_self->entity))->_scheduler = _nil;
 	((Machine) (_self->entity))->_machineManipulator = _nil;
@@ -27,9 +28,13 @@ Object Machine_Init(Object _self)
 {
 	DPUSHS ("Machine: Init begined.")
 	ASSERT_C ( "Machine:Init --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
+	_objectsFactory = ExternalObjectsFactory_Create();
+	ExternalObjectsFactory_SetMachine(_objectsFactory, _self);
 	(((Machine) (_self->entity))->_objectsByUIDs) = ListMap_Create();
 	(((Machine) (_self->entity))->_uidGenerator) = UIDGenerator_Create();
 	(((Machine) (_self->entity))->_globalContext) = ListMap_Create();
+	(((Machine) (_self->entity))->_fakeProcessor) = Processor_Create();
+	Processor_SetMachine((((Machine) (_self->entity))->_fakeProcessor), _self);
 	(((Machine) (_self->entity))->_processor) = Processor_Create();
 	Processor_SetMachine((((Machine) (_self->entity))->_processor), _self);
 	(((Machine) (_self->entity))->_scheduler) = MachineScheduler_Create();
@@ -74,7 +79,7 @@ Object Machine_LoadUIDWithNameToNamespace(Object _self, Object _objectName, Obje
 	_uid = UIDGenerator_GenerateUID((((Machine) (_self->entity))->_uidGenerator));
 	Machine_SetUIDToObject(_self, _uid, _parsedObject);
 	Machine_ScheduleUID(_self, _uid);
-	Machine_DefineFieldHelper(_self, _uid, ListMap_ListAt(ListMap_ObjectProperties(_parsedObject), StringFactory_FromUTF8(_stringFactory, "Имя", 6)), _namespace);
+	Processor_DefineFieldInNameSpaceWithUID((((Machine) (_self->entity))->_fakeProcessor), ListMap_ListAt(ListMap_ObjectProperties(_parsedObject), StringFactory_FromUTF8(_stringFactory, "Имя", 6)), _namespace, _uid);
 	AutoreleasePool_PopFrame(_autoreleasePool);
 	Object toReturn = _uid;
 	DPOPS ("Machine: LoadUIDWithNameToNamespace ended.")
@@ -97,30 +102,9 @@ Object Machine_RegisterAtGlobalContext(Object _self, Object _uid, Object _name)
 	ASSERT_C ( "Machine:RegisterAtGlobalContext --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
 	ASSERT_C ( "Machine:RegisterAtGlobalContext --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	ASSERT_C ( "Machine:RegisterAtGlobalContext --- Checking for correct parameter type failed at parameter _name.", _name->gid ==  3732711262168886272ull || _name == _nil )
-	Object toReturn = Machine_DefineFieldHelper(_self, _uid, _name, (((Machine) (_self->entity))->_globalContext));
-	DPOPS ("Machine: RegisterAtGlobalContext ended.")
-	return toReturn;
-}
-
-Object Machine_DefineFieldHelper(Object _self, Object _uid, Object _fieldName, Object _nameSpace)
-{
-	DPUSHS ("Machine: DefineFieldHelper begined.")
-	ASSERT_C ( "Machine:DefineFieldHelper --- Checking for correct object type failed.", _self->gid ==  6547848715907434496ull )
-	ASSERT_C ( "Machine:DefineFieldHelper --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
-	ASSERT_C ( "Machine:DefineFieldHelper --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	ASSERT_C ( "Machine:DefineFieldHelper --- Checking for correct parameter type failed at parameter _nameSpace.", _nameSpace->gid ==  2108332898258556672ull || _nameSpace == _nil )
-	Object _synonim;
-	_synonim = Synonim_Create();
-	Synonim_SetUID(_synonim, _uid);
-	Object _reference;
-	_reference = ListMap_Create();
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _nameSpace);
-	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _fieldName);
-	Synonim_AddReference(_synonim, _reference);
-	Object_Release(_reference);
-	Object_Release(_synonim);
+	Processor_DefineFieldInNameSpaceWithUID((((Machine) (_self->entity))->_fakeProcessor), _name, (((Machine) (_self->entity))->_globalContext), _uid);
 	Object toReturn = _self;
-	DPOPS ("Machine: DefineFieldHelper ended.")
+	DPOPS ("Machine: RegisterAtGlobalContext ended.")
 	return toReturn;
 }
 
@@ -209,6 +193,8 @@ Object Machine_Destroy(Object _self)
 	Object_Release((((Machine) (_self->entity))->_globalContext));
 	Object_Release((((Machine) (_self->entity))->_uidGenerator));
 	Object_Release((((Machine) (_self->entity))->_scheduler));
+	Object_Release((((Machine) (_self->entity))->_processor));
+	Object_Release((((Machine) (_self->entity))->_fakeProcessor));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("Machine: Destroy ended.")
 	return toReturn;

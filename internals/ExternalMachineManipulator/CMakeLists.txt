@@ -1,4 +1,4 @@
 project(ExternalMachineManipulator)
 cmake_minimum_required(VERSION 2.6)
 add_library(ExternalMachineManipulator ${Library} code.c)
-target_link_libraries(ExternalMachineManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory Machine ExternalObjectManipulator ExternalConsoleManipulator ExternalFileManipulator List Console ListMap)
+target_link_libraries(ExternalMachineManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory Machine ExternalObjectManipulator ExternalConsoleManipulator ExternalFileManipulator ExternalNumberManipulator ExternalListManipulator List Console ListMap)

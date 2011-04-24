@@ -24,6 +24,7 @@ ExternalObjectManipulator <List> CreateUIDObject
 	autoreleasePool ++
 	uid = self.machine ImportUID "SvvLanguage_C/externals/Объект" 
 	object = self.machine ObjectByUID uid
+	
 	object ObjectSetBasicMethod self &ExternalObjectManipulator_CloneUIDObjectBasicMethod "Клонирование Тип=ЗапросЗапрос=Клонировать"
 	object ObjectSetBasicMethod self &ExternalObjectManipulator_DoUIDObjectBasicMethod "Специализация Тип=ЗапросЗапрос=Выполнить_Тело"
 	self.objectMasterCopy = (self.machine UIDToObject uid) DeepClone
@@ -46,9 +47,8 @@ ExternalObjectManipulator DoUIDObjectBasicMethod <Processor> processor
 	tempMethodName = "Специализация, временный метод"
 	object = self.machine UIDToObject processor.contextUID
 	job = processor ContextJob
-	message = job JobMessageInMessageSlot "Специализация Тип=ЗапросЗапрос=Выполнить_Тело"
-	methodBody = message ListAt "Тело"
-	object ObjectSetMethodBody methodBody tempMethodName
+	methodBody = processor EntityFromMessageField "Тело" "Специализация Тип=ЗапросЗапрос=Выполнить_Тело"
+	job JobSetMethodBody methodBody tempMethodName
 	processor InvokeMethodWithParameters tempMethodName (entitiesFactory CreateEmptyListMap)
 	(object ObjectMethods) Remove tempMethodName
 	replyMessage = entitiesFactory CreateEmptyMessage

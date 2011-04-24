@@ -414,9 +414,33 @@ Object ListMap_DumpListToListMap(Object _self)
 	{
 		Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "\"", 1));
 		Console_WriteString(_console, ListMapIterator_ThisKey(_iterator));
-		Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "\":\"", 3));
-		Console_WriteString(_console, ListMapIterator_ThisValue(_iterator));
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "\"", 1));
+		Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "\":", 2));
+		if((LogicFactory_FromLong(_logicFactory, ListMapIterator_ThisValue(_iterator)->gid ==  3732711262168886272ull)) != _false)
+		{
+			Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "\"", 1));
+			Console_WriteString(_console, ListMapIterator_ThisValue(_iterator));
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "\"", 1));
+		}
+		else if((LogicFactory_FromLong(_logicFactory, ListMapIterator_ThisValue(_iterator)->gid == 15425740279749906432ull)) != _false)
+		{
+			Console_WriteLnNumber(_console, ListMapIterator_ThisValue(_iterator));
+		}
+		else if((Object_Is(ListMapIterator_ThisValue(_iterator), _nil)) != _false)
+		{
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "null", 4));
+		}
+		else if((Object_Is(ListMapIterator_ThisValue(_iterator), _true)) != _false)
+		{
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "true", 4));
+		}
+		else if((Object_Is(ListMapIterator_ThisValue(_iterator), _false)) != _false)
+		{
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "false", 5));
+		}
+		else
+		{
+			Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "unknown", 7));
+		}
 		ListMapIterator_Next(_iterator);
 	}
 	Object toReturn = _self;
@@ -569,7 +593,7 @@ Object ListMap_ObjectSetJob(Object _self, Object _job, Object _jobName)
 	return toReturn;
 }
 
-Object ListMap_ObjectSetProperty(Object _self, Object _propertyName, Object _value)
+Object ListMap_ObjectSetProperty(Object _self, Object _value, Object _propertyName)
 {
 	DPUSHS ("ListMap: ObjectSetProperty begined.")
 	ASSERT_C ( "ListMap:ObjectSetProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
@@ -684,6 +708,35 @@ Object ListMap_ObjectProperty(Object _self, Object _propertyName)
 	ASSERT_C ( "ListMap:ObjectProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
 	Object toReturn = ListMap_ObjectAt(ListMap_ObjectProperties(_self), _propertyName);
 	DPOPS ("ListMap: ObjectProperty ended.")
+	return toReturn;
+}
+
+Object ListMap_ObjectNotificationRequests(Object _self)
+{
+	DPUSHS ("ListMap: ObjectNotificationRequests begined.")
+	ASSERT_C ( "ListMap:ObjectNotificationRequests --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_ObjectProperty(_self, StringFactory_FromUTF8(_stringFactory, "Запросы на оповещение", 40));
+	DPOPS ("ListMap: ObjectNotificationRequests ended.")
+	return toReturn;
+}
+
+Object ListMap_ObjectAddNotificationRequest(Object _self, Object _notificationRequest)
+{
+	DPUSHS ("ListMap: ObjectAddNotificationRequest begined.")
+	ASSERT_C ( "ListMap:ObjectAddNotificationRequest --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ObjectAddNotificationRequest --- Checking for correct parameter type failed at parameter _notificationRequest.", _notificationRequest->gid ==  2108332898258556672ull || _notificationRequest == _nil )
+	List_PushBack(ListMap_ObjectNotificationRequests(_self), _notificationRequest);
+	Object toReturn = _self;
+	DPOPS ("ListMap: ObjectAddNotificationRequest ended.")
+	return toReturn;
+}
+
+Object ListMap_ObjectNotificationRequestsIterator(Object _self)
+{
+	DPUSHS ("ListMap: ObjectNotificationRequestsIterator begined.")
+	ASSERT_C ( "ListMap:ObjectNotificationRequestsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = List_First(ListMap_ObjectNotificationRequests(_self));
+	DPOPS ("ListMap: ObjectNotificationRequestsIterator ended.")
 	return toReturn;
 }
 
@@ -948,15 +1001,6 @@ Object ListMap_MessageRequest(Object _self)
 	return toReturn;
 }
 
-Object ListMap_MessageReply(Object _self)
-{
-	DPUSHS ("ListMap: MessageReply begined.")
-	ASSERT_C ( "ListMap:MessageReply --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Ответ", 10));
-	DPOPS ("ListMap: MessageReply ended.")
-	return toReturn;
-}
-
 Object ListMap_MessageSetSender(Object _self, Object _sender)
 {
 	DPUSHS ("ListMap: MessageSetSender begined.")
@@ -1014,12 +1058,12 @@ Object ListMap_MessageSetTypeNotification(Object _self)
 	return toReturn;
 }
 
-Object ListMap_MessageSetRequest(Object _self, Object _reqest)
+Object ListMap_MessageSetRequest(Object _self, Object _request)
 {
 	DPUSHS ("ListMap: MessageSetRequest begined.")
 	ASSERT_C ( "ListMap:MessageSetRequest --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:MessageSetRequest --- Checking for correct parameter type failed at parameter _reqest.", _reqest->gid ==  3732711262168886272ull || _reqest == _nil )
-	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), _reqest);
+	ASSERT_C ( "ListMap:MessageSetRequest --- Checking for correct parameter type failed at parameter _request.", _request->gid ==  3732711262168886272ull || _request == _nil )
+	Object toReturn = ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), _request);
 	DPOPS ("ListMap: MessageSetRequest ended.")
 	return toReturn;
 }
@@ -1052,6 +1096,33 @@ Object ListMap_MessageSetReplyFail(Object _self)
 	return toReturn;
 }
 
+Object ListMap_MessageReply(Object _self)
+{
+	DPUSHS ("ListMap: MessageReply begined.")
+	ASSERT_C ( "ListMap:MessageReply --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_ListAt(_self, StringFactory_FromUTF8(_stringFactory, "Ответ", 10));
+	DPOPS ("ListMap: MessageReply ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageReplyIsSuccess(Object _self)
+{
+	DPUSHS ("ListMap: MessageReplyIsSuccess begined.")
+	ASSERT_C ( "ListMap:MessageReplyIsSuccess --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_MessageReply(_self), StringFactory_FromUTF8(_stringFactory, "Успех", 10)) == _equal);
+	DPOPS ("ListMap: MessageReplyIsSuccess ended.")
+	return toReturn;
+}
+
+Object ListMap_MessageReplyIsFail(Object _self)
+{
+	DPUSHS ("ListMap: MessageReplyIsFail begined.")
+	ASSERT_C ( "ListMap:MessageReplyIsFail --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_MessageReply(_self), StringFactory_FromUTF8(_stringFactory, "Неудача", 14)) == _equal);
+	DPOPS ("ListMap: MessageReplyIsFail ended.")
+	return toReturn;
+}
+
 Object ListMap_MessageSetJobNameAndMessageSlotName(Object _self, Object _jobName, Object _messageSlotName)
 {
 	DPUSHS ("ListMap: MessageSetJobNameAndMessageSlotName begined.")
@@ -1062,7 +1133,7 @@ Object ListMap_MessageSetJobNameAndMessageSlotName(Object _self, Object _jobName
 	_listmap = ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory);
 	ListMap_Add(_listmap, StringFactory_FromUTF8(_stringFactory, "Работа", 12), _jobName);
 	ListMap_Add(_listmap, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение", 37), _messageSlotName);
-	List_PushBack(ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Атрибуты", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)), _listmap);
+	List_PushBack(ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Свойства", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37)), _listmap);
 	Object toReturn = _self;
 	DPOPS ("ListMap: MessageSetJobNameAndMessageSlotName ended.")
 	return toReturn;
@@ -1072,7 +1143,7 @@ Object ListMap_MessageAttributesMessageSlots(Object _self)
 {
 	DPUSHS ("ListMap: MessageAttributesMessageSlots begined.")
 	ASSERT_C ( "ListMap:MessageAttributesMessageSlots --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Атрибуты", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37));
+	Object toReturn = ListMap_ListAt(ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Свойства", 16)), StringFactory_FromUTF8(_stringFactory, "Ожидаемые сообщения", 37));
 	DPOPS ("ListMap: MessageAttributesMessageSlots ended.")
 	return toReturn;
 }

@@ -24,7 +24,8 @@ TableOfSymbols globalObjects := Map with(
 	"_console",			"Console",
 	"_jsonParser",			"JSONParser",
 	"_methodFactory",		"MethodFactory",
-	"_entitiesFactory",		"ExternalEntitiesFactory"
+	"_entitiesFactory",		"ExternalEntitiesFactory",
+	"_objectsFactory",		"ExternalObjectsFactory"
 )
 
 TableOfSymbols tableOfImports := Map clone

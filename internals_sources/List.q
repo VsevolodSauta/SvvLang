@@ -355,7 +355,7 @@ List <Logic> Empty (IsEmpty)
 	def self.iterator ThisEnd
 	self.iterator Hide
 
-List Concatenate <List> list
+List ConcatenateRight (Concatenate) <List> list
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator AddListAfter list

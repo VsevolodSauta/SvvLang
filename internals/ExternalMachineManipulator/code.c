@@ -16,6 +16,8 @@ Object ExternalMachineManipulator_Create(void)
 	((ExternalMachineManipulator) (_self->entity))->_object = _nil;
 	((ExternalMachineManipulator) (_self->entity))->_console = _nil;
 	((ExternalMachineManipulator) (_self->entity))->_file = _nil;
+	((ExternalMachineManipulator) (_self->entity))->_number = _nil;
+	((ExternalMachineManipulator) (_self->entity))->_list = _nil;
 	_self = ExternalMachineManipulator_Init(_self);
 	DPOPS ("ExternalMachineManipulator: Create ended.")
 	return _self;
@@ -28,6 +30,8 @@ Object ExternalMachineManipulator_Init(Object _self)
 	(((ExternalMachineManipulator) (_self->entity))->_object) = ExternalObjectManipulator_Create();
 	(((ExternalMachineManipulator) (_self->entity))->_console) = ExternalConsoleManipulator_Create();
 	(((ExternalMachineManipulator) (_self->entity))->_file) = ExternalFileManipulator_Create();
+	(((ExternalMachineManipulator) (_self->entity))->_number) = ExternalNumberManipulator_Create();
+	(((ExternalMachineManipulator) (_self->entity))->_list) = ExternalListManipulator_Create();
 	Object toReturn = _self;
 	DPOPS ("ExternalMachineManipulator: Init ended.")
 	return toReturn;
@@ -40,6 +44,8 @@ Object ExternalMachineManipulator_Destroy(Object _self)
 	Object_Release((((ExternalMachineManipulator) (_self->entity))->_object));
 	Object_Release((((ExternalMachineManipulator) (_self->entity))->_console));
 	Object_Release((((ExternalMachineManipulator) (_self->entity))->_file));
+	Object_Release((((ExternalMachineManipulator) (_self->entity))->_number));
+	Object_Release((((ExternalMachineManipulator) (_self->entity))->_list));
 	Object toReturn = Object_Destroy(_self);
 	DPOPS ("ExternalMachineManipulator: Destroy ended.")
 	return toReturn;
@@ -82,6 +88,8 @@ Object ExternalMachineManipulator_SetMachine(Object _self, Object _machine)
 	ExternalObjectManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_object), _machine);
 	ExternalConsoleManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_console), _machine);
 	ExternalFileManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_file), _machine);
+	ExternalNumberManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_number), _machine);
+	ExternalListManipulator_SetMachine((((ExternalMachineManipulator) (_self->entity))->_list), _machine);
 	Object toReturn = _self;
 	DPOPS ("ExternalMachineManipulator: SetMachine ended.")
 	return toReturn;
@@ -101,12 +109,24 @@ Object ExternalMachineManipulator_CreateAll(Object _self)
 	_fileUID = ExternalObjectManipulator_CloneUIDObjectInternalRoutine((((ExternalMachineManipulator) (_self->entity))->_object), _objectUID);
 	ExternalFileManipulator_CreateUIDFileFromUIDObject((((ExternalMachineManipulator) (_self->entity))->_file), _fileUID);
 	Machine_RegisterAtGlobalContext((((ExternalMachineManipulator) (_self->entity))->_machine), _fileUID, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	Object _numberUID;
+	_numberUID = ExternalObjectManipulator_CloneUIDObjectInternalRoutine((((ExternalMachineManipulator) (_self->entity))->_object), _objectUID);
+	ExternalNumberManipulator_CreateUIDNumberFromUIDObject((((ExternalMachineManipulator) (_self->entity))->_number), _numberUID);
+	Machine_RegisterAtGlobalContext((((ExternalMachineManipulator) (_self->entity))->_machine), _numberUID, StringFactory_FromUTF8(_stringFactory, "Число", 10));
+	Object _listUID;
+	_listUID = ExternalObjectManipulator_CloneUIDObjectInternalRoutine((((ExternalMachineManipulator) (_self->entity))->_object), _objectUID);
+	ExternalListManipulator_CreateUIDListFromUIDObject((((ExternalMachineManipulator) (_self->entity))->_list), _listUID);
+	Machine_RegisterAtGlobalContext((((ExternalMachineManipulator) (_self->entity))->_machine), _listUID, StringFactory_FromUTF8(_stringFactory, "Список", 12));
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
 	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _objectUID)));
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
 	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _consoleUID)));
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
 	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _fileUID)));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
+	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _numberUID)));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
+	ListMap_DumpKeys(ListMap_ObjectJobs(Machine_UIDToObject((((ExternalMachineManipulator) (_self->entity))->_machine), _listUID)));
 	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "===============", 15));
 	Object toReturn = _self;
 	DPOPS ("ExternalMachineManipulator: CreateAll ended.")

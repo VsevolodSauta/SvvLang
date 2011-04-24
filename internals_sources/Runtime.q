@@ -33,4 +33,3 @@ Runtime DeepClone
 
 Runtime <Comparation> Compare <Runtime> runtime
 	return equal
-

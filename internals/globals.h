@@ -31,3 +31,4 @@ extern Object _no;
 extern Object _console;
 extern Object _jsonParser;
 extern Object _entitiesFactory;
+extern Object _objectsFactory;

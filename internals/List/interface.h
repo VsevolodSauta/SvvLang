@@ -48,7 +48,7 @@ Object List_SublistBetweenPositions(Object _self, Object _positionFrom, Object _
 Object List_SublistBetweenIterators(Object _self, Object _positionFrom, Object _positionTo);
 Object List_Size(Object _self);
 Object List_Empty(Object _self);
-Object List_Concatenate(Object _self, Object _list);
+Object List_ConcatenateRight(Object _self, Object _list);
 Object List_Set(Object _self, Object _list);
 Object List_SortInPlace(Object _self);
 Object List_PrintLn(Object _self);

@@ -1,0 +1,4 @@
+project(ExternalListManipulator)
+cmake_minimum_required(VERSION 2.6)
+add_library(ExternalListManipulator ${Library} code.c)
+target_link_libraries(ExternalListManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory Machine List ExternalEntitiesFactory ListMap Processor ExternalObjectsFactory ListIterator)

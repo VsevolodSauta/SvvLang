@@ -109,7 +109,7 @@ Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Objec
 	ASSERT_C ( "ExternalConsoleManipulator:WriteUIDConsoleBasicMethod --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
 	ASSERT_C ( "ExternalConsoleManipulator:WriteUIDConsoleBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _string;
-	_string = ListMap_JobFieldInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "Строка", 12), StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
+	_string = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28), StringFactory_FromUTF8(_stringFactory, "Строка", 12));
 	Console_WriteLnString(_console, _string);
 	Object _replyMessage;
 	_replyMessage = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);

@@ -117,15 +117,27 @@ Object Processor_Init(Object _self)
 	return toReturn;
 }
 
-Object Processor_DefineMethod(Object _self, Object _method, Object _methodName)
+Object Processor_DefineObjectMethod(Object _self, Object _method, Object _methodName)
 {
-	DPUSHS ("Processor: DefineMethod begined.")
-	ASSERT_C ( "Processor:DefineMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
-	ASSERT_C ( "Processor:DefineMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
-	ASSERT_C ( "Processor:DefineMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	DPUSHS ("Processor: DefineObjectMethod begined.")
+	ASSERT_C ( "Processor:DefineObjectMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:DefineObjectMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
+	ASSERT_C ( "Processor:DefineObjectMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	ListMap_ObjectSetMethod(Processor_ContextObject(_self), _method, _methodName);
 	Object toReturn = _self;
-	DPOPS ("Processor: DefineMethod ended.")
+	DPOPS ("Processor: DefineObjectMethod ended.")
+	return toReturn;
+}
+
+Object Processor_DefineObjectMethodWithBody(Object _self, Object _methodBody, Object _methodName)
+{
+	DPUSHS ("Processor: DefineObjectMethodWithBody begined.")
+	ASSERT_C ( "Processor:DefineObjectMethodWithBody --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:DefineObjectMethodWithBody --- Checking for correct parameter type failed at parameter _methodBody.", _methodBody->gid ==  3732711262168886272ull || _methodBody == _nil )
+	ASSERT_C ( "Processor:DefineObjectMethodWithBody --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_ObjectSetMethod(Processor_ContextObject(_self), ExternalEntitiesFactory_CreateMethodWithBody(_entitiesFactory, _methodBody), _methodName);
+	Object toReturn = _self;
+	DPOPS ("Processor: DefineObjectMethodWithBody ended.")
 	return toReturn;
 }
 
@@ -134,9 +146,62 @@ Object Processor_UnDefineMethod(Object _self, Object _methodName)
 	DPUSHS ("Processor: UnDefineMethod begined.")
 	ASSERT_C ( "Processor:UnDefineMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:UnDefineMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
-	ListMap_ObjectRemoveMethod(Processor_ContextObject(_self), _methodName);
+	if((ListMap_Contains(ListMap_ObjectMethods(Processor_ContextJob(_self)), _methodName)) != _false)
+	{
+		ListMap_ObjectRemoveMethod(Processor_ContextJob(_self), _methodName);
+	}
+	else
+	{
+		ListMap_ObjectRemoveMethod(Processor_ContextObject(_self), _methodName);
+	}
 	Object toReturn = _self;
 	DPOPS ("Processor: UnDefineMethod ended.")
+	return toReturn;
+}
+
+Object Processor_UnDefineObjectMethod(Object _self, Object _methodName)
+{
+	DPUSHS ("Processor: UnDefineObjectMethod begined.")
+	ASSERT_C ( "Processor:UnDefineObjectMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:UnDefineObjectMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_ObjectRemoveMethod(Processor_ContextObject(_self), _methodName);
+	Object toReturn = _self;
+	DPOPS ("Processor: UnDefineObjectMethod ended.")
+	return toReturn;
+}
+
+Object Processor_DefineJobMethod(Object _self, Object _method, Object _methodName)
+{
+	DPUSHS ("Processor: DefineJobMethod begined.")
+	ASSERT_C ( "Processor:DefineJobMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:DefineJobMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
+	ASSERT_C ( "Processor:DefineJobMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_ObjectSetMethod(Processor_ContextJob(_self), _method, _methodName);
+	Object toReturn = _self;
+	DPOPS ("Processor: DefineJobMethod ended.")
+	return toReturn;
+}
+
+Object Processor_DefineJobMethodWithBody(Object _self, Object _methodBody, Object _methodName)
+{
+	DPUSHS ("Processor: DefineJobMethodWithBody begined.")
+	ASSERT_C ( "Processor:DefineJobMethodWithBody --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:DefineJobMethodWithBody --- Checking for correct parameter type failed at parameter _methodBody.", _methodBody->gid ==  3732711262168886272ull || _methodBody == _nil )
+	ASSERT_C ( "Processor:DefineJobMethodWithBody --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_ObjectSetMethod(Processor_ContextJob(_self), ExternalEntitiesFactory_CreateMethodWithBody(_entitiesFactory, _methodBody), _methodName);
+	Object toReturn = _self;
+	DPOPS ("Processor: DefineJobMethodWithBody ended.")
+	return toReturn;
+}
+
+Object Processor_UnDefineJobMethod(Object _self, Object _methodName)
+{
+	DPUSHS ("Processor: UnDefineJobMethod begined.")
+	ASSERT_C ( "Processor:UnDefineJobMethod --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:UnDefineJobMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_ObjectRemoveMethod(Processor_ContextJob(_self), _methodName);
+	Object toReturn = _self;
+	DPOPS ("Processor: UnDefineJobMethod ended.")
 	return toReturn;
 }
 
@@ -147,7 +212,15 @@ Object Processor_DefineFieldInNameSpaceWithUID(Object _self, Object _fieldName, 
 	ASSERT_C ( "Processor:DefineFieldInNameSpaceWithUID --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	ASSERT_C ( "Processor:DefineFieldInNameSpaceWithUID --- Checking for correct parameter type failed at parameter _nameSpace.", _nameSpace->gid ==  2108332898258556672ull || _nameSpace == _nil )
 	ASSERT_C ( "Processor:DefineFieldInNameSpaceWithUID --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
-	Machine_DefineFieldHelper((((Processor) (_self->entity))->_machine), _uid, _fieldName, _nameSpace);
+	Object _synonim;
+	_synonim = Synonim_Create();
+	Synonim_SetUID(_synonim, _uid);
+	Object _reference;
+	_reference = ListMap_Create();
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _nameSpace);
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _fieldName);
+	Synonim_AddReference(_synonim, _reference);
+	Object_Release(_reference);
 	Object toReturn = _self;
 	DPOPS ("Processor: DefineFieldInNameSpaceWithUID ended.")
 	return toReturn;
@@ -645,19 +718,24 @@ Object Processor_RemoveMessageInMessageSlotInJob(Object _self, Object _messageSl
 	Object _messageSlot;
 	_messageSlot = ListMap_JobMessageSlot(ListMap_ObjectJob(Processor_ContextObject(_self), _jobName), _messageSlotName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_MessageSlotMessage(_messageSlot), _nil) != _equal)) != _false)
-	ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
-	Object _stagesIterator;
-	_stagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
-	while((Logic_Not(ListIterator_ThisEnd(_stagesIterator))) != _false)
 	{
-		Object _stage;
-		_stage = ListMap_JobStage(ListMap_ObjectJob(Processor_ContextObject(_self), _jobName), ListIterator_ListData(_stagesIterator));
-		ListMap_StageDecrementMessagesCounter(_stage);
-		if((ListMap_StageIsReady(_stage)) != _false)
+		ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(ListMap_MessageSlotMessages(_messageSlot)), NumberFactory_FromLong(_numberFactory, 0)) == _equal)) != _false)
 		{
-			ListMap_StageSetWaiting(_stage);
+			Object _stagesIterator;
+			_stagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
+			while((Logic_Not(ListIterator_ThisEnd(_stagesIterator))) != _false)
+			{
+				Object _stage;
+				_stage = ListMap_JobStage(ListMap_ObjectJob(Processor_ContextObject(_self), _jobName), ListIterator_ListData(_stagesIterator));
+				ListMap_StageIncrementMessagesCounter(_stage);
+				if((ListMap_StageIsReady(_stage)) != _false)
+				{
+					ListMap_StageSetWaiting(_stage);
+				}
+				ListIterator_Next(_stagesIterator);
+			}
 		}
-		ListIterator_Next(_stagesIterator);
 	}
 	Object toReturn = _self;
 	DPOPS ("Processor: RemoveMessageInMessageSlotInJob ended.")
@@ -766,13 +844,83 @@ Object Processor_RemoveAllReceivedMessagesInJob(Object _self, Object _jobName)
 	return toReturn;
 }
 
+Object Processor_CreateStageRequestEntityBasicMethodInJob(Object _self, Object _requestName, Object _entity, Object _basicMethod, Object _job)
+{
+	DPUSHS ("Processor: CreateStageRequestEntityBasicMethodInJob begined.")
+	ASSERT_C ( "Processor:CreateStageRequestEntityBasicMethodInJob --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:CreateStageRequestEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _requestName.", _requestName->gid ==  3732711262168886272ull || _requestName == _nil )
+	ASSERT_C ( "Processor:CreateStageRequestEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
+	ASSERT_C ( "Processor:CreateStageRequestEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	Object _messageSlot;
+	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, _requestName);
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, _requestName, _requestName, _requestName, _messageSlot);
+	ListMap_ObjectSetBasicMethod(_job, _entity, _basicMethod, _requestName);
+	Object toReturn = _messageSlot;
+	DPOPS ("Processor: CreateStageRequestEntityBasicMethodInJob ended.")
+	return toReturn;
+}
+
+Object Processor_CreateStageReplyEntityBasicMethodInJob(Object _self, Object _requestName, Object _entity, Object _basicMethod, Object _job)
+{
+	DPUSHS ("Processor: CreateStageReplyEntityBasicMethodInJob begined.")
+	ASSERT_C ( "Processor:CreateStageReplyEntityBasicMethodInJob --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:CreateStageReplyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _requestName.", _requestName->gid ==  3732711262168886272ull || _requestName == _nil )
+	ASSERT_C ( "Processor:CreateStageReplyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
+	ASSERT_C ( "Processor:CreateStageReplyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	Object _messageSlot;
+	_messageSlot = ExternalEntitiesFactory_CreateReplyMessageSlot(_entitiesFactory, _requestName);
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, _requestName, _requestName, _requestName, _messageSlot);
+	ListMap_ObjectSetBasicMethod(_job, _entity, _basicMethod, _requestName);
+	Object toReturn = _messageSlot;
+	DPOPS ("Processor: CreateStageReplyEntityBasicMethodInJob ended.")
+	return toReturn;
+}
+
+Object Processor_CreateStageEmptyEntityBasicMethodInJob(Object _self, Object _requestName, Object _entity, Object _basicMethod, Object _job)
+{
+	DPUSHS ("Processor: CreateStageEmptyEntityBasicMethodInJob begined.")
+	ASSERT_C ( "Processor:CreateStageEmptyEntityBasicMethodInJob --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:CreateStageEmptyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _requestName.", _requestName->gid ==  3732711262168886272ull || _requestName == _nil )
+	ASSERT_C ( "Processor:CreateStageEmptyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
+	ASSERT_C ( "Processor:CreateStageEmptyEntityBasicMethodInJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	Object _messageSlot;
+	_messageSlot = ExternalEntitiesFactory_CreateEmptyMessageSlot(_entitiesFactory);
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, _requestName, _requestName, _requestName, _messageSlot);
+	ListMap_ObjectSetBasicMethod(_job, _entity, _basicMethod, _requestName);
+	Object toReturn = _messageSlot;
+	DPOPS ("Processor: CreateStageEmptyEntityBasicMethodInJob ended.")
+	return toReturn;
+}
+
+Object Processor_DefineFieldHelper(Object _self, Object _uid, Object _fieldName, Object _nameSpace)
+{
+	DPUSHS ("Processor: DefineFieldHelper begined.")
+	ASSERT_C ( "Processor:DefineFieldHelper --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:DefineFieldHelper --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
+	ASSERT_C ( "Processor:DefineFieldHelper --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	ASSERT_C ( "Processor:DefineFieldHelper --- Checking for correct parameter type failed at parameter _nameSpace.", _nameSpace->gid ==  2108332898258556672ull || _nameSpace == _nil )
+	Object _synonim;
+	_synonim = Synonim_Create();
+	Synonim_SetUID(_synonim, _uid);
+	Object _reference;
+	_reference = ListMap_Create();
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Пространство имен", 33), _nameSpace);
+	ListMap_Add(_reference, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _fieldName);
+	Synonim_AddReference(_synonim, _reference);
+	Object_Release(_reference);
+	Object_Release(_synonim);
+	Object toReturn = _self;
+	DPOPS ("Processor: DefineFieldHelper ended.")
+	return toReturn;
+}
+
 Object Processor_EntityFromNamedMessageField(Object _self, Object _messageName, Object _fieldName)
 {
 	DPUSHS ("Processor: EntityFromNamedMessageField begined.")
 	ASSERT_C ( "Processor:EntityFromNamedMessageField --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:EntityFromNamedMessageField --- Checking for correct parameter type failed at parameter _messageName.", _messageName->gid ==  3732711262168886272ull || _messageName == _nil )
 	ASSERT_C ( "Processor:EntityFromNamedMessageField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	Object toReturn = ListMap_ObjectAt(ListMap_JobMessageInMessageSlot(Processor_ContextJob(_self), _messageName), _fieldName);
+	Object toReturn = ListMap_ObjectAt(Processor_MessageInMessageSlot(_self, _messageName), _fieldName);
 	DPOPS ("Processor: EntityFromNamedMessageField ended.")
 	return toReturn;
 }
@@ -885,43 +1033,52 @@ Object Processor_FieldNameToSynonim(Object _self, Object _fieldName)
 		DPOPS ("Processor: FieldNameToSynonim ended.")
 		return toReturn;
 	}
-	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!!! Ошибка! Взятие отсутствующего поля.", 75));
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!!! Ошибка! Взятие синонима отсутствующего поля.", 92));
 	Object toReturn = _nil;
 	DPOPS ("Processor: FieldNameToSynonim ended.")
 	return toReturn;
 }
 
-Object Processor_FieldNameToSynonimInJobObject(Object _self, Object _fieldName, Object _job, Object _object)
+Object Processor_FieldNameToUIDInJobObject(Object _self, Object _fieldName, Object _job, Object _object)
 {
-	DPUSHS ("Processor: FieldNameToSynonimInJobObject begined.")
-	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
-	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
-	ASSERT_C ( "Processor:FieldNameToSynonimInJobObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
+	DPUSHS ("Processor: FieldNameToUIDInJobObject begined.")
+	ASSERT_C ( "Processor:FieldNameToUIDInJobObject --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:FieldNameToUIDInJobObject --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	ASSERT_C ( "Processor:FieldNameToUIDInJobObject --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "Processor:FieldNameToUIDInJobObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
 	Object _candidate;
 	_candidate = ListMap_SynonimAt(ListMap_ObjectFields(_job), _fieldName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
-		Object toReturn = _candidate;
-		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		Object toReturn = Synonim_GetUID(_candidate);
+		DPOPS ("Processor: FieldNameToUIDInJobObject ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_SynonimAt(ListMap_ObjectFields(_object), _fieldName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
-		Object toReturn = _candidate;
-		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		Object toReturn = Synonim_GetUID(_candidate);
+		DPOPS ("Processor: FieldNameToUIDInJobObject ended.")
 		return toReturn;
 	}
 	_candidate = ListMap_SynonimAt((((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext), _fieldName);
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
 	{
-		Object toReturn = _candidate;
-		DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+		Object toReturn = Synonim_GetUID(_candidate);
+		DPOPS ("Processor: FieldNameToUIDInJobObject ended.")
 		return toReturn;
 	}
+	Object _parsedObject;
+	_parsedObject = JSONParser_ParseValue(_jsonParser, List_First(_fieldName));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_parsedObject, (((JSONParser) (_jsonParser->entity))->_error)) != _equal)) != _false)
+	{
+		Object toReturn = ExternalObjectsFactory_CreateValue(_objectsFactory, _parsedObject);
+		DPOPS ("Processor: FieldNameToUIDInJobObject ended.")
+		return toReturn;
+	}
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!!! Ошибка! Взятие отсутствующего поля.", 75));
 	Object toReturn = _nil;
-	DPOPS ("Processor: FieldNameToSynonimInJobObject ended.")
+	DPOPS ("Processor: FieldNameToUIDInJobObject ended.")
 	return toReturn;
 }
 
@@ -930,7 +1087,30 @@ Object Processor_FieldNameToUID(Object _self, Object _fieldName)
 	DPUSHS ("Processor: FieldNameToUID begined.")
 	ASSERT_C ( "Processor:FieldNameToUID --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:FieldNameToUID --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	Object toReturn = Synonim_GetUID(Processor_FieldNameToSynonim(_self, _fieldName));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare((((Processor) (_self->entity))->_contextUID), _nil) != _equal)) != _false)
+	{
+		Object toReturn = Processor_FieldNameToUIDInJobObject(_self, _fieldName, Processor_ContextJob(_self), Processor_ContextObject(_self));
+		DPOPS ("Processor: FieldNameToUID ended.")
+		return toReturn;
+	}
+	Object _candidate;
+	_candidate = ListMap_SynonimAt((((Machine) ((((Processor) (_self->entity))->_machine)->entity))->_globalContext), _fieldName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_candidate, _nil) != _equal)) != _false)
+	{
+		Object toReturn = Synonim_GetUID(_candidate);
+		DPOPS ("Processor: FieldNameToUID ended.")
+		return toReturn;
+	}
+	Object _parsedObject;
+	_parsedObject = JSONParser_ParseValue(_jsonParser, List_First(_fieldName));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_parsedObject, (((JSONParser) (_jsonParser->entity))->_error)) != _equal)) != _false)
+	{
+		Object toReturn = ExternalObjectsFactory_CreateValue(_objectsFactory, _parsedObject);
+		DPOPS ("Processor: FieldNameToUID ended.")
+		return toReturn;
+	}
+	Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!!! Ошибка! Взятие отсутствующего поля.", 75));
+	Object toReturn = _nil;
 	DPOPS ("Processor: FieldNameToUID ended.")
 	return toReturn;
 }
@@ -941,8 +1121,18 @@ Object Processor_EntityFromMessageField(Object _self, Object _fieldName, Object 
 	ASSERT_C ( "Processor:EntityFromMessageField --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:EntityFromMessageField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	ASSERT_C ( "Processor:EntityFromMessageField --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
-	Object toReturn = ListMap_JobFieldInMessageSlot(Processor_ContextJob(_self), _fieldName, _messageSlotName);
+	Object toReturn = ListMap_ObjectAt(ListMap_ListMapAt((((Processor) (_self->entity))->_contextMessages), _messageSlotName), _fieldName);
 	DPOPS ("Processor: EntityFromMessageField ended.")
+	return toReturn;
+}
+
+Object Processor_MessageInMessageSlot(Object _self, Object _messageSlotName)
+{
+	DPUSHS ("Processor: MessageInMessageSlot begined.")
+	ASSERT_C ( "Processor:MessageInMessageSlot --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
+	ASSERT_C ( "Processor:MessageInMessageSlot --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
+	Object toReturn = ListMap_ListMapAt((((Processor) (_self->entity))->_contextMessages), _messageSlotName);
+	DPOPS ("Processor: MessageInMessageSlot ended.")
 	return toReturn;
 }
 
@@ -951,6 +1141,7 @@ Object Processor_SendMessage(Object _self, Object _message)
 	DPUSHS ("Processor: SendMessage begined.")
 	ASSERT_C ( "Processor:SendMessage --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:SendMessage --- Checking for correct parameter type failed at parameter _message.", _message->gid ==  2108332898258556672ull || _message == _nil )
+	ListMap_MessageSetSender(_message, (((Processor) (_self->entity))->_contextUID));
 	Object _uid;
 	_uid = ListMap_MessageReceiver(_message);
 	Object _receiver;
@@ -970,8 +1161,7 @@ Object Processor_SendMessageToMessageField(Object _self, Object _message, Object
 	ASSERT_C ( "Processor:SendMessageToMessageField --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	ASSERT_C ( "Processor:SendMessageToMessageField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
 	Object _receiver;
-	_receiver = ListMap_ObjectAt(ListMap_JobMessageInMessageSlot(Processor_ContextJob(_self), _messageSlotName), _fieldName);
-	ListMap_MessageSetSender(_message, (((Processor) (_self->entity))->_contextUID));
+	_receiver = ListMap_ObjectAt(Processor_MessageInMessageSlot(_self, _messageSlotName), _fieldName);
 	ListMap_MessageSetReceiver(_message, _receiver);
 	Processor_SendMessage(_self, _message);
 	Object toReturn = _self;
@@ -986,15 +1176,14 @@ Object Processor_SendReplyForMessage(Object _self, Object _replyMessage, Object 
 	ASSERT_C ( "Processor:SendReplyForMessage --- Checking for correct parameter type failed at parameter _replyMessage.", _replyMessage->gid ==  2108332898258556672ull || _replyMessage == _nil )
 	ASSERT_C ( "Processor:SendReplyForMessage --- Checking for correct parameter type failed at parameter _messageSlotName.", _messageSlotName->gid ==  3732711262168886272ull || _messageSlotName == _nil )
 	Object _message;
-	_message = ListMap_JobMessageInMessageSlot(Processor_ContextJob(_self), _messageSlotName);
+	_message = Processor_MessageInMessageSlot(_self, _messageSlotName);
 	Object _receiver;
 	_receiver = ListMap_MessageSender(_message);
-	Object _reqest;
-	_reqest = ListMap_MessageRequest(_message);
+	Object _request;
+	_request = ListMap_MessageRequest(_message);
 	_replyMessage = Object_TempDeepClone(_replyMessage);
-	ListMap_MessageSetSender(_replyMessage, (((Processor) (_self->entity))->_contextUID));
 	ListMap_MessageSetReceiver(_replyMessage, _receiver);
-	ListMap_MessageSetRequest(_replyMessage, _reqest);
+	ListMap_MessageSetRequest(_replyMessage, _request);
 	ListMap_MessageSetTypeReply(_replyMessage);
 	Processor_SendMessage(_self, _replyMessage);
 	Object toReturn = _self;
@@ -1010,15 +1199,17 @@ Object Processor_InvokeMethodWithParameters(Object _self, Object _methodName, Ob
 	ASSERT_C ( "Processor:InvokeMethodWithParameters --- Checking for correct parameter type failed at parameter _parameters.", _parameters->gid ==  2108332898258556672ull || _parameters == _nil )
 	AutoreleasePool_PushFrame(_autoreleasePool);
 	Object _method;
-	_method = ListMap_ObjectMethod(Processor_ContextObject(_self), _methodName);
+	_method = ListMap_ObjectMethod(Processor_ContextJob(_self), _methodName);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_method, _nil) == _equal)) != _false)
+	{
+		_method = ListMap_ObjectMethod(Processor_ContextObject(_self), _methodName);
+	}
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_method, _nil) == _equal)) != _false)
 	{
 		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!! Ошибка! Вызов несуществующего метода.", 78));
 	}
 	else
 	{
-		Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "Процессор вызывает метод: ", 48));
-		Console_WriteLnString(_console, _methodName);
 		Object _namespace;
 		_namespace = ListMap_Create();
 		Stack_Push((((Processor) (_self->entity))->_localNamespaces), _namespace);
@@ -1064,27 +1255,27 @@ Object Processor_MessageConfirmsToParameterInJobObject(Object _self, Object _mes
 	_checkingMethod = ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Метод проверки", 27));
 	if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Совпадение", 20)) == _equal)) != _false)
 	{
-		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16))) == _equal);
+		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ListAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16))) == _equal);
 		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Совпадение с полем", 34)) == _equal)) != _false)
 	{
-		Object _synonim;
-		_synonim = Processor_FieldNameToSynonimInJobObject(_self, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16)), _job, _object);
-		if((Object_Is(_synonim, _nil)) != _false)
+		Object _uid;
+		_uid = Processor_FieldNameToUIDInJobObject(_self, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Значение", 16)), _job, _object);
+		if((Object_Is(_uid, _nil)) != _false)
 		{
 			Object toReturn = _false;
 			DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 			return toReturn;
 		}
-		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), Synonim_GetUID(_synonim)) == _equal);
+		Object toReturn = LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_message, ListMap_ListAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8))), _uid) == _equal);
 		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
 	else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_checkingMethod, StringFactory_FromUTF8(_stringFactory, "Наличие", 14)) == _equal)) != _false)
 	{
-		Object toReturn = ListMap_Contains(_message, ListMap_ObjectAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8)));
+		Object toReturn = ListMap_Contains(_message, ListMap_ListAt(_parameter, StringFactory_FromUTF8(_stringFactory, "Ключ", 8)));
 		DPOPS ("Processor: MessageConfirmsToParameterInJobObject ended.")
 		return toReturn;
 	}
@@ -1120,20 +1311,27 @@ Object Processor_TryLinkMessageWithMessageSlotInJobObject(Object _self, Object _
 	}
 	if((_confirms) != _false)
 	{
-		ListMap_MessageSlotSetMessage(_messageSlot, _message);
-		ListMap_MessageSetJobNameAndMessageSlotName(_message, _jobName, _messageSlotName);
-		Object _waitingStageNamesIterator;
-		_waitingStageNamesIterator = List_First(ListMap_MessageSlotStages(_messageSlot));
-		while((Logic_Not(ListIterator_ThisEnd(_waitingStageNamesIterator))) != _false)
+		if((LogicFactory_FromLong(_logicFactory, Object_Compare(List_Size(ListMap_MessageSlotMessages(_messageSlot)), NumberFactory_FromLong(_numberFactory, 0)) == _greater)) != _false)
 		{
-			Object _jobStage;
-			_jobStage = ListMap_ListMapAt(ListMap_JobStages(_job), ListIterator_ListData(_waitingStageNamesIterator));
-			ListMap_StageDecrementMessagesCounter(_jobStage);
-			if((Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_jobStage), NumberFactory_FromLong(_numberFactory, 0)) == _equal), ListMap_StageIsWaiting(_jobStage))) != _false)
+			ListMap_MessageSlotSetMessage(_messageSlot, _message);
+		}
+		else
+		{
+			ListMap_MessageSlotSetMessage(_messageSlot, _message);
+			ListMap_MessageSetJobNameAndMessageSlotName(_message, _jobName, _messageSlotName);
+			Object _waitingStageNamesIterator;
+			_waitingStageNamesIterator = List_First(ListMap_MessageSlotStages(_messageSlot));
+			while((Logic_Not(ListIterator_ThisEnd(_waitingStageNamesIterator))) != _false)
 			{
-				ListMap_StageSetReady(_jobStage);
+				Object _jobStage;
+				_jobStage = ListMap_ListMapAt(ListMap_JobStages(_job), ListIterator_ListData(_waitingStageNamesIterator));
+				ListMap_StageDecrementMessagesCounter(_jobStage);
+				if((Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_StageMessagesCounter(_jobStage), NumberFactory_FromLong(_numberFactory, 0)) == _equal), ListMap_StageIsWaiting(_jobStage))) != _false)
+				{
+					ListMap_StageSetReady(_jobStage);
+				}
+				ListIterator_Next(_waitingStageNamesIterator);
 			}
-			ListIterator_Next(_waitingStageNamesIterator);
 		}
 	}
 	Object toReturn = _confirms;
@@ -1149,7 +1347,6 @@ Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _
 	ASSERT_C ( "Processor:ProcessMessageForObject --- Checking for correct parameter type failed at parameter _object.", _object->gid ==  2108332898258556672ull || _object == _nil )
 	Object _assigned;
 	_assigned = _false;
-	Console_WriteLnString(_console, ListMap_MessageRequest(_message));
 	Object _jobsIterator;
 	_jobsIterator = ListMap_First(ListMap_ObjectJobs(_object));
 	while((Logic_Not(ListMapIterator_ThisEnd(_jobsIterator))) != _false)
@@ -1170,22 +1367,11 @@ Object Processor_ProcessMessageForObject(Object _self, Object _message, Object _
 			{
 				Object _assignedRightNow;
 				_assignedRightNow = Processor_TryLinkMessageWithMessageSlotInJobObject(_self, _message, _messageSlot, _job, _object, _messageSlotName, _jobName);
-				if((_assignedRightNow) != _false)
-				{
-					Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "Сообщение прикреплено к ", 45));
-					Console_WriteString(_console, _jobName);
-					Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, ":", 1));
-					Console_WriteLnString(_console, _messageSlotName);
-				}
 				_assigned = Logic_Or(_assignedRightNow, _assigned);
 			}
 			ListMapIterator_Next(_messageSlotsIterator);
 		}
 		ListMapIterator_Next(_jobsIterator);
-	}
-	if((Logic_Not(_assigned)) != _false)
-	{
-		Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "!!!!!!!! Ошибка! Сообщение не обработано объектом.", 85));
 	}
 	Object toReturn = _self;
 	DPOPS ("Processor: ProcessMessageForObject ended.")
@@ -1210,76 +1396,25 @@ Object Processor_ProcessOneJobIfAny(Object _self)
 			_jobStage = ListMapIterator_ListMapData(_jobStagesIterator);
 			if((ListMap_StageIsReady(_jobStage)) != _false)
 			{
+				Object_SetReleasing(&(((Processor) (_self->entity))->_contextMessages), ListMap_Create());
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobStageName), ListMapIterator_ThisKey(_jobStagesIterator));
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobName), ListMapIterator_ThisKey(_jobsIterator));
+				Object _messageSlotsIterator;
+				_messageSlotsIterator = ListMap_StageMessageSlotsIterator(_jobStage);
+				while((Logic_Not(ListIterator_ThisEnd(_messageSlotsIterator))) != _false)
+				{
+					Object _messageSlotName;
+					_messageSlotName = ListIterator_ListData(_messageSlotsIterator);
+					Object _message;
+					_message = ListMap_MessageSlotMessage(ListMap_JobMessageSlot(_job, _messageSlotName));
+					ListMap_Add((((Processor) (_self->entity))->_contextMessages), _messageSlotName, _message);
+					Processor_RemoveMessageInMessageSlot(_self, _messageSlotName);
+					ListIterator_Next(_messageSlotsIterator);
+				}
 				Object _emptyParameters;
 				_emptyParameters = ListMap_Create();
 				Processor_InvokeMethodWithParameters(_self, ListMap_StageMethod(_jobStage), _emptyParameters);
 				Object_Release(_emptyParameters);
-				if((LogicFactory_FromLong(_logicFactory, Object_Compare(Processor_ContextJob(_self), _nil) != _equal)) != _false)
-				{
-					Object _messageSlotsIterator;
-					_messageSlotsIterator = ListMap_StageMessageSlotsIterator(_jobStage);
-					while((Logic_Not(ListIterator_ThisEnd(_messageSlotsIterator))) != _false)
-					{
-						Object _messageSlotName;
-						_messageSlotName = ListIterator_ListData(_messageSlotsIterator);
-						Object _messageSlot;
-						_messageSlot = ListMap_JobMessageSlot(Processor_ContextJob(_self), _messageSlotName);
-						if((LogicFactory_FromLong(_logicFactory, Object_Compare(_messageSlot, _nil) != _equal)) != _false)
-						{
-							if((Logic_Not(List_Empty(ListMap_MessageSlotMessages(_messageSlot)))) != _false)
-							{
-								ListMap_MessageSlotRemoveMessage(_messageSlot, _nil);
-								if((List_Empty(ListMap_MessageSlotMessages(_messageSlot))) != _false)
-								{
-									Object _slotStagesIterator;
-									_slotStagesIterator = ListMap_MessageSlotStagesIterator(_messageSlot);
-									while((Logic_Not(ListIterator_ThisEnd(_slotStagesIterator))) != _false)
-									{
-										Object _slotStage;
-										_slotStage = ListMap_JobStage(Processor_ContextJob(_self), ListIterator_ThisData(_slotStagesIterator));
-										if((LogicFactory_FromLong(_logicFactory, Object_Compare(_slotStage, _nil) != _equal)) != _false)
-										{
-											ListMap_StageIncrementMessagesCounter(_slotStage);
-											if((ListMap_StageIsReady(_slotStage)) != _false)
-											{
-												Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия переведена в состояние ожидания", 72));
-												ListMap_StageSetWaiting(_slotStage);
-											}
-											else
-											{
-												Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия не была готова.", 40));
-											}
-										}
-										else
-										{
-											Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Стадия, подписанная да это сообщение, удалена.", 84));
-										}
-										ListIterator_Next(_slotStagesIterator);
-									}
-								}
-								else
-								{
-									Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение несет более одного сообщения.", 92));
-								}
-							}
-							else
-							{
-								Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение не несет реальных сообщений.", 90));
-							}
-						}
-						else
-						{
-							Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Ожидаемое сообщение удалено.", 53));
-						}
-						ListIterator_Next(_messageSlotsIterator);
-					}
-				}
-				else
-				{
-					Console_WriteLnString(_console, StringFactory_FromUTF8(_stringFactory, "Контекстная работа удалена.", 51));
-				}
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobStageName), _nil);
 				Object_SetRetaining(&(((Processor) (_self->entity))->_contextJobName), _nil);
 				Object toReturn = _self;
@@ -1301,7 +1436,7 @@ Object Processor_ProcessUID(Object _self, Object _uid)
 	ASSERT_C ( "Processor:ProcessUID --- Checking for correct object type failed.", _self->gid ==  8708543990322460672ull )
 	ASSERT_C ( "Processor:ProcessUID --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
 	AutoreleasePool_PushFrame(_autoreleasePool);
-	Stack_Clean((((ProcessorCommandSystem) ((((Processor) (_self->entity))->_commandSystem)->entity))->_helperStack));
+	ProcessorCommandSystem_ContextSwitched((((Processor) (_self->entity))->_commandSystem));
 	Object_SetRetaining(&(((Processor) (_self->entity))->_contextUID), _uid);
 	Processor_ProcessOneJobIfAny(_self);
 	Object_SetRetaining(&(((Processor) (_self->entity))->_contextUID), _nil);

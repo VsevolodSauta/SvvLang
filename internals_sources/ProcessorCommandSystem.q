@@ -2,7 +2,7 @@
 
 ProcessorCommandSystem Clone
 	return <ProcessorCommandSystem>
-	
+
 ProcessorCommandSystem DeepClone
 	return <ProcessorCommandSystem>
 
@@ -16,6 +16,10 @@ ProcessorCommandSystem Destroy
 
 ProcessorCommandSystem SetProcessor <Processor> processor
 	self.processor = processor
+	return self
+
+ProcessorCommandSystem ContextSwitched
+	self.helperStack Clean
 	return self
 
 ProcessorCommandSystem Init
@@ -44,7 +48,8 @@ ProcessorCommandSystem Init
 	self.processorCodes AtPut ("Послать сообщение объекту из поля сообщения") &ProcessorCommandSystem_CodeSendMessageToMessageField
 	self.processorCodes AtPut ("Послать ответ на сообщение") &ProcessorCommandSystem_CodeSendReplyForMessage
 	self.processorCodes AtPut ("Вызвать метод с параметрами") &ProcessorCommandSystem_CodeInvokeMethod
-	self.processorCodes AtPut ("Определить метод") &ProcessorCommandSystem_CodeDefineMethod
+	self.processorCodes AtPut ("Определить метод объекта") &ProcessorCommandSystem_CodeDefineObjectMethod
+	self.processorCodes AtPut ("Определить метод работы") &ProcessorCommandSystem_CodeDefineJobMethod
 	self.processorCodes AtPut ("Удалить метод с именем") &ProcessorCommandSystem_CodeUnDefineMethod
 	self.processorCodes AtPut ("Установить ТВА") &ProcessorCommandSystem_CodeDefineLocalField
 	self.processorCodes AtPut ("Установить поле работы") &ProcessorCommandSystem_CodeDefineJobField
@@ -75,6 +80,8 @@ ProcessorCommandSystem Init
 	return self
 
 ProcessorCommandSystem Do <ListMap> toDo
+	// SVV!
+	// console PrintLnString (toDo ListAt ("Действие"))
 	method = self.processorCodes MethodAt (toDo ListAt ("Действие"))
 	if method == nil
 		console PrintLnString ("Некорректное toDo: Действие не задано либо отсутствует в системе комманд.")
@@ -212,7 +219,6 @@ ProcessorCommandSystem CodeSwapTopInStack <ListMap> toDo
 ProcessorCommandSystem CodeSendMessageToUID <ListMap> toDo
 	receiver = self GetNamedEntityFromToDoOrStack ("Получатель") toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
-	message MessageSetSender self.processor.contextUID
 	message MessageSetReceiver receiver
 	self.processor SendMessage message
 	return self
@@ -222,7 +228,6 @@ ProcessorCommandSystem CodeSendMessageToField <ListMap> toDo
 	message = (self GetNamedEntityFromToDoOrStack ("Сообщение") toDo) AsListMap
 	fieldName = self GetNamedEntityFromToDoOrStack ("Имя поля") toDo
 	receiver = self.processor FieldNameToUID fieldName
-	message MessageSetSender self.processor.contextUID
 	message MessageSetReceiver receiver
 	self.processor SendMessage message
 	return self
@@ -250,10 +255,16 @@ ProcessorCommandSystem CodeInvokeMethod <ListMap> toDo
 	return self
 
 
-ProcessorCommandSystem CodeDefineMethod <ListMap> toDo
+ProcessorCommandSystem CodeDefineObjectMethod <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
 	method = self GetNamedEntityFromToDoOrStack ("Метод") toDo
-	self.processor DefineMethod method methodName
+	self.processor DefineObjectMethod method methodName
+	return self
+
+ProcessorCommandSystem CodeDefineJobMethod <ListMap> toDo
+	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
+	method = self GetNamedEntityFromToDoOrStack ("Метод") toDo
+	self.processor DefineJobMethod method methodName
 	return self
 
 ProcessorCommandSystem CodeUnDefineMethod <ListMap> toDo
@@ -319,18 +330,18 @@ ProcessorCommandSystem CodeAddJobStage <ListMap> toDo
 	jobStage = self GetNamedEntityFromToDoOrStack ("Стадия") toDo
 	self.processor AddJobStage jobStage jobStageName
 	return self
-	
+
 ProcessorCommandSystem CodeAddMessageSlot <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack ("Имя сообщения") toDo
 	messageSlot = self GetNamedEntityFromToDoOrStack ("Сообщение") toDo
 	self.processor AddMessageSlot messageSlot messageSlotName
 	return self
-	
+
 ProcessorCommandSystem CodeBlockStage <ListMap> toDo
 	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
 	self.processor BlockStage stageName
 	return self
-	
+
 ProcessorCommandSystem CodeUnBlockStage <ListMap> toDo
 	stageName = self GetNamedEntityFromToDoOrStack ("Имя стадии") toDo
 	self.processor UnBlockStage stageName
@@ -346,7 +357,7 @@ ProcessorCommandSystem CodeUnBlockMessageSlot <ListMap> toDo
 	messageSlotName = self GetNamedEntityFromToDoOrStack  ("Имя сообщения") toDo
 	self.processor UnBlockMessageSlot messageSlotName
 	return self
-	
+
 
 ProcessorCommandSystem CodeRemoveJobStage <ListMap> toDo
 	jobStageName = self GetNamedEntityFromToDoOrStack  ("Имя стадии") toDo
@@ -397,6 +408,3 @@ ProcessorCommandSystem CodeAttachToStageMessageSlot <ListMap> toDo
 	messageName = self GetNamedEntityFromToDoOrStack  ("Имя сообщения") toDo
 	self.processor AttachToStageMessageSlot stageName messageName
 	return self
-
-
-

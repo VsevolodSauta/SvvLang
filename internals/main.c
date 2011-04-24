@@ -13,6 +13,7 @@ Object _autoreleasePool;
 Object _console;
 Object _jsonParser;
 Object _entitiesFactory;
+Object _objectsFactory;
 
 #if STDLIB
 int main(void)

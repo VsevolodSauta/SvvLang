@@ -70,6 +70,16 @@ Object ProcessorCommandSystem_SetProcessor(Object _self, Object _processor)
 	return toReturn;
 }
 
+Object ProcessorCommandSystem_ContextSwitched(Object _self)
+{
+	DPUSHS ("ProcessorCommandSystem: ContextSwitched begined.")
+	ASSERT_C ( "ProcessorCommandSystem:ContextSwitched --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
+	Stack_Clean((((ProcessorCommandSystem) (_self->entity))->_helperStack));
+	Object toReturn = _self;
+	DPOPS ("ProcessorCommandSystem: ContextSwitched ended.")
+	return toReturn;
+}
+
 Object ProcessorCommandSystem_Init(Object _self)
 {
 	DPUSHS ("ProcessorCommandSystem: Init begined.")
@@ -99,7 +109,8 @@ Object ProcessorCommandSystem_Init(Object _self)
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать сообщение объекту из поля сообщения", 81), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeSendMessageToMessageField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать ответ на сообщение", 49), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeSendReplyForMessage));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Вызвать метод с параметрами", 51), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeInvokeMethod));
-	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод", 31), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineMethod));
+	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод объекта", 46), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineObjectMethod));
+	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод работы", 44), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineJobMethod));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Удалить метод с именем", 41), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeUnDefineMethod));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить ТВА", 27), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineLocalField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить поле работы", 42), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineJobField));
@@ -430,7 +441,6 @@ Object ProcessorCommandSystem_CodeSendMessageToUID(Object _self, Object _toDo)
 	_receiver = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Получатель", 20), _toDo);
 	Object _message;
 	_message = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Сообщение", 18), _toDo);
-	ListMap_MessageSetSender(_message, (((Processor) ((((ProcessorCommandSystem) (_self->entity))->_processor)->entity))->_contextUID));
 	ListMap_MessageSetReceiver(_message, _receiver);
 	Processor_SendMessage((((ProcessorCommandSystem) (_self->entity))->_processor), _message);
 	Object toReturn = _self;
@@ -449,7 +459,6 @@ Object ProcessorCommandSystem_CodeSendMessageToField(Object _self, Object _toDo)
 	_fieldName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _toDo);
 	Object _receiver;
 	_receiver = Processor_FieldNameToUID((((ProcessorCommandSystem) (_self->entity))->_processor), _fieldName);
-	ListMap_MessageSetSender(_message, (((Processor) ((((ProcessorCommandSystem) (_self->entity))->_processor)->entity))->_contextUID));
 	ListMap_MessageSetReceiver(_message, _receiver);
 	Processor_SendMessage((((ProcessorCommandSystem) (_self->entity))->_processor), _message);
 	Object toReturn = _self;
@@ -504,18 +513,33 @@ Object ProcessorCommandSystem_CodeInvokeMethod(Object _self, Object _toDo)
 	return toReturn;
 }
 
-Object ProcessorCommandSystem_CodeDefineMethod(Object _self, Object _toDo)
+Object ProcessorCommandSystem_CodeDefineObjectMethod(Object _self, Object _toDo)
 {
-	DPUSHS ("ProcessorCommandSystem: CodeDefineMethod begined.")
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineMethod --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineMethod --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
+	DPUSHS ("ProcessorCommandSystem: CodeDefineObjectMethod begined.")
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectMethod --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectMethod --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
 	Object _methodName;
 	_methodName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя метода", 19), _toDo);
 	Object _method;
 	_method = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Метод", 10), _toDo);
-	Processor_DefineMethod((((ProcessorCommandSystem) (_self->entity))->_processor), _method, _methodName);
+	Processor_DefineObjectMethod((((ProcessorCommandSystem) (_self->entity))->_processor), _method, _methodName);
 	Object toReturn = _self;
-	DPOPS ("ProcessorCommandSystem: CodeDefineMethod ended.")
+	DPOPS ("ProcessorCommandSystem: CodeDefineObjectMethod ended.")
+	return toReturn;
+}
+
+Object ProcessorCommandSystem_CodeDefineJobMethod(Object _self, Object _toDo)
+{
+	DPUSHS ("ProcessorCommandSystem: CodeDefineJobMethod begined.")
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineJobMethod --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineJobMethod --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
+	Object _methodName;
+	_methodName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя метода", 19), _toDo);
+	Object _method;
+	_method = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Метод", 10), _toDo);
+	Processor_DefineJobMethod((((ProcessorCommandSystem) (_self->entity))->_processor), _method, _methodName);
+	Object toReturn = _self;
+	DPOPS ("ProcessorCommandSystem: CodeDefineJobMethod ended.")
 	return toReturn;
 }
 

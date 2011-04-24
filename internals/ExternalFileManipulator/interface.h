@@ -15,4 +15,6 @@ Object ExternalFileManipulator_OpenForReadingUIDFileBasicMethod(Object _self, Ob
 Object ExternalFileManipulator_OpenForWritingUIDFileBasicMethod(Object _self, Object _processor);
 Object ExternalFileManipulator_CloseUIDFileBasicMethod(Object _self, Object _processor);
 Object ExternalFileManipulator_WriteStringUIDFileBasicMethod(Object _self, Object _processor);
+Object ExternalFileManipulator_WriteObjectUIDFileBasicMethod(Object _self, Object _processor);
+Object ExternalFileManipulator_WriteSecondStageUIDFileBasicMethod(Object _self, Object _processor);
 Object ExternalFileManipulator_ReadStringUIDFileBasicMethod(Object _self, Object _processor);

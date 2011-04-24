@@ -83,38 +83,28 @@ Object ExternalNumberManipulator_CreateUIDNumberFromUIDObject(Object _self, Obje
 	Object _job;
 	_job = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
 	Object _messageSlot;
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "+=", 2));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_SimpleNumber), _job);
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_SimpleString), _job);
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "+=", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_AddInPlace), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "+=", 2), StringFactory_FromUTF8(_stringFactory, "+=", 2), StringFactory_FromUTF8(_stringFactory, "+=", 2), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "-=", 2));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "-=", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_SubInPlace), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "-=", 2), StringFactory_FromUTF8(_stringFactory, "-=", 2), StringFactory_FromUTF8(_stringFactory, "-=", 2), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "*=", 2));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "*=", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_MulInPlace), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "*=", 2), StringFactory_FromUTF8(_stringFactory, "*=", 2), StringFactory_FromUTF8(_stringFactory, "*=", 2), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "/=", 2));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "/=", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_DivInPlace), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "/=", 2), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "/=", 2));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "%=", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_ModInPlace), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "/=", 2), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Инкремент", 18));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Инкремент", 18), StringFactory_FromUTF8(_stringFactory, "Инкремент", 18), StringFactory_FromUTF8(_stringFactory, "Инкремент", 18), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Декремент", 18));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Декремент", 18), StringFactory_FromUTF8(_stringFactory, "Декремент", 18), StringFactory_FromUTF8(_stringFactory, "Декремент", 18), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Модуль", 12));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Модуль", 12), StringFactory_FromUTF8(_stringFactory, "Модуль", 12), StringFactory_FromUTF8(_stringFactory, "Модуль", 12), _messageSlot);
-	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "++", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_Increment), _job);
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "--", 2), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_Decrement), _job);
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "Модуль", 12), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_Absolute), _job);
+	_messageSlot = Processor_CreateStageRequestEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "Оповестить", 20), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_NotifyRequest), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Условие", 14)));
-	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение", 16)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20), StringFactory_FromUTF8(_stringFactory, "Опвестить", 18), StringFactory_FromUTF8(_stringFactory, "Оповестить", 20), _messageSlot);
+	_messageSlot = Processor_CreateStageEmptyEntityBasicMethodInJob((((Machine) ((((ExternalNumberManipulator) (_self->entity))->_machine)->entity))->_fakeProcessor), StringFactory_FromUTF8(_stringFactory, "Текущее значение получено", 48), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_CurrentValueReceived), _job);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Текущее значение", 31)));
 	Object _object;
 	_object = Machine_UIDToObject((((ExternalNumberManipulator) (_self->entity))->_machine), _uid);
-	ListMap_ObjectSetJob(_object, _job);
+	ListMap_ObjectSetJob(_object, _job, StringFactory_FromUTF8(_stringFactory, "Основная работа числа", 40));
 	Object toReturn = _uid;
 	DPOPS ("ExternalNumberManipulator: CreateUIDNumberFromUIDObject ended.")
 	return toReturn;
@@ -165,26 +155,23 @@ Object ExternalNumberManipulator_AddInPlace(Object _self, Object _processor)
 	ASSERT_C ( "ExternalNumberManipulator:AddInPlace --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _object;
 	_object = Processor_ContextObject(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "+=", 2));
 	Object _requestArgument;
-	_requestArgument = ListMap_ListAt(_request, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
+	_requestArgument = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "+=", 2), StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
 	Object _jobToProcessThisEvent;
 	_jobToProcessThisEvent = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
-	Machine_DefineFieldHelper((((ExternalNumberManipulator) (_self->entity))->_machine), ListMap_MessageSender(_request), StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38), ListMap_ObjectFields(_jobToProcessThisEvent));
-	Object _name;
-	_name = Object_TempClone(_requestArgument);
-	List_Concatenate(_name, StringFactory_FromUTF8(_stringFactory, "Запрос для +=", 22));
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_jobToProcessThisEvent), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "+=", 2), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
 	Object _messageSlot;
-	_messageSlot = ExternalEntitiesFactory_CreateReplyMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_jobToProcessThisEvent, _name, _name, _name, _messageSlot);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &AddInPlaceSimple), _name);
-	Object _request2;
-	_request2 = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
-	ListMap_MessageSetTypeRequest(_request2);
-	ListMap_MessageSetRequest(_request2, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_MessageSetReceiver(_request2, _requestArgument);
-	Processor_SendMessage(_processor, _request2);
+	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_AddInPlaceSimple), _jobToProcessThisEvent);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _requestArgument));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Processor_AddJobWithName(_processor, _jobToProcessThisEvent, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Запрос для += ", 23), _requestArgument));
+	Object _request;
+	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetTypeRequest(_request);
+	ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
+	ListMap_MessageSetReceiver(_request, _requestArgument);
+	Processor_SendMessage(_processor, _request);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: AddInPlace ended.")
 	return toReturn;
@@ -199,19 +186,17 @@ Object ExternalNumberManipulator_AddInPlaceSimple(Object _self, Object _processo
 	_object = Processor_ContextObject(_processor);
 	Object _number;
 	_number = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
-	Object _job;
-	_job = Processor_ContextJob(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	Number_AddInPlace(_number, ListMap_NumberAt(_request, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Number_AddInPlace(_number, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Число", 10)));
 	Object _receiver;
-	_receiver = ListMap_ObjectFieldUID(_job, StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38));
+	_receiver = Processor_FieldNameToUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
 	ListMap_MessageSetTypeReply(_reply);
 	ListMap_MessageSetRequest(_reply, StringFactory_FromUTF8(_stringFactory, "+=", 2));
+	ListMap_MessageSetReceiver(_reply, _receiver);
 	Processor_SendMessage(_processor, _reply);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: AddInPlaceSimple ended.")
 	return toReturn;
@@ -224,26 +209,23 @@ Object ExternalNumberManipulator_SubInPlace(Object _self, Object _processor)
 	ASSERT_C ( "ExternalNumberManipulator:SubInPlace --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _object;
 	_object = Processor_ContextObject(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "-=", 2));
 	Object _requestArgument;
-	_requestArgument = ListMap_ListAt(_request, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
+	_requestArgument = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "-=", 2), StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
 	Object _jobToProcessThisEvent;
 	_jobToProcessThisEvent = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
-	Machine_DefineFieldHelper((((ExternalNumberManipulator) (_self->entity))->_machine), ListMap_MessageSender(_request), StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38), ListMap_ObjectFields(_jobToProcessThisEvent));
-	Object _name;
-	_name = Object_TempClone(_requestArgument);
-	List_Concatenate(_name, StringFactory_FromUTF8(_stringFactory, "Запрос для -=", 22));
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_jobToProcessThisEvent), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "-=", 2), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
 	Object _messageSlot;
-	_messageSlot = ExternalEntitiesFactory_CreateReplyMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_jobToProcessThisEvent, _name, _name, _name, _messageSlot);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &SubInPlaceSimple), _name);
-	Object _request2;
-	_request2 = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
-	ListMap_MessageSetTypeRequest(_request2);
-	ListMap_MessageSetRequest(_request2, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_MessageSetReceiver(_request2, _requestArgument);
-	Processor_SendMessage(_processor, _request2);
+	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_SubInPlaceSimple), _jobToProcessThisEvent);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _requestArgument));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Processor_AddJobWithName(_processor, _jobToProcessThisEvent, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Запрос для -= ", 23), _requestArgument));
+	Object _request;
+	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetTypeRequest(_request);
+	ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
+	ListMap_MessageSetReceiver(_request, _requestArgument);
+	Processor_SendMessage(_processor, _request);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: SubInPlace ended.")
 	return toReturn;
@@ -258,19 +240,17 @@ Object ExternalNumberManipulator_SubInPlaceSimple(Object _self, Object _processo
 	_object = Processor_ContextObject(_processor);
 	Object _number;
 	_number = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
-	Object _job;
-	_job = Processor_ContextJob(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	Number_SubInPlace(_number, ListMap_NumberAt(_request, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Number_SubInPlace(_number, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Число", 10)));
 	Object _receiver;
-	_receiver = ListMap_ObjectFieldUID(_job, StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38));
+	_receiver = Processor_FieldNameToUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
 	ListMap_MessageSetTypeReply(_reply);
 	ListMap_MessageSetRequest(_reply, StringFactory_FromUTF8(_stringFactory, "-=", 2));
+	ListMap_MessageSetReceiver(_reply, _receiver);
 	Processor_SendMessage(_processor, _reply);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: SubInPlaceSimple ended.")
 	return toReturn;
@@ -283,26 +263,23 @@ Object ExternalNumberManipulator_MulInPlace(Object _self, Object _processor)
 	ASSERT_C ( "ExternalNumberManipulator:MulInPlace --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _object;
 	_object = Processor_ContextObject(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "*=", 2));
 	Object _requestArgument;
-	_requestArgument = ListMap_ListAt(_request, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
+	_requestArgument = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "*=", 2), StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
 	Object _jobToProcessThisEvent;
 	_jobToProcessThisEvent = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
-	Machine_DefineFieldHelper((((ExternalNumberManipulator) (_self->entity))->_machine), ListMap_MessageSender(_request), StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38), ListMap_ObjectFields(_jobToProcessThisEvent));
-	Object _name;
-	_name = Object_TempClone(_requestArgument);
-	List_Concatenate(_name, StringFactory_FromUTF8(_stringFactory, "Запрос для *=", 22));
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_jobToProcessThisEvent), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "*=", 2), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
 	Object _messageSlot;
-	_messageSlot = ExternalEntitiesFactory_CreateReplyMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_jobToProcessThisEvent, _name, _name, _name, _messageSlot);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &MulInPlaceSimple), _name);
-	Object _request2;
-	_request2 = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
-	ListMap_MessageSetTypeRequest(_request2);
-	ListMap_MessageSetRequest(_request2, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_MessageSetReceiver(_request2, _requestArgument);
-	Processor_SendMessage(_processor, _request2);
+	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_MulInPlaceSimple), _jobToProcessThisEvent);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _requestArgument));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Processor_AddJobWithName(_processor, _jobToProcessThisEvent, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Запрос для *= ", 23), _requestArgument));
+	Object _request;
+	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetTypeRequest(_request);
+	ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
+	ListMap_MessageSetReceiver(_request, _requestArgument);
+	Processor_SendMessage(_processor, _request);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: MulInPlace ended.")
 	return toReturn;
@@ -317,19 +294,17 @@ Object ExternalNumberManipulator_MulInPlaceSimple(Object _self, Object _processo
 	_object = Processor_ContextObject(_processor);
 	Object _number;
 	_number = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
-	Object _job;
-	_job = Processor_ContextJob(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	Number_MulInPlace(_number, ListMap_NumberAt(_request, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Number_MulInPlace(_number, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Число", 10)));
 	Object _receiver;
-	_receiver = ListMap_ObjectFieldUID(_job, StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38));
+	_receiver = Processor_FieldNameToUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
 	ListMap_MessageSetTypeReply(_reply);
 	ListMap_MessageSetRequest(_reply, StringFactory_FromUTF8(_stringFactory, "*=", 2));
+	ListMap_MessageSetReceiver(_reply, _receiver);
 	Processor_SendMessage(_processor, _reply);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: MulInPlaceSimple ended.")
 	return toReturn;
@@ -342,26 +317,23 @@ Object ExternalNumberManipulator_DivInPlace(Object _self, Object _processor)
 	ASSERT_C ( "ExternalNumberManipulator:DivInPlace --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _object;
 	_object = Processor_ContextObject(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(Processor_ContextJob(_processor), StringFactory_FromUTF8(_stringFactory, "/=", 2));
 	Object _requestArgument;
-	_requestArgument = ListMap_ListAt(_request, StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
+	_requestArgument = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
 	Object _jobToProcessThisEvent;
 	_jobToProcessThisEvent = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
-	Machine_DefineFieldHelper((((ExternalNumberManipulator) (_self->entity))->_machine), ListMap_MessageSender(_request), StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38), ListMap_ObjectFields(_jobToProcessThisEvent));
-	Object _name;
-	_name = Object_TempClone(_requestArgument);
-	List_Concatenate(_name, StringFactory_FromUTF8(_stringFactory, "Запрос для /=", 22));
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_jobToProcessThisEvent), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "/=", 2), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
 	Object _messageSlot;
-	_messageSlot = ExternalEntitiesFactory_CreateReplyMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_jobToProcessThisEvent, _name, _name, _name, _messageSlot);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &DivInPlaceSimple), _name);
-	Object _request2;
-	_request2 = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
-	ListMap_MessageSetTypeRequest(_request2);
-	ListMap_MessageSetRequest(_request2, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	ListMap_MessageSetReceiver(_request2, _requestArgument);
-	Processor_SendMessage(_processor, _request2);
+	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_DivInPlaceSimple), _jobToProcessThisEvent);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _requestArgument));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Processor_AddJobWithName(_processor, _jobToProcessThisEvent, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Запрос для /= ", 23), _requestArgument));
+	Object _request;
+	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetTypeRequest(_request);
+	ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
+	ListMap_MessageSetReceiver(_request, _requestArgument);
+	Processor_SendMessage(_processor, _request);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: DivInPlace ended.")
 	return toReturn;
@@ -376,21 +348,73 @@ Object ExternalNumberManipulator_DivInPlaceSimple(Object _self, Object _processo
 	_object = Processor_ContextObject(_processor);
 	Object _number;
 	_number = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
-	Object _job;
-	_job = Processor_ContextJob(_processor);
-	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
-	Number_DivInPlace(_number, ListMap_NumberAt(_request, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Number_DivInPlace(_number, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Число", 10)));
 	Object _receiver;
-	_receiver = ListMap_ObjectFieldUID(_job, StringFactory_FromUTF8(_stringFactory, "Перед кем отчетность", 38));
+	_receiver = Processor_FieldNameToUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
 	ListMap_MessageSetTypeReply(_reply);
 	ListMap_MessageSetRequest(_reply, StringFactory_FromUTF8(_stringFactory, "/=", 2));
+	ListMap_MessageSetReceiver(_reply, _receiver);
 	Processor_SendMessage(_processor, _reply);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: DivInPlaceSimple ended.")
+	return toReturn;
+}
+
+Object ExternalNumberManipulator_ModInPlace(Object _self, Object _processor)
+{
+	DPUSHS ("ExternalNumberManipulator: ModInPlace begined.")
+	ASSERT_C ( "ExternalNumberManipulator:ModInPlace --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:ModInPlace --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _object;
+	_object = Processor_ContextObject(_processor);
+	Object _requestArgument;
+	_requestArgument = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "%=", 2), StringFactory_FromUTF8(_stringFactory, "Аргумент", 16));
+	Object _jobToProcessThisEvent;
+	_jobToProcessThisEvent = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_jobToProcessThisEvent), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "%=", 2), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
+	Object _messageSlot;
+	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), _self, MethodFactory_FromPointer(_methodFactory, &ExternalNumberManipulator_ModInPlaceSimple), _jobToProcessThisEvent);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Отправитель", 22), _requestArgument));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Processor_AddJobWithName(_processor, _jobToProcessThisEvent, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Запрос для %= ", 23), _requestArgument));
+	Object _request;
+	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetTypeRequest(_request);
+	ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44));
+	ListMap_MessageSetReceiver(_request, _requestArgument);
+	Processor_SendMessage(_processor, _request);
+	Object toReturn = _self;
+	DPOPS ("ExternalNumberManipulator: ModInPlace ended.")
+	return toReturn;
+}
+
+Object ExternalNumberManipulator_ModInPlaceSimple(Object _self, Object _processor)
+{
+	DPUSHS ("ExternalNumberManipulator: ModInPlaceSimple begined.")
+	ASSERT_C ( "ExternalNumberManipulator:ModInPlaceSimple --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:ModInPlaceSimple --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _object;
+	_object = Processor_ContextObject(_processor);
+	Object _number;
+	_number = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
+	Number_ModInPlace(_number, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простым числом", 44), StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	Object _receiver;
+	_receiver = Processor_FieldNameToUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16));
+	Object _reply;
+	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+	ListMap_MessageSetReplySuccess(_reply);
+	ListMap_MessageSetTypeReply(_reply);
+	ListMap_MessageSetRequest(_reply, StringFactory_FromUTF8(_stringFactory, "%=", 2));
+	ListMap_MessageSetReceiver(_reply, _receiver);
+	Processor_SendMessage(_processor, _reply);
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
+	Object toReturn = _self;
+	DPOPS ("ExternalNumberManipulator: ModInPlaceSimple ended.")
 	return toReturn;
 }
 
@@ -407,7 +431,8 @@ Object ExternalNumberManipulator_Increment(Object _self, Object _processor)
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
-	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Инкремент", 18));
+	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "++", 2));
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: Increment ended.")
 	return toReturn;
@@ -426,7 +451,8 @@ Object ExternalNumberManipulator_Decrement(Object _self, Object _processor)
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetReplySuccess(_reply);
-	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "Декремент", 18));
+	Processor_SendReplyForMessage(_processor, _reply, StringFactory_FromUTF8(_stringFactory, "--", 2));
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
 	DPOPS ("ExternalNumberManipulator: Decrement ended.")
 	return toReturn;
@@ -456,23 +482,65 @@ Object ExternalNumberManipulator_Absolute(Object _self, Object _processor)
 	return toReturn;
 }
 
-Object ExternalNumberManipulator_Notify(Object _self, Object _processor)
+Object ExternalNumberManipulator_NotifyRequest(Object _self, Object _processor)
 {
-	DPUSHS ("ExternalNumberManipulator: Notify begined.")
-	ASSERT_C ( "ExternalNumberManipulator:Notify --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
-	ASSERT_C ( "ExternalNumberManipulator:Notify --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	DPUSHS ("ExternalNumberManipulator: NotifyRequest begined.")
+	ASSERT_C ( "ExternalNumberManipulator:NotifyRequest --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:NotifyRequest --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
 	Object _object;
 	_object = Processor_ContextObject(_processor);
-	Object _notifications;
-	_notifications = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Оповещения", 20));
-	Object _job;
-	_job = Processor_ContextJob(_processor);
 	Object _request;
-	_request = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
-	List_PushBack(_notifications, _request);
+	_request = Processor_MessageInMessageSlot(_processor, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
+	if((Logic_Not(ListMap_Contains(ListMap_ObjectProperties(_object), StringFactory_FromUTF8(_stringFactory, "Значения при оповещении", 44)))) != _false)
+	{
+		ListMap_ObjectSetProperty(_object, ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory), StringFactory_FromUTF8(_stringFactory, "Значения при оповещении", 44));
+	}
+	ListMap_ObjectAddNotificationRequest(_object, _request);
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_ObjectAt(_request, StringFactory_FromUTF8(_stringFactory, "Значение", 16)), _nil) != _equal)) != _false)
+	{
+		Object _msg;
+		_msg = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
+		ListMap_MessageSetReceiver(_msg, ListMap_ObjectAt(_request, StringFactory_FromUTF8(_stringFactory, "Значение", 16)));
+		ListMap_MessageSetTypeRequest(_msg);
+		ListMap_MessageSetRequest(_msg, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
+		ListMap_Add(_msg, StringFactory_FromUTF8(_stringFactory, "Условие", 14), StringFactory_FromUTF8(_stringFactory, "Значение изменилось", 37));
+		Processor_SendMessage(_processor, _msg);
+	}
+	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
+	Object _reply;
+	_reply = Object_TempDeepClone(_request);
+	ListMap_MessageSetTypeReply(_reply);
+	ListMap_MessageSetReplySuccess(_reply);
+	ListMap_Add(_reply, StringFactory_FromUTF8(_stringFactory, "Текущее значение", 31), ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10)));
+	ListMap_MessageSetReceiver(_reply, ListMap_MessageSender(_request));
+	Processor_SendMessage(_processor, _reply);
+	Object toReturn = _self;
+	DPOPS ("ExternalNumberManipulator: NotifyRequest ended.")
+	return toReturn;
+}
+
+Object ExternalNumberManipulator_CurrentValueReceived(Object _self, Object _processor)
+{
+	DPUSHS ("ExternalNumberManipulator: CurrentValueReceived begined.")
+	ASSERT_C ( "ExternalNumberManipulator:CurrentValueReceived --- Checking for correct object type failed.", _self->gid ==  3782552814704636928ull )
+	ASSERT_C ( "ExternalNumberManipulator:CurrentValueReceived --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _object;
+	_object = Processor_ContextObject(_processor);
+	Object _receivedMessage;
+	_receivedMessage = Processor_MessageInMessageSlot(_processor, StringFactory_FromUTF8(_stringFactory, "Текущее значение получено", 48));
+	ListMap_Add(ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Значения при оповещении", 44)), ListMap_MessageSender(_receivedMessage), ListMap_NumberAt(_receivedMessage, StringFactory_FromUTF8(_stringFactory, "Текущее значение", 31)));
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListMap_MessageType(_receivedMessage), StringFactory_FromUTF8(_stringFactory, "Оповещение", 20)) == _equal)) != _false)
+	{
+		Object _request;
+		_request = Object_TempDeepClone(_receivedMessage);
+		ListMap_MessageSetTypeRequest(_request);
+		ListMap_MessageSetRequest(_request, StringFactory_FromUTF8(_stringFactory, "Оповестить", 20));
+		ListMap_MessageSetReceiver(_request, ListMap_MessageSender(_receivedMessage));
+		Processor_SendMessage(_processor, _request);
+	}
 	ExternalNumberManipulator_CheckForNotifications(_self, _processor);
 	Object toReturn = _self;
-	DPOPS ("ExternalNumberManipulator: Notify ended.")
+	DPOPS ("ExternalNumberManipulator: CurrentValueReceived ended.")
 	return toReturn;
 }
 
@@ -484,9 +552,11 @@ Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _pro
 	Object _object;
 	_object = Processor_ContextObject(_processor);
 	Object _notifications;
-	_notifications = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Оповещения", 20));
+	_notifications = ListMap_ObjectNotificationRequests(_object);
 	Object _currentValue;
 	_currentValue = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число", 10));
+	Object _prevValue;
+	_prevValue = ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Число (предыдущее значение)", 50));
 	Object _notificationsIterator;
 	_notificationsIterator = List_First(_notifications);
 	while((Logic_Not(ListIterator_ThisEnd(_notificationsIterator))) != _false)
@@ -501,7 +571,7 @@ Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _pro
 		_valuesValue = _nil;
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(_value, _nil) != _equal)) != _false)
 		{
-			_valuesValue = ListMap_ObjectAt(ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Значения на оповещения", 42)), _value);
+			_valuesValue = ListMap_ObjectAt(ListMap_ObjectProperty(_object, StringFactory_FromUTF8(_stringFactory, "Значения при оповещении", 44)), _value);
 			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_valuesValue, _nil) == _equal)) != _false)
 			{
 				ListIterator_Next(_notificationsIterator);
@@ -533,13 +603,15 @@ Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _pro
 		}
 		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(_condition, StringFactory_FromUTF8(_stringFactory, "Значение изменилось", 37)) == _equal)) != _false)
 		{
-			_shouldNotify = _true;
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(_currentValue, _prevValue) != _equal)) != _false)
+			{
+				_shouldNotify = _true;
+			}
 		}
 		else
 		{
 			Console_WriteString(_console, StringFactory_FromUTF8(_stringFactory, "Некорректное условие на оповещение: ", 67));
 			Console_WriteLnString(_console, _condition);
-			ListIterator_ThisRemove(_notificationsIterator);
 			ListIterator_Prev(_notificationsIterator);
 		}
 		if((_shouldNotify) != _false)
@@ -556,8 +628,11 @@ Object ExternalNumberManipulator_CheckForNotifications(Object _self, Object _pro
 			ListMap_MessageSetReceiver(_notifyMessage, ListMap_MessageSender(_request));
 			Processor_SendMessage(_processor, _notifyMessage);
 			ListIterator_ThisRemove(_notificationsIterator);
-			ListIterator_Prev(_notificationsIterator);
 		}
 		ListIterator_Next(_notificationsIterator);
 	}
+	ListMap_ObjectSetProperty(_object, Object_TempClone(_currentValue), StringFactory_FromUTF8(_stringFactory, "Число (предыдущее значение)", 50));
+	Object toReturn = _self;
+	DPOPS ("ExternalNumberManipulator: CheckForNotifications ended.")
+	return toReturn;
 }

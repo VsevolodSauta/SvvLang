@@ -128,11 +128,9 @@ Object ExternalObjectManipulator_DoUIDObjectBasicMethod(Object _self, Object _pr
 	_object = Machine_UIDToObject((((ExternalObjectManipulator) (_self->entity))->_machine), (((Processor) (_processor->entity))->_contextUID));
 	Object _job;
 	_job = Processor_ContextJob(_processor);
-	Object _message;
-	_message = ListMap_JobMessageInMessageSlot(_job, StringFactory_FromUTF8(_stringFactory, "Специализация Тип=ЗапросЗапрос=Выполнить_Тело", 86));
 	Object _methodBody;
-	_methodBody = ListMap_ListAt(_message, StringFactory_FromUTF8(_stringFactory, "Тело", 8));
-	ListMap_ObjectSetMethodBody(_object, _methodBody, _tempMethodName);
+	_methodBody = Processor_EntityFromMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Тело", 8), StringFactory_FromUTF8(_stringFactory, "Специализация Тип=ЗапросЗапрос=Выполнить_Тело", 86));
+	ListMap_ObjectSetMethodBody(_job, _methodBody, _tempMethodName);
 	Processor_InvokeMethodWithParameters(_processor, _tempMethodName, ExternalEntitiesFactory_CreateEmptyListMap(_entitiesFactory));
 	ListMap_Remove(ListMap_ObjectMethods(_object), _tempMethodName);
 	Object _replyMessage;

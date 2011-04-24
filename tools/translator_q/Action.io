@@ -107,6 +107,11 @@ Action process := method(actor, line,
 		return toReturn
 	)
 	
+	if(actionName beginsWithSeq("TypeIs"),
+		toReturn actorName copy("LogicFactory_FromLong(_logicFactory, #{actor actorName}->gid == #{actionName exclusiveSlice(6) hash asString(20, 0)}ull)" interpolate)
+		toReturn actorType = "Logic"
+		return toReturn
+	)
 	
 	actionType := getActionType(actor)
 	actionResult := actor getReturnedType(self)

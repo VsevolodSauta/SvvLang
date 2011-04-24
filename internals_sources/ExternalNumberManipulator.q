@@ -21,58 +21,50 @@ ExternalNumberManipulator SetMachine <Machine> machine
 
 ExternalNumberManipulator <List> CreateUIDNumberFromUIDObject <List> uid
 	job = entitiesFactory CreateEmptyJob
-	
+
 	// Обеспечение внутреннего протокола
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Значение простым числом"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Значение простым числом" "Значение простым числом" "Значение простым числом" messageSlot	
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_SimpleNumber job
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "Значение простой строкой" self &ExternalNumberManipulator_SimpleString job
 
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Значение простой строкой"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Значение простой строкой" "Значение простой строкой" "Значение простой строкой" messageSlot
-	
+
 	// Создание арифметических операций
-	messageSlot = entitiesFactory CreateRequestMessageSlot "+="
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "+=" self &ExternalNumberManipulator_AddInPlace job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "+=" "+=" "+=" messageSlot
-	
-	messageSlot = entitiesFactory CreateRequestMessageSlot "-="
-	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "-=" "-=" "-=" messageSlot
 
-	messageSlot = entitiesFactory CreateRequestMessageSlot "*="
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "-=" self &ExternalNumberManipulator_SubInPlace job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "*=" "*=" "*=" messageSlot
 
-	messageSlot = entitiesFactory CreateRequestMessageSlot "/="
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "*=" self &ExternalNumberManipulator_MulInPlace job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "/=" "/=" "/=" messageSlot
 
-	messageSlot = entitiesFactory CreateRequestMessageSlot "/="
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "/=" self &ExternalNumberManipulator_DivInPlace job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "/=" "/=" "/=" messageSlot
-	
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Инкремент"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Инкремент" "Инкремент" "Инкремент" messageSlot
-	
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Декремент"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Декремент" "Декремент" "Декремент" messageSlot
-	
+
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "%=" self &ExternalNumberManipulator_ModInPlace job
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Аргумент")
+
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "++" self &ExternalNumberManipulator_Increment job
+
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "--" self &ExternalNumberManipulator_Decrement job
+
+
 	// Создание набора функций
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Модуль"
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Модуль" "Модуль" "Модуль" messageSlot
-	
-	
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "Модуль" self &ExternalNumberManipulator_Absolute job
+
+
 	// Создание оповещения.
-	messageSlot = entitiesFactory CreateRequestMessageSlot "Оповестить"
+	messageSlot = self.machine.fakeProcessor CreateStageRequestEntityBasicMethodInJob "Оповестить" self &ExternalNumberManipulator_NotifyRequest job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Условие")
-	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Значение")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Оповестить" "Опвестить" "Оповестить" messageSlot
-	
+
+	// Создание слота получения оповещения.
+	messageSlot = self.machine.fakeProcessor CreateStageEmptyEntityBasicMethodInJob "Текущее значение получено" self &ExternalNumberManipulator_CurrentValueReceived job
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Текущее значение")
 
 	object = self.machine ObjectByUID uid
-	object ObjectSetJob job
+	object ObjectSetJob job "Основная работа числа"
 	return uid
-	
-	
+
+
 ExternalNumberManipulator SimpleNumber <Processor> processor
 	object = processor ContextObject
 	number = object ObjectProperty "Число"
@@ -81,7 +73,7 @@ ExternalNumberManipulator SimpleNumber <Processor> processor
 	message AtPut "Число" (number TempClone)
 	processor SendReplyForMessage message "Значение простым числом"
 	return self
-	
+
 
 ExternalNumberManipulator SimpleString <Processor> processor
 	object = processor ContextObject
@@ -95,200 +87,275 @@ ExternalNumberManipulator SimpleString <Processor> processor
 
 ExternalNumberManipulator AddInPlace <Processor> processor
 	object = processor ContextObject
-	request = (processor ContextJob) JobMessageInMessageSlot "+="
-	requestArgument = request ListAt "Аргумент"
+	requestArgument = processor EntityFromNamedMessageField "+=" "Аргумент"
 
 	jobToProcessThisEvent = entitiesFactory CreateEmptyJob
-	self.machine DefineFieldHelper (request MessageSender) "Перед кем отчетность" (jobToProcessThisEvent JobFields)
-	name = requestArgument TempClone
-	name Concatenate "Запрос для +="
-	messageSlot = entitiesFactory CreateReplyMessageSlot "Значение простым числом"
-	jobToProcessThisEvent JobCreateStageWithNameMethodMessageSlotNameAndEntity name name name messageSlot
-	object ObjectSetBasicMethod self &AddInPlaceSimple name
-	
-	request2 = entitiesFactory CreateEmptyMessage
-	request2 MessageSetTypeRequest
-	request2 MessageSetRequest "Значение простым числом"
-	request2 MessageSetReceiver requestArgument
-	processor SendMessage request2
+	processor DefineFieldInNameSpaceWithUID "Заказчик" (jobToProcessThisEvent JobFields) (processor EntityFromNamedMessageField "+=" "Отправитель")
+	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_AddInPlaceSimple jobToProcessThisEvent
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Отправитель" requestArgument)
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Ответ" "Успех")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Число")
+	processor AddJobWithName jobToProcessThisEvent ("Запрос для += " Concatenate requestArgument)
+
+	request = entitiesFactory CreateEmptyMessage
+	request MessageSetTypeRequest
+	request MessageSetRequest "Значение простым числом"
+	request MessageSetReceiver requestArgument
+	processor SendMessage request
 	return self
 
 ExternalNumberManipulator AddInPlaceSimple <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
-	job = (processor ContextJob)
-	request = job JobMessageInMessageSlot "Значение простым числом"
-	number += (request NumberAt "Число")
-	
-	receiver = job JobFieldUIDWithName "Перед кем отчетность"
+	number += (processor EntityFromNamedMessageField "Значение простым числом" "Число")
+
+	receiver = processor FieldNameToUID "Заказчик"
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply MessageSetTypeReply
 	reply MessageSetRequest "+="
+	reply MessageSetReceiver receiver
 	processor SendMessage reply
+
+	self CheckForNotifications processor
 	return self
 
-	
+
 ExternalNumberManipulator SubInPlace <Processor> processor
 	object = processor ContextObject
-	request = (processor ContextJob) JobMessageInMessageSlot "-="
-	requestArgument = request ListAt "Аргумент"
+	requestArgument = processor EntityFromNamedMessageField "-=" "Аргумент"
 
 	jobToProcessThisEvent = entitiesFactory CreateEmptyJob
-	self.machine DefineFieldHelper (request MessageSender) "Перед кем отчетность" (jobToProcessThisEvent JobFields)
-	name = requestArgument TempClone
-	name Concatenate "Запрос для -="
-	messageSlot = entitiesFactory CreateReplyMessageSlot "Значение простым числом"
-	jobToProcessThisEvent JobCreateStageWithNameMethodMessageSlotNameAndEntity name name name messageSlot
-	object ObjectSetBasicMethod self &SubInPlaceSimple name
-	
-	request2 = entitiesFactory CreateEmptyMessage
-	request2 MessageSetTypeRequest
-	request2 MessageSetRequest "Значение простым числом"
-	request2 MessageSetReceiver requestArgument
-	processor SendMessage request2
+	processor DefineFieldInNameSpaceWithUID "Заказчик" (jobToProcessThisEvent JobFields) (processor EntityFromNamedMessageField "-=" "Отправитель")
+	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_SubInPlaceSimple jobToProcessThisEvent
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Отправитель" requestArgument)
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Ответ" "Успех")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Число")
+	processor AddJobWithName jobToProcessThisEvent ("Запрос для -= " Concatenate requestArgument)
+
+	request = entitiesFactory CreateEmptyMessage
+	request MessageSetTypeRequest
+	request MessageSetRequest "Значение простым числом"
+	request MessageSetReceiver requestArgument
+	processor SendMessage request
 	return self
 
 ExternalNumberManipulator SubInPlaceSimple <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
-	job = (processor ContextJob)
-	request = job JobMessageInMessageSlot "Значение простым числом"
-	number -= (request NumberAt "Число")
-	
-	receiver = job JobFieldUIDWithName "Перед кем отчетность"
+	number -= (processor EntityFromNamedMessageField "Значение простым числом" "Число")
+
+	receiver = processor FieldNameToUID "Заказчик"
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply MessageSetTypeReply
 	reply MessageSetRequest "-="
+	reply MessageSetReceiver receiver
 	processor SendMessage reply
+
+	self CheckForNotifications processor
 	return self
 
-	
+
 ExternalNumberManipulator MulInPlace <Processor> processor
 	object = processor ContextObject
-	request = (processor ContextJob) JobMessageInMessageSlot "*="
-	requestArgument = request ListAt "Аргумент"
+	requestArgument = processor EntityFromNamedMessageField "*=" "Аргумент"
 
 	jobToProcessThisEvent = entitiesFactory CreateEmptyJob
-	self.machine DefineFieldHelper (request MessageSender) "Перед кем отчетность" (jobToProcessThisEvent JobFields)
-	name = requestArgument TempClone
-	name Concatenate "Запрос для *="
-	messageSlot = entitiesFactory CreateReplyMessageSlot "Значение простым числом"
-	jobToProcessThisEvent JobCreateStageWithNameMethodMessageSlotNameAndEntity name name name messageSlot
-	object ObjectSetBasicMethod self &MulInPlaceSimple name
-	
-	request2 = entitiesFactory CreateEmptyMessage
-	request2 MessageSetTypeRequest
-	request2 MessageSetRequest "Значение простым числом"
-	request2 MessageSetReceiver requestArgument
-	processor SendMessage request2
+	processor DefineFieldInNameSpaceWithUID "Заказчик" (jobToProcessThisEvent JobFields) (processor EntityFromNamedMessageField "*=" "Отправитель")
+	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_MulInPlaceSimple jobToProcessThisEvent
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Отправитель" requestArgument)
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Ответ" "Успех")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Число")
+	processor AddJobWithName jobToProcessThisEvent ("Запрос для *= " Concatenate requestArgument)
+
+	request = entitiesFactory CreateEmptyMessage
+	request MessageSetTypeRequest
+	request MessageSetRequest "Значение простым числом"
+	request MessageSetReceiver requestArgument
+	processor SendMessage request
 	return self
 
 ExternalNumberManipulator MulInPlaceSimple <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
-	job = (processor ContextJob)
-	request = job JobMessageInMessageSlot "Значение простым числом"
-	number *= (request NumberAt "Число")
-	
-	receiver = job JobFieldUIDWithName "Перед кем отчетность"
+	number *= (processor EntityFromNamedMessageField "Значение простым числом" "Число")
+
+	receiver = processor FieldNameToUID "Заказчик"
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply MessageSetTypeReply
 	reply MessageSetRequest "*="
+	reply MessageSetReceiver receiver
 	processor SendMessage reply
+
+	self CheckForNotifications processor
 	return self
 
-	
+
 ExternalNumberManipulator DivInPlace <Processor> processor
 	object = processor ContextObject
-	request = (processor ContextJob) JobMessageInMessageSlot "/="
-	requestArgument = request ListAt "Аргумент"
+	requestArgument = processor EntityFromNamedMessageField "/=" "Аргумент"
 
 	jobToProcessThisEvent = entitiesFactory CreateEmptyJob
-	self.machine DefineFieldHelper (request MessageSender) "Перед кем отчетность" (jobToProcessThisEvent JobFields)
-	name = requestArgument TempClone
-	name Concatenate "Запрос для /="
-	messageSlot = entitiesFactory CreateReplyMessageSlot "Значение простым числом"
-	jobToProcessThisEvent JobCreateStageWithNameMethodMessageSlotNameAndEntity name name name messageSlot
-	object ObjectSetBasicMethod self &DivInPlaceSimple name
-	
-	request2 = entitiesFactory CreateEmptyMessage
-	request2 MessageSetTypeRequest
-	request2 MessageSetRequest "Значение простым числом"
-	request2 MessageSetReceiver requestArgument
-	processor SendMessage request2
+	processor DefineFieldInNameSpaceWithUID "Заказчик" (jobToProcessThisEvent JobFields) (processor EntityFromNamedMessageField "/=" "Отправитель")
+	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_DivInPlaceSimple jobToProcessThisEvent
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Отправитель" requestArgument)
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Ответ" "Успех")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Число")
+	processor AddJobWithName jobToProcessThisEvent ("Запрос для /= " Concatenate requestArgument)
+
+	request = entitiesFactory CreateEmptyMessage
+	request MessageSetTypeRequest
+	request MessageSetRequest "Значение простым числом"
+	request MessageSetReceiver requestArgument
+	processor SendMessage request
 	return self
 
 ExternalNumberManipulator DivInPlaceSimple <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
-	job = (processor ContextJob)
-	request = job JobMessageInMessageSlot "Значение простым числом"
-	number /= (request NumberAt "Число")
-	
-	receiver = job JobFieldUIDWithName "Перед кем отчетность"
+	number /= (processor EntityFromNamedMessageField "Значение простым числом" "Число")
+
+	receiver = processor FieldNameToUID "Заказчик"
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply MessageSetTypeReply
 	reply MessageSetRequest "/="
+	reply MessageSetReceiver receiver
 	processor SendMessage reply
+
+	self CheckForNotifications processor
 	return self
 
-	
+
+ExternalNumberManipulator ModInPlace <Processor> processor
+	object = processor ContextObject
+	requestArgument = processor EntityFromNamedMessageField "%=" "Аргумент"
+
+	jobToProcessThisEvent = entitiesFactory CreateEmptyJob
+	processor DefineFieldInNameSpaceWithUID "Заказчик" (jobToProcessThisEvent JobFields) (processor EntityFromNamedMessageField "%=" "Отправитель")
+	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простым числом" self &ExternalNumberManipulator_ModInPlaceSimple jobToProcessThisEvent
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Отправитель" requestArgument)
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionEquality "Ответ" "Успех")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Число")
+	processor AddJobWithName jobToProcessThisEvent ("Запрос для %= " Concatenate requestArgument)
+
+	request = entitiesFactory CreateEmptyMessage
+	request MessageSetTypeRequest
+	request MessageSetRequest "Значение простым числом"
+	request MessageSetReceiver requestArgument
+	processor SendMessage request
+	return self
+
+ExternalNumberManipulator ModInPlaceSimple <Processor> processor
+	object = processor ContextObject
+	number = (object ObjectProperty "Число") AsNumber
+	number %= (processor EntityFromNamedMessageField "Значение простым числом" "Число")
+
+	receiver = processor FieldNameToUID "Заказчик"
+	reply = entitiesFactory CreateEmptyMessage
+	reply MessageSetAnswerSuccess
+	reply MessageSetTypeReply
+	reply MessageSetRequest "%="
+	reply MessageSetReceiver receiver
+	processor SendMessage reply
+
+	self CheckForNotifications processor
+	return self
+
+
 ExternalNumberManipulator Increment <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
 	number ++
-	
+
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
-	processor SendReplyForMessage reply "Инкремент"
+	processor SendReplyForMessage reply "++"
+
+	self CheckForNotifications processor
 	return self
-	
-	
+
+
 ExternalNumberManipulator Decrement <Processor> processor
 	object = processor ContextObject
 	number = (object ObjectProperty "Число") AsNumber
 	number --
-	
+
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
-	processor SendReplyForMessage reply "Декремент"
+	processor SendReplyForMessage reply "--"
+
+	self CheckForNotifications processor
 	return self
-	
+
 
 ExternalNumberManipulator Absolute <Processor> processor
 	object = processor ContextObject
 	number = ((object ObjectProperty "Число") AsNumber) Abs
-	
+
 	cloneUID = self.machine.machineManipulator.object CloneUIDObjectInternalRoutine processor.contextUID
 	clone = self.machine UIDToObject cloneUID
-	
+
 	(clone ObjectProperties) AtPut "Число" number
-	
+
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
 	reply AtPut "Значение" cloneUID
 	processor SendReplyForMessage reply "Модуль"
 	return self
 
-ExternalNumberManipulator Notify <Processor> processor
+ExternalNumberManipulator NotifyRequest <Processor> processor
 	object = processor ContextObject
-	notifications = (object ObjectProperty "Оповещения") AsList
-	
-	job = processor ContextJob
-	request = job JobMessageInMessageSlot "Оповестить"
-	notifications Append request
-	
+	request = (processor MessageInMessageSlot "Оповестить")
+
+	if (object ObjectProperties) NotContainsKey "Значения при оповещении"
+		object ObjectSetProperty (entitiesFactory CreateEmptyListMap) "Значения при оповещении"
+
+	object ObjectAddNotificationRequest request
+
+	if (request At "Значение") != nil
+		msg = entitiesFactory CreateEmptyMessage
+		msg MessageSetReceiver (request At "Значение")
+		msg MessageSetTypeRequest
+		msg MessageSetRequest "Оповестить"
+		msg AtPut "Условие" "Значение изменилось"
+		processor SendMessage msg
+
+	self CheckForNotifications processor
+
+	reply = request TempDeepClone
+	reply MessageSetTypeReply
+	reply MessageSetReplySuccess
+	reply AtPut "Текущее значение" (object ObjectProperty "Число")
+	reply MessageSetReceiver (request MessageSender)
+	processor SendMessage reply
+
+	return self
+
+ExternalNumberManipulator CurrentValueReceived <Processor> processor
+	object = processor ContextObject
+	receivedMessage = processor MessageInMessageSlot "Текущее значение получено"
+	((object ObjectProperty "Значения при оповещении") AsListMap) AtPut (receivedMessage MessageSender) (receivedMessage NumberAt "Текущее значение")
+
+	if (receivedMessage MessageType) == "Оповещение"
+		request = receivedMessage TempDeepClone
+		request MessageSetTypeRequest
+		request MessageSetRequest "Оповестить"
+		request MessageSetReceiver (receivedMessage MessageSender)
+		processor SendMessage request
+
+	// Мониторится состояние объектов БЕСКОНЕЧНО
+
 	self CheckForNotifications processor
 	return self
 
 ExternalNumberManipulator CheckForNotifications <Processor> processor
 	object = processor ContextObject
-	notifications = (object ObjectProperty "Оповещения") AsList
+	notifications = object ObjectNotificationRequests
 	currentValue = (object ObjectProperty "Число") AsNumber
+	prevValue = (object ObjectProperty "Число (предыдущее значение)") AsNumber
 
 	notificationsIterator = notifications First
 	while notificationsIterator NotThisEnd
@@ -297,28 +364,29 @@ ExternalNumberManipulator CheckForNotifications <Processor> processor
 		value = request At "Значение"
 		valuesValue = nil
 		if value != nil
-			valuesValue = ((object ObjectProperty "Значения на оповещения") AsListMap) At value
+			valuesValue = ((object ObjectProperty "Значения при оповещении") AsListMap) At value
 			if valuesValue == nil
 				notificationsIterator ++
 				continue
 		shouldNotify = false
-		if (condition == ">") 
+		if (condition == ">")
 			if (currentValue > valuesValue)
 				shouldNotify = true
-		elif (condition == "<") 
+		elif (condition == "<")
 			if (currentValue < valuesValue)
 				shouldNotify = true
-		elif ((condition == "=") Or (condition == "==")) 
-			if (currentValue == valuesValue)		
+		elif ((condition == "=") Or (condition == "=="))
+			if (currentValue == valuesValue)
 				shouldNotify = true
 		elif (condition == "Значение изменилось")
-			shouldNotify = true
+			if (currentValue != prevValue)
+				shouldNotify = true
 		else
 			console PrintString "Некорректное условие на оповещение: "
 			console PrintLnString condition
-			notificationsIterator Remove
+			// notificationsIterator Remove
 			notificationsIterator --
-		if shouldNotify		
+		if shouldNotify
 			notifyMessage = entitiesFactory CreateEmptyMessage
 			notifyMessage MessageSetTypeNotification
 			notifyMessage AtPut "Условие" condition
@@ -328,6 +396,6 @@ ExternalNumberManipulator CheckForNotifications <Processor> processor
 			notifyMessage MessageSetReceiver (request MessageSender)
 			processor SendMessage notifyMessage
 			notificationsIterator Remove
-			notificationsIterator --
 		notificationsIterator ++
-
+	object ObjectSetProperty (currentValue TempClone) "Число (предыдущее значение)"
+	return self

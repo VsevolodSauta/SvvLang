@@ -2,6 +2,8 @@
 #include "internals/ExternalObjectManipulator/interface.h"
 #include "internals/ExternalConsoleManipulator/interface.h"
 #include "internals/ExternalFileManipulator/interface.h"
+#include "internals/ExternalNumberManipulator/interface.h"
+#include "internals/ExternalListManipulator/interface.h"
 #include "internals/ExternalMachineManipulator/interface.h"
 #include "internals/List/interface.h"
 #include "internals/Console/interface.h"
