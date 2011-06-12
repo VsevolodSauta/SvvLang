@@ -8,6 +8,8 @@
 #include "internals/NumberFactory/interface.h"
 #include "internals/Encoding/interface.h"
 
+#define BUFFER_LENGTH 4096
+
 Object File_Create()
 {
 	File entity = Allocator_New(_allocator, sizeof(struct File));
@@ -24,17 +26,17 @@ Object File_Create()
 Object File_OpenForReading(Object _self, Object _filename)
 {
 	File entity = _self->entity;
-	char buffer[4096];
-	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, 1024);
-	entity->_descriptor = OSfileOpen(buffer, 0);
+	char buffer[BUFFER_LENGTH];
+	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, BUFFER_LENGTH);
+	entity->_descriptor = OSfileOpen(entity->buffer, 0);
 	return _self;
 }
 
 Object File_OpenForAppending(Object _self, Object _filename)
 {
 	File entity = _self->entity;
-	char buffer[4096];
-	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, 1024);
+	char buffer[BUFFER_LENGTH];
+	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, BUFFER_LENGTH);
 	entity->_descriptor = OSfileOpen(buffer, 66, 0777);
 	return _self;
 }
@@ -96,14 +98,6 @@ Object File_ReadByte(Object _self)
 	char buffer;
 	OSfileRead(entity->_descriptor, &buffer, 1);
 	return NumberFactory_FromLong(_numberFactory, buffer);
-}
-
-Object File_WriteByte(Object _self, Object _byte)
-{
-	File entity = _self->entity;
-	char buffer = Number_GetLong(_byte);
-	OSfileWrite(entity->_descriptor, &buffer, 1);
-	return _self;
 }
 
 Object File_ReadChar(Object _self)
@@ -213,11 +207,42 @@ Object File_Destroy(Object _self)
 	return Object_Destroy(_self);
 }
 
+Object File_WriteByte(Object _self, Object _byte)
+{
+	File entity = _self->entity;
+	char buffer = Number_GetLong(_byte);
+	OSfileWrite(entity->_descriptor, &buffer, 1);
+	return _self;
+}
+
+Object File_WriteChar(Object _self, Object _char)
+{
+	File entity = _self->entity;
+	char buffer[16];
+	long code;
+	long length;
+	code = Number_GetLong(Char_GetCode(_char));
+	length = UTF8GetLengthOfCode(code);
+	UTF8PutChar(buffer, code, length);
+	OSfileWrite(entity->_descriptor, buffer, length);
+	return _self;
+}
+
 Object File_WriteNakedString(Object _self, Object _list)
 {
 	File entity = _self->entity;
-	static char buffer[65536];
-	OSfileWrite(entity->_descriptor, buffer, StringFactory_GetUTF8String(_stringFactory, _list, buffer, 65536));
+	char buffer[16];
+	long code;
+	long length;
+	Object iterator = List_First(_list);
+	while(ListIterator_ThisEnd(iterator) != _true)
+	{
+		code = Number_GetLong(Char_GetCode(ListIterator_ThisData(iterator)));
+		length = UTF8GetLengthOfCode(code);
+		UTF8PutChar(buffer, code, length);
+		OSfileWrite(entity->_descriptor, buffer, length);
+		ListIterator_Next(iterator);
+	}
 	return _self;
 }
 

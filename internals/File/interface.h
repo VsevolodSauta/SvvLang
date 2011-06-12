@@ -20,8 +20,6 @@ Object File_SeekFromEndToPosition(Object _self, Object _position);
 Object File_GetPosition(Object _self);
 
 Object File_ReadByte(Object _self);
-Object File_WriteByte(Object _self, Object _byteCode);
-
 Object File_ReadChar(Object _self);
 Object File_ReadString(Object _self);
 Object File_ReadLnString(Object _self);
@@ -37,11 +35,12 @@ Object File_Compare(Object _self, Object _file);
 Object File_Clone(Object _self);
 Object File_Destroy(Object _self);
 
-Object File_WriteNakedNumber(Object _self, Object _number);
+Object File_WriteByte(Object _self, Object _byteCode);
 Object File_WriteNakedString(Object _self, Object _list);
-Object File_WriteNumber(Object _self, Object _number);
 Object File_WriteString(Object _self, Object _list);
-Object File_WriteLnNumber(Object _self, Object _number);
 Object File_WriteLnString(Object _self, Object _list);
+Object File_WriteNakedNumber(Object _self, Object _number);
+Object File_WriteNumber(Object _self, Object _number);
+Object File_WriteLnNumber(Object _self, Object _number);
 Object File_WriteList(Object _self, Object _list);
 Object File_WriteListMap(Object _self, Object _listMap);
