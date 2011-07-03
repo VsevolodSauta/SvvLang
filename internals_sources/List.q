@@ -67,7 +67,7 @@ List PushFront (Prepend) object
 	self.iterator Hide
 	return self
 
-List PushBack (Append Push) object
+List PushBack (Append Push Add AddObject) object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator AddAfter object
@@ -89,7 +89,7 @@ List <Object> PeekFront
 	def self.iterator ThisData
 	self.iterator Hide
 
-List <Object> PeekBack
+List <Object> PeekBack (Peek)
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	def self.iterator ThisData
@@ -135,7 +135,7 @@ List PushBackIfAbsent (AppendIfAbsent) object
 	self.iterator Hide
 	return self
 
-List AddAfterPosition <Number> position object
+List AddAfterPosition (AtInsert) <Number> position object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator AddAfter object
@@ -149,7 +149,7 @@ List AddBeforePosition (InsertAtPositionObject AtInsert) <Number> position objec
 	self.iterator Hide
 	return self
 
-List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition) <Number> position
+List <Object> ObjectAtPosition (ObjectFromPosition DataFromPosition ObjectAt At) <Number> position
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	def self.iterator ThisData
@@ -168,7 +168,7 @@ List RemoveObjectAtPosition (RemoveAt) <Number> position
 	self.iterator Hide
 	return self
 
-List ReplaceAtPositionWithObject <Number> position object
+List ReplaceAtPositionWithObject (AtPut) <Number> position object
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToPosition position
 	self.iterator SetThisData object
@@ -277,6 +277,11 @@ List <ListIterator> SystemIterator
 	iterator SystemInitWithListAndNode self nil
 	return iterator
 
+List <ListIterator> SystemFirst
+	iterator = <ListIterator>
+	iterator InitWithListAndNode self self.head.next
+	return iterator
+
 List <ListMap> ListMapAtPosition (ListMapFromPosition) <Number> position
 	return (self ObjectAtPosition position) AsListMap
 
@@ -355,13 +360,13 @@ List <Logic> Empty (IsEmpty)
 	def self.iterator ThisEnd
 	self.iterator Hide
 
-List ConcatenateRight (Concatenate) <List> list
+List ConcatenateRight (Concatenate +) <List> list
 	assert "Список занят. Итератор не на месте." self.iterator Hidden
 	self.iterator ToEnd
 	self.iterator AddListAfter list
 	self.iterator Hide
 	return self
-	
+
 List Set (ReplaceWithList) <List> list
 	self Clean
 	self Concatenate list
@@ -378,4 +383,28 @@ List Print
 	console PrintString self
 	return self
 
+List <Logic> LooksLikeString
+	iterator = self First
+	while iterator NotThisEnd
+		if (iterator ThisData) NotTypeIsChar
+			return no
+		iterator ++
+	return yes
+
+List <Logic> LooksLikeUID
+	iterator = self First
+	if iterator ThisEnd
+		return no
+	if (iterator ThisData) != '<'
+		return no
+	iterator ++
+	while ((iterator ThisData) >= '0') And ((iterator ThisData) <= '9')
+		iterator ++
+	if iterator ThisEnd
+		return no
+	if (iterator ThisData) != '>'
+		return no
+	if iterator NotNextEnd
+		return no
+	return yes
 

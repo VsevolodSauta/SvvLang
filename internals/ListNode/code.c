@@ -51,7 +51,7 @@ Object ListNode_DeepClone(Object _self)
 	_toReturn = ListNode_Create();
 	(((ListNode) (_toReturn->entity))->_next) = (((ListNode) (_self->entity))->_next);
 	(((ListNode) (_toReturn->entity))->_prev) = (((ListNode) (_self->entity))->_prev);
-	Object_SetRetaining(&(((ListNode) (_toReturn->entity))->_data), Object_DeepClone((((ListNode) (_self->entity))->_data)));
+	Object_SetReleasing(&(((ListNode) (_toReturn->entity))->_data), Object_DeepClone((((ListNode) (_self->entity))->_data)));
 	Object toReturn = _toReturn;
 	DPOPS ("ListNode: DeepClone ended.")
 	return toReturn;

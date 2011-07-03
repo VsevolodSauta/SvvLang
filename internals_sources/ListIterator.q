@@ -5,7 +5,7 @@ ListIterator <Comparation> Compare <ListIterator> iterator
 
 ListIterator Destroy
 	self.node Release
-	if self.system Is false
+	if self.system Not
 		self.list Release
 	return (self AsObject) Destroy
 

@@ -388,6 +388,24 @@ Object ListMap_Last(Object _self)
 	return toReturn;
 }
 
+Object ListMap_Size(Object _self)
+{
+	DPUSHS ("ListMap: Size begined.")
+	ASSERT_C ( "ListMap:Size --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object _iterator;
+	_iterator = ListMap_First(_self);
+	Object _toReturn;
+	_toReturn = NumberFactory_FromLong(_numberFactory, 0);
+	while((Logic_Not(ListMapIterator_ThisEnd(_iterator))) != _false)
+	{
+		Number_Inc(_toReturn);
+		ListMapIterator_Next(_iterator);
+	}
+	Object toReturn = _toReturn;
+	DPOPS ("ListMap: Size ended.")
+	return toReturn;
+}
+
 Object ListMap_DumpKeys(Object _self)
 {
 	DPUSHS ("ListMap: DumpKeys begined.")
@@ -448,203 +466,203 @@ Object ListMap_DumpListToListMap(Object _self)
 	return toReturn;
 }
 
-Object ListMap_ObjectMethods(Object _self)
+Object ListMap_ActorMethods(Object _self)
 {
-	DPUSHS ("ListMap: ObjectMethods begined.")
-	ASSERT_C ( "ListMap:ObjectMethods --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	DPUSHS ("ListMap: ActorMethods begined.")
+	ASSERT_C ( "ListMap:ActorMethods --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
 	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Методы", 12));
-	DPOPS ("ListMap: ObjectMethods ended.")
+	DPOPS ("ListMap: ActorMethods ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectFields(Object _self)
+Object ListMap_ActorFields(Object _self)
 {
-	DPUSHS ("ListMap: ObjectFields begined.")
-	ASSERT_C ( "ListMap:ObjectFields --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	DPUSHS ("ListMap: ActorFields begined.")
+	ASSERT_C ( "ListMap:ActorFields --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
 	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Поля", 8));
-	DPOPS ("ListMap: ObjectFields ended.")
+	DPOPS ("ListMap: ActorFields ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectJobs(Object _self)
+Object ListMap_ActorJobs(Object _self)
 {
-	DPUSHS ("ListMap: ObjectJobs begined.")
-	ASSERT_C ( "ListMap:ObjectJobs --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	DPUSHS ("ListMap: ActorJobs begined.")
+	ASSERT_C ( "ListMap:ActorJobs --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
 	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Работы", 12));
-	DPOPS ("ListMap: ObjectJobs ended.")
+	DPOPS ("ListMap: ActorJobs ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectJobsIterator(Object _self)
+Object ListMap_ActorJobsIterator(Object _self)
 {
-	DPUSHS ("ListMap: ObjectJobsIterator begined.")
-	ASSERT_C ( "ListMap:ObjectJobsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_First(ListMap_ObjectJobs(_self));
-	DPOPS ("ListMap: ObjectJobsIterator ended.")
+	DPUSHS ("ListMap: ActorJobsIterator begined.")
+	ASSERT_C ( "ListMap:ActorJobsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_First(ListMap_ActorJobs(_self));
+	DPOPS ("ListMap: ActorJobsIterator ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectProperties(Object _self)
+Object ListMap_ActorProperties(Object _self)
 {
-	DPUSHS ("ListMap: ObjectProperties begined.")
-	ASSERT_C ( "ListMap:ObjectProperties --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	DPUSHS ("ListMap: ActorProperties begined.")
+	ASSERT_C ( "ListMap:ActorProperties --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
 	Object toReturn = ListMap_ListMapAt(_self, StringFactory_FromUTF8(_stringFactory, "Свойства", 16));
-	DPOPS ("ListMap: ObjectProperties ended.")
+	DPOPS ("ListMap: ActorProperties ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectField(Object _self, Object _fieldName)
+Object ListMap_ActorField(Object _self, Object _fieldName)
 {
-	DPUSHS ("ListMap: ObjectField begined.")
-	ASSERT_C ( "ListMap:ObjectField --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	Object toReturn = ListMap_SynonimAt(ListMap_ObjectFields(_self), _fieldName);
-	DPOPS ("ListMap: ObjectField ended.")
+	DPUSHS ("ListMap: ActorField begined.")
+	ASSERT_C ( "ListMap:ActorField --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorField --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	Object toReturn = ListMap_SynonimAt(ListMap_ActorFields(_self), _fieldName);
+	DPOPS ("ListMap: ActorField ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectFieldUID(Object _self, Object _fieldName)
+Object ListMap_ActorFieldUID(Object _self, Object _fieldName)
 {
-	DPUSHS ("ListMap: ObjectFieldUID begined.")
-	ASSERT_C ( "ListMap:ObjectFieldUID --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectFieldUID --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
-	Object toReturn = Synonim_GetUID(ListMap_ObjectField(_self, _fieldName));
-	DPOPS ("ListMap: ObjectFieldUID ended.")
+	DPUSHS ("ListMap: ActorFieldUID begined.")
+	ASSERT_C ( "ListMap:ActorFieldUID --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorFieldUID --- Checking for correct parameter type failed at parameter _fieldName.", _fieldName->gid ==  3732711262168886272ull || _fieldName == _nil )
+	Object toReturn = Synonim_GetUID(ListMap_ActorField(_self, _fieldName));
+	DPOPS ("ListMap: ActorFieldUID ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectMethod(Object _self, Object _methodName)
+Object ListMap_ActorMethod(Object _self, Object _methodName)
 {
-	DPUSHS ("ListMap: ObjectMethod begined.")
-	ASSERT_C ( "ListMap:ObjectMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
-	Object toReturn = ListMap_ListMapAt(ListMap_ObjectMethods(_self), _methodName);
-	DPOPS ("ListMap: ObjectMethod ended.")
+	DPUSHS ("ListMap: ActorMethod begined.")
+	ASSERT_C ( "ListMap:ActorMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	Object toReturn = ListMap_ListMapAt(ListMap_ActorMethods(_self), _methodName);
+	DPOPS ("ListMap: ActorMethod ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectRemoveMethod(Object _self, Object _methodName)
+Object ListMap_ActorRemoveMethod(Object _self, Object _methodName)
 {
-	DPUSHS ("ListMap: ObjectRemoveMethod begined.")
-	ASSERT_C ( "ListMap:ObjectRemoveMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectRemoveMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
-	ListMap_Remove(ListMap_ObjectMethods(_self), _methodName);
+	DPUSHS ("ListMap: ActorRemoveMethod begined.")
+	ASSERT_C ( "ListMap:ActorRemoveMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorRemoveMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_Remove(ListMap_ActorMethods(_self), _methodName);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectRemoveMethod ended.")
+	DPOPS ("ListMap: ActorRemoveMethod ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectSetMethod(Object _self, Object _method, Object _methodName)
+Object ListMap_ActorSetMethod(Object _self, Object _method, Object _methodName)
 {
-	DPUSHS ("ListMap: ObjectSetMethod begined.")
-	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
-	ASSERT_C ( "ListMap:ObjectSetMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
-	ListMap_Add(ListMap_ObjectMethods(_self), _methodName, _method);
+	DPUSHS ("ListMap: ActorSetMethod begined.")
+	ASSERT_C ( "ListMap:ActorSetMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorSetMethod --- Checking for correct parameter type failed at parameter _method.", _method->gid ==  2108332898258556672ull || _method == _nil )
+	ASSERT_C ( "ListMap:ActorSetMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	ListMap_Add(ListMap_ActorMethods(_self), _methodName, _method);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectSetMethod ended.")
+	DPOPS ("ListMap: ActorSetMethod ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectSetMethodBody(Object _self, Object _methodBody, Object _methodName)
+Object ListMap_ActorSetMethodBody(Object _self, Object _methodBody, Object _methodName)
 {
-	DPUSHS ("ListMap: ObjectSetMethodBody begined.")
-	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct parameter type failed at parameter _methodBody.", _methodBody->gid ==  3732711262168886272ull || _methodBody == _nil )
-	ASSERT_C ( "ListMap:ObjectSetMethodBody --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	DPUSHS ("ListMap: ActorSetMethodBody begined.")
+	ASSERT_C ( "ListMap:ActorSetMethodBody --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorSetMethodBody --- Checking for correct parameter type failed at parameter _methodBody.", _methodBody->gid ==  3732711262168886272ull || _methodBody == _nil )
+	ASSERT_C ( "ListMap:ActorSetMethodBody --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	Object _method;
 	_method = ListMap_Create();
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _false);
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Тело", 8), _methodBody);
-	ListMap_Add(ListMap_ObjectMethods(_self), _methodName, _method);
+	ListMap_Add(ListMap_ActorMethods(_self), _methodName, _method);
 	Object_Release(_method);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectSetMethodBody ended.")
+	DPOPS ("ListMap: ActorSetMethodBody ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectSetBasicMethod(Object _self, Object _entity, Object _basicMethod, Object _methodName)
+Object ListMap_ActorSetBasicMethod(Object _self, Object _entity, Object _basicMethod, Object _methodName)
 {
-	DPUSHS ("ListMap: ObjectSetBasicMethod begined.")
-	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
-	ASSERT_C ( "ListMap:ObjectSetBasicMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
+	DPUSHS ("ListMap: ActorSetBasicMethod begined.")
+	ASSERT_C ( "ListMap:ActorSetBasicMethod --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorSetBasicMethod --- Checking for correct parameter type failed at parameter _basicMethod.", _basicMethod->gid == 14849865630305968128ull || _basicMethod == _nil )
+	ASSERT_C ( "ListMap:ActorSetBasicMethod --- Checking for correct parameter type failed at parameter _methodName.", _methodName->gid ==  3732711262168886272ull || _methodName == _nil )
 	Object _method;
 	_method = ListMap_Create();
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый", 14), _true);
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Сущность", 16), _entity);
 	ListMap_Add(_method, StringFactory_FromUTF8(_stringFactory, "Базовый метод", 25), _basicMethod);
-	ListMap_Add(ListMap_ObjectMethods(_self), _methodName, _method);
+	ListMap_Add(ListMap_ActorMethods(_self), _methodName, _method);
 	Object_Release(_method);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectSetBasicMethod ended.")
+	DPOPS ("ListMap: ActorSetBasicMethod ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectSetJob(Object _self, Object _job, Object _jobName)
+Object ListMap_ActorSetJob(Object _self, Object _job, Object _jobName)
 {
-	DPUSHS ("ListMap: ObjectSetJob begined.")
-	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
-	ASSERT_C ( "ListMap:ObjectSetJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
-	ListMap_Add(ListMap_ObjectJobs(_self), _jobName, _job);
+	DPUSHS ("ListMap: ActorSetJob begined.")
+	ASSERT_C ( "ListMap:ActorSetJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorSetJob --- Checking for correct parameter type failed at parameter _job.", _job->gid ==  2108332898258556672ull || _job == _nil )
+	ASSERT_C ( "ListMap:ActorSetJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
+	ListMap_Add(ListMap_ActorJobs(_self), _jobName, _job);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectSetJob ended.")
+	DPOPS ("ListMap: ActorSetJob ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectSetProperty(Object _self, Object _value, Object _propertyName)
+Object ListMap_ActorSetProperty(Object _self, Object _value, Object _propertyName)
 {
-	DPUSHS ("ListMap: ObjectSetProperty begined.")
-	ASSERT_C ( "ListMap:ObjectSetProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectSetProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
-	ListMap_Add(ListMap_ObjectProperties(_self), _propertyName, _value);
+	DPUSHS ("ListMap: ActorSetProperty begined.")
+	ASSERT_C ( "ListMap:ActorSetProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorSetProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
+	ListMap_Add(ListMap_ActorProperties(_self), _propertyName, _value);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectSetProperty ended.")
+	DPOPS ("ListMap: ActorSetProperty ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectRemoveJob(Object _self, Object _jobName)
+Object ListMap_ActorRemoveJob(Object _self, Object _jobName)
 {
-	DPUSHS ("ListMap: ObjectRemoveJob begined.")
-	ASSERT_C ( "ListMap:ObjectRemoveJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectRemoveJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
-	ListMap_Remove(ListMap_ObjectJobs(_self), _jobName);
+	DPUSHS ("ListMap: ActorRemoveJob begined.")
+	ASSERT_C ( "ListMap:ActorRemoveJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorRemoveJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
+	ListMap_Remove(ListMap_ActorJobs(_self), _jobName);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectRemoveJob ended.")
+	DPOPS ("ListMap: ActorRemoveJob ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectResetMethodsDestructive(Object _self, Object _newMethods)
+Object ListMap_ActorResetMethodsDestructive(Object _self, Object _newMethods)
 {
-	DPUSHS ("ListMap: ObjectResetMethodsDestructive begined.")
-	ASSERT_C ( "ListMap:ObjectResetMethodsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectResetMethodsDestructive --- Checking for correct parameter type failed at parameter _newMethods.", _newMethods->gid ==  2108332898258556672ull || _newMethods == _nil )
+	DPUSHS ("ListMap: ActorResetMethodsDestructive begined.")
+	ASSERT_C ( "ListMap:ActorResetMethodsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorResetMethodsDestructive --- Checking for correct parameter type failed at parameter _newMethods.", _newMethods->gid ==  2108332898258556672ull || _newMethods == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Методы", 12), _newMethods);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectResetMethodsDestructive ended.")
+	DPOPS ("ListMap: ActorResetMethodsDestructive ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectResetFieldsDestructive(Object _self, Object _newFields)
+Object ListMap_ActorResetFieldsDestructive(Object _self, Object _newFields)
 {
-	DPUSHS ("ListMap: ObjectResetFieldsDestructive begined.")
-	ASSERT_C ( "ListMap:ObjectResetFieldsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectResetFieldsDestructive --- Checking for correct parameter type failed at parameter _newFields.", _newFields->gid ==  2108332898258556672ull || _newFields == _nil )
+	DPUSHS ("ListMap: ActorResetFieldsDestructive begined.")
+	ASSERT_C ( "ListMap:ActorResetFieldsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorResetFieldsDestructive --- Checking for correct parameter type failed at parameter _newFields.", _newFields->gid ==  2108332898258556672ull || _newFields == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Поля", 8), _newFields);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectResetFieldsDestructive ended.")
+	DPOPS ("ListMap: ActorResetFieldsDestructive ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectResetJobsDestructive(Object _self, Object _newJobs)
+Object ListMap_ActorResetJobsDestructive(Object _self, Object _newJobs)
 {
-	DPUSHS ("ListMap: ObjectResetJobsDestructive begined.")
-	ASSERT_C ( "ListMap:ObjectResetJobsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectResetJobsDestructive --- Checking for correct parameter type failed at parameter _newJobs.", _newJobs->gid ==  2108332898258556672ull || _newJobs == _nil )
+	DPUSHS ("ListMap: ActorResetJobsDestructive begined.")
+	ASSERT_C ( "ListMap:ActorResetJobsDestructive --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorResetJobsDestructive --- Checking for correct parameter type failed at parameter _newJobs.", _newJobs->gid ==  2108332898258556672ull || _newJobs == _nil )
 	ListMap_Add(_self, StringFactory_FromUTF8(_stringFactory, "Работы", 12), _newJobs);
 	Object _jobsIterator;
-	_jobsIterator = ListMap_ObjectJobsIterator(_self);
+	_jobsIterator = ListMap_ActorJobsIterator(_self);
 	while((Logic_Not(ListMapIterator_ThisEnd(_jobsIterator))) != _false)
 	{
 		Object _job;
@@ -677,66 +695,66 @@ Object ListMap_ObjectResetJobsDestructive(Object _self, Object _newJobs)
 		ListMapIterator_Next(_jobsIterator);
 	}
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectResetJobsDestructive ended.")
+	DPOPS ("ListMap: ActorResetJobsDestructive ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectRemoveAllIdentifiers(Object _self)
+Object ListMap_ActorRemoveAllIdentifiers(Object _self)
 {
-	DPUSHS ("ListMap: ObjectRemoveAllIdentifiers begined.")
-	ASSERT_C ( "ListMap:ObjectRemoveAllIdentifiers --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	List_Clean(ListMap_ListAt(ListMap_ObjectProperties(_self), StringFactory_FromUTF8(_stringFactory, "Идентификаторы", 28)));
+	DPUSHS ("ListMap: ActorRemoveAllIdentifiers begined.")
+	ASSERT_C ( "ListMap:ActorRemoveAllIdentifiers --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	List_Clean(ListMap_ListAt(ListMap_ActorProperties(_self), StringFactory_FromUTF8(_stringFactory, "Идентификаторы", 28)));
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectRemoveAllIdentifiers ended.")
+	DPOPS ("ListMap: ActorRemoveAllIdentifiers ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectJob(Object _self, Object _jobName)
+Object ListMap_ActorJob(Object _self, Object _jobName)
 {
-	DPUSHS ("ListMap: ObjectJob begined.")
-	ASSERT_C ( "ListMap:ObjectJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
-	Object toReturn = ListMap_ListMapAt(ListMap_ObjectJobs(_self), _jobName);
-	DPOPS ("ListMap: ObjectJob ended.")
+	DPUSHS ("ListMap: ActorJob begined.")
+	ASSERT_C ( "ListMap:ActorJob --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorJob --- Checking for correct parameter type failed at parameter _jobName.", _jobName->gid ==  3732711262168886272ull || _jobName == _nil )
+	Object toReturn = ListMap_ListMapAt(ListMap_ActorJobs(_self), _jobName);
+	DPOPS ("ListMap: ActorJob ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectProperty(Object _self, Object _propertyName)
+Object ListMap_ActorProperty(Object _self, Object _propertyName)
 {
-	DPUSHS ("ListMap: ObjectProperty begined.")
-	ASSERT_C ( "ListMap:ObjectProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
-	Object toReturn = ListMap_ObjectAt(ListMap_ObjectProperties(_self), _propertyName);
-	DPOPS ("ListMap: ObjectProperty ended.")
+	DPUSHS ("ListMap: ActorProperty begined.")
+	ASSERT_C ( "ListMap:ActorProperty --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorProperty --- Checking for correct parameter type failed at parameter _propertyName.", _propertyName->gid ==  3732711262168886272ull || _propertyName == _nil )
+	Object toReturn = ListMap_ObjectAt(ListMap_ActorProperties(_self), _propertyName);
+	DPOPS ("ListMap: ActorProperty ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectNotificationRequests(Object _self)
+Object ListMap_ActorNotificationRequests(Object _self)
 {
-	DPUSHS ("ListMap: ObjectNotificationRequests begined.")
-	ASSERT_C ( "ListMap:ObjectNotificationRequests --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = ListMap_ObjectProperty(_self, StringFactory_FromUTF8(_stringFactory, "Запросы на оповещение", 40));
-	DPOPS ("ListMap: ObjectNotificationRequests ended.")
+	DPUSHS ("ListMap: ActorNotificationRequests begined.")
+	ASSERT_C ( "ListMap:ActorNotificationRequests --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = ListMap_ActorProperty(_self, StringFactory_FromUTF8(_stringFactory, "Запросы на оповещение", 40));
+	DPOPS ("ListMap: ActorNotificationRequests ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectAddNotificationRequest(Object _self, Object _notificationRequest)
+Object ListMap_ActorAddNotificationRequest(Object _self, Object _notificationRequest)
 {
-	DPUSHS ("ListMap: ObjectAddNotificationRequest begined.")
-	ASSERT_C ( "ListMap:ObjectAddNotificationRequest --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	ASSERT_C ( "ListMap:ObjectAddNotificationRequest --- Checking for correct parameter type failed at parameter _notificationRequest.", _notificationRequest->gid ==  2108332898258556672ull || _notificationRequest == _nil )
-	List_PushBack(ListMap_ObjectNotificationRequests(_self), _notificationRequest);
+	DPUSHS ("ListMap: ActorAddNotificationRequest begined.")
+	ASSERT_C ( "ListMap:ActorAddNotificationRequest --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	ASSERT_C ( "ListMap:ActorAddNotificationRequest --- Checking for correct parameter type failed at parameter _notificationRequest.", _notificationRequest->gid ==  2108332898258556672ull || _notificationRequest == _nil )
+	List_PushBack(ListMap_ActorNotificationRequests(_self), _notificationRequest);
 	Object toReturn = _self;
-	DPOPS ("ListMap: ObjectAddNotificationRequest ended.")
+	DPOPS ("ListMap: ActorAddNotificationRequest ended.")
 	return toReturn;
 }
 
-Object ListMap_ObjectNotificationRequestsIterator(Object _self)
+Object ListMap_ActorNotificationRequestsIterator(Object _self)
 {
-	DPUSHS ("ListMap: ObjectNotificationRequestsIterator begined.")
-	ASSERT_C ( "ListMap:ObjectNotificationRequestsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
-	Object toReturn = List_First(ListMap_ObjectNotificationRequests(_self));
-	DPOPS ("ListMap: ObjectNotificationRequestsIterator ended.")
+	DPUSHS ("ListMap: ActorNotificationRequestsIterator begined.")
+	ASSERT_C ( "ListMap:ActorNotificationRequestsIterator --- Checking for correct object type failed.", _self->gid ==  2108332898258556672ull )
+	Object toReturn = List_First(ListMap_ActorNotificationRequests(_self));
+	DPOPS ("ListMap: ActorNotificationRequestsIterator ended.")
 	return toReturn;
 }
 

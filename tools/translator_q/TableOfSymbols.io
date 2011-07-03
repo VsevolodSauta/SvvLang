@@ -1,13 +1,13 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP", "assert")
-TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is")
+TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is", "IsNil", "IsTrue", "IsFalse")
 TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
 	"_nil",				"Object",
 	"_nothing",			"Object",
 	"_null",			"Object",
 	"_allocator",			"Allocator",
-	"_autoreleasePool",		"AutoreleasePool",
+	"_threadManager",		"ThreadManager",
 	"_true",			"Logic",
 	"_yes",				"Logic",
 	"_false",			"Logic",
@@ -25,7 +25,7 @@ TableOfSymbols globalObjects := Map with(
 	"_jsonParser",			"JSONParser",
 	"_methodFactory",		"MethodFactory",
 	"_entitiesFactory",		"ExternalEntitiesFactory",
-	"_objectsFactory",		"ExternalObjectsFactory"
+	"_actorsFactory",		"ExternalActorsFactory"
 )
 
 TableOfSymbols tableOfImports := Map clone

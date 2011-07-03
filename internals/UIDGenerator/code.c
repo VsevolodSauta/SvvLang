@@ -75,7 +75,7 @@ Object UIDGenerator_GenerateUID(Object _self)
 {
 	DPUSHS ("UIDGenerator: GenerateUID begined.")
 	ASSERT_C ( "UIDGenerator:GenerateUID --- Checking for correct object type failed.", _self->gid ==  8939281001414702080ull )
-	Object def = StringFactory_FromNumber(_stringFactory, (((UIDGenerator) (_self->entity))->_currentUID));
+	Object def = List_ConcatenateRight(List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "<", 1), StringFactory_FromNumber(_stringFactory, (((UIDGenerator) (_self->entity))->_currentUID))), StringFactory_FromUTF8(_stringFactory, ">", 1));
 	Number_Inc((((UIDGenerator) (_self->entity))->_currentUID));
 	DPOPS ("UIDGenerator: GenerateUID ended.")
 	return def;

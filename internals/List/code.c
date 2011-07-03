@@ -577,6 +577,18 @@ Object List_SystemIterator(Object _self)
 	return toReturn;
 }
 
+Object List_SystemFirst(Object _self)
+{
+	DPUSHS ("List: SystemFirst begined.")
+	ASSERT_C ( "List:SystemFirst --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	Object _iterator;
+	_iterator = ListIterator_Create();
+	ListIterator_InitWithListAndNode(_iterator, _self, (((ListNode) ((((List) (_self->entity))->_head)->entity))->_next));
+	Object toReturn = _iterator;
+	DPOPS ("List: SystemFirst ended.")
+	return toReturn;
+}
+
 Object List_ListMapAtPosition(Object _self, Object _position)
 {
 	DPUSHS ("List: ListMapAtPosition begined.")
@@ -797,5 +809,72 @@ Object List_Print(Object _self)
 	Console_WriteString(_console, _self);
 	Object toReturn = _self;
 	DPOPS ("List: Print ended.")
+	return toReturn;
+}
+
+Object List_LooksLikeString(Object _self)
+{
+	DPUSHS ("List: LooksLikeString begined.")
+	ASSERT_C ( "List:LooksLikeString --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	Object _iterator;
+	_iterator = List_First(_self);
+	while((Logic_Not(ListIterator_ThisEnd(_iterator))) != _false)
+	{
+		if((LogicFactory_FromLong(_logicFactory, ListIterator_ThisData(_iterator)->gid == 15931002582760847360ull)) != _false)
+		{
+			Object toReturn = _no;
+			DPOPS ("List: LooksLikeString ended.")
+			return toReturn;
+		}
+		ListIterator_Next(_iterator);
+	}
+	Object toReturn = _yes;
+	DPOPS ("List: LooksLikeString ended.")
+	return toReturn;
+}
+
+Object List_LooksLikeUID(Object _self)
+{
+	DPUSHS ("List: LooksLikeUID begined.")
+	ASSERT_C ( "List:LooksLikeUID --- Checking for correct object type failed.", _self->gid ==  3732711262168886272ull )
+	Object _iterator;
+	_iterator = List_First(_self);
+	if((ListIterator_ThisEnd(_iterator)) != _false)
+	{
+		Object toReturn = _no;
+		DPOPS ("List: LooksLikeUID ended.")
+		return toReturn;
+	}
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '<')) != _equal)) != _false)
+	{
+		Object toReturn = _no;
+		DPOPS ("List: LooksLikeUID ended.")
+		return toReturn;
+	}
+	ListIterator_Next(_iterator);
+	while((Logic_And(LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '0')) != _less), LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '9')) != _greater))) != _false)
+	{
+		ListIterator_Next(_iterator);
+	}
+	if((ListIterator_ThisEnd(_iterator)) != _false)
+	{
+		Object toReturn = _no;
+		DPOPS ("List: LooksLikeUID ended.")
+		return toReturn;
+	}
+	if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_iterator), CharFactory_FromLong(_charFactory, '>')) != _equal)) != _false)
+	{
+		Object toReturn = _no;
+		DPOPS ("List: LooksLikeUID ended.")
+		return toReturn;
+	}
+	if((Logic_Not(ListIterator_NextEnd(_iterator))) != _false)
+	{
+		Object toReturn = _no;
+		DPOPS ("List: LooksLikeUID ended.")
+		return toReturn;
+	}
+	Object toReturn = _yes;
+	DPOPS ("List: LooksLikeUID ended.")
 	return toReturn;
 }

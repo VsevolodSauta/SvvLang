@@ -2,35 +2,40 @@
 #include "internals/Undestroyable/interface.h"
 
 #define DOUBLE_FREE_CHECK 0
-#define SpaceInAllocator (2*10485760ull)
-#define ITEM_SIZE 96
+#define POOL_SIZE (20*1048576ull)
+#define ITEM_SIZE 64
 
-static char arr[SpaceInAllocator];
+static char arr[POOL_SIZE];
 static unsigned long long int position = 0;
 static char* pool;
 
 Object Allocator_Create()
 {
-	pool = OSmappingMap((void*) 0x100000, ITEM_SIZE * SpaceInAllocator, 7, 34, -1, 0);
-#if !DOUBLE_FREE_CHECK
+	pool = OSmappingMap((void*) 0x100000, ITEM_SIZE * POOL_SIZE, 7, 34, -1, 0);
 	int i;
-	for(i = 0; i < SpaceInAllocator; i++)
+	for(i = 0; i < POOL_SIZE; i++)
 	{
 		arr[i] = 1;
 	}
-#endif
 	return Undestroyable_Create();
 }
 
 void* Allocator_New(Object _self, int size)
 {
-#if !DOUBLE_FREE_CHECK
-	while(arr[position] == 0) position = (position + 1) % SpaceInAllocator;
-#else
-	position++;
-#endif
-	arr[position] = 0;
-	return pool + position * ITEM_SIZE;
+	ASSERT_C("Allocator: size is greater than ITEM_SIZE.", size <= ITEM_SIZE);
+	register long long toAllocate;
+	do {
+		toAllocate = 1;
+		asm volatile (
+			"lock\n"
+			"xadd %1, %0\n"
+			: "=m" (position),
+			  "=r" (toAllocate)
+		);
+		toAllocate %= POOL_SIZE;
+	} while(!arr[toAllocate]);
+	arr[toAllocate] = 0;
+	return pool + toAllocate * ITEM_SIZE;
 }
 
 #if RESIZE_AVAILABLE

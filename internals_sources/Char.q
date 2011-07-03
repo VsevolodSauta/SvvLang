@@ -42,4 +42,3 @@ Char <Logic> IsDigit
 
 Char <Logic> IsHexDigit
 	return (self IsDigit) Or (((self.code >= 97) And (self.code <= 102)) Or ((self.code >= 65) And (self.code  <= 70)))
-

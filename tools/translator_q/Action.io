@@ -103,6 +103,7 @@ Action process := method(actor, line,
 	if(actionName beginsWithSeq("As"),
 		toReturn actorName copy(actor actorName)
 		toReturn actorType copy(actionName exclusiveSlice(2))
+		TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
 		line getParameters
 		return toReturn
 	)
@@ -113,11 +114,17 @@ Action process := method(actor, line,
 		return toReturn
 	)
 	
+	if(actionName beginsWithSeq("InBackground"),
+		toReturn actorName copy("ThreadManager_SpawnThreadWithMethodAndEntity(_threadManager, MethodFactory_FromPointer(_methodFactory, &#{actor actorType}_#{actionName exclusiveSlice(12)}), #{actor actorName})" interpolate)
+		toReturn actorType = "ThreadManager"
+		return toReturn
+	)
+	
 	actionType := getActionType(actor)
 	actionResult := actor getReturnedType(self)
 	parameters := line getParameters
 	
-	if(actionName == "Clone",
+	if(actionName in(list("Clone", "DeepClone")),
 		toReturn setProperty("JustCreated")
 	)
 	

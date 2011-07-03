@@ -9,5 +9,5 @@ Object ExternalConsoleManipulator_DeepClone(Object _self);
 Object ExternalConsoleManipulator_Destroy(Object _self);
 Object ExternalConsoleManipulator_Compare(Object _self, Object _consoleManipulator);
 Object ExternalConsoleManipulator_SetMachine(Object _self, Object _machine);
-Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Object _uid);
+Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDActor(Object _self, Object _uid);
 Object ExternalConsoleManipulator_WriteUIDConsoleBasicMethod(Object _self, Object _processor);

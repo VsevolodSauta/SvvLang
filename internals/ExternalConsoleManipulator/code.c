@@ -75,14 +75,14 @@ Object ExternalConsoleManipulator_SetMachine(Object _self, Object _machine)
 	return toReturn;
 }
 
-Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Object _uid)
+Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDActor(Object _self, Object _uid)
 {
-	DPUSHS ("ExternalConsoleManipulator: CreateUIDConsoleFromUIDObject begined.")
-	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDObject --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
-	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDObject --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
-	Object _object;
-	_object = Machine_UIDToObject((((ExternalConsoleManipulator) (_self->entity))->_machine), _uid);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalConsoleManipulator_WriteUIDConsoleBasicMethod), StringFactory_FromUTF8(_stringFactory, "Вывести", 14));
+	DPUSHS ("ExternalConsoleManipulator: CreateUIDConsoleFromUIDActor begined.")
+	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDActor --- Checking for correct object type failed.", _self->gid ==   220283697601632256ull )
+	ASSERT_C ( "ExternalConsoleManipulator:CreateUIDConsoleFromUIDActor --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
+	Object _actor;
+	_actor = Machine_UIDToActor((((ExternalConsoleManipulator) (_self->entity))->_machine), _uid);
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalConsoleManipulator_WriteUIDConsoleBasicMethod), StringFactory_FromUTF8(_stringFactory, "Вывести", 14));
 	Object _job;
 	_job = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
 	Object _messageSlot;
@@ -97,9 +97,9 @@ Object ExternalConsoleManipulator_CreateUIDConsoleFromUIDObject(Object _self, Ob
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Запрос", 12), StringFactory_FromUTF8(_stringFactory, "Вывести", 14)));
 	ListMap_JobSetMessageSlot(_job, _messageSlot, StringFactory_FromUTF8(_stringFactory, "Запрос на вывод", 28));
 	ListMap_JobSetStage(_job, _stage, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
-	ListMap_ObjectSetJob(_object, _job, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
+	ListMap_ActorSetJob(_actor, _job, StringFactory_FromUTF8(_stringFactory, "Вывод", 10));
 	Object toReturn = _uid;
-	DPOPS ("ExternalConsoleManipulator: CreateUIDConsoleFromUIDObject ended.")
+	DPOPS ("ExternalConsoleManipulator: CreateUIDConsoleFromUIDActor ended.")
 	return toReturn;
 }
 

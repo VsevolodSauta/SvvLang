@@ -1,0 +1,4 @@
+project(ExternalJSONParserManipulator)
+cmake_minimum_required(VERSION 2.6)
+add_library(ExternalJSONParserManipulator ${Library} code.c)
+target_link_libraries(ExternalJSONParserManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory Machine List ExternalEntitiesFactory ListMap Processor JSONParser ExternalActorsFactory)

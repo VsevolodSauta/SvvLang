@@ -286,3 +286,8 @@ Line translateObjectSignature := method(contextObject,
 	)
 	toPut interpolate
 )
+
+
+Line translateGlobalObjectDefinition := method(
+	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
+)

@@ -19,9 +19,9 @@ ExternalConsoleManipulator SetMachine <Machine> machine
 	self.machine = machine
 	return self
 
-ExternalConsoleManipulator CreateUIDConsoleFromUIDObject <List> uid
-	object = self.machine ObjectByUID uid
-	object ObjectSetBasicMethod self &ExternalConsoleManipulator_WriteUIDConsoleBasicMethod "Вывести"
+ExternalConsoleManipulator CreateUIDConsoleFromUIDActor <List> uid
+	actor = self.machine ActorByUID uid
+	actor ActorSetBasicMethod self &ExternalConsoleManipulator_WriteUIDConsoleBasicMethod "Вывести"
 	job = entitiesFactory CreateEmptyJob
 	messageSlot = entitiesFactory CreateEmptyMessageSlot
 	stage = entitiesFactory CreateEmptyJobStage
@@ -33,7 +33,7 @@ ExternalConsoleManipulator CreateUIDConsoleFromUIDObject <List> uid
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Запрос" "Вывести")
 	job JobSetMessageSlot messageSlot "Запрос на вывод"
 	job JobSetStage stage "Вывод"
-	object ObjectSetJob job "Вывод"
+	actor ActorSetJob job "Вывод"
 	return uid
 
 ExternalConsoleManipulator WriteUIDConsoleBasicMethod <Processor> processor

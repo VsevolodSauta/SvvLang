@@ -22,6 +22,6 @@ UIDGenerator <Comparation> Compare uidGenerator
 	return (self Hash) ? (uidGenerator Hash)
 
 UIDGenerator <List> GenerateUID (GetUID)
-	def stringFactory FromNumber self.currentUID
+	def (("<" + (stringFactory FromNumber self.currentUID)) + ">")
 	self.currentUID ++
 

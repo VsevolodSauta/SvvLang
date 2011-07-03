@@ -19,19 +19,19 @@ ExternalFileManipulator SetMachine <Machine> machine
 	self.machine = machine
 	return self
 
-ExternalFileManipulator <List> CreateUIDFileFromUIDObject <List> uid
-	object = self.machine ObjectByUID uid
+ExternalFileManipulator <List> CreateUIDFileFromUIDActor <List> uid
+	actor = self.machine ActorByUID uid
 
-	object ObjectSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя фала"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку"
-	object ObjectSetBasicMethod self &ExternalFileManipulator_WriteObjectUIDFileBasicMethod "Записать объект"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_AssociateUIDFileBasicMethod "Ассоциировать имя фала"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod "Открыть файл для чтения"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod "Открыть файл для записи"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_CloseUIDFileBasicMethod "Закрыть файл"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_ReadStringUIDFileBasicMethod "Прочитать строку"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_WriteStringUIDFileBasicMethod "Записать строку"
+	actor ActorSetBasicMethod self &ExternalFileManipulator_WriteActorUIDFileBasicMethod "Записать объект"
 
 	job = entitiesFactory CreateEmptyJob
-	object ObjectSetJob job "Основная работа файла"
+	actor ActorSetJob job "Основная работа файла"
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Ассоциировать"
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Имя файла")
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Ассоциирование файла" "Ассоциировать имя фала" "Запрос на ассоциирование" messageSlot
@@ -39,9 +39,9 @@ ExternalFileManipulator <List> CreateUIDFileFromUIDObject <List> uid
 
 
 ExternalFileManipulator AssociateUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+	fileActor = (processor ContextActor)
 	job = (processor ContextJob)
-	(fileObject ObjectProperties) AtPut "Имя файла" (processor EntityFromNamedMessageField "Запрос на ассоциирование" "Имя файла")
+	(fileActor ActorProperties) AtPut "Имя файла" (processor EntityFromNamedMessageField "Запрос на ассоциирование" "Имя файла")
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Открыть"
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Доступ" "Чтение")
 	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Открытие файла для чтения" "Открыть файл для чтения" "Запрос на открытие файла для чтения"  messageSlot
@@ -58,11 +58,11 @@ ExternalFileManipulator AssociateUIDFileBasicMethod <Processor> processor
 
 
 ExternalFileManipulator OpenForReadingUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+	fileActor = (processor ContextActor)
 	job = (processor ContextJob)
 	file = <File>
-	file OpenForReading (fileObject ObjectProperty "Имя файла")
-	(fileObject ObjectSetProperty file "Файл"
+	file OpenForReading (fileActor ActorProperty "Имя файла")
+	(fileActor ActorSetProperty file "Файл"
 	file Release
 
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Прочитать"
@@ -83,17 +83,17 @@ ExternalFileManipulator OpenForReadingUIDFileBasicMethod <Processor> processor
 
 
 ExternalFileManipulator OpenForWritingUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+	fileActor = (processor ContextActor)
 	job = (processor ContextJob)
 	file = <File>
-	file OpenForAppending (fileObject ObjectProperty "Имя файла")
-	fileObject ObjectSetProperty file "Файл"
+	file OpenForAppending (fileActor ActorProperty "Имя файла")
+	fileActor ActorSetProperty file "Файл"
 	file Release
 
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Записать"
-	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Объект записи" "Строка")
-	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Строка")
-	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Запись строки" "Записать строку" "Запрос для записи строки" messageSlot
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Объект записи" "Простая строка")
+	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionPresence "Простая строка")
+	job JobCreateStageWithNameMethodMessageSlotNameAndEntity "Запись простой строки" "Записать простую строку" "Запрос для записи простой строки" messageSlot
 
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Записать"
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Объект записи" "Объект")
@@ -113,11 +113,11 @@ ExternalFileManipulator OpenForWritingUIDFileBasicMethod <Processor> processor
 	return self
 
 ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+	fileActor = (processor ContextActor)
 	job = (processor ContextJob)
-	file = (fileObject ObjectProperty "Файл") AsFile
+	file = (fileActor ActorProperty "Файл") AsFile
 	file Close
-	fileObject ObjectSetProperty nil "Файл"
+	fileActor ActorSetProperty nil "Файл"
 
 	messageSlot = entitiesFactory CreateRequestMessageSlot "Открыть"
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Доступ" "Чтение")
@@ -142,9 +142,9 @@ ExternalFileManipulator CloseUIDFileBasicMethod <Processor> processor
 
 
 ExternalFileManipulator WriteStringUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+	fileActor = (processor ContextActor)
 	job = (processor ContextJob)
-	file = (fileObject ObjectProperty "Файл") AsFile
+	file = (fileActor ActorProperty "Файл") AsFile
 	file WriteNakedString (processor EntityFromNamedMessageField "Запрос для записи строки" "Строка")
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
@@ -152,11 +152,11 @@ ExternalFileManipulator WriteStringUIDFileBasicMethod <Processor> processor
 	return self
 
 
-ExternalFileManipulator WriteObjectUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
+ExternalFileManipulator WriteActorUIDFileBasicMethod <Processor> processor
+	fileActor = (processor ContextActor)
 	job = entitiesFactory CreateEmptyJob
 	uidToWrite = (processor EntityFromNamedMessageField "Запрос для записи объекта" "Объект")
-	fileObject ObjectSetJob job ("Вывод " Concatenate uidToWrite)
+	fileActor ActorSetJob job ("Вывод " Concatenate uidToWrite)
 
 	messageSlot = processor CreateStageReplyEntityBasicMethodInJob "Значение простой строкой" self &ExternalFileManipulator_WriteSecondStageUIDFileBasicMethod job
 	messageSlot MessageSlotSetCondition (entitiesFactory CreateConditionWithKeyValue "Ответ" "Успех")
@@ -173,8 +173,8 @@ ExternalFileManipulator WriteObjectUIDFileBasicMethod <Processor> processor
 
 
 ExternalFileManipulator WriteSecondStageUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
-	file = (fileObject ObjectProperty "Файл") AsFile
+	fileActor = (processor ContextActor)
+	file = (fileActor ActorProperty "Файл") AsFile
 	file WriteNakedString (processor EntityFromNamedMessageField "Значение простой строкой" "Строка")
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess
@@ -185,8 +185,8 @@ ExternalFileManipulator WriteSecondStageUIDFileBasicMethod <Processor> processor
 
 
 ExternalFileManipulator ReadStringUIDFileBasicMethod <Processor> processor
-	fileObject = (processor ContextObject)
-	file = (fileObject ObjectProperty "Файл") AsFile
+	fileActor = (processor ContextActor)
+	file = (fileActor ActorProperty "Файл") AsFile
 	string = file ReadString
 	reply = entitiesFactory CreateEmptyMessage
 	reply MessageSetAnswerSuccess

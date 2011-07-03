@@ -60,8 +60,8 @@ Object Map_DeepClone(Object _self)
 	ASSERT_C ( "Map:DeepClone --- Checking for correct object type failed.", _self->gid ==  7784561639000363008ull )
 	Object _toReturn;
 	_toReturn = Map_Create();
-	Object_SetRetaining(&(((Map) (_toReturn->entity))->_keys), Object_DeepClone((((Map) (_self->entity))->_keys)));
-	Object_SetRetaining(&(((Map) (_toReturn->entity))->_values), Object_DeepClone((((Map) (_self->entity))->_values)));
+	Object_SetReleasing(&(((Map) (_toReturn->entity))->_keys), Object_DeepClone((((Map) (_self->entity))->_keys)));
+	Object_SetReleasing(&(((Map) (_toReturn->entity))->_values), Object_DeepClone((((Map) (_self->entity))->_values)));
 	Object toReturn = _toReturn;
 	DPOPS ("Map: DeepClone ended.")
 	return toReturn;
@@ -108,9 +108,9 @@ Object Map_Add(Object _self, Object _key, Object _value)
 	DPUSHS ("Map: Add begined.")
 	ASSERT_C ( "Map:Add --- Checking for correct object type failed.", _self->gid ==  7784561639000363008ull )
 	Object _keysIterator;
-	_keysIterator = List_First((((Map) (_self->entity))->_keys));
+	_keysIterator = List_SystemFirst((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
-	_valuesIterator = List_First((((Map) (_self->entity))->_values));
+	_valuesIterator = List_SystemFirst((((Map) (_self->entity))->_values));
 	while((Logic_Not(ListIterator_ThisEnd(_keysIterator))) != _false)
 	{
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _less)) != _false)
@@ -125,6 +125,8 @@ Object Map_Add(Object _self, Object _key, Object _value)
 		else
 		{
 			ListIterator_ThisSetData(_valuesIterator, _value);
+			Object_Release(_keysIterator);
+			Object_Release(_valuesIterator);
 			Object toReturn = _self;
 			DPOPS ("Map: Add ended.")
 			return toReturn;
@@ -132,6 +134,8 @@ Object Map_Add(Object _self, Object _key, Object _value)
 	}
 	ListIterator_AddBefore(_keysIterator, _key);
 	ListIterator_AddBefore(_valuesIterator, _value);
+	Object_Release(_keysIterator);
+	Object_Release(_valuesIterator);
 	Object toReturn = _self;
 	DPOPS ("Map: Add ended.")
 	return toReturn;
@@ -206,25 +210,26 @@ Object Map_ContainsKey(Object _self, Object _key)
 	DPUSHS ("Map: ContainsKey begined.")
 	ASSERT_C ( "Map:ContainsKey --- Checking for correct object type failed.", _self->gid ==  7784561639000363008ull )
 	Object _keysIterator;
-	_keysIterator = List_First((((Map) (_self->entity))->_keys));
+	_keysIterator = List_SystemFirst((((Map) (_self->entity))->_keys));
+	Object _toReturn;
+	_toReturn = _false;
 	while((Logic_Not(ListIterator_ThisEnd(_keysIterator))) != _false)
 	{
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _less)) != _false)
 		{
 			ListIterator_Next(_keysIterator);
 		}
-		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _greater)) != _false)
-		{
-			break;
-		}
 		else
 		{
-			Object toReturn = _true;
-			DPOPS ("Map: ContainsKey ended.")
-			return toReturn;
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _equal)) != _false)
+			{
+				_toReturn = _true;
+			}
+			break;
 		}
 	}
-	Object toReturn = _false;
+	Object_Release(_keysIterator);
+	Object toReturn = _toReturn;
 	DPOPS ("Map: ContainsKey ended.")
 	return toReturn;
 }
@@ -234,9 +239,11 @@ Object Map_GetValueForKey(Object _self, Object _key)
 	DPUSHS ("Map: GetValueForKey begined.")
 	ASSERT_C ( "Map:GetValueForKey --- Checking for correct object type failed.", _self->gid ==  7784561639000363008ull )
 	Object _keysIterator;
-	_keysIterator = List_First((((Map) (_self->entity))->_keys));
+	_keysIterator = List_SystemFirst((((Map) (_self->entity))->_keys));
 	Object _valuesIterator;
-	_valuesIterator = List_First((((Map) (_self->entity))->_values));
+	_valuesIterator = List_SystemFirst((((Map) (_self->entity))->_values));
+	Object _toReturn;
+	_toReturn = _nil;
 	while((Logic_Not(ListIterator_ThisEnd(_keysIterator))) != _false)
 	{
 		if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _less)) != _false)
@@ -244,18 +251,18 @@ Object Map_GetValueForKey(Object _self, Object _key)
 			ListIterator_Next(_keysIterator);
 			ListIterator_Next(_valuesIterator);
 		}
-		else if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _greater)) != _false)
-		{
-			break;
-		}
 		else
 		{
-			Object toReturn = ListIterator_ThisData(_valuesIterator);
-			DPOPS ("Map: GetValueForKey ended.")
-			return toReturn;
+			if((LogicFactory_FromLong(_logicFactory, Object_Compare(ListIterator_ThisData(_keysIterator), _key) == _equal)) != _false)
+			{
+				_toReturn = ListIterator_ThisData(_valuesIterator);
+			}
+			break;
 		}
 	}
-	Object toReturn = _nil;
+	Object_Release(_keysIterator);
+	Object_Release(_valuesIterator);
+	Object toReturn = _toReturn;
 	DPOPS ("Map: GetValueForKey ended.")
 	return toReturn;
 }

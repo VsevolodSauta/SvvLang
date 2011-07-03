@@ -48,12 +48,12 @@ ProcessorCommandSystem Init
 	self.processorCodes AtPut ("Послать сообщение объекту из поля сообщения") &ProcessorCommandSystem_CodeSendMessageToMessageField
 	self.processorCodes AtPut ("Послать ответ на сообщение") &ProcessorCommandSystem_CodeSendReplyForMessage
 	self.processorCodes AtPut ("Вызвать метод с параметрами") &ProcessorCommandSystem_CodeInvokeMethod
-	self.processorCodes AtPut ("Определить метод объекта") &ProcessorCommandSystem_CodeDefineObjectMethod
+	self.processorCodes AtPut ("Определить метод объекта") &ProcessorCommandSystem_CodeDefineActorMethod
 	self.processorCodes AtPut ("Определить метод работы") &ProcessorCommandSystem_CodeDefineJobMethod
 	self.processorCodes AtPut ("Удалить метод с именем") &ProcessorCommandSystem_CodeUnDefineMethod
 	self.processorCodes AtPut ("Установить ТВА") &ProcessorCommandSystem_CodeDefineLocalField
 	self.processorCodes AtPut ("Установить поле работы") &ProcessorCommandSystem_CodeDefineJobField
-	self.processorCodes AtPut ("Установить поле объекта") &ProcessorCommandSystem_CodeDefineObjectField
+	self.processorCodes AtPut ("Установить поле объекта") &ProcessorCommandSystem_CodeDefineActorField
 	self.processorCodes AtPut ("Установить глобальное поле") &ProcessorCommandSystem_CodeDefineGlobalField
 	self.processorCodes AtPut ("Присвоить полю идентификатор") &ProcessorCommandSystem_CodeSetField
 	self.processorCodes AtPut ("Перемежить поле прибытия с полем отправления") &ProcessorCommandSystem_CodeUniteField
@@ -119,17 +119,17 @@ ProcessorCommandSystem CodeUIDFromField <ListMap> toDo
 
 
 ProcessorCommandSystem CodeAddCurrentUIDToStack <ListMap> toDo
-	self.helperStack Push self.processor.contextUID
+	self.helperStack Push (self.processor ContextActorUID)
 	return self
 
 
 ProcessorCommandSystem CodeAddCurrentJobToStack <ListMap> toDo
-	self.helperStack Push self.processor.contextJobName
+	self.helperStack Push (self.processor ContextJobName)
 	return self
 
 
 ProcessorCommandSystem CodeAddCurrentJobStageToStack <ListMap> toDo
-	self.helperStack Push self.processor.contextJobStageName
+	self.helperStack Push (self.processor ContextJobStageName)
 	return self
 
 
@@ -255,10 +255,10 @@ ProcessorCommandSystem CodeInvokeMethod <ListMap> toDo
 	return self
 
 
-ProcessorCommandSystem CodeDefineObjectMethod <ListMap> toDo
+ProcessorCommandSystem CodeDefineActorMethod <ListMap> toDo
 	methodName = self GetNamedEntityFromToDoOrStack ("Имя метода") toDo
 	method = self GetNamedEntityFromToDoOrStack ("Метод") toDo
-	self.processor DefineObjectMethod method methodName
+	self.processor DefineActorMethod method methodName
 	return self
 
 ProcessorCommandSystem CodeDefineJobMethod <ListMap> toDo
@@ -280,8 +280,8 @@ ProcessorCommandSystem CodeDefineJobField <ListMap> toDo
 	return self DefineFieldHelper toDo ((self.processor ContextJob) JobFields)
 
 
-ProcessorCommandSystem CodeDefineObjectField <ListMap> toDo
-	return self DefineFieldHelper toDo ((self.processor ContextObject) ObjectFields)
+ProcessorCommandSystem CodeDefineActorField <ListMap> toDo
+	return self DefineFieldHelper toDo ((self.processor ContextActor) ActorFields)
 
 
 ProcessorCommandSystem CodeDefineGlobalField <ListMap> toDo

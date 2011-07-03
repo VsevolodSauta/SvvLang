@@ -201,8 +201,8 @@ Object MapIterator_DeepClone(Object _self)
 	Object _toReturn;
 	_toReturn = MapIterator_Create();
 	Object_SetRetaining(&(((MapIterator) (_toReturn->entity))->_map), (((MapIterator) (_self->entity))->_map));
-	Object_SetRetaining(&(((MapIterator) (_toReturn->entity))->_keysIterator), Object_DeepClone((((MapIterator) (_self->entity))->_keysIterator)));
-	Object_SetRetaining(&(((MapIterator) (_toReturn->entity))->_valuesIterator), Object_DeepClone((((MapIterator) (_self->entity))->_valuesIterator)));
+	Object_SetReleasing(&(((MapIterator) (_toReturn->entity))->_keysIterator), Object_DeepClone((((MapIterator) (_self->entity))->_keysIterator)));
+	Object_SetReleasing(&(((MapIterator) (_toReturn->entity))->_valuesIterator), Object_DeepClone((((MapIterator) (_self->entity))->_valuesIterator)));
 	Object toReturn = _toReturn;
 	DPOPS ("MapIterator: DeepClone ended.")
 	return toReturn;

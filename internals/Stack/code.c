@@ -141,7 +141,7 @@ Object Stack_DeepClone(Object _self)
 	ASSERT_C ( "Stack:DeepClone --- Checking for correct object type failed.", _self->gid ==  6822298517081180160ull )
 	Object _toReturn;
 	_toReturn = Stack_Create();
-	Object_SetRetaining(&(((Stack) (_toReturn->entity))->_list), Object_DeepClone((((Stack) (_self->entity))->_list)));
+	Object_SetReleasing(&(((Stack) (_toReturn->entity))->_list), Object_DeepClone((((Stack) (_self->entity))->_list)));
 	Object toReturn = _toReturn;
 	DPOPS ("Stack: DeepClone ended.")
 	return toReturn;

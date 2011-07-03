@@ -24,7 +24,6 @@ Object Synonim_Init(Object _self)
 	DPUSHS ("Synonim: Init begined.")
 	ASSERT_C ( "Synonim:Init --- Checking for correct object type failed.", _self->gid ==  6761424502691563520ull )
 	(((Synonim) (_self->entity))->_references) = List_Create();
-	Object_Autorelease(_self);
 	Object toReturn = _self;
 	DPOPS ("Synonim: Init ended.")
 	return toReturn;

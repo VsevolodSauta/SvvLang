@@ -76,7 +76,7 @@ Object ListMapIteratorElement_DeepClone(Object _self)
 	Object _toReturn;
 	_toReturn = ListMapIteratorElement_Create();
 	Object_SetRetaining(&(((ListMapIteratorElement) (_toReturn->entity))->_node), (((ListMapIteratorElement) (_self->entity))->_node));
-	Object_SetRetaining(&(((ListMapIteratorElement) (_toReturn->entity))->_iterator), Object_DeepClone((((ListMapIteratorElement) (_self->entity))->_iterator)));
+	Object_SetReleasing(&(((ListMapIteratorElement) (_toReturn->entity))->_iterator), Object_DeepClone((((ListMapIteratorElement) (_self->entity))->_iterator)));
 	(((ListMapIteratorElement) (_toReturn->entity))->_nextExists) = (((ListMapIteratorElement) (_self->entity))->_nextExists);
 	(((ListMapIteratorElement) (_toReturn->entity))->_prevExists) = (((ListMapIteratorElement) (_self->entity))->_prevExists);
 	Object toReturn = _toReturn;

@@ -3,17 +3,18 @@
 #include "internals/Machine/interface.h"
 #include "os_dependent/linux.h"
 #include "internals/AutoreleasePool/interface.h"
+#include "internals/ThreadManager/interface.h"
 #if MEMORY_DEBUG
 #include <stdio.h>
 #endif
 
 int DLEVEL = 0;
 
-Object _autoreleasePool;
 Object _console;
 Object _jsonParser;
 Object _entitiesFactory;
 Object _objectsFactory;
+Object _threadManager;
 
 #if STDLIB
 int main(void)
@@ -22,10 +23,12 @@ void _start(void)
 #endif
 {
 	_allocator = Allocator_Create();
+	_allocatorForStack = AllocatorForStack_Create();
+	
 	Object _runtime = Runtime_Create();
 	Object _machine = Machine_Create();
 	Machine_RestorePreviousState(_machine);
-	AutoreleasePool_PushFrame(_autoreleasePool);
+	AutoreleasePool_PushFrame(ThreadManager_AutoreleasePool(_threadManager));
 #if 0
 	int i;
 	for(i = 1; i < argc; i++)
@@ -35,9 +38,9 @@ void _start(void)
 	}
 #else
 	Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, "SvvLanguage_C/externals/Приложение");
-	Machine_ImportUID(_machine, _objectToImportName);
+	Machine_ImportActor(_machine, _objectToImportName);
 #endif
-	AutoreleasePool_PopFrame(_autoreleasePool);
+	AutoreleasePool_PopFrame(ThreadManager_AutoreleasePool(_threadManager));
 	Machine_Run(_machine);
 	Object_Release(_machine);
 	Object_Release(_runtime);

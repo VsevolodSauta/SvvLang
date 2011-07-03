@@ -1,10 +1,13 @@
 typedef struct ExternalMachineManipulator {
 	Object _machine;
-	Object _object;
+	Object _actor;
 	Object _console;
 	Object _file;
 	Object _number;
 	Object _list;
+	Object _listMap;
+	Object _char;
+	Object _jsonParser;
 } *ExternalMachineManipulator;
 
 Object ExternalMachineManipulator_Create(void);

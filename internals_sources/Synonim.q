@@ -2,7 +2,7 @@
 
 Synonim Init
 	self.references = <List>
-	self Autorelease
+	// self Autorelease
 	return self
 
 Synonim SetUID <List> uid

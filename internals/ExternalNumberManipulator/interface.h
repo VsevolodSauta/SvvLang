@@ -9,7 +9,7 @@ Object ExternalNumberManipulator_DeepClone(Object _self);
 Object ExternalNumberManipulator_Destroy(Object _self);
 Object ExternalNumberManipulator_Compare(Object _self, Object _manipulator);
 Object ExternalNumberManipulator_SetMachine(Object _self, Object _machine);
-Object ExternalNumberManipulator_CreateUIDNumberFromUIDObject(Object _self, Object _uid);
+Object ExternalNumberManipulator_CreateUIDNumberFromUIDActor(Object _self, Object _uid);
 Object ExternalNumberManipulator_SimpleNumber(Object _self, Object _processor);
 Object ExternalNumberManipulator_SimpleString(Object _self, Object _processor);
 Object ExternalNumberManipulator_AddInPlace(Object _self, Object _processor);

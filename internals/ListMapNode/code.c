@@ -63,8 +63,8 @@ Object ListMapNode_DeepClone(Object _self)
 	ASSERT_C ( "ListMapNode:DeepClone --- Checking for correct object type failed.", _self->gid ==  5883107801261346816ull )
 	Object _toReturn;
 	_toReturn = ListMapNode_Create();
-	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_DeepClone((((ListMapNode) (_self->entity))->_nextMap)));
-	Object_SetRetaining(&(((ListMapNode) (_toReturn->entity))->_mapping), Object_DeepClone((((ListMapNode) (_self->entity))->_mapping)));
+	Object_SetReleasing(&(((ListMapNode) (_toReturn->entity))->_nextMap), Object_DeepClone((((ListMapNode) (_self->entity))->_nextMap)));
+	Object_SetReleasing(&(((ListMapNode) (_toReturn->entity))->_mapping), Object_DeepClone((((ListMapNode) (_self->entity))->_mapping)));
 	(((ListMapNode) (_toReturn->entity))->_mapped) = (((ListMapNode) (_self->entity))->_mapped);
 	Object toReturn = _toReturn;
 	DPOPS ("ListMapNode: DeepClone ended.")

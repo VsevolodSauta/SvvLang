@@ -12,15 +12,15 @@ Runtime Init
 	stringFactory = <StringFactory>
 	numberFactory = <NumberFactory>
 	logicFactory = <LogicFactory>
-	autoreleasePool = <AutoreleasePool>
-	autoreleasePool PushFrame
+	threadManager = <ThreadManager>
+	threadManager RegisterCurrentThread
 	console = <Console>
 	jsonParser = <JSONParser>
 	entitiesFactory = <ExternalEntitiesFactory>
 	return self
 
 Runtime Destroy
-	autoreleasePool Release
+	threadManager Release
 	console Release
 	jsonParser Release
 	return self Destroy

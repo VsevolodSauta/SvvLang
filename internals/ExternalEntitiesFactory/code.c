@@ -235,30 +235,30 @@ Object ExternalEntitiesFactory_CreateReplyMessageSlot(Object _self, Object _requ
 	return toReturn;
 }
 
-Object ExternalEntitiesFactory_CreateObjectProperties(Object _self)
+Object ExternalEntitiesFactory_CreateActorProperties(Object _self)
 {
-	DPUSHS ("ExternalEntitiesFactory: CreateObjectProperties begined.")
-	ASSERT_C ( "ExternalEntitiesFactory:CreateObjectProperties --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	DPUSHS ("ExternalEntitiesFactory: CreateActorProperties begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateActorProperties --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyProperties(_self);
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Запросы на оповещение", 40), ExternalEntitiesFactory_CreateEmptyList(_self));
 	Object toReturn = _toReturn;
-	DPOPS ("ExternalEntitiesFactory: CreateObjectProperties ended.")
+	DPOPS ("ExternalEntitiesFactory: CreateActorProperties ended.")
 	return toReturn;
 }
 
-Object ExternalEntitiesFactory_CreateObject(Object _self)
+Object ExternalEntitiesFactory_CreateEmptyActor(Object _self)
 {
-	DPUSHS ("ExternalEntitiesFactory: CreateObject begined.")
-	ASSERT_C ( "ExternalEntitiesFactory:CreateObject --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
+	DPUSHS ("ExternalEntitiesFactory: CreateEmptyActor begined.")
+	ASSERT_C ( "ExternalEntitiesFactory:CreateEmptyActor --- Checking for correct object type failed.", _self->gid ==  4514905638553083904ull )
 	Object _toReturn;
 	_toReturn = ExternalEntitiesFactory_CreateEmptyListMap(_self);
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Методы", 12), ExternalEntitiesFactory_CreateEmptyMethods(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Поля", 8), ExternalEntitiesFactory_CreateEmptyFields(_self));
 	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Работы", 12), ExternalEntitiesFactory_CreateEmptyJobs(_self));
-	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Свойства", 16), ExternalEntitiesFactory_CreateObjectProperties(_self));
+	ListMap_Add(_toReturn, StringFactory_FromUTF8(_stringFactory, "Свойства", 16), ExternalEntitiesFactory_CreateActorProperties(_self));
 	Object toReturn = _toReturn;
-	DPOPS ("ExternalEntitiesFactory: CreateObject ended.")
+	DPOPS ("ExternalEntitiesFactory: CreateEmptyActor ended.")
 	return toReturn;
 }
 

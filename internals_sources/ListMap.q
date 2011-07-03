@@ -155,6 +155,14 @@ ListMap <ListMapIterator> Last
 	iterator ToEnd
 	return iterator Autorelease
 
+ListMap <Number> Size (Length Count)
+	iterator = self First
+	toReturn = 0
+	while iterator NotThisEnd
+		toReturn ++
+		iterator ++
+	return toReturn
+
 ListMap DumpKeys
 	iterator = self First
 	while iterator NotThisEnd
@@ -195,78 +203,78 @@ ListMap DumpListToListMap (MessageDump)
 // ==========================
 // Управление объектами
 
-ListMap ObjectMethods (JobMethods)
+ListMap ActorMethods (JobMethods)
 	return self ListMapAt ("Методы")
 
-ListMap ObjectFields (JobFields)
+ListMap ActorFields (JobFields)
 	return self ListMapAt ("Поля")
 
-ListMap ObjectJobs
+ListMap ActorJobs
 	return self ListMapAt ("Работы")
 
-ListMap <ListMapIterator> ObjectJobsIterator
-	return (self ObjectJobs) First
+ListMap <ListMapIterator> ActorJobsIterator
+	return (self ActorJobs) First
 
-ListMap ObjectProperties
+ListMap ActorProperties
 	return self ListMapAt ("Свойства")
 
-ListMap <Synonim> ObjectField (JobFieldWithName) <List> fieldName
-	return (self ObjectFields) SynonimAt fieldName
+ListMap <Synonim> ActorField (JobFieldWithName) <List> fieldName
+	return (self ActorFields) SynonimAt fieldName
 
-ListMap ObjectFieldUID (JobFieldUIDWithName) <List> fieldName
-	return (self ObjectField fieldName) UID
+ListMap ActorFieldUID (JobFieldUIDWithName) <List> fieldName
+	return (self ActorField fieldName) UID
 
-ListMap ObjectMethod (JobMethod) <List> methodName
-	return (self ObjectMethods) ListMapAt methodName
+ListMap ActorMethod (JobMethod) <List> methodName
+	return (self ActorMethods) ListMapAt methodName
 
-ListMap ObjectRemoveMethod (ObjectDeleteMethod JobRemoveMethod) <List> methodName
-	(self ObjectMethods) RemoveKey methodName
+ListMap ActorRemoveMethod (ActorDeleteMethod JobRemoveMethod) <List> methodName
+	(self ActorMethods) RemoveKey methodName
 	return self
 
-ListMap ObjectSetMethod (JobSetMethod) <ListMap> method <List> methodName
-	(self ObjectMethods) AtPut methodName method
+ListMap ActorSetMethod (JobSetMethod) <ListMap> method <List> methodName
+	(self ActorMethods) AtPut methodName method
 	return self
 
-ListMap ObjectSetMethodBody (JobSetMethodBody) <List> methodBody <List> methodName
+ListMap ActorSetMethodBody (JobSetMethodBody) <List> methodBody <List> methodName
 	method = <ListMap>
 	method AtPut "Базовый" false
 	method AtPut "Тело" methodBody
-	(self ObjectMethods) AtPut methodName method
+	(self ActorMethods) AtPut methodName method
 	method Release
 	return self
 
-ListMap ObjectSetBasicMethod (JobSetBasicMethod) <Object> entity <Method> basicMethod <List> methodName
+ListMap ActorSetBasicMethod (JobSetBasicMethod) <Object> entity <Method> basicMethod <List> methodName
 	method = <ListMap>
 	method AtPut "Базовый" true
 	method AtPut "Сущность" entity
 	method AtPut "Базовый метод" basicMethod
-	(self ObjectMethods) AtPut methodName method
+	(self ActorMethods) AtPut methodName method
 	method Release
 	return self
 
-ListMap ObjectSetJob <ListMap> job <List> jobName
-	(self ObjectJobs) AtPut jobName job
+ListMap ActorSetJob <ListMap> job <List> jobName
+	(self ActorJobs) AtPut jobName job
 	return self
 
-ListMap ObjectSetProperty (JobSetProperty) value <List> propertyName
-	(self ObjectProperties) AtPut propertyName value
+ListMap ActorSetProperty (JobSetProperty) value <List> propertyName
+	(self ActorProperties) AtPut propertyName value
 	return self
 
-ListMap ObjectRemoveJob <List> jobName
-	(self ObjectJobs) Remove jobName
+ListMap ActorRemoveJob <List> jobName
+	(self ActorJobs) Remove jobName
 	return self
 
-ListMap ObjectResetMethodsDestructive <ListMap> newMethods
-	self AtPut "Методы" newMethods // (self ObjectMethods) ResetWithListMapDestructive newMethods
+ListMap ActorResetMethodsDestructive <ListMap> newMethods
+	self AtPut "Методы" newMethods // (self ActorMethods) ResetWithListMapDestructive newMethods
 	return self
 
-ListMap ObjectResetFieldsDestructive <ListMap> newFields
-	self AtPut "Поля" newFields // (self ObjectFields) ResetWithListMapDestructive newFields
+ListMap ActorResetFieldsDestructive <ListMap> newFields
+	self AtPut "Поля" newFields // (self ActorFields) ResetWithListMapDestructive newFields
 	return self
 
-ListMap ObjectResetJobsDestructive <ListMap> newJobs
-	self AtPut "Работы" newJobs // (self ObjectJobs) ResetWithListMapDestructive newJobs
-	jobsIterator = self ObjectJobsIterator
+ListMap ActorResetJobsDestructive <ListMap> newJobs
+	self AtPut "Работы" newJobs // (self ActorJobs) ResetWithListMapDestructive newJobs
+	jobsIterator = self ActorJobsIterator
 	while jobsIterator NotThisEnd
 		job = jobsIterator ListMapData
 		messageSlotsIterator = job JobMessageSlotsIterator
@@ -285,26 +293,26 @@ ListMap ObjectResetJobsDestructive <ListMap> newJobs
 		jobsIterator ++
 	return self
 
-ListMap ObjectRemoveAllIdentifiers
-	((self ObjectProperties) ListAt ("Идентификаторы")) RemoveAll
+ListMap ActorRemoveAllIdentifiers
+	((self ActorProperties) ListAt ("Идентификаторы")) RemoveAll
 	return self
 
-ListMap ObjectJob <List> jobName
-	return (self ObjectJobs) ListMapAt jobName
+ListMap ActorJob <List> jobName
+	return (self ActorJobs) ListMapAt jobName
 
 
-ListMap <Object> ObjectProperty (JobProperty) <List> propertyName
-	return (self ObjectProperties) At propertyName
+ListMap <Object> ActorProperty (JobProperty) <List> propertyName
+	return (self ActorProperties) ObjectAt propertyName
 
-ListMap <List> ObjectNotificationRequests
-	return self ObjectProperty "Запросы на оповещение"
+ListMap <List> ActorNotificationRequests
+	return self ActorProperty "Запросы на оповещение"
 
-ListMap ObjectAddNotificationRequest <ListMap> notificationRequest
-	(self ObjectNotificationRequests) Append notificationRequest
+ListMap ActorAddNotificationRequest <ListMap> notificationRequest
+	(self ActorNotificationRequests) Append notificationRequest
 	return self
 
-ListMap <ListIterator> ObjectNotificationRequestsIterator
-	return (self ObjectNotificationRequests) First
+ListMap <ListIterator> ActorNotificationRequestsIterator
+	return (self ActorNotificationRequests) First
 
 
 // ==========================

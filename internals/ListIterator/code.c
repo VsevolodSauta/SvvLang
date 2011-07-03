@@ -34,7 +34,7 @@ Object ListIterator_Destroy(Object _self)
 	DPUSHS ("ListIterator: Destroy begined.")
 	ASSERT_C ( "ListIterator:Destroy --- Checking for correct object type failed.", _self->gid ==   807984642922801280ull )
 	Object_Release((((ListIterator) (_self->entity))->_node));
-	if((Object_Is((((ListIterator) (_self->entity))->_system), _false)) != _false)
+	if((Logic_Not((((ListIterator) (_self->entity))->_system))) != _false)
 	{
 		Object_Release((((ListIterator) (_self->entity))->_list));
 	}

@@ -109,12 +109,12 @@ Object ProcessorCommandSystem_Init(Object _self)
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать сообщение объекту из поля сообщения", 81), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeSendMessageToMessageField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Послать ответ на сообщение", 49), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeSendReplyForMessage));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Вызвать метод с параметрами", 51), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeInvokeMethod));
-	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод объекта", 46), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineObjectMethod));
+	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод объекта", 46), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineActorMethod));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Определить метод работы", 44), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineJobMethod));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Удалить метод с именем", 41), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeUnDefineMethod));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить ТВА", 27), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineLocalField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить поле работы", 42), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineJobField));
-	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить поле объекта", 44), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineObjectField));
+	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить поле объекта", 44), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineActorField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Установить глобальное поле", 50), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeDefineGlobalField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Присвоить полю идентификатор", 54), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeSetField));
 	ListMap_Add((((ProcessorCommandSystem) (_self->entity))->_processorCodes), StringFactory_FromUTF8(_stringFactory, "Перемежить поле прибытия с полем отправления", 83), MethodFactory_FromPointer(_methodFactory, &ProcessorCommandSystem_CodeUniteField));
@@ -202,7 +202,7 @@ Object ProcessorCommandSystem_CodeEntityFromMessageField(Object _self, Object _t
 	_messageSlotName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя сообщения", 25), _toDo);
 	Object _fieldName;
 	_fieldName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя поля", 15), _toDo);
-	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), Processor_EntityFromMessageField((((ProcessorCommandSystem) (_self->entity))->_processor), _fieldName, _messageSlotName));
+	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), Processor_EntityFromNamedMessageField((((ProcessorCommandSystem) (_self->entity))->_processor), _fieldName, _messageSlotName));
 	Object toReturn = _self;
 	DPOPS ("ProcessorCommandSystem: CodeEntityFromMessageField ended.")
 	return toReturn;
@@ -226,7 +226,7 @@ Object ProcessorCommandSystem_CodeAddCurrentUIDToStack(Object _self, Object _toD
 	DPUSHS ("ProcessorCommandSystem: CodeAddCurrentUIDToStack begined.")
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentUIDToStack --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentUIDToStack --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
-	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), (((Processor) ((((ProcessorCommandSystem) (_self->entity))->_processor)->entity))->_contextUID));
+	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), Processor_ContextActorUID((((ProcessorCommandSystem) (_self->entity))->_processor)));
 	Object toReturn = _self;
 	DPOPS ("ProcessorCommandSystem: CodeAddCurrentUIDToStack ended.")
 	return toReturn;
@@ -237,7 +237,7 @@ Object ProcessorCommandSystem_CodeAddCurrentJobToStack(Object _self, Object _toD
 	DPUSHS ("ProcessorCommandSystem: CodeAddCurrentJobToStack begined.")
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentJobToStack --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentJobToStack --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
-	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), (((Processor) ((((ProcessorCommandSystem) (_self->entity))->_processor)->entity))->_contextJobName));
+	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), Processor_ContextJobName((((ProcessorCommandSystem) (_self->entity))->_processor)));
 	Object toReturn = _self;
 	DPOPS ("ProcessorCommandSystem: CodeAddCurrentJobToStack ended.")
 	return toReturn;
@@ -248,7 +248,7 @@ Object ProcessorCommandSystem_CodeAddCurrentJobStageToStack(Object _self, Object
 	DPUSHS ("ProcessorCommandSystem: CodeAddCurrentJobStageToStack begined.")
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentJobStageToStack --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
 	ASSERT_C ( "ProcessorCommandSystem:CodeAddCurrentJobStageToStack --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
-	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), (((Processor) ((((ProcessorCommandSystem) (_self->entity))->_processor)->entity))->_contextJobStageName));
+	Stack_Push((((ProcessorCommandSystem) (_self->entity))->_helperStack), Processor_ContextJobStageName((((ProcessorCommandSystem) (_self->entity))->_processor)));
 	Object toReturn = _self;
 	DPOPS ("ProcessorCommandSystem: CodeAddCurrentJobStageToStack ended.")
 	return toReturn;
@@ -513,18 +513,18 @@ Object ProcessorCommandSystem_CodeInvokeMethod(Object _self, Object _toDo)
 	return toReturn;
 }
 
-Object ProcessorCommandSystem_CodeDefineObjectMethod(Object _self, Object _toDo)
+Object ProcessorCommandSystem_CodeDefineActorMethod(Object _self, Object _toDo)
 {
-	DPUSHS ("ProcessorCommandSystem: CodeDefineObjectMethod begined.")
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectMethod --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectMethod --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
+	DPUSHS ("ProcessorCommandSystem: CodeDefineActorMethod begined.")
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineActorMethod --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineActorMethod --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
 	Object _methodName;
 	_methodName = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Имя метода", 19), _toDo);
 	Object _method;
 	_method = ProcessorCommandSystem_GetNamedEntityFromToDoOrStack(_self, StringFactory_FromUTF8(_stringFactory, "Метод", 10), _toDo);
-	Processor_DefineObjectMethod((((ProcessorCommandSystem) (_self->entity))->_processor), _method, _methodName);
+	Processor_DefineActorMethod((((ProcessorCommandSystem) (_self->entity))->_processor), _method, _methodName);
 	Object toReturn = _self;
-	DPOPS ("ProcessorCommandSystem: CodeDefineObjectMethod ended.")
+	DPOPS ("ProcessorCommandSystem: CodeDefineActorMethod ended.")
 	return toReturn;
 }
 
@@ -569,18 +569,18 @@ Object ProcessorCommandSystem_CodeDefineJobField(Object _self, Object _toDo)
 	DPUSHS ("ProcessorCommandSystem: CodeDefineJobField begined.")
 	ASSERT_C ( "ProcessorCommandSystem:CodeDefineJobField --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
 	ASSERT_C ( "ProcessorCommandSystem:CodeDefineJobField --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
-	Object toReturn = ProcessorCommandSystem_DefineFieldHelper(_self, _toDo, ListMap_ObjectFields(Processor_ContextJob((((ProcessorCommandSystem) (_self->entity))->_processor))));
+	Object toReturn = ProcessorCommandSystem_DefineFieldHelper(_self, _toDo, ListMap_ActorFields(Processor_ContextJob((((ProcessorCommandSystem) (_self->entity))->_processor))));
 	DPOPS ("ProcessorCommandSystem: CodeDefineJobField ended.")
 	return toReturn;
 }
 
-Object ProcessorCommandSystem_CodeDefineObjectField(Object _self, Object _toDo)
+Object ProcessorCommandSystem_CodeDefineActorField(Object _self, Object _toDo)
 {
-	DPUSHS ("ProcessorCommandSystem: CodeDefineObjectField begined.")
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectField --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
-	ASSERT_C ( "ProcessorCommandSystem:CodeDefineObjectField --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
-	Object toReturn = ProcessorCommandSystem_DefineFieldHelper(_self, _toDo, ListMap_ObjectFields(Processor_ContextObject((((ProcessorCommandSystem) (_self->entity))->_processor))));
-	DPOPS ("ProcessorCommandSystem: CodeDefineObjectField ended.")
+	DPUSHS ("ProcessorCommandSystem: CodeDefineActorField begined.")
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineActorField --- Checking for correct object type failed.", _self->gid ==  3307502136344893952ull )
+	ASSERT_C ( "ProcessorCommandSystem:CodeDefineActorField --- Checking for correct parameter type failed at parameter _toDo.", _toDo->gid ==  2108332898258556672ull || _toDo == _nil )
+	Object toReturn = ProcessorCommandSystem_DefineFieldHelper(_self, _toDo, ListMap_ActorFields(Processor_ContextActor((((ProcessorCommandSystem) (_self->entity))->_processor))));
+	DPOPS ("ProcessorCommandSystem: CodeDefineActorField ended.")
 	return toReturn;
 }
 

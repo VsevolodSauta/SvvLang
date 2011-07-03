@@ -9,7 +9,8 @@ Object Array_Create(void)
 	Object_SetComparator(toReturn, &Array_Compare);
 	Object_SetDestructor(toReturn, &Array_Destroy);
 	Object_SetCloner(toReturn, &Array_Clone);
-	((Array) (toReturn->entity))->size = 0;
+	Object_SetDeepCloner(toReturn, &Array_DeepClone);
+	((Array) (toReturn->entity))->size = NumberFactory_NumberFromLong(_numberFactory, 0);
 	return toReturn;
 }
 
@@ -42,8 +43,8 @@ Object Array_Destroy(Object receiver)
 
 Object Array_SetSize(Object receiver, Object size)
 {
-	((Array) (receiver->entity))->size = Number_GetLong(size);
-	((Array) (receiver->entity))->data = Allocator_New(_allocator, sizeof(Object) * ((Array) (receiver->entity))->size);
+	((Array) (receiver->entity))->size = Object_Retain(size);
+	((Array) (receiver->entity))->data = Allocator_New(_allocator, sizeof(Object) * Number_GetLong(size));
 	return receiver;
 }
 
@@ -54,6 +55,7 @@ Object Array_GetAt(Object receiver, Object position)
 
 Object Array_PutAt(Object receiver, Object object, Object position)
 {
-	((Array) (receiver->entity))->data[Number_GetLong(position)] = object;
+	Object_Release(((Array) (receiver->entity))->data[Number_GetLong(position)]);
+	((Array) (receiver->entity))->data[Number_GetLong(position)] = Object_Retain(object);
 	return receiver;
 }

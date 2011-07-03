@@ -157,7 +157,7 @@ Object Queue_DeepClone(Object _self)
 	ASSERT_C ( "Queue:DeepClone --- Checking for correct object type failed.", _self->gid ==  5026058259973625856ull )
 	Object _toReturn;
 	_toReturn = Queue_Create();
-	Object_SetRetaining(&(((Queue) (_toReturn->entity))->_list), Object_DeepClone((((Queue) (_self->entity))->_list)));
+	Object_SetReleasing(&(((Queue) (_toReturn->entity))->_list), Object_DeepClone((((Queue) (_self->entity))->_list)));
 	Object toReturn = _toReturn;
 	DPOPS ("Queue: DeepClone ended.")
 	return toReturn;

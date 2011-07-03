@@ -33,8 +33,8 @@ Object Runtime_Init(Object _self)
 	_stringFactory = StringFactory_Create();
 	_numberFactory = NumberFactory_Create();
 	_logicFactory = LogicFactory_Create();
-	_autoreleasePool = AutoreleasePool_Create();
-	AutoreleasePool_PushFrame(_autoreleasePool);
+	_threadManager = ThreadManager_Create();
+	ThreadManager_RegisterCurrentThread(_threadManager);
 	_console = Console_Create();
 	_jsonParser = JSONParser_Create();
 	_entitiesFactory = ExternalEntitiesFactory_Create();
@@ -47,7 +47,7 @@ Object Runtime_Destroy(Object _self)
 {
 	DPUSHS ("Runtime: Destroy begined.")
 	ASSERT_C ( "Runtime:Destroy --- Checking for correct object type failed.", _self->gid ==  5367970674748323840ull )
-	Object_Release(_autoreleasePool);
+	Object_Release(_threadManager);
 	Object_Release(_console);
 	Object_Release(_jsonParser);
 	Object toReturn = Object_Destroy(_self);

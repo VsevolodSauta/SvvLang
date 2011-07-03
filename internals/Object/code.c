@@ -1,4 +1,5 @@
 #include "internals/basics.h"
+#include "internals/ThreadManager/interface.h"
 #include "internals/AutoreleasePool/interface.h"
 
 Object Object_Create(void)
@@ -40,7 +41,12 @@ Object Object_EmptyComparator(Object _self, Object object)
 Object Object_Retain(Object _self)
 {
 	DMSGS("Object: Retain.");
-	_self->links++;
+	asm volatile (
+		"lock\n"
+		"xadd %1, %0\n"
+		: "=m" (_self->links)
+		: "r" (1)
+	);
 	return _self;
 }
 
@@ -53,7 +59,14 @@ Object Object_Release(Object _self)
 		DMSG("Object: Releasing already destroyed object.");
 	}
 #endif
-	if(!(--(_self->links)))
+	register int toAdd = -1;
+	asm volatile (
+		"lock\n"
+		"xadd %1, %0\n"
+		: "=m" (_self->links),
+		  "=r" (toAdd)
+	);
+	if(toAdd == 1)
 	{
 		DPUSHS("Object: Destroy.");
 		_self->destroy(_self);
@@ -66,7 +79,7 @@ Object Object_Release(Object _self)
 Object Object_Autorelease(Object _self)
 {
 	DPUSHS("Object: Autorelease.");
-	AutoreleasePool_Add(_autoreleasePool, _self);
+	AutoreleasePool_Add(ThreadManager_AutoreleasePool(_threadManager), _self);
 	DPOPS("Object: Autoreleased.");
 	return _self;
 }
@@ -135,4 +148,9 @@ Object Object_Hash(Object _self)
 Object Object_Is(Object _self, Object object)
 {
 	return (_self == object) ? _true : _false;
+}
+
+Object Object_IsNil(Object _self)
+{
+	return (_self == _nil) ? _true : _false;
 }

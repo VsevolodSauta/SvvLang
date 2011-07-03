@@ -28,7 +28,7 @@ Object File_OpenForReading(Object _self, Object _filename)
 	File entity = _self->entity;
 	char buffer[BUFFER_LENGTH];
 	StringFactory_GetUTF8String(_stringFactory, _filename, buffer, BUFFER_LENGTH);
-	entity->_descriptor = OSfileOpen(entity->buffer, 0);
+	entity->_descriptor = OSfileOpen(buffer, 0);
 	return _self;
 }
 

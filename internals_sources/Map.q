@@ -35,8 +35,8 @@ Map <Number> Size
 	return self.keys Size
 
 Map Add (AtPut PutAt +) key value
-	keysIterator = self.keys First
-	valuesIterator = self.values First
+	keysIterator = self.keys SystemFirst
+	valuesIterator = self.values SystemFirst
 	while keysIterator NotThisEnd
 		if (keysIterator ThisData) < key
 			keysIterator ++
@@ -45,9 +45,13 @@ Map Add (AtPut PutAt +) key value
 			break
 		else
 			valuesIterator SetThisData value
+			keysIterator Release
+			valuesIterator Release
 			return self
 	keysIterator AddBefore key
 	valuesIterator AddBefore value
+	keysIterator Release
+	valuesIterator Release
 	return self
 
 Map RemoveKey (Remove Delete DeleteKey - \) key
@@ -80,29 +84,34 @@ Map RemoveKeyConfirming (RemoveConfirming -? \?) key
 			return true
 	return false
 
-Map ContainsKey (HasKey) key
-	keysIterator = self.keys First
+Map ContainsKey (HasKey Contains) key
+	keysIterator = self.keys SystemFirst
+	toReturn = false
 	while keysIterator NotThisEnd
 		if (keysIterator ThisData) < key
 			keysIterator ++
-		elif (keysIterator ThisData) > key
-			break
 		else
-			return true
-	return false
+			if (keysIterator ThisData) == key
+				toReturn = true
+			break
+	keysIterator Release
+	return toReturn
 
 Map GetValueForKey (GetAt AtGet At) key
-	keysIterator = self.keys First
-	valuesIterator = self.values First
+	keysIterator = self.keys SystemFirst
+	valuesIterator = self.values SystemFirst
+	toReturn = nil
 	while keysIterator NotThisEnd
 		if (keysIterator ThisData) < key
 			keysIterator ++
 			valuesIterator ++
-		elif (keysIterator ThisData) > key
-			break
 		else
-			return valuesIterator ThisData
-	return nil
+			if (keysIterator ThisData) == key
+				toReturn = valuesIterator ThisData
+			break
+	keysIterator Release
+	valuesIterator Release
+	return toReturn
 
 Map <MapIterator> First
 	iterator = <MapIterator>
@@ -115,4 +124,3 @@ Map <MapIterator> Last
 	iterator SetMap self
 	iterator ToEnd
 	return iterator Autorelease
-	

@@ -20,8 +20,8 @@ Object ExternalEntitiesFactory_CreateConditionEqualityWithField(Object _self, Ob
 Object ExternalEntitiesFactory_CreateEmptyMessageSlot(Object _self);
 Object ExternalEntitiesFactory_CreateRequestMessageSlot(Object _self, Object _request);
 Object ExternalEntitiesFactory_CreateReplyMessageSlot(Object _self, Object _request);
-Object ExternalEntitiesFactory_CreateObjectProperties(Object _self);
-Object ExternalEntitiesFactory_CreateObject(Object _self);
+Object ExternalEntitiesFactory_CreateActorProperties(Object _self);
+Object ExternalEntitiesFactory_CreateEmptyActor(Object _self);
 Object ExternalEntitiesFactory_CreateMessageProperties(Object _self);
 Object ExternalEntitiesFactory_CreateEmptyMessage(Object _self);
 Object ExternalEntitiesFactory_CreateEmptyFields(Object _self);

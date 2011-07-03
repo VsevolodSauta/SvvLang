@@ -3,7 +3,7 @@
 #include "internals/Object/interface.h"
 
 typedef struct Array {
-	long		size;
+	Object		size;
 	Object		*data;
 } *Array;
 

@@ -4,6 +4,10 @@ Token isCreator := method(
 	(self beginsWithSeq("<")) and (self endsWithSeq(">"))
 )
 
+Token isGlobalObjectDefinition := method(
+	self beginsWithSeq("@")
+)
+
 Token with := method(sequence,
 	toReturn := sequence clone
 	toReturn appendProto(Token)

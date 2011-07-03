@@ -75,29 +75,29 @@ Object ExternalFileManipulator_SetMachine(Object _self, Object _machine)
 	return toReturn;
 }
 
-Object ExternalFileManipulator_CreateUIDFileFromUIDObject(Object _self, Object _uid)
+Object ExternalFileManipulator_CreateUIDFileFromUIDActor(Object _self, Object _uid)
 {
-	DPUSHS ("ExternalFileManipulator: CreateUIDFileFromUIDObject begined.")
-	ASSERT_C ( "ExternalFileManipulator:CreateUIDFileFromUIDObject --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
-	ASSERT_C ( "ExternalFileManipulator:CreateUIDFileFromUIDObject --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
-	Object _object;
-	_object = Machine_UIDToObject((((ExternalFileManipulator) (_self->entity))->_machine), _uid);
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_AssociateUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя фала", 42));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для чтения", 43));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для записи", 43));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_CloseUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_ReadStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать строку", 29));
-	ListMap_ObjectSetBasicMethod(_object, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteObjectUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать объект", 29));
+	DPUSHS ("ExternalFileManipulator: CreateUIDFileFromUIDActor begined.")
+	ASSERT_C ( "ExternalFileManipulator:CreateUIDFileFromUIDActor --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
+	ASSERT_C ( "ExternalFileManipulator:CreateUIDFileFromUIDActor --- Checking for correct parameter type failed at parameter _uid.", _uid->gid ==  3732711262168886272ull || _uid == _nil )
+	Object _actor;
+	_actor = Machine_UIDToActor((((ExternalFileManipulator) (_self->entity))->_machine), _uid);
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_AssociateUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя фала", 42));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForReadingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для чтения", 43));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_OpenForWritingUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Открыть файл для записи", 43));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_CloseUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Закрыть файл", 23));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_ReadStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Прочитать строку", 31));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteStringUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать строку", 29));
+	ListMap_ActorSetBasicMethod(_actor, _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteActorUIDFileBasicMethod), StringFactory_FromUTF8(_stringFactory, "Записать объект", 29));
 	Object _job;
 	_job = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
-	ListMap_ObjectSetJob(_object, _job, StringFactory_FromUTF8(_stringFactory, "Основная работа файла", 40));
+	ListMap_ActorSetJob(_actor, _job, StringFactory_FromUTF8(_stringFactory, "Основная работа файла", 40));
 	Object _messageSlot;
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ассоциировать", 26));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
 	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Ассоциирование файла", 39), StringFactory_FromUTF8(_stringFactory, "Ассоциировать имя фала", 42), StringFactory_FromUTF8(_stringFactory, "Запрос на ассоциирование", 46), _messageSlot);
 	Object toReturn = _uid;
-	DPOPS ("ExternalFileManipulator: CreateUIDFileFromUIDObject ended.")
+	DPOPS ("ExternalFileManipulator: CreateUIDFileFromUIDActor ended.")
 	return toReturn;
 }
 
@@ -106,11 +106,11 @@ Object ExternalFileManipulator_AssociateUIDFileBasicMethod(Object _self, Object 
 	DPUSHS ("ExternalFileManipulator: AssociateUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:AssociateUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:AssociateUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = Processor_ContextJob(_processor);
-	ListMap_Add(ListMap_ObjectProperties(_fileObject), StringFactory_FromUTF8(_stringFactory, "Имя файла", 17), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос на ассоциирование", 46), StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
+	ListMap_Add(ListMap_ActorProperties(_fileActor), StringFactory_FromUTF8(_stringFactory, "Имя файла", 17), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос на ассоциирование", 46), StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
 	Object _messageSlot;
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Открыть", 14));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Доступ", 12), StringFactory_FromUTF8(_stringFactory, "Чтение", 12)));
@@ -132,14 +132,14 @@ Object ExternalFileManipulator_OpenForReadingUIDFileBasicMethod(Object _self, Ob
 	DPUSHS ("ExternalFileManipulator: OpenForReadingUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:OpenForReadingUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:OpenForReadingUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = Processor_ContextJob(_processor);
 	Object _file;
 	_file = File_Create();
-	File_OpenForReading(_file, ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
-	ListMap_ObjectSetProperty(_fileObject, _file, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	File_OpenForReading(_file, ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
+	ListMap_ActorSetProperty(_fileActor, _file, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	Object_Release(_file);
 	Object _messageSlot;
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Прочитать", 18));
@@ -164,20 +164,20 @@ Object ExternalFileManipulator_OpenForWritingUIDFileBasicMethod(Object _self, Ob
 	DPUSHS ("ExternalFileManipulator: OpenForWritingUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:OpenForWritingUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:OpenForWritingUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = Processor_ContextJob(_processor);
 	Object _file;
 	_file = File_Create();
-	File_OpenForAppending(_file, ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
-	ListMap_ObjectSetProperty(_fileObject, _file, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	File_OpenForAppending(_file, ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Имя файла", 17)));
+	ListMap_ActorSetProperty(_fileActor, _file, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	Object_Release(_file);
 	Object _messageSlot;
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Записать", 16));
-	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Объект записи", 25), StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
-	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
-	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Запись строки", 25), StringFactory_FromUTF8(_stringFactory, "Записать строку", 29), StringFactory_FromUTF8(_stringFactory, "Запрос для записи строки", 45), _messageSlot);
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Объект записи", 25), StringFactory_FromUTF8(_stringFactory, "Простая строка", 27)));
+	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Простая строка", 27)));
+	ListMap_JobCreateStageWithNameMethodMessageSlotNameAndEntity(_job, StringFactory_FromUTF8(_stringFactory, "Запись простой строки", 40), StringFactory_FromUTF8(_stringFactory, "Записать простую строку", 44), StringFactory_FromUTF8(_stringFactory, "Запрос для записи простой строки", 60), _messageSlot);
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Записать", 16));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Объект записи", 25), StringFactory_FromUTF8(_stringFactory, "Объект", 12)));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Объект", 12)));
@@ -201,14 +201,14 @@ Object ExternalFileManipulator_CloseUIDFileBasicMethod(Object _self, Object _pro
 	DPUSHS ("ExternalFileManipulator: CloseUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:CloseUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:CloseUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = Processor_ContextJob(_processor);
 	Object _file;
-	_file = ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	_file = ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	File_Close(_file);
-	ListMap_ObjectSetProperty(_fileObject, _nil, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	ListMap_ActorSetProperty(_fileActor, _nil, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	Object _messageSlot;
 	_messageSlot = ExternalEntitiesFactory_CreateRequestMessageSlot(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Открыть", 14));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Доступ", 12), StringFactory_FromUTF8(_stringFactory, "Чтение", 12)));
@@ -236,12 +236,12 @@ Object ExternalFileManipulator_WriteStringUIDFileBasicMethod(Object _self, Objec
 	DPUSHS ("ExternalFileManipulator: WriteStringUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:WriteStringUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:WriteStringUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = Processor_ContextJob(_processor);
 	Object _file;
-	_file = ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	_file = ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	File_WriteNakedString(_file, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос для записи строки", 45), StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
@@ -252,23 +252,23 @@ Object ExternalFileManipulator_WriteStringUIDFileBasicMethod(Object _self, Objec
 	return toReturn;
 }
 
-Object ExternalFileManipulator_WriteObjectUIDFileBasicMethod(Object _self, Object _processor)
+Object ExternalFileManipulator_WriteActorUIDFileBasicMethod(Object _self, Object _processor)
 {
-	DPUSHS ("ExternalFileManipulator: WriteObjectUIDFileBasicMethod begined.")
-	ASSERT_C ( "ExternalFileManipulator:WriteObjectUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
-	ASSERT_C ( "ExternalFileManipulator:WriteObjectUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	DPUSHS ("ExternalFileManipulator: WriteActorUIDFileBasicMethod begined.")
+	ASSERT_C ( "ExternalFileManipulator:WriteActorUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
+	ASSERT_C ( "ExternalFileManipulator:WriteActorUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _job;
 	_job = ExternalEntitiesFactory_CreateEmptyJob(_entitiesFactory);
 	Object _uidToWrite;
 	_uidToWrite = Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос для записи объекта", 47), StringFactory_FromUTF8(_stringFactory, "Объект", 12));
-	ListMap_ObjectSetJob(_fileObject, _job, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Вывод ", 11), _uidToWrite));
+	ListMap_ActorSetJob(_fileActor, _job, List_ConcatenateRight(StringFactory_FromUTF8(_stringFactory, "Вывод ", 11), _uidToWrite));
 	Object _messageSlot;
 	_messageSlot = Processor_CreateStageReplyEntityBasicMethodInJob(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), _self, MethodFactory_FromPointer(_methodFactory, &ExternalFileManipulator_WriteSecondStageUIDFileBasicMethod), _job);
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionEquality(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Ответ", 10), StringFactory_FromUTF8(_stringFactory, "Успех", 10)));
 	ListMap_MessageSlotSetCondition(_messageSlot, ExternalEntitiesFactory_CreateConditionPresence(_entitiesFactory, StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
-	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ObjectFields(_job), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос для записи объекта", 47), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
+	Processor_DefineFieldInNameSpaceWithUID(_processor, StringFactory_FromUTF8(_stringFactory, "Заказчик", 16), ListMap_ActorFields(_job), Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Запрос для записи объекта", 47), StringFactory_FromUTF8(_stringFactory, "Отправитель", 22)));
 	Object _request;
 	_request = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
 	ListMap_MessageSetTypeRequest(_request);
@@ -276,7 +276,7 @@ Object ExternalFileManipulator_WriteObjectUIDFileBasicMethod(Object _self, Objec
 	ListMap_MessageSetReceiver(_request, _uidToWrite);
 	Processor_SendMessage(_processor, _request);
 	Object toReturn = _self;
-	DPOPS ("ExternalFileManipulator: WriteObjectUIDFileBasicMethod ended.")
+	DPOPS ("ExternalFileManipulator: WriteActorUIDFileBasicMethod ended.")
 	return toReturn;
 }
 
@@ -285,10 +285,10 @@ Object ExternalFileManipulator_WriteSecondStageUIDFileBasicMethod(Object _self, 
 	DPUSHS ("ExternalFileManipulator: WriteSecondStageUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:WriteSecondStageUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:WriteSecondStageUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _file;
-	_file = ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	_file = ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	File_WriteNakedString(_file, Processor_EntityFromNamedMessageField(_processor, StringFactory_FromUTF8(_stringFactory, "Значение простой строкой", 46), StringFactory_FromUTF8(_stringFactory, "Строка", 12)));
 	Object _reply;
 	_reply = ExternalEntitiesFactory_CreateEmptyMessage(_entitiesFactory);
@@ -306,10 +306,10 @@ Object ExternalFileManipulator_ReadStringUIDFileBasicMethod(Object _self, Object
 	DPUSHS ("ExternalFileManipulator: ReadStringUIDFileBasicMethod begined.")
 	ASSERT_C ( "ExternalFileManipulator:ReadStringUIDFileBasicMethod --- Checking for correct object type failed.", _self->gid ==  6719891516697860096ull )
 	ASSERT_C ( "ExternalFileManipulator:ReadStringUIDFileBasicMethod --- Checking for correct parameter type failed at parameter _processor.", _processor->gid ==  8708543990322460672ull || _processor == _nil )
-	Object _fileObject;
-	_fileObject = Processor_ContextObject(_processor);
+	Object _fileActor;
+	_fileActor = Processor_ContextActor(_processor);
 	Object _file;
-	_file = ListMap_ObjectProperty(_fileObject, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
+	_file = ListMap_ActorProperty(_fileActor, StringFactory_FromUTF8(_stringFactory, "Файл", 8));
 	Object _string;
 	_string = File_ReadString(_file);
 	Object _reply;

@@ -11,6 +11,7 @@ add_subdirectory(StringFactory)
 add_subdirectory(LogicFactory)
 
 add_subdirectory(Allocator)
+add_subdirectory(AllocatorForStack)
 add_subdirectory(AutoreleasePool)
 add_subdirectory(Undestroyable)
 
@@ -50,15 +51,20 @@ add_subdirectory(Runtime)
 
 add_subdirectory(ExternalMachineManipulator)
 
-add_subdirectory(ExternalObjectManipulator)
+add_subdirectory(ExternalActorManipulator)
 add_subdirectory(ExternalConsoleManipulator)
 add_subdirectory(ExternalFileManipulator)
 add_subdirectory(ExternalNumberManipulator)
+add_subdirectory(ExternalCharManipulator)
 add_subdirectory(ExternalListManipulator)
+add_subdirectory(ExternalListMapManipulator)
+add_subdirectory(ExternalJSONParserManipulator)
 
 add_subdirectory(ExternalEntitiesFactory)
-add_subdirectory(ExternalObjectsFactory)
+add_subdirectory(ExternalActorsFactory)
 
+add_subdirectory(ThreadManager)
+add_subdirectory(Thread)
 
 add_executable(VM main.c)
-target_link_libraries(VM Machine Runtime Object OSKernel)
+target_link_libraries(VM AllocatorForStack Machine Runtime Object OSKernel)

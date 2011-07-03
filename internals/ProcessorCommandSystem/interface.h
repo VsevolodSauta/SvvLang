@@ -37,12 +37,12 @@ Object ProcessorCommandSystem_CodeSendMessageToField(Object _self, Object _toDo)
 Object ProcessorCommandSystem_CodeSendMessageToMessageField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeSendReplyForMessage(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeInvokeMethod(Object _self, Object _toDo);
-Object ProcessorCommandSystem_CodeDefineObjectMethod(Object _self, Object _toDo);
+Object ProcessorCommandSystem_CodeDefineActorMethod(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineJobMethod(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeUnDefineMethod(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineLocalField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineJobField(Object _self, Object _toDo);
-Object ProcessorCommandSystem_CodeDefineObjectField(Object _self, Object _toDo);
+Object ProcessorCommandSystem_CodeDefineActorField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_CodeDefineGlobalField(Object _self, Object _toDo);
 Object ProcessorCommandSystem_DefineFieldHelper(Object _self, Object _toDo, Object _nameSpace);
 Object ProcessorCommandSystem_CodeSetField(Object _self, Object _toDo);

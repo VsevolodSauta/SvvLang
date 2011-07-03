@@ -7,14 +7,7 @@ extern Object _nil;
 extern Object _null;
 
 extern Object _allocator;
-
-extern Object _autoreleasePool;
-
-extern Object _stringFactory;
-extern Object _numberFactory;
-extern Object _logicFactory;
-extern Object _charFactory;
-extern Object _methodFactory;
+extern Object _allocatorForStack;
 
 extern Object _uncomparableGreater;
 extern Object _uncomparableLess;
@@ -30,5 +23,14 @@ extern Object _no;
 
 extern Object _console;
 extern Object _jsonParser;
+
 extern Object _entitiesFactory;
 extern Object _objectsFactory;
+
+extern Object _logicFactory;
+extern Object _numberFactory;
+extern Object _charFactory;
+extern Object _stringFactory;
+extern Object _methodFactory;
+
+extern Object _threadManager;

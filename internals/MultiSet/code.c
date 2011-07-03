@@ -56,7 +56,7 @@ Object MultiSet_DeepClone(Object _self)
 	ASSERT_C ( "MultiSet:DeepClone --- Checking for correct object type failed.", _self->gid ==  8253887558225682432ull )
 	Object _toReturn;
 	_toReturn = MultiSet_Create();
-	Object_SetRetaining(&(((MultiSet) (_toReturn->entity))->_list), Object_DeepClone((((MultiSet) (_self->entity))->_list)));
+	Object_SetReleasing(&(((MultiSet) (_toReturn->entity))->_list), Object_DeepClone((((MultiSet) (_self->entity))->_list)));
 	Object toReturn = _toReturn;
 	DPOPS ("MultiSet: DeepClone ended.")
 	return toReturn;

@@ -381,7 +381,7 @@ Object ListMapIterator_Clone(Object _self)
 	(((ListMapIterator) (_toReturn->entity))->_elementStack) = Object_DeepClone((((ListMapIterator) (_self->entity))->_elementStack));
 	(((ListMapIterator) (_toReturn->entity))->_thisBegin) = (((ListMapIterator) (_self->entity))->_thisBegin);
 	(((ListMapIterator) (_toReturn->entity))->_thisEnd) = (((ListMapIterator) (_self->entity))->_thisEnd);
-	Object_SetRetaining(&(((ListMapIterator) (_toReturn->entity))->_key), Object_DeepClone((((ListMapIterator) (_self->entity))->_key)));
+	Object_SetReleasing(&(((ListMapIterator) (_toReturn->entity))->_key), Object_DeepClone((((ListMapIterator) (_self->entity))->_key)));
 	Object toReturn = _toReturn;
 	DPOPS ("ListMapIterator: Clone ended.")
 	return toReturn;
@@ -397,7 +397,7 @@ Object ListMapIterator_DeepClone(Object _self)
 	(((ListMapIterator) (_toReturn->entity))->_elementStack) = Object_DeepClone((((ListMapIterator) (_self->entity))->_elementStack));
 	(((ListMapIterator) (_toReturn->entity))->_thisBegin) = (((ListMapIterator) (_self->entity))->_thisBegin);
 	(((ListMapIterator) (_toReturn->entity))->_thisEnd) = (((ListMapIterator) (_self->entity))->_thisEnd);
-	Object_SetRetaining(&(((ListMapIterator) (_toReturn->entity))->_key), Object_DeepClone((((ListMapIterator) (_self->entity))->_key)));
+	Object_SetReleasing(&(((ListMapIterator) (_toReturn->entity))->_key), Object_DeepClone((((ListMapIterator) (_self->entity))->_key)));
 	Object toReturn = _toReturn;
 	DPOPS ("ListMapIterator: DeepClone ended.")
 	return toReturn;

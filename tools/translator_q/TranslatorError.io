@@ -11,5 +11,5 @@ TranslatorError with := method(line, string,
 		
 		"Error: #{line number}: #{string}" interpolate println
 	)
-	System exit
+	System exit(1)
 )
