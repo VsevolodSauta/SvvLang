@@ -44,6 +44,13 @@ DestinationFile putObjectSignature := method(signature,
 	self
 )
 
+DestinationFile putGlobalObjectDefinition := method(definition,
+	if(blockingLevel == 0,
+		interfacesFile write("extern " .. definition .. "\n")
+		self write("\n" .. definition .. "\n")
+	)
+)
+
 DestinationFile putMethodSignature := method(signature,
 	if(blockingLevel == 0,
 		interfacesFile write(signature .. ";\n")

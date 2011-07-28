@@ -21,6 +21,10 @@ Token isKeyword := method(
 	TableOfSymbols isKeyword(self)
 )
 
+Token looksLikeMethodDefinition := method(
+	((self isCreator) or (self isGlobalObjectDefinition)) not
+)
+
 Token asKeyword := method(
 	Keyword with(self)
 )

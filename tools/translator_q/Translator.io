@@ -43,7 +43,7 @@ Translator translateLevel := method(
 			BlockDelegatesHandling blockWillEnd
 			BlockDelegatesHandling blockDidEnd
 		)
-		if(line tokens first isCreator not,
+		if(line tokens first looksLikeMethodDefinition,
 			BlockDelegatesHandling blockWillBegin
 		),
 		
@@ -75,6 +75,10 @@ Translator translateClass := method(objectClassName,
 	DestinationFile write("#include \"internals/basics.h\"\n")
 	DestinationFile write("#include \"internals/#{objectClassName}/imports.h\"\n" interpolate)
 	DestinationFile write("\n")
+	
+	TableOfSymbols ensureKnownClassForClass("Logic", objectClassName)
+	TableOfSymbols ensureKnownClassForClass("SuperClass", objectClassName)
+	
 	TableOfSymbols pushFrame
 	loop(
 		line = SourceFile getLine
@@ -87,17 +91,45 @@ Translator translateClass := method(objectClassName,
 				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName))
 				actor := Actor unnamedActor(line tokens first outOfBrackets)
 				DestinationFile putMethodSignature(actor getCreatorSignature)
-				DestinationFile write(actor getCreatorBody),
-				
-				DestinationFile putMethodSignature(line translateMethodSignature(objectClassName))
-				BlockDelegatesHandling blockDidBegin
-			),
+				DestinationFile write(actor getCreatorBody)
+				continue
+			)
+			if(line tokens first isGlobalObjectDefinition,
+				DestinationFile putGlobalObjectDefinition(line translateGlobalObjectDefinition)
+				continue
+			)
+			
+			DestinationFile putMethodSignature(line translateMethodSignature(objectClassName))
+			BlockDelegatesHandling blockDidBegin,
+			
 			putMethodEntryLine(line translateMethodEntryLine(objectClassName))
 		)
 	)
 	while(0 < previousLevel,
 		BlockDelegatesHandling blockWillEnd
 		BlockDelegatesHandling blockDidEnd
+	)
+	
+	DestinationFile write("void #{objectClassName}_IntializeClass()\n" interpolate)
+	DestinationFile write("{\n")
+	//DestinationFile write("\tAutoreleasePool_PushFrame(_autoreleasePool);\n");
+	DestinationFile write("\tObject _className = StringFactory_FromUTF8(_stringFactory, \"#{objectClassName}\", #{objectClassName size});\n" interpolate)
+	TableOfSymbols classMethods at(objectClassName) foreach(methodName, methodResultClass,
+		DestinationFile write("\tSuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &#{objectClassName}_#{methodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName}\", #{methodName size}), _className);\n" interpolate)
+	)
+	TableOfSymbols mapOfMethodAliases at(objectClassName) foreach(methodName, realMethodName,
+		DestinationFile write("\tSuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &#{objectClassName}_#{realMethodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName asMutable escape}\", #{methodName size}), _className);\n" interpolate)
+	)
+	//DestinationFile write("\tAutoreleasePool_PopFrame(_autoreleasePool);\n");
+	DestinationFile write("}")
+)
+
+Translator importAll := method(
+	Translator currentClassName := "Object"
+	Directory with("../../internals_sources_q") files foreach(file,
+		if(file name endsWithSeq(".q"),
+			TableOfSymbols ensureKnownClassForClass(file name exclusiveSlice(0, file name size - 2), "Object")
+		)
 	)
 )
 
@@ -110,10 +142,15 @@ Translator importObjectType := method(objectClassNameToImport,
 		currentLevel := line getLevel
 		if(line tokens ?size == 0, continue)
 		if(currentLevel != 0, continue)
-		if(line tokens at(0) isCreator,
-			line translateObjectSignature(objectClassName),
-			line translateMethodSignature(objectClassName)
+		if(line tokens first isCreator,
+			line translateObjectSignature(objectClassNameToImport)
+			continue
 		)
+		if(line tokens first isGlobalObjectDefinition,
+			line translateGlobalObjectDefinition
+			continue
+		)
+		line translateMethodSignature(objectClassNameToImport)
 	)
 	TableOfSymbols imported
 )
@@ -121,11 +158,15 @@ Translator importObjectType := method(objectClassNameToImport,
 BlockDelegatesHandling beforeEachBlockBegins(TableOfSymbols, 5)
 BlockDelegatesHandling afterEachBlockBegins(Translator, 5)
 BlockDelegatesHandling afterEachBlockBegins(TranslatorDebugger, 4)
+
+Translator importAll
+
 if(System args size == 1,
 	toProcessList := List clone
-	Directory with("../../internals_sources") files foreach(file,
-		if(file name at(file name size - 1) asCharacter == "~", continue)
-		toProcessList push(file baseName)
+	Directory with("../../internals_sources_q") files foreach(file,
+		if(file name endsWithSeq(".q"),
+			toProcessList push(file baseName)
+		)
 	),
 	
 	toProcessList := System args slice(1)
@@ -140,3 +181,5 @@ toProcessList foreach(index, objectClassName,
 	DestinationFile writeImport(TableOfSymbols importStringForClass(objectClassName))
 	DestinationFile createCMake(TableOfSymbols importListForClass(objectClassName) remove(objectClassName))
 )
+
+FinalStage perform

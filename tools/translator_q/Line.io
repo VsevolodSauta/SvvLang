@@ -148,11 +148,12 @@ Line getAction := method(
 )
 
 Line getActor := method(
+	actor := nil
 	if(getCurrentToken beginsNewAction,
 		toNextToken
-		actor := getActor,
+		actor = getActor,
 			
-		actor := getCurrentToken asActor
+		actor = getCurrentToken asActor
 		toNextToken
 	)
 	
@@ -178,6 +179,14 @@ Line translateMethodEntryLine := method(
 		return first asKeyword process(self),
 		return getActor actorName .. ";"
 	)
+)
+
+Line translateGlobalObjectDefinition := method(
+	objectName := "_" .. getCurrentToken exclusiveSlice(1)
+	objectClass := TableOfSymbols listOfBeingImportedObjects last
+	if(objectClass isNil, objectClass = Translator currentClassName)
+	TableOfSymbols globalObjects atPut(objectName, objectClass)
+	("Object " .. objectName .. ";\n")
 )
 
 Line translateMethodSignature := method(contextObject, 
@@ -285,9 +294,4 @@ Line translateObjectSignature := method(contextObject,
 		fields appendSeq("\tObject #{token};\n" interpolate)
 	)
 	toPut interpolate
-)
-
-
-Line translateGlobalObjectDefinition := method(
-	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
 )

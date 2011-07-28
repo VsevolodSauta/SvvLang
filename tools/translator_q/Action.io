@@ -1,5 +1,16 @@
 Action := Object clone
 Action actionName := Token clone
+
+Action comparationMap := Map with(
+	"==", "== _equal",
+	"<>", "!= _equal",
+	"!=", "!= _equal",
+	">",  "== _greater",
+	"<",  "== _less",
+	">=", "!= _less",
+	"<=", "!= _greater"
+)
+
 Action comparationTypeMap := Map with(
 	"==", "==", 
 	"<>", "!=", 
@@ -43,11 +54,6 @@ Action getActionType := method(actor,
 Action process := method(actor, line,
 	toReturn := Actor clone
 	
-/*
-	if(actionName == "Not=",
-		TranslatorError with(line, "Invalid construction Not=.")
-	)
-*/
 	
 	if((actionName beginsWithSeq("Not")) and (actionName != "Not"),
 		actionName copy(actionName exclusiveSlice(3))
@@ -93,8 +99,8 @@ Action process := method(actor, line,
 		return toReturn
 	)
 	
-	if(comparationTypeMap hasKey(actionName),
-		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationTypeMap at(actionName)} #{comparationValueMap at(actionName)}" interpolate)
+	if(comparationMap hasKey(actionName),
+		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationMap at(actionName)}" interpolate)
 		toReturn actorName copy("LogicFactory_FromLong(_logicFactory, #{toReturn actorName})" interpolate)
 		toReturn actorType = "Logic"
 		return toReturn
@@ -117,6 +123,12 @@ Action process := method(actor, line,
 	if(actionName beginsWithSeq("InBackground"),
 		toReturn actorName copy("ThreadManager_SpawnThreadWithMethodAndEntity(_threadManager, MethodFactory_FromPointer(_methodFactory, &#{actor actorType}_#{actionName exclusiveSlice(12)}), #{actor actorName})" interpolate)
 		toReturn actorType = "ThreadManager"
+		return toReturn
+	)
+	
+	if(actionName beginsWithSeq("Dynamically"),
+		toReturn actorName copy("Object_DynamicallyInvoke(#{actor actorName}, \"#{actionName exclusiveSlice(11)}\"#{line getParameters})" interpolate)
+		toReturn actorType = "Object"
 		return toReturn
 	)
 	

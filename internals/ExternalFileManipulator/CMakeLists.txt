@@ -1,4 +1,0 @@
-project(ExternalFileManipulator)
-cmake_minimum_required(VERSION 2.6)
-add_library(ExternalFileManipulator ${Library} code.c)
-target_link_libraries(ExternalFileManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory Machine List ListMap ExternalEntitiesFactory Processor Undestroyable)

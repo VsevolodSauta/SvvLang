@@ -1,39 +1,53 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP", "assert")
-TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is", "IsNil", "IsTrue", "IsFalse")
-TableOfSymbols basicClasses := list("Object", "Number", "Logic", "Comparation", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
+TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is")
+TableOfSymbols basicClasses := list("Object", "Number", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
 	"_nil",				"Object",
 	"_nothing",			"Object",
 	"_null",			"Object",
 	"_allocator",			"Allocator",
-	"_threadManager",		"ThreadManager",
-	"_true",			"Logic",
-	"_yes",				"Logic",
-	"_false",			"Logic",
-	"_no",				"Logic",
-	"_less",			"Comparation", 
-	"_greater",			"Comparation", 
-	"_equal",			"Comparation", 
-	"_uncomparableLess",		"Comparation", 
-	"_uncomparableGreater",		"Comparation",
 	"_numberFactory",		"NumberFactory",
 	"_logicFactory",		"LogicFactory",
 	"_charFactory",			"CharFactory",
 	"_stringFactory",		"StringFactory",
-	"_console",			"Console",
-	"_jsonParser",			"JSONParser",
-	"_methodFactory",		"MethodFactory",
-	"_entitiesFactory",		"ExternalEntitiesFactory",
-	"_actorsFactory",		"ExternalActorsFactory"
+	"_methodFactory",		"MethodFactory"
 )
 
 TableOfSymbols tableOfImports := Map clone
-TableOfSymbols invalutiveClasses := list("Number", "Logic")
+TableOfSymbols invalutiveClasses := list("Number")
 TableOfSymbols currentActorTypesMap := Map clone
 TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map with(
+	"Object", Map with(
+		"Compare", Actor unnamedActor("Comparison"),
+		"Hash", Actor unnamedActor("Number"),
+		"Is", Actor unnamedActor("Logic")
+	),
+	"Number", Map with(
+		"Add", Actor unnamedActor("Number"),
+		"Sub", Actor unnamedActor("Number"),
+		"Mul", Actor unnamedActor("Number"),
+		"Div", Actor unnamedActor("Number"),
+		"Mod", Actor unnamedActor("Number"),
+		"Inc", Actor unnamedActor("Number"),
+		"Dec", Actor unnamedActor("Number"),
+		"AddInPlace", Actor unnamedActor("Number"),
+		"SubInPlace", Actor unnamedActor("Number"),
+		"MulInPlace", Actor unnamedActor("Number"),
+		"DivInPlace", Actor unnamedActor("Number"),
+		"ModInPlace", Actor unnamedActor("Number"),
+		"Min", Actor unnamedActor("Number"),
+		"Max", Actor unnamedActor("Number"),
+		"Abs", Actor unnamedActor("Number"),
+		"Inv", Actor unnamedActor("Number"),
+		"Power", Actor unnamedActor("Number"),
+		"Set", Actor unnamedActor("Number"),
+		"IsInteger", Actor unnamedActor("Logic"),
+		"IsOdd", Actor unnamedActor("Logic"),
+		"IsEven", Actor unnamedActor("Logic")
+	),
 	"NumberFactory", Map with(
 		"FromLong", Actor unnamedActor("Number"),
 		"FromString", Actor unnamedActor("Number"),
@@ -110,15 +124,6 @@ TableOfSymbols mapOfMethodAliases := Map with(
 		"++", "Inc",
 		"--", "Dec"
 	),
-	"Logic", Map with(
-		"&", "And",
-		"|", "Or",
-		"&&", "And",
-		"||", "Or",
-		"^", "Xor",
-		"!", "Not"
-	), 
-	"Comparation", Map clone,
 	"Allocator", Map clone,
 	"NumberFactory", Map clone,
 	"LogicFactory", Map clone,
@@ -149,6 +154,7 @@ TableOfSymbols getActorType := method(actorName,
 	actorTypesStack foreach(map,
 		actorType := map at(actorName)
 		if(actorType isTrue, 
+			ensureKnownClassForClass(actorType, Translator objectClassName)
 			return actorType
 		)
 	)
@@ -183,20 +189,18 @@ TableOfSymbols actorHasAction := method(actor, action,
 )
 
 TableOfSymbols getActorActionReturnedType := method(actor, action,
+	toReturn := nil
 	if(isObjectsMethod(action actionName),
-		toReturn := Actor unnamedActor(actor actorType),
+		candidate := classMethods at("Object") at(action actionName)
+		return if(candidate isNil not, candidate, Actor unnamedActor(actor actorType)),
 		
-		if(invalutiveClasses contains(actor actorType),
-			toReturn := Actor unnamedActor(actor actorType),
-			
-			toReturn := classMethods at(actor actorType) ?at(action actionName)
-			if(toReturn isNil,
-				TranslatorError with(nil, "Unknown method #{action actionName} for class #{actor actorType}." interpolate)
-				toReturn := Actor unnamedActor("Object")
-			)
+		toReturn := classMethods at(actor actorType) ?at(action actionName)
+		if(toReturn isNil,
+			TranslatorError with(nil, "Unknown method #{action actionName} for class #{actor actorType}." interpolate)
+			toReturn = Actor unnamedActor("Object")
 		)
+		return toReturn
 	)
-	toReturn
 )
 
 TableOfSymbols setClassActionReturnedType := method(className, action, returnedActor,

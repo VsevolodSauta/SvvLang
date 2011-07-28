@@ -1,4 +1,0 @@
-project(Processor)
-cmake_minimum_required(VERSION 2.6)
-add_library(Processor ${Library} code.c)
-target_link_libraries(Processor Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory List ListNode ListIterator Map MapIterator ListMapNode ListMap Queue Synonim Stack ListMapIteratorElement ListMapIterator Char UIDGenerator MachineScheduler Machine ExternalActorManipulator ExternalConsoleManipulator ExternalFileManipulator ExternalNumberManipulator ExternalListManipulator ExternalListMapManipulator ExternalCharManipulator ExternalJSONParserManipulator ExternalMachineManipulator ExternalActorsFactory ProcessorCommandSystem ExternalEntitiesFactory Console JSONParser ThreadManager AutoreleasePool Thread)

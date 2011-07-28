@@ -1,4 +1,0 @@
-project(ExternalNumberManipulator)
-cmake_minimum_required(VERSION 2.6)
-add_library(ExternalNumberManipulator ${Library} code.c)
-target_link_libraries(ExternalNumberManipulator Object Number Logic Comparation Allocator File Method NumberFactory LogicFactory StringFactory CharFactory MethodFactory ListMap List UIDGenerator Machine Stack Processor ProcessorCommandSystem Synonim Queue MachineScheduler ExternalActorManipulator ExternalConsoleManipulator ExternalFileManipulator ExternalListManipulator ExternalListMapManipulator ExternalCharManipulator ExternalJSONParserManipulator ExternalMachineManipulator Char ExternalActorsFactory ExternalEntitiesFactory ListIterator Console)
