@@ -2,6 +2,7 @@
 #include "internals/ThreadManager/interface.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/Logic/interface.h"
+#include "internals/ListMap/interface.h"
 
 Object Object_Create(void)
 {
@@ -151,7 +152,17 @@ Object Object_Is(Object _self, Object object)
 	return (_self == object) ? _true : _false;
 }
 
-Object Object_IsNil(Object _self)
+Object Object_DynamicallyInvoke(Object _self, Object _methodName, ...)
 {
-	return (_self == _nil) ? _true : _false;
+	asm(
+		"pushq %%rdi\n"
+		"movq %0, %%rdi\n"
+		"call ListMap_ObjectAt\n"
+		"movq %%rax, %%rdi\n"
+		"popq %%rsi\n"
+		"jmp Method_Invoke\n"
+		: : "m" (_self->classInvocationMap)
+	);
+	// Unreachable code
+	return _nil;
 }

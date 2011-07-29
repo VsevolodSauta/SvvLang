@@ -34,7 +34,7 @@ Object Object_SetDestructor(Object _self, ObjectDestructor);
 Object Object_Hash(Object _self);
 Object Object_EmptyComparator(Object _self, Object object);
 Object Object_Is(Object _self, Object object);
-Object Object_IsNil(Object _self);
+Object Object_DynamicallyInvoke(Object _self, Object _methodName, ...);
 
 inline static Object Object_SetRetaining(Object *toSet, Object with)
 {
@@ -59,4 +59,3 @@ inline static Object Object_SetReleasing(Object *toSet, Object with)
 	return with;
 }
 
-#define Object_DynamicallyInvoke(object, methodName, args...) Method_Invoke(ListMap_ObjectAt(object->classInvocationMap, methodName), object, ##args)

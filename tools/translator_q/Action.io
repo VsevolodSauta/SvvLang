@@ -127,7 +127,7 @@ Action process := method(actor, line,
 	)
 	
 	if(actionName beginsWithSeq("Dynamically"),
-		toReturn actorName copy("Object_DynamicallyInvoke(#{actor actorName}, \"#{actionName exclusiveSlice(11)}\"#{line getParameters})" interpolate)
+		toReturn actorName copy("Object_DynamicallyInvoke(#{actor actorName}, StringFactory_FromUTF8(_stringFactory, \"#{actionName exclusiveSlice(11)}\", #{actionName exclusiveSlice(11) size})#{line getParameters})" interpolate)
 		toReturn actorType = "Object"
 		return toReturn
 	)
