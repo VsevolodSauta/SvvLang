@@ -16,7 +16,7 @@ SuperClass Destroy
 	self.classes Release
 	return self Destroy
 
-SuperClass <Comparison> Compare <SuperClass> _superClass
+SuperClass <Comparison> Compare <SuperClass> superClass2
 	return equal
 
 SuperClass RegisterClass <List> className

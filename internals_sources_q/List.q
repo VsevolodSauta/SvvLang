@@ -291,7 +291,7 @@ List Search object
 	list = <List> Autorelease
 	self.iterator SearchForward object
 	while self.iterator NotThisEnd
-		list PushBack (self.iterator TempClone)
+		list PushBack ((self.iterator Clone) Autorelease)
 		self.iterator SearchForward object
 	return list
 
@@ -317,7 +317,7 @@ List SearchPositions object
 	position = 0
 	while self.iterator NotThisEnd
 		if (list.iterator ThisData) == object
-			list PushBack (position TempClone)
+			list PushBack ((position Clone) Autorelease)
 		position Inc
 		self.iterator Next
 	self.iterator Hide

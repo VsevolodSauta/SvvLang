@@ -25,6 +25,18 @@ Token looksLikeMethodDefinition := method(
 	((self isCreator) or (self isGlobalObjectDefinition)) not
 )
 
+Token looksLikeClass := method(
+	((self asCapitalized) == self) and (self at(0) isLetter)
+)
+
+Token looksLikeIdentifier := method(
+	((((self asCapitalized) == self) or isKeyword) not) or isCreator or isString or isChar or isPointer or (self at(0) isDigit)
+)
+
+Token looksLikeMethod := method(
+	(looksLikeIdentifier or isKeyword) not
+)
+
 Token asKeyword := method(
 	Keyword with(self)
 )

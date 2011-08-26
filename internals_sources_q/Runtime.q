@@ -17,6 +17,7 @@ Runtime Init
 	console = <Console>
 	jsonParser = <JSONParser>
 	entitiesFactory = <ExternalEntitiesFactory>
+	superClass = <SuperClass>
 	return self
 
 Runtime Destroy

@@ -1,6 +1,8 @@
 #include "internals/basics.h"
 #include "internals/Number/library.h"
 #include "internals/Logic/interface.h"
+#include "internals/Comparison/interface.h"
+#include "internals/SuperClass/interface.h"
 
 Object Number_Create(void)
 {
@@ -263,3 +265,45 @@ Object Number_Set(Object _self, Object _number)
 	return Number_NormalizeSign(_self);
 }
 
+void Number_InitializeClass()
+{
+	Object _className = StringFactory_FromUTF8(_stringFactory, "Number", 6);
+	
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Clone), StringFactory_FromUTF8(_stringFactory, "DeepClone", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Clone), StringFactory_FromUTF8(_stringFactory, "Clone", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Compare), StringFactory_FromUTF8(_stringFactory, "Compare", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Inc), StringFactory_FromUTF8(_stringFactory, "Inc", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Inc), StringFactory_FromUTF8(_stringFactory, "++", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Dec), StringFactory_FromUTF8(_stringFactory, "Dec", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Dec), StringFactory_FromUTF8(_stringFactory, "--", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Add), StringFactory_FromUTF8(_stringFactory, "Add", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Add), StringFactory_FromUTF8(_stringFactory, "+", 1), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Sub), StringFactory_FromUTF8(_stringFactory, "Sub", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Sub), StringFactory_FromUTF8(_stringFactory, "-", 1), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Mul), StringFactory_FromUTF8(_stringFactory, "Mul", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Mul), StringFactory_FromUTF8(_stringFactory, "*", 1), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Div), StringFactory_FromUTF8(_stringFactory, "Div", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Div), StringFactory_FromUTF8(_stringFactory, "/", 1), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Mod), StringFactory_FromUTF8(_stringFactory, "Mod", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Mod), StringFactory_FromUTF8(_stringFactory, "%", 1), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_AddInPlace), StringFactory_FromUTF8(_stringFactory, "AddInPlace", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_AddInPlace), StringFactory_FromUTF8(_stringFactory, "+=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_SubInPlace), StringFactory_FromUTF8(_stringFactory, "AddInPlace", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_SubInPlace), StringFactory_FromUTF8(_stringFactory, "-=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_MulInPlace), StringFactory_FromUTF8(_stringFactory, "AddInPlace", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_MulInPlace), StringFactory_FromUTF8(_stringFactory, "*=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_DivInPlace), StringFactory_FromUTF8(_stringFactory, "AddInPlace", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_DivInPlace), StringFactory_FromUTF8(_stringFactory, "/=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_ModInPlace), StringFactory_FromUTF8(_stringFactory, "AddInPlace", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_ModInPlace), StringFactory_FromUTF8(_stringFactory, "%=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Min), StringFactory_FromUTF8(_stringFactory, "%=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Max), StringFactory_FromUTF8(_stringFactory, "%=", 2), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Abs), StringFactory_FromUTF8(_stringFactory, "Abs", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Inv), StringFactory_FromUTF8(_stringFactory, "Inv", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Power), StringFactory_FromUTF8(_stringFactory, "Power", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_IsInteger), StringFactory_FromUTF8(_stringFactory, "IsInteger", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_IsOdd), StringFactory_FromUTF8(_stringFactory, "IsOdd", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_IsEven), StringFactory_FromUTF8(_stringFactory, "IsEven", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Number_Set), StringFactory_FromUTF8(_stringFactory, "Set", 3), _className);
+}

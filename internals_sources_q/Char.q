@@ -26,7 +26,7 @@ Char SetCode <Number> code
 	return self
 
 Char <Number> GetCode (GetImmutableCode)
-	return self.code TempClone
+	return (self.code Clone) Autorelease
 
 Char <Number> GetMutableCode
 	return self.code

@@ -8,6 +8,8 @@
 #include "internals/NumberFactory/interface.h"
 #include "internals/File/encoding.h"
 #include "internals/Logic/interface.h"
+#include "internals/Comparison/interface.h"
+#include "internals/SuperClass/interface.h"
 
 #define BUFFER_LENGTH 4096
 
@@ -283,3 +285,37 @@ Object File_WriteLnNumber(Object _self, Object _number)
 
 Object File_WriteList(Object _self, Object _list);
 Object File_WriteListMap(Object _self, Object _listMap);
+
+void File_InitializeClass()
+{
+	Object _className = StringFactory_FromUTF8(_stringFactory, "File", 4);
+	
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_Clone), StringFactory_FromUTF8(_stringFactory, "DeepClone", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_Compare), StringFactory_FromUTF8(_stringFactory, "Compare", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_OpenForAppending), StringFactory_FromUTF8(_stringFactory, "OpenForAppending", 16), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_OpenForReading), StringFactory_FromUTF8(_stringFactory, "OpenForReading", 14), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_Close), StringFactory_FromUTF8(_stringFactory, "Close", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_TruncateToSize), StringFactory_FromUTF8(_stringFactory, "TruncateToSize", 14), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ErrorWhileOpenning), StringFactory_FromUTF8(_stringFactory, "ErrorWhileOpenning", 18), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_SeekToPosition), StringFactory_FromUTF8(_stringFactory, "SeekToPosition", 14), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_Advance), StringFactory_FromUTF8(_stringFactory, "Advance", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_SeekFromEndToPosition), StringFactory_FromUTF8(_stringFactory, "SeekFromEndToPosition", 21), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_GetPosition), StringFactory_FromUTF8(_stringFactory, "GetPosition", 11), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadByte), StringFactory_FromUTF8(_stringFactory, "ReadByte", 8), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadChar), StringFactory_FromUTF8(_stringFactory, "ReadChar", 8), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadString), StringFactory_FromUTF8(_stringFactory, "ReadString", 10), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadLnString), StringFactory_FromUTF8(_stringFactory, "ReadLnString", 12), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadStringOfLength), StringFactory_FromUTF8(_stringFactory, "ReadStringOfLength", 18), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadNumber), StringFactory_FromUTF8(_stringFactory, "ReadNumber", 9), _className);
+	//SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadList), StringFactory_FromUTF8(_stringFactory, "ReadList", 8), _className);
+	//SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadListMap), StringFactory_FromUTF8(_stringFactory, "ReadListMap", 11), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_ReadContentsOfFile), StringFactory_FromUTF8(_stringFactory, "ReadContentsOfFile", 18), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteByte), StringFactory_FromUTF8(_stringFactory, "WriteByte", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteChar), StringFactory_FromUTF8(_stringFactory, "WriteChar", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteString), StringFactory_FromUTF8(_stringFactory, "WriteString", 11), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteLnString), StringFactory_FromUTF8(_stringFactory, "WriteLnString", 13), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteNumber), StringFactory_FromUTF8(_stringFactory, "WriteNumber", 10), _className);
+	//SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteList), StringFactory_FromUTF8(_stringFactory, "WriteList", 9), _className);
+	//SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &File_WriteListMap), StringFactory_FromUTF8(_stringFactory, "WriteListMap", 12), _className);
+}

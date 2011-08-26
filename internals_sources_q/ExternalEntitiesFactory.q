@@ -67,15 +67,15 @@ ExternalEntitiesFactory <ListMap> CreateConditionPresence <List> key
 ExternalEntitiesFactory <ListMap> CreateConditionEquality (CreateConditionWithKeyValue) <List> key value
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод проверки" "Совпадение"
-	toReturn AtPut "Ключ" (key TempClone)
-	toReturn AtPut "Значение" (value TempClone)
+	toReturn AtPut "Ключ" ((key Clone) Autorelease)
+	toReturn AtPut "Значение" ((value DynamicallyClone) Autorelease)
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateConditionEqualityWithField <List> key value
 	toReturn = self CreateEmptyListMap
 	toReturn AtPut "Метод проверки" "Совпадение с полем"
-	toReturn AtPut "Ключ" (key TempClone)
-	toReturn AtPut "Значение" (value TempClone)
+	toReturn AtPut "Ключ" ((key Clone) Autorelease)
+	toReturn AtPut "Значение" ((value DynamicallyClone) Autorelease)
 	return toReturn
 
 ExternalEntitiesFactory <ListMap> CreateEmptyMessageSlot

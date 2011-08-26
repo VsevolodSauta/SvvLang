@@ -110,7 +110,7 @@ Translator translateClass := method(objectClassName,
 		BlockDelegatesHandling blockDidEnd
 	)
 	
-	DestinationFile write("void #{objectClassName}_IntializeClass()\n" interpolate)
+	DestinationFile write("void #{objectClassName}_InitializeClass()\n" interpolate)
 	DestinationFile write("{\n")
 	//DestinationFile write("\tAutoreleasePool_PushFrame(_autoreleasePool);\n");
 	DestinationFile write("\tObject _className = StringFactory_FromUTF8(_stringFactory, \"#{objectClassName}\", #{objectClassName size});\n" interpolate)

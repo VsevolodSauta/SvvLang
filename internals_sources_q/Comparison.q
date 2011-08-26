@@ -5,6 +5,7 @@
 @equal
 @uncomparableLess
 @less
+@uncomparable
 
 Comparison <Comparison> Clone
 	return self
@@ -16,6 +17,9 @@ Comparison <Comparison> Destroy
 	return self
 
 Comparison <Comparison> Compare <Comparison> arg
+	if (self Is uncomparable) Or (arg Is uncomparable)
+		return uncomparable
+	
 	if self Is arg
 		return equal
 	

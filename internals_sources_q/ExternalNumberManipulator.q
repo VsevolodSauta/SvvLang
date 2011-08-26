@@ -67,17 +67,17 @@ ExternalNumberManipulator <List> CreateUIDNumberFromUIDActor <List> uid
 
 ExternalNumberManipulator SimpleNumber <Processor> processor
 	actor = processor ContextActor
-	number = actor ActorProperty "Число"
+	number = (actor ActorProperty "Число") AsNumber
 	message = entitiesFactory CreateEmptyMessage
 	message MessageSetAnswerSuccess
-	message AtPut "Значение" (number TempClone)
+	message AtPut "Значение" ((number Clone) Autorelease)
 	processor SendReplyForMessage message "Значение простым числом"
 	return self
 
 
 ExternalNumberManipulator SimpleString <Processor> processor
 	actor = processor ContextActor
-	number = actor ActorProperty "Число"
+	number = (actor ActorProperty "Число") AsNumber
 	message = entitiesFactory CreateEmptyMessage
 	message MessageSetAnswerSuccess
 	message AtPut "Значение" (stringFactory FromNumber number)
@@ -325,7 +325,7 @@ ExternalNumberManipulator NotifyRequest <Processor> processor
 
 	self CheckForNotifications processor
 
-	reply = request TempDeepClone
+	reply = (request DeepClone) Autorelease
 	reply MessageSetTypeReply
 	reply MessageSetReplySuccess
 	reply AtPut "Текущее значение" (actor ActorProperty "Число")
@@ -340,7 +340,7 @@ ExternalNumberManipulator CurrentValueReceived <Processor> processor
 	((actor ActorProperty "Значения при оповещении") AsListMap) AtPut (receivedMessage MessageSender) (receivedMessage NumberAt "Текущее значение")
 
 	if (receivedMessage MessageType) == "Оповещение"
-		request = receivedMessage TempDeepClone
+		request = (receivedMessage DeepClone) Autorelease
 		request MessageSetTypeRequest
 		request MessageSetRequest "Оповестить"
 		request MessageSetReceiver (receivedMessage MessageSender)
@@ -397,5 +397,5 @@ ExternalNumberManipulator CheckForNotifications <Processor> processor
 			processor SendMessage notifyMessage
 			notificationsIterator Remove
 		notificationsIterator ++
-	actor ActorSetProperty (currentValue TempClone) "Число (предыдущее значение)"
+	actor ActorSetProperty ((currentValue Clone) Autorelease) "Число (предыдущее значение)"
 	return self

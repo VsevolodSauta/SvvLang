@@ -3,3 +3,6 @@
 void* AllocatorForStack_Create();
 void* AllocatorForStack_New(Object _self);
 Object AllocatorForStack_Delete(Object _self, void* toDelete);
+void AllocatorForStack_InitializeClass();
+
+extern Object _allocatorForStack;

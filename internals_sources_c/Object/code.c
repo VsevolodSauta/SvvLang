@@ -3,6 +3,8 @@
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/Logic/interface.h"
 #include "internals/ListMap/interface.h"
+#include "internals/Comparison/interface.h"
+#include "internals/SuperClass/interface.h"
 
 Object Object_Create(void)
 {
@@ -55,12 +57,7 @@ Object Object_Retain(Object _self)
 Object Object_Release(Object _self)
 {
 	DPUSHS("Object: Release.");
-#if DEBUG_MEMORY
-	if((_self->links <= 0) && (_self->gid != 3814824931964230656ull))
-	{
-		DMSG("Object: Releasing already destroyed object.");
-	}
-#endif
+	
 	register int toAdd = -1;
 	asm volatile (
 		"lock\n"
@@ -165,4 +162,16 @@ Object Object_DynamicallyInvoke(Object _self, Object _methodName, ...)
 	);
 	// Unreachable code
 	return _nil;
+}
+
+void Object_InitializeClass()
+{
+	Object _className = StringFactory_FromUTF8(_stringFactory, "Object", 6);
+	
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Retain), StringFactory_FromUTF8(_stringFactory, "Retain", 6), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Release), StringFactory_FromUTF8(_stringFactory, "Release", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Autorelease), StringFactory_FromUTF8(_stringFactory, "Autorelease", 11), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_DynamicallyInvoke), StringFactory_FromUTF8(_stringFactory, "DynamicallyInvoke", 17), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Is), StringFactory_FromUTF8(_stringFactory, "Is", 2), _className);	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Retain), StringFactory_FromUTF8(_stringFactory, "Retain", 6), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Hash), StringFactory_FromUTF8(_stringFactory, "Hash", 4), _className);
 }

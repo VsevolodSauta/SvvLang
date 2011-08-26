@@ -44,3 +44,5 @@ Object File_WriteNumber(Object _self, Object _number);
 Object File_WriteLnNumber(Object _self, Object _number);
 Object File_WriteList(Object _self, Object _list);
 Object File_WriteListMap(Object _self, Object _listMap);
+
+void File_InitializeClass();

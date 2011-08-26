@@ -82,7 +82,7 @@ ListMapIterator ThisRemoveLeft
 	return self
 
 ListMapIterator <List> ThisKey (Key)
-	return self.key TempClone
+	return (self.key Clone) Autorelease
 
 ListMapIterator <Object> ThisValue (ThisData Value Data)
 	element = (self.elementStack Peek) AsListMapIteratorElement

@@ -41,9 +41,9 @@ Logic <Logic> Or (| ||) <Logic> arg
 	return false
 
 Logic <Logic> Not (!)
-	if self NotIs false
-		return false
-	return true
+	if self Is false
+		return true
+	return false
 
 Logic <Logic> Xor (^) <Logic> arg
 	if self NotIs false

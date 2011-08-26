@@ -4,7 +4,11 @@ FinalStage := Object clone do(
 		destDir := Directory clone with(_path) createIfAbsent
 		items foreach(item,
 			if(item name beginsWithSeq(".") not,
-				item copyToPath(_path .. "/" .. (item name))
+				dstPath := _path .. "/" .. (item name)
+				if(item type == "File", 
+					File clone with(dstPath) remove
+				)
+				item copyToPath(dstPath)
 			)
 		)
 	)
@@ -13,7 +17,11 @@ FinalStage := Object clone do(
 		if(path isNil, path = "")
 		dir := Directory clone with("../../internals_sources_c") 
 		dir items selectInPlace(item, item name beginsWithSeq(".") not) foreach(item,
-			item copyToPath("../../internals" .. path .. "/" .. (item name))
+			dstPath := "../../internals" .. path .. "/" .. (item name)
+			if(item type == "File", 
+				File clone with(dstPath) remove
+			)
+			item copyToPath(dstPath)
 		)
 	)
 	

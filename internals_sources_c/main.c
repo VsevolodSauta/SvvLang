@@ -4,22 +4,18 @@
 #include "os_dependent/linux.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/ThreadManager/interface.h"
-#if MEMORY_DEBUG
-#include <stdio.h>
-#endif
+#include "internals/initializers.h"
 
 int DLEVEL = 0;
 
-#if STDLIB
-int main(void)
-#else
 void _start(void)
-#endif
 {
 	_allocator = Allocator_Create();
 	_allocatorForStack = AllocatorForStack_Create();
 	
 	Object _runtime = Runtime_Create();
+	__initAllClasses();
+	
 	Object _machine = Machine_Create();
 	Machine_RestorePreviousState(_machine);
 	AutoreleasePool_PushFrame(ThreadManager_AutoreleasePool(_threadManager));
@@ -31,23 +27,12 @@ void _start(void)
 		Machine_ImportUID(_machine, _objectToImportName);
 	}
 #else
-	Object _objectToImportName = StringFactory_FromCUTF8(_stringFactory, "SvvLanguage_C/externals/Приложение");
-	Machine_ImportActor(_machine, _objectToImportName);
+	Machine_ImportActor(_machine, StringFactory_FromCUTF8(_stringFactory, "SvvLanguage_C/externals/Приложение"));
 #endif
 	AutoreleasePool_PopFrame(ThreadManager_AutoreleasePool(_threadManager));
 	Machine_Run(_machine);
 	Object_Release(_machine);
 	Object_Release(_runtime);
-#if 0 // MEMORY_DEBUG
-	printf("Allocated: %i\nResized: %i\nFreed: %i\nNot freed: %i\n",
-		Allocator_GetAllocated(_allocator),
-		Allocator_GetResized(_allocator),
-		Allocator_GetFreed(_allocator),
-		Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator)
-	);
-	// Prev number of Not freed allocator objects was 24. Probably there is a bug in source code.
-	printf(Allocator_GetAllocated(_allocator) - Allocator_GetFreed(_allocator) == 46 ? "Everything is OK.\n" : "Memory leaks detected.\n");
-#endif
 	Object_Release(_allocator);
 	OSexit(0);
 }

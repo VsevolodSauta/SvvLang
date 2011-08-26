@@ -18,6 +18,6 @@
 #include "internals/Method/interface.h"
 #include "internals/MethodFactory/interface.h"
 
-#include "internals/globals.h"
+// #include "internals/globals.h"
 
 typedef Object (*BasicMethod)(Object, Object, Object);

@@ -44,9 +44,9 @@ ExternalActorManipulator <List> CloneUIDActorInternalRoutine <List> uid
 	actor = self.machine UIDToActor uid
 	uidToReturn = self.machine GenerateUID
 	actorToReturn = self.actorMasterCopy DeepClone
-	actorToReturn ActorResetMethodsDestructive ((actor ActorMethods) TempDeepClone)
-	actorToReturn ActorResetFieldsDestructive ((actor ActorFields) TempDeepClone)
-	actorToReturn ActorResetJobsDestructive ((actor ActorJobs) TempDeepClone)
+	actorToReturn ActorResetMethodsDestructive (((actor ActorMethods) DeepClone) Autorelease)
+	actorToReturn ActorResetFieldsDestructive (((actor ActorFields) DeepClone) Autorelease)
+	actorToReturn ActorResetJobsDestructive (((actor ActorJobs) DeepClone) Autorelease)
 	actorToReturn ActorRemoveAllIdentifiers
 	self.machine SetUIDToActor uidToReturn actorToReturn
 	actorToReturn Release

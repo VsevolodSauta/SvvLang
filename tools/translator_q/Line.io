@@ -122,51 +122,21 @@ Line getCurrentToken := method(
 	tokens at(currentTokenNumber)
 )
 
-Line getParameters := method(
-	toReturn := "" asMutable
-	while(currentTokenNumber < (tokens size),
-		token := getCurrentToken
-		if(token endsNewAction, 
-			toNextToken
-			return toReturn
-		)
-		if(token beginsNewAction, 
-			toNextToken
-			toReturn appendSeq(", ") appendSeq(getActor actorName)
-			continue
-		)
-		toReturn appendSeq(", ") appendSeq(token asActor actorName)
-		toNextToken
-	)
-	toReturn
-)
-
-Line getAction := method(
-	toReturn := getCurrentToken asAction
-	toNextToken
-	toReturn
-)
-
 Line getActor := method(
 	actor := nil
 	if(getCurrentToken beginsNewAction,
 		toNextToken
 		actor = getActor,
-			
+		
 		actor = getCurrentToken asActor
 		toNextToken
 	)
 	
-	if(getCurrentToken isNil,
-		return actor
-	)
-	
-	if(getCurrentToken endsNewAction,
+	if(getCurrentToken ?endsNewAction,
 		toNextToken
 		return actor
 	)
-	toReturn := getAction process(actor, self)
-	toReturn
+	Action process(actor, self)
 )
 
 Line getCondition := method(
@@ -189,7 +159,7 @@ Line translateGlobalObjectDefinition := method(
 	("Object " .. objectName .. ";\n")
 )
 
-Line translateMethodSignature := method(contextObject, 
+Line translateMethodSignature := method(contextObject,
 	toPut := "Object #{class}_#{name}(#{parameters})" asMutable
 	class := getCurrentToken
 	returnType := class
@@ -199,63 +169,70 @@ Line translateMethodSignature := method(contextObject,
 		TableOfSymbols ensureKnownClassForClass(returnType, contextObject)
 		toNextToken
 	)
-	name := getCurrentToken
+	
+	TableOfSymbols setActorType(Actor fullActor("_self", class, list("Constant")))
+	parameters := "Object _self" asMutable
+	alternateMethodNames := list()
+	name := "" asMutable
+	typeOfParameter := "Object"
+	propertyList := List clone
+	
+	while(getCurrentToken isNil not,
+		if(getCurrentToken beginsNewAction,
+			toNextToken
+			while(getCurrentToken endsNewAction not,
+				alternateMethodNames append(getCurrentToken)
+				toNextToken
+			)
+			toNextToken
+			continue
+		)
+		if(getCurrentToken looksLikeMethod,
+			name appendSeq(getCurrentToken)
+			toNextToken
+			continue
+		)
+		if(getCurrentToken isCreator,
+			typeOfParameter = getCurrentToken outOfBrackets
+			TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
+			toNextToken
+			continue
+		)
+		if(getCurrentToken beginsPropertyList,
+			toNextToken
+			while(getCurrentToken endsPropertyList not,
+				propertyList appendIfAbsent(getCurrentToken)
+				toNextToken
+			)
+			continue
+		)
+		identifier := "_" .. getCurrentToken
+		toNextToken
+		TableOfSymbols setActorType(Actor fullActor(identifier, typeOfParameter, propertyList))
+		if((Translator isImporting not) and (typeOfParameter != "Object"),
+			a := Object clone
+			a parameterType := typeOfParameter
+			a parameterName := identifier
+			a blockDidBegin := method(
+				Translator putNLevels(1)
+				DestinationFile write("ASSERT_C ( \"#{Translator currentClassName}:#{Translator currentMethodName} --- Checking for correct parameter type failed at parameter #{parameterName}.\", #{parameterName}->gid == #{TableOfSymbols getClassId(parameterType)} || #{parameterName} == _nil )\n" interpolate)
+			)
+			BlockDelegatesHandling afterThisBlockBegins(a, 4)
+		)
+		propertyList = List clone
+		typeOfParameter = "Object"
+		parameters appendSeq(", Object #{identifier}" interpolate)
+	)
+	
 	if(TableOfSymbols listOfBeingImportedObjects isEmpty,
 		Translator currentMethodName := name
 	)
-	toNextToken
 	TableOfSymbols setClassActionReturnedType(class, Action with(name), Actor unnamedActor(returnType))
 	
-	parameters := "Object _self" asMutable
-	TableOfSymbols setActorType(Actor fullActor("_self", class, list("Constant")))
-	if(getCurrentToken isNil not,
-		if(getCurrentToken beginsNewAction,
-			loop(
-				toNextToken
-				
-				if(getCurrentToken endsNewAction,
-					toNextToken
-					break
-				)
-				
-				TableOfSymbols setMainActionNameForActorAndAction(name, Actor unnamedActor(class), Action with(getCurrentToken))
-			)
-		)
-		
-		typeOfParameter := "Object"
-		propertyList := List clone
-		while(getCurrentToken isNil not,
-			token := getCurrentToken
-			toNextToken
-			if(token isCreator,
-				typeOfParameter = token outOfBrackets
-				TableOfSymbols ensureKnownClassForClass(typeOfParameter, contextObject)
-				continue
-			)
-			if(token beginsPropertyList,
-				toNextToken
-				while(getCurrentToken endsPropertyList not,
-					propertyList appendIfAbsent(getCurrentToken)
-					toNextToken
-				)
-			)
-			token = "_" .. token
-			TableOfSymbols setActorType(Actor fullActor(token, typeOfParameter, propertyList))
-			if((Translator isImporting not) and (typeOfParameter != "Object"),
-				a := Object clone
-				a parameterType := typeOfParameter
-				a parameterName := token
-				a blockDidBegin := method(
-					Translator putNLevels(1)
-					DestinationFile write("ASSERT_C ( \"#{Translator currentClassName}:#{Translator currentMethodName} --- Checking for correct parameter type failed at parameter #{parameterName}.\", #{parameterName}->gid == #{TableOfSymbols getClassId(parameterType)} || #{parameterName} == _nil )\n" interpolate)
-				)
-				BlockDelegatesHandling afterThisBlockBegins(a, 4)
-			)
-			propertyList = List clone
-			typeOfParameter = "Object"
-			parameters appendSeq(", Object #{token}" asMutable interpolateInPlace)
-		)
+	alternateMethodNames foreach(altMethodName,
+		TableOfSymbols setMainActionNameForActorAndAction(name, Actor unnamedActor(class), Action with(altMethodName))
 	)
+	
 	toPut interpolateInPlace
 )
 

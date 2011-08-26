@@ -513,7 +513,7 @@ Processor SendMessage <ListMap> message
 	message MessageSetSender self.contextActorUID
 	uid = message MessageReceiver
 	receiver = self.machine ActorByUID uid
-	self ProcessMessageForActor (message TempDeepClone) receiver
+	self ProcessMessageForActor ((message DeepClone) Autorelease) receiver
 	self.machine ScheduleUID uid
 	return self
 
@@ -529,7 +529,7 @@ Processor SendReplyForMessage <ListMap> replyMessage <List> messageSlotName
 	message = self MessageInMessageSlot messageSlotName
 	receiver = message MessageSender
 	request = message MessageRequest
-	replyMessage = replyMessage TempDeepClone
+	replyMessage = (replyMessage DeepClone) Autorelease
 	replyMessage MessageSetReceiver receiver
 	replyMessage MessageSetRequest request
 	replyMessage MessageSetTypeAnswer

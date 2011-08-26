@@ -40,7 +40,7 @@ Queue <Object> Destroy
 	return self Destroy
 
 Queue <List> GetList
-	return self.list TempClone
+	return (self.list Clone) Autorelease
 
 Queue Clone
 	toReturn = <Queue>

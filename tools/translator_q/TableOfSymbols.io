@@ -1,6 +1,6 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP", "assert")
-TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Clone", "TempClone", "DeepClone", "TempDeepClone", "Hash", "Destroy", "Is")
+TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Hash", "Destroy", "Is", "DynamicallyInvoke")
 TableOfSymbols basicClasses := list("Object", "Number", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
 	"_nil",				"Object",
@@ -23,9 +23,11 @@ TableOfSymbols classMethods := Map with(
 	"Object", Map with(
 		"Compare", Actor unnamedActor("Comparison"),
 		"Hash", Actor unnamedActor("Number"),
-		"Is", Actor unnamedActor("Logic")
+		"Is", Actor unnamedActor("Logic"),
+		"DynamicallyInvoke", Actor unnamedActor("Dynamic")
 	),
 	"Number", Map with(
+		"Clone", Actor unnamedActor("Number"),
 		"Add", Actor unnamedActor("Number"),
 		"Sub", Actor unnamedActor("Number"),
 		"Mul", Actor unnamedActor("Number"),
@@ -66,6 +68,7 @@ TableOfSymbols classMethods := Map with(
 		"Invoke", Actor unnamedActor("Object")
 	),
 	"File", Map with(
+		"Clone", Actor unnamedActor("File"),
 		"OpenForReading", Actor unnamedActor("File"),
 		"OpenForAppending", Actor unnamedActor("File"),
 		"Close", Actor unnamedActor("File"),

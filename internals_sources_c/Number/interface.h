@@ -35,6 +35,8 @@ Object Number_IsOdd(Object _self);
 Object Number_IsEven(Object _self);
 Object Number_Set(Object _self, Object arg);
 
+void Number_InitializeClass();
+
 static inline long Number_GetLong(Object _self)
 {
 	return ((Number) (_self->entity))->_long / ((Number) (_self->entity))->_div;

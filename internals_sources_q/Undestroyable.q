@@ -10,4 +10,9 @@ Undestroyable DeepClone
 	return self
 
 Undestroyable Compare <Undestroyable> undestroyable
-	C return (_self < _undestroyable) ? _less : ((_self > _undestroyable) ? _greater : _equal);
+	C if(_self < _undestroyable) 
+		return less
+	C if(_self > _undestroyable)
+		return greater
+	return equal
+

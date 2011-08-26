@@ -1,5 +1,7 @@
 #include "internals/basics.h"
 #include "internals/Method/interface.h"
+#include "internals/Comparison/interface.h"
+#include "internals/SuperClass/interface.h"
 
 Object Method_Create()
 {
@@ -37,4 +39,15 @@ Object Method_Destroy(Object _self)
 {
 	_self->entity = Allocator_GetUndeletable(_allocator);
 	return Object_Destroy(_self);
+}
+
+void Method_InitializeClass()
+{
+	Object _className = StringFactory_FromUTF8(_stringFactory, "Method", 5);
+	
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Method_Clone), StringFactory_FromUTF8(_stringFactory, "DeepClone", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Method_Clone), StringFactory_FromUTF8(_stringFactory, "Clone", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Method_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Method_Compare), StringFactory_FromUTF8(_stringFactory, "Compare", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Method_Invoke), StringFactory_FromUTF8(_stringFactory, "Invoke", 6), _className);
 }

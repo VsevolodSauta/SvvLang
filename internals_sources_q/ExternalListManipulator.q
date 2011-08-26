@@ -62,11 +62,11 @@ ExternalListManipulator ListWithIntegersInIntervalHandler <Processor> processor
 	cur = (leftAnswer NumberAt "Значение") + 1
 	right = (rightAnswer NumberAt "Значение")
 	while cur < right
-		list Append (cur TempClone)
+		list Append ((cur Clone) Autorelease)
 		cur ++
 
 	uid = (self.machine ActorsFactory) CreateList list
-	reply = (((processor ContextJob) JobProperty "Сообщение заказа") AsListMap) TempDeepClone
+	reply = ((((processor ContextJob) JobProperty "Сообщение заказа") AsListMap) DeepClone) Autorelease
 	reply MessageSetTypeReply
 	reply MessageSetReplySuccess
 	reply MessageSetReceiver (reply MessageSender)
@@ -115,7 +115,7 @@ ExternalListManipulator ListWithIntegersInInterval <Processor> processor
 	msg MessageSetRequest "Значение простым числом"
 	msg MessageSetReceiver leftElement
 	processor SendMessage msg
-	msg = msg TempDeepClone
+	msg = (msg DeepClone) Autorelease
 	msg MessageSetReceiver rightElement
 	processor SendMessage msg
 
@@ -142,7 +142,7 @@ ExternalListManipulator SendToAllResendAnswersHandler <Processor> processor
 		job JobSetProperty "Неудача" "Ответ в общем"
 
 	if answersRemained == 0
-		summaryAnswer = request TempDeepClone
+		summaryAnswer = (request DeepClone) Autorelease
 		summaryAnswer MessageSetTypeReply
 		summaryAnswer MessageSetAnswerSuccess
 		summaryAnswer AtPut "Отчет" (job JobProperty "Ответ в общем")
@@ -165,7 +165,7 @@ ExternalListManipulator SendToAllAnswerInCommonHandler <Processor> processor
 		job JobSetProperty "Неудача" "Ответ в общем"
 
 	if answersRemained == 0
-		summaryAnswer = request TempDeepClone
+		summaryAnswer = (request DeepClone) Autorelease
 		summaryAnswer MessageSetTypeReply
 		summaryAnswer MessageSetAnswerSuccess
 		summaryAnswer AtPut "Отчет" (job JobProperty "Ответ в общем")
@@ -213,7 +213,7 @@ ExternalListManipulator SendToAll <Processor> processor
 				iteratorInListOfActors ++
 		if flag
 			receiver = (self.machine ActorsFactory) CreateActorFromObject data
-		messageToSend2 = messageToSend TempDeepClone
+		messageToSend2 = (messageToSend DeepClone) Autorelease
 		messageToSend2 MessageSetReceiver receiver
 		processor SendMessage messageToSend2
 

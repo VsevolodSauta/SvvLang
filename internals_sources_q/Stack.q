@@ -35,7 +35,7 @@ Stack <Object> Destroy
 	return self Destroy
 
 Stack <List> GetList
-	return self.list TempClone
+	return (self.list Clone) Autorelease
 
 Stack Clone
 	toReturn = <Stack>

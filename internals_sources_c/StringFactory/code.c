@@ -7,6 +7,7 @@
 #include "internals/Number/interface.h"
 #include "internals/Logic/interface.h"
 #include "internals/Undestroyable/interface.h"
+#include "internals/SuperClass/interface.h"
 
 Object StringFactory_Create()
 {
@@ -125,5 +126,8 @@ Object StringFactory_FromNumber(Object _self, Object number)
 	return toReturn;
 }
 
+void StringFactory_InitializeClass()
+{
+}
 
 Object _stringFactory;

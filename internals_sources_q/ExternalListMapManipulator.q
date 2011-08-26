@@ -242,7 +242,7 @@ ExternalListMapManipulator SendToAllResendAnswersHandler <Processor> processor
 		job JobSetProperty "Неудача" "Ответ в общем"
 
 	if answersRemained == 0
-		summaryAnswer = request TempDeepClone
+		summaryAnswer = (request DeepClone) Autorelease
 		summaryAnswer MessageSetTypeReply
 		summaryAnswer MessageSetAnswerSuccess
 		summaryAnswer AtPut "Отчет" (job JobProperty "Ответ в общем")
@@ -265,7 +265,7 @@ ExternalListMapManipulator SendToAllAnswerInCommonHandler <Processor> processor
 		job JobSetProperty "Неудача" "Ответ в общем"
 
 	if answersRemained == 0
-		summaryAnswer = request TempDeepClone
+		summaryAnswer = (request DeepClone) Autorelease
 		summaryAnswer MessageSetTypeReply
 		summaryAnswer MessageSetAnswerSuccess
 		summaryAnswer AtPut "Отчет" (job JobProperty "Ответ в общем")

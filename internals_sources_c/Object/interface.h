@@ -59,3 +59,4 @@ inline static Object Object_SetReleasing(Object *toSet, Object with)
 	return with;
 }
 
+void Object_InitializeClass();

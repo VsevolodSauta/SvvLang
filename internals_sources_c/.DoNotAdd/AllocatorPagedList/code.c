@@ -1,5 +1,6 @@
 #include "internals/basics.h"
 #include "internals/Undestroyable/interface.h"
+#include "internals/SuperClass/interface.h"
 
 #define NULL ((void*) 0)
 
@@ -67,7 +68,21 @@ Object Allocator_Create()
         Object_SetDeepCloner(allocatorObject, &Object_Retain);
         allocatorObject->entity = allocatorOnHeap;
         return allocatorObject;
+}
 
+Object Allocator_Clone(Object _self)
+{
+	return Object_Retain(_self);
+}
+
+Object Allocator_DeepClone(Object _self)
+{
+	return Object_Retain(_self);
+}
+
+Object Allocator_Destroy(Object _self)
+{
+	return Object_Destroy(_self);
 }
 
 void* Allocator_New(Object _self, long size)
@@ -107,6 +122,18 @@ Object Allocator_Delete(Object _self, void* toDelete)
 void*  Allocator_GetUndeletable(Object _self)
 {
 	return 0;
+}
+
+
+void Allocator_InitializeClass()
+{
+	Object _className = StringFactory_FromUTF8(_stringFactory, "Allocator", 9);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_DeepClone), StringFactory_FromUTF8(_stringFactory, "DeepClone", 9), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Clone), StringFactory_FromUTF8(_stringFactory, "Clone", 5), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_New), StringFactory_FromUTF8(_stringFactory, "New", 3), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Delete), StringFactory_FromUTF8(_stringFactory, "Delete", 6), _className);
+	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_GetUndeletable), StringFactory_FromUTF8(_stringFactory, "GetUndeletable", 14), _className);
 }
 
 #if MEMORY_DEBUG

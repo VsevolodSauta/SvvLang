@@ -16,8 +16,8 @@ AVLTreeNode Clone
 	toReturn.data = self.data
 	toReturn.height = self.height
 	if toReturn NotIsLeaf
-		toReturn SetLeft (self.left TempClone)
-		toReturn SetRight (self.right TempClone)
+		toReturn SetLeft ((self.left Clone) Autorelease)
+		toReturn SetRight ((self.right Clone) Autorelease)
 	return toReturn
 
 AVLTreeNode <Comparation> Compare <AVLTreeNode> avlTreeNode
