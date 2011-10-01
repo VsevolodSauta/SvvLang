@@ -1,4 +1,4 @@
-<ThreadManager> <Map> threadsByPidMap
+<ThreadManager@Object> <Map> threadsByPidMap
 
 @threadManager
 
@@ -12,12 +12,12 @@ ThreadManager Clone
 ThreadManager DeepClone
 	return self Retain
 
-ThreadManager <Comparison> Compare <ThreadManager> tm
+ThreadManager <Comparison> CompareSameGID <ThreadManager> tm
 	return (self Hash) ? (tm Hash)
 
 ThreadManager Destroy
 	self.threadsByPidMap Release
-	return self Destroy
+	return super Destroy
 
 ThreadManager RegisterCurrentThread
 	pid = self Pid

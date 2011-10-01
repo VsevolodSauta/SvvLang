@@ -1,4 +1,4 @@
-<MapIterator> <Map> [Retain] map <ListIterator> [Retain] keysIterator <ListIterator> [Retain] valuesIterator
+<MapIterator@Object> <Map> [Retain] map <ListIterator> [Retain] keysIterator <ListIterator> [Retain] valuesIterator
 
 MapIterator SetMap <Map> map
 	self.map = map
@@ -54,7 +54,7 @@ MapIterator <Object> NextValue
 MapIterator <Object> PrevValue
 	return self.valuesIterator PrevData
 
-MapIterator <Comparison> Compare <MapIterator> mapIterator
+MapIterator <Comparison> CompareSameGID <MapIterator> mapIterator
 	candidate = self.keysIterator ? mapIterator.keysIterator
 	if candidate == equal
 		candidate = self.valuesIterator ? mapIterator.valuesIterator
@@ -78,4 +78,4 @@ MapIterator Destroy
 	self.keysIterator Release
 	self.valuesIterator Release
 	self.map Release
-	return self Destroy
+	return super Destroy

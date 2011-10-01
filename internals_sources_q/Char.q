@@ -1,15 +1,15 @@
-<Char> <Number> [Clone] code
+<Char@Object> <Number> [Clone] code
 
 Char Init
 	self.code = 0
 	return self
 
-Char <Comparison> Compare <Char> char
+Char <Comparison> CompareSameGID <Char> char
 	return self.code ? char.code
 
 Char Destroy
 	self.code Release
-	return self Destroy
+	return super Destroy
 
 Char Clone
 	toReturn = <Char>

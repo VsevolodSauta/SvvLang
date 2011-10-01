@@ -1,4 +1,4 @@
-<Map> <List> [Retain] keys <List> [Retain] values
+<Map@Object> <List> [Retain] keys <List> [Retain] values
 
 Map Init
 	self.keys = <List>
@@ -8,7 +8,7 @@ Map Init
 Map Destroy
 	self.keys Release
 	self.values Release
-	return self Destroy
+	return super Destroy
 
 Map Clone
 	toReturn = <Map>
@@ -22,7 +22,7 @@ Map DeepClone
 	toReturn.values = self.values DeepClone
 	return toReturn
 
-Map <Comparison> Compare <Map> map
+Map <Comparison> CompareSameGID <Map> map
 	candidate = self.keys ? map.keys
 	if candidate != equal
 		return candidate

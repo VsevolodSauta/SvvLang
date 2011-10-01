@@ -136,7 +136,9 @@ Line getActor := method(
 		toNextToken
 		return actor
 	)
-	Action process(actor, self)
+	toReturn := Action process(actor, self)
+	TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
+	toReturn
 )
 
 Line getCondition := method(
@@ -238,12 +240,19 @@ Line translateMethodSignature := method(contextObject,
 
 Line translateObjectSignature := method(contextObject, 
 	toPut := "typedef struct #{objectName} {\n#{fields}} *#{objectName}"
-	objectName := getCurrentToken outOfBrackets
+	objectName := getCurrentToken outOfBrackets split("@") first
+	parentName := getCurrentToken outOfBrackets split("@") second
 	flagAddToTable := TableOfSymbols classFields at(objectName) empty
 	toNextToken
 	TableOfSymbols setClassId(objectName, ((objectName hash) mod (Number longMax)) asString(20, 0) .. "ull")
+	TableOfSymbols mapOfClassParents atPut(objectName, parentName)
 	
 	fields := "" asMutable
+	if((parentName isNil not) and (parentName != "Object"),
+		TableOfSymbols ensureKnownClassForClass(parentName, objectName)
+		fields appendSeq("\tstruct #{parentName};\n" interpolate)
+	)
+	
 	typeOfParameter := "Object"
 	propertyList := List clone
 	while(getCurrentToken isNil not,

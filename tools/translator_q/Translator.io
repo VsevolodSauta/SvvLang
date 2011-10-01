@@ -75,9 +75,8 @@ Translator translateClass := method(objectClassName,
 	DestinationFile write("#include \"internals/basics.h\"\n")
 	DestinationFile write("#include \"internals/#{objectClassName}/imports.h\"\n" interpolate)
 	DestinationFile write("\n")
-	
-	TableOfSymbols ensureKnownClassForClass("Logic", objectClassName)
-	TableOfSymbols ensureKnownClassForClass("SuperClass", objectClassName)
+	DestinationFile write("#define #{objectClassName}GID #{TableOfSymbols getClassId(objectClassName)}" interpolate)
+	DestinationFile write("\n")
 	
 	TableOfSymbols pushFrame
 	loop(
@@ -89,7 +88,7 @@ Translator translateClass := method(objectClassName,
 		if(currentLevel == 0,
 			if(line tokens first isCreator,
 				DestinationFile putObjectSignature(line translateObjectSignature(objectClassName))
-				actor := Actor unnamedActor(line tokens first outOfBrackets)
+				actor := Actor unnamedActor(line tokens first className)
 				DestinationFile putMethodSignature(actor getCreatorSignature)
 				DestinationFile write(actor getCreatorBody)
 				continue
@@ -110,18 +109,8 @@ Translator translateClass := method(objectClassName,
 		BlockDelegatesHandling blockDidEnd
 	)
 	
-	DestinationFile write("void #{objectClassName}_InitializeClass()\n" interpolate)
-	DestinationFile write("{\n")
-	//DestinationFile write("\tAutoreleasePool_PushFrame(_autoreleasePool);\n");
-	DestinationFile write("\tObject _className = StringFactory_FromUTF8(_stringFactory, \"#{objectClassName}\", #{objectClassName size});\n" interpolate)
-	TableOfSymbols classMethods at(objectClassName) foreach(methodName, methodResultClass,
-		DestinationFile write("\tSuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &#{objectClassName}_#{methodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName}\", #{methodName size}), _className);\n" interpolate)
-	)
-	TableOfSymbols mapOfMethodAliases at(objectClassName) foreach(methodName, realMethodName,
-		DestinationFile write("\tSuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &#{objectClassName}_#{realMethodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName asMutable escape}\", #{methodName size}), _className);\n" interpolate)
-	)
-	//DestinationFile write("\tAutoreleasePool_PopFrame(_autoreleasePool);\n");
-	DestinationFile write("}")
+	DestinationFile write(Actor unnamedActor(objectClassName) getInitializeClassBody)
+	TableOfSymbols ensureKnownClassForClass("SuperClass", objectClassName)
 )
 
 Translator importAll := method(

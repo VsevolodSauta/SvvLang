@@ -1,4 +1,4 @@
-<MachineScheduler> <Queue> queue
+<MachineScheduler@Object> <Queue> queue
 
 MachineScheduler Init
 	self.queue = <Queue>
@@ -16,13 +16,4 @@ MachineScheduler ScheduleUID <List> uid
 
 MachineScheduler Destroy
 	self.queue Release
-	return self Destroy
-
-MachineScheduler DeepClone
-	return self
-
-MachineScheduler Clone
-	return self
-
-MachineScheduler Compare <MachineScheduler> scheduler
-	return equal
+	return super Destroy

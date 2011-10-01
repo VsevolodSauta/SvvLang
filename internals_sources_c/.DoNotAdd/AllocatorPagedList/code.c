@@ -2,7 +2,7 @@
 #include "internals/Undestroyable/interface.h"
 #include "internals/SuperClass/interface.h"
 
-#define NULL ((void*) 0)
+#define AllocatorGID 13474595845139800064ull
 
 static void* Allocator_InternalNew(Allocator allocator, long size)
 {
@@ -18,14 +18,14 @@ static void* Allocator_InternalNew(Allocator allocator, long size)
 
 	while(1)
 	{
-		if(page == NULL)
+		if(page == 0)
 		{
-			page = OSmappingMap(NULL, sizeof(struct AllocatedPage), 7, 34, -1, 0);
+			page = OSmappingMap(0, sizeof(struct AllocatedPage), 7, 34, -1, 0);
 			page->nextPage = allocator->pages[positionInPages];
 			page->linkToPage = allocator->pages + positionInPages;
 			page->firstFree = (void*) (page->data + overhead);
 			page->allocated = 0;
-			if(allocator->pages[positionInPages] != NULL)
+			if(allocator->pages[positionInPages] != 0)
 			{
 				allocator->pages[positionInPages]->linkToPage = &(page->nextPage);
 			}
@@ -35,7 +35,7 @@ static void* Allocator_InternalNew(Allocator allocator, long size)
 			{
 				*((void**) (page->data + overhead + size * (i - 1))) = page->data + overhead + size * i;
 			}
-			*((void**) (page->data + overhead + size * (capacity - 1))) = NULL;
+			*((void**) (page->data + overhead + size * (capacity - 1))) = 0;
 		}
 
 		if(page->allocated < capacity)
@@ -54,30 +54,17 @@ Object Allocator_Create()
 	struct AllocatorPaged allocatorOnStack;
 	for(int i = 0; i < 10; i++)
 	{
-		allocatorOnStack.pages[i] = NULL;
+		allocatorOnStack.pages[i] = 0;
 	}
 
 	Allocator allocatorOnHeap = Allocator_InternalNew(&allocatorOnStack, sizeof(allocatorOnStack));
 	copyMemory((char*) allocatorOnHeap, (char*) &allocatorOnStack, sizeof(allocatorOnStack));
 	Object allocatorObject = Allocator_InternalNew(allocatorOnHeap, sizeof(struct Object));
 	allocatorObject->links = 1;
-	allocatorObject->gid = 13474595845139800064ull;
-        Object_SetComparator(allocatorObject, &Object_EmptyComparator);
-        Object_SetDestructor(allocatorObject, &Object_Destroy);
-        Object_SetCloner(allocatorObject, &Object_Retain);
-        Object_SetDeepCloner(allocatorObject, &Object_Retain);
-        allocatorObject->entity = allocatorOnHeap;
-        return allocatorObject;
-}
-
-Object Allocator_Clone(Object _self)
-{
-	return Object_Retain(_self);
-}
-
-Object Allocator_DeepClone(Object _self)
-{
-	return Object_Retain(_self);
+	allocatorObject->gid = AllocatorGID; 
+	allocatorObject->destroy = &Object_Destroy;
+	allocatorObject->entity = allocatorOnHeap;
+	return allocatorObject;
 }
 
 Object Allocator_Destroy(Object _self)
@@ -93,19 +80,19 @@ void* Allocator_New(Object _self, long size)
 #if RESIZE_AVAILABLE
 void*  Allocator_Resize(Object _self, void* toResize, long size)
 {
-	return NULL;
+	return 0;
 }
 #endif
 
 Object Allocator_Delete(Object _self, void* toDelete)
 {
-	if(toDelete != NULL)
+	if(toDelete != 0)
 	{
 		struct AllocatedPage* page = (struct AllocatedPage*) (((long) toDelete) & ~(sizeof(struct AllocatedPage) - 1));
 		page->allocated--;
 		if(page->allocated == 0)
 		{
-			if(page->nextPage != NULL)
+			if(page->nextPage != 0)
 			{
 				page->nextPage->linkToPage = page->linkToPage;
 			}
@@ -128,12 +115,12 @@ void*  Allocator_GetUndeletable(Object _self)
 void Allocator_InitializeClass()
 {
 	Object _className = StringFactory_FromUTF8(_stringFactory, "Allocator", 9);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_DeepClone), StringFactory_FromUTF8(_stringFactory, "DeepClone", 9), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Clone), StringFactory_FromUTF8(_stringFactory, "Clone", 5), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_New), StringFactory_FromUTF8(_stringFactory, "New", 3), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Delete), StringFactory_FromUTF8(_stringFactory, "Delete", 6), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_GetUndeletable), StringFactory_FromUTF8(_stringFactory, "GetUndeletable", 14), _className);
+	Object _gid = NumberFactory_FromLong(_numberFactory, AllocatorGID);
+	SuperClass_RegisterClassWithNameWithGIDWithParentClassName(_superClass, _className, _gid, _nil);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Destroy), StringFactory_FromUTF8(_stringFactory, "Destroy", 7), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_New), StringFactory_FromUTF8(_stringFactory, "New", 3), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_Delete), StringFactory_FromUTF8(_stringFactory, "Delete", 6), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Allocator_GetUndeletable), StringFactory_FromUTF8(_stringFactory, "GetUndeletable", 14), _className);
 }
 
 #if MEMORY_DEBUG

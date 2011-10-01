@@ -1,4 +1,4 @@
-<Synonim> <List> [Retain] uid <List> references
+<Synonim@Object> <List> [Retain] uid <List> references
 
 Synonim Init
 	self.references = <List>
@@ -52,7 +52,7 @@ Synonim RemoveNamespace <ListMap> namespace
 Synonim Destroy
 	self.uid Release
 	self.references Release
-	return self Destroy
+	return super Destroy
 
 Synonim Clone
 	toReturn = <Synonim>
@@ -64,5 +64,5 @@ Synonim DeepClone
 	toReturn.uid = self.uid
 	return self
 
-Synonim <Comparison> Compare <Synonim> synonim
+Synonim <Comparison> CompareSameGID <Synonim> synonim
 	return self.uid ? synonim.uid

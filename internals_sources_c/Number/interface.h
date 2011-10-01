@@ -8,7 +8,7 @@ typedef struct Number {
 } *Number;
 
 Object Number_Create();
-Object Number_Compare(Object _self, Object number);
+Object Number_CompareSameGID(Object _self, Object number);
 Object Number_Clone(Object _self);
 Object Number_Destroy(Object _self);
 
@@ -19,11 +19,15 @@ Object Number_Sub(Object _self, Object arg);
 Object Number_Mul(Object _self, Object arg);
 Object Number_Div(Object _self, Object arg);
 Object Number_Mod(Object _self, Object arg);
+Object Number_Shr(Object _self, Object arg);
+Object Number_Shl(Object _self, Object arg);
 Object Number_AddInPlace(Object _self, Object arg);
 Object Number_SubInPlace(Object _self, Object arg);
 Object Number_MulInPlace(Object _self, Object arg);
 Object Number_DivInPlace(Object _self, Object arg);
 Object Number_ModInPlace(Object _self, Object arg);
+Object Number_ShrInPlace(Object _self, Object arg);
+Object Number_ShlInPlace(Object _self, Object arg);
 Object Number_Min(Object _self, Object arg);
 Object Number_Max(Object _self, Object arg);
 Object Number_Abs(Object _self);

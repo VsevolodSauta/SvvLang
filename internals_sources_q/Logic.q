@@ -1,18 +1,9 @@
-<Logic> placeHolder
+<Logic@Undestroyable> placeHolder
 
 @yes
 @no
 @true
 @false
-
-Logic Clone
-	return self
-
-Logic DeepClone
-	return self
-
-Logic Destroy
-	return self
 
 Logic <Comparison> Compare <Logic> arg
 	if self Is arg

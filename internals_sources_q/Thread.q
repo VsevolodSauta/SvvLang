@@ -1,4 +1,4 @@
-<Thread> <Number> [Retain] pid <AutoreleasePool> autoreleasePool
+<Thread@Object> <Number> [Retain] pid <AutoreleasePool> autoreleasePool
 
 Thread Init
 	self.autoreleasePool = <AutoreleasePool>
@@ -9,19 +9,13 @@ Thread SetPid <Number> pid
 	self.pid = pid
 	return self
 
-Thread Clone
-	return self Retain
-
-Thread DeepClone
-	return self Retain
-
-Thread <Comparison> Compare <Thread> thread
+Thread <Comparison> CompareSameGID <Thread> thread
 	return self.pid ? thread.pid
 
 Thread Destroy
 	self.pid Release
 	self.autoreleasePool Release
-	return self Destroy
+	return super Destroy
 
 Thread <AutoreleasePool> AutoreleasePool
 	return self.autoreleasePool

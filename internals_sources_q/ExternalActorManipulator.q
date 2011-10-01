@@ -1,20 +1,8 @@
-<ExternalActorManipulator> <Machine> machine <ListMap> actorMasterCopy
-
-ExternalActorManipulator Init
-	return self
-
-ExternalActorManipulator Clone
-	return self Retain
-
-ExternalActorManipulator DeepClone
-	return self Retain
+<ExternalActorManipulator@Object> <Machine> machine <ListMap> actorMasterCopy
 
 ExternalActorManipulator Destroy
 	self.actorMasterCopy Release
-	return self Destroy
-
-ExternalActorManipulator Compare <ExternalActorManipulator> manipulator
-	return equal
+	return super Destroy
 
 ExternalActorManipulator SetMachine <Machine> machine
 	self.machine = machine

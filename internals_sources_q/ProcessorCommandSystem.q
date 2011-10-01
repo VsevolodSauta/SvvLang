@@ -1,4 +1,4 @@
-<ProcessorCommandSystem> <Stack> helperStack <ListMap> processorCodes <Processor> processor
+<ProcessorCommandSystem@Object> <Stack> helperStack <ListMap> processorCodes <Processor> processor
 
 ProcessorCommandSystem Clone
 	return <ProcessorCommandSystem>
@@ -6,13 +6,13 @@ ProcessorCommandSystem Clone
 ProcessorCommandSystem DeepClone
 	return <ProcessorCommandSystem>
 
-ProcessorCommandSystem <Comparison> Compare <ProcessorCommandSystem> processorCommandSystem
+ProcessorCommandSystem <Comparison> CompareSameGID <ProcessorCommandSystem> processorCommandSystem
 	return (self Hash) ? (processorCommandSystem Hash)
 
 ProcessorCommandSystem Destroy
 	self.helperStack Release
 	self.processorCodes Release
-	return self Destroy
+	return super Destroy
 
 ProcessorCommandSystem SetProcessor <Processor> processor
 	self.processor = processor

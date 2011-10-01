@@ -1,4 +1,4 @@
-<Processor> <List> [Retain] contextActorUID <List> [Retain] contextJobName <ListMap> [Retain] contextJobStageName <Machine> machine <Stack> localNamespaces  <ProcessorCommandSystem> commandSystem <ListMap> [Retain] contextMessages <ListMap> processorCodes
+<Processor@Object> <List> [Retain] contextActorUID <List> [Retain] contextJobName <ListMap> [Retain] contextJobStageName <Machine> machine <Stack> localNamespaces  <ProcessorCommandSystem> commandSystem <ListMap> [Retain] contextMessages <ListMap> processorCodes
 
 Processor <Processor> Clone
 	return <Processor>
@@ -12,7 +12,7 @@ Processor Destroy
 	self.contextJobStageName Release
 	self.localNamespaces Release
 	self.commandSystem Release
-	return self Destroy
+	return super Destroy
 
 Processor <Comparison> Compare <Processor> processor
 	return equal

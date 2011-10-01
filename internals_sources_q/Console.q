@@ -1,4 +1,4 @@
-<Console> <File> toRead <File> toWrite
+<Console@Undestroyable> <File> toRead <File> toWrite
 
 @console
 
@@ -21,16 +21,4 @@ Console WriteLnNumber (PrintLnNumber) <Number> number
 
 Console WriteHash (PrintHash) object
 	self.toWrite WriteLnNumber (object Hash)
-	return self
-
-Console Clone
-	return self
-
-Console DeepClone
-	return self
-
-Console Compare <Console> console
-	return equal
-
-Console Destroy
 	return self

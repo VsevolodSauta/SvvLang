@@ -1,4 +1,4 @@
-<ListNode> <ListNode> next <ListNode> prev [Retain] data
+<ListNode@Object> <ListNode> next <ListNode> prev [Retain] data
 
 ListNode Init
 	return self
@@ -17,7 +17,7 @@ ListNode DeepClone
 	toReturn.data = self.data DynamicallyDeepClone
 	return toReturn
 
-ListNode <Comparison> Compare <ListNode> listNode
+ListNode <Comparison> CompareSameGID <ListNode> listNode
 	candidate = self.data ? listNode.data
 	if candidate != equal
 		return candidate
@@ -27,5 +27,4 @@ ListNode <Comparison> Compare <ListNode> listNode
 
 ListNode Destroy
 	self.data Release
-	return self Destroy
-
+	return super Destroy

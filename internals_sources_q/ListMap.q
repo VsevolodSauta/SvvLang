@@ -1,16 +1,16 @@
-<ListMap> <ListMapNode> root <Logic> underClonning
+<ListMap@Object> <ListMapNode> root <Logic> underClonning
 
 ListMap Init
 	self.root = <ListMapNode>
 	self.underClonning = no
 	return self
 
-ListMap <Comparison> Compare <ListMap> listMap
+ListMap <Comparison> CompareSameGID <ListMap> listMap
 	return self.root ? listMap.root
 
 ListMap Destroy
 	self.root Release
-	return self Destroy
+	return super Destroy
 
 ListMap Clone
 	if self.underClonning

@@ -24,10 +24,14 @@ Action with := method(token,
 )
 
 Action getActionType := method(actor,
-	if(TableOfSymbols isObjectsMethod(actionName),
-		return Actor unnamedActor("Object"),
-		return Actor unnamedActor(actor actorType)
+	abstractActor := Actor unnamedActor(actor actorType)
+	while(abstractActor actorType isNil not,
+		if(TableOfSymbols actorHasAction(abstractActor, self),
+			return abstractActor
+		)
+		abstractActor actorType = TableOfSymbols mapOfClassParents at(abstractActor actorType)
 	)
+	TranslatorError with(nil, "Method \"#{actionName}\" for object of class \"#{actor actorType}\" not found." interpolate)
 )
 
 Action process := method(actor, line,
@@ -67,7 +71,6 @@ Action process := method(actor, line,
 		toReturn actorType = "#{actionResult actorType}" asMutable
 	)
 	
-	
 	localActionName = TableOfSymbols getMainActionNameForActorAndAction(actor, Action with(localActionName))
 	
 	if(localActionName == "=",
@@ -105,6 +108,7 @@ Action process := method(actor, line,
 	)
 	
 	if(comparationMap hasKey(localActionName),
+		TableOfSymbols ensureKnownClassForClass("Comparison", Translator objectClassName)
 		toReturn actorName copy("Object_Compare(#{actor actorName}, #{line getActor actorName}) #{comparationMap at(localActionName)}" interpolate)
 		toReturn actorName copy("LogicFactory_FromLong(_logicFactory, #{toReturn actorName})" interpolate)
 		toReturn actorType = "Logic"
@@ -114,7 +118,6 @@ Action process := method(actor, line,
 	if(localActionName beginsWithSeq("As"),
 		toReturn actorName copy(actor actorName)
 		toReturn actorType copy(localActionName exclusiveSlice(2))
-		TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
 		return toReturn
 	)
 	
@@ -145,6 +148,5 @@ Action process := method(actor, line,
 	
 	toReturn actorType interpolateInPlace
 	toReturn actorName interpolateInPlace
-	TableOfSymbols ensureKnownClassForClass(toReturn actorType, Translator currentClassName)
 	toReturn
 )

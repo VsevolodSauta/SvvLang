@@ -22,11 +22,16 @@ Object AllocatorForStack_Delete(Object _self, void* toDelete)
 	return _self;
 }
 
+#if 0
 void AllocatorForStack_InitializeClass()
 {
+	INITIALIZE_CLASS(AllocatorForStack_InitializeClass);
 	Object _className = StringFactory_FromUTF8(_stringFactory, "AllocatorForStack", 17);
+	Object _parentClassName = StringFactory_FromUTF8(_stringFactory, "Object", 6);
+	SuperClass_RegisterClassWithParentClass(_superClass, _className, _parentClassName);
 	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &AllocatorForStack_New), StringFactory_FromUTF8(_stringFactory, "New", 3), _className);
 	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &AllocatorForStack_Delete), StringFactory_FromUTF8(_stringFactory, "Delete", 6), _className);
 }
+#endif
 
 Object _allocatorForStack;

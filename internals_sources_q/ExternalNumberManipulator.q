@@ -1,19 +1,4 @@
-<ExternalNumberManipulator> <Machine> machine
-
-ExternalNumberManipulator Init
-	return self
-
-ExternalNumberManipulator Clone
-	return self Retain
-
-ExternalNumberManipulator DeepClone
-	return self Retain
-
-ExternalNumberManipulator Destroy
-	return self Destroy
-
-ExternalNumberManipulator Compare <ExternalNumberManipulator> manipulator
-	return equal
+<ExternalNumberManipulator@Object> <Machine> machine
 
 ExternalNumberManipulator SetMachine <Machine> machine
 	self.machine = machine

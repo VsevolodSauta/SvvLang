@@ -1,19 +1,4 @@
-<ExternalListMapManipulator> <Machine> machine
-
-ExternalListMapManipulator Init
-	return self
-
-ExternalListMapManipulator Clone
-	return self Retain
-
-ExternalListMapManipulator DeepClone
-	return self Retain
-
-ExternalListMapManipulator Destroy
-	return self Destroy
-
-ExternalListMapManipulator Compare <ExternalListMapManipulator> manipulator
-	return equal
+<ExternalListMapManipulator@Object> <Machine> machine
 
 ExternalListMapManipulator SetMachine <Machine> machine
 	self.machine = machine

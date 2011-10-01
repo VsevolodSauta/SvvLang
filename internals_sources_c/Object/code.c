@@ -1,4 +1,5 @@
 #include "internals/basics.h"
+#include "internals/Undestroyable/interface.h"
 #include "internals/ThreadManager/interface.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/Logic/interface.h"
@@ -6,16 +7,14 @@
 #include "internals/Comparison/interface.h"
 #include "internals/SuperClass/interface.h"
 
+#define ObjectGID 2803832687958515712ull
+
 Object Object_Create(void)
 {
-//	DMSG("Object Create\n");
 	Object toReturn = Allocator_New(_allocator, sizeof(struct Object));
 	toReturn->links = 1;
-	toReturn->gid = 2803832687958515712ull;
-	Object_SetComparator(toReturn, &Object_EmptyComparator);
-	Object_SetDestructor(toReturn, &Object_Destroy);
-	Object_SetCloner(toReturn, &Object_Retain);
-	Object_SetDeepCloner(toReturn, &Object_Retain);
+	toReturn->gid = ObjectGID;
+	toReturn->destroy = &Object_Destroy;
 	toReturn->entity = Allocator_GetUndeletable(_allocator);
 	return toReturn;
 }
@@ -32,12 +31,12 @@ Object Object_Compare(Object _self, Object object)
 		{
 			return _uncomparableGreater;
 		} else {
-			return (_self->compare)(_self, object);
+			return Object_DynamicallyInvoke(_self, StringFactory_FromUTF8(_stringFactory, "CompareSameGID", 14), object);
 		}
 	}
 }
 
-Object Object_EmptyComparator(Object _self, Object object)
+Object Object_CompareSameGID(Object _self, Object object)
 {
 	return _equal;
 }
@@ -56,8 +55,6 @@ Object Object_Retain(Object _self)
 
 Object Object_Release(Object _self)
 {
-	DPUSHS("Object: Release.");
-	
 	register int toAdd = -1;
 	asm volatile (
 		"lock\n"
@@ -85,57 +82,27 @@ Object Object_Autorelease(Object _self)
 
 Object Object_Destroy(Object _self)
 {
-//	DMSG("Object Destroy\n");
 	Allocator_Delete(_allocator, _self->entity);
 	return Allocator_Delete(_allocator, _self);
 }
 
 Object Object_Clone(Object _self)
 {
-	return _self->clone(_self);
+	return Object_Retain(_self);
 }
 
 Object Object_TempClone(Object _self)
 {
-//	DMSG("Object TempClone\n");
-	Object toReturn = _self->clone(_self);
-	Object_Autorelease(toReturn);
-	return toReturn;
+	return _self;
 }
 
 Object Object_DeepClone(Object _self)
 {
-	return _self->deepClone(_self);
+	return Object_Retain(_self);
 }
 
 Object Object_TempDeepClone(Object _self)
 {
-	Object toReturn = _self->deepClone(_self);
-	Object_Autorelease(toReturn);
-	return toReturn;
-}
-
-Object Object_SetComparator(Object _self, ObjectComparator comparator)
-{
-	_self->compare = comparator;
-	return _self;
-}
-
-Object Object_SetCloner(Object _self, ObjectCloner cloner)
-{
-	_self->clone = cloner;
-	return _self;
-}
-
-Object Object_SetDeepCloner(Object _self, ObjectCloner deepCloner)
-{
-	_self->deepClone = deepCloner;
-	return _self;
-}
-
-Object Object_SetDestructor(Object _self, ObjectDestructor destructor)
-{
-	_self->destroy = destructor;
 	return _self;
 }
 
@@ -151,27 +118,44 @@ Object Object_Is(Object _self, Object object)
 
 Object Object_DynamicallyInvoke(Object _self, Object _methodName, ...)
 {
+	Object _gid = NumberFactory_FromLong(_numberFactory, _self->gid);
+	Object _className = SuperClass_ClassNameForGID(_superClass, _gid);
+	Object _implementation = SuperClass_MethodWithNameInClassWithName(_superClass, _methodName, _className);
+	
+	while(_implementation == _nil) {
+		_className = SuperClass_ParentClassNameForClassWithName(_superClass, _className);
+		if(_className == _nil)
+		{
+			ASSERT_C("Unable to find the method for dynamic invocation.", 0);
+		}
+		_implementation = SuperClass_MethodWithNameInClassWithName(_superClass, _methodName, _className);
+	}
+	
 	asm(
-		"pushq %%rdi\n"
+		"movq %%rdi, %%rsi\n"
 		"movq %0, %%rdi\n"
-		"call ListMap_ObjectAt\n"
-		"movq %%rax, %%rdi\n"
-		"popq %%rsi\n"
 		"jmp Method_Invoke\n"
-		: : "m" (_self->classInvocationMap)
+		: 
+		: 
+		"m" (_implementation)
 	);
+	
 	// Unreachable code
 	return _nil;
 }
 
 void Object_InitializeClass()
 {
+	INITIALIZE_CLASS(Object_InitializeClass);
 	Object _className = StringFactory_FromUTF8(_stringFactory, "Object", 6);
-	
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Retain), StringFactory_FromUTF8(_stringFactory, "Retain", 6), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Release), StringFactory_FromUTF8(_stringFactory, "Release", 7), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Autorelease), StringFactory_FromUTF8(_stringFactory, "Autorelease", 11), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_DynamicallyInvoke), StringFactory_FromUTF8(_stringFactory, "DynamicallyInvoke", 17), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Is), StringFactory_FromUTF8(_stringFactory, "Is", 2), _className);	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Retain), StringFactory_FromUTF8(_stringFactory, "Retain", 6), _className);
-	SuperClass_RegisterMethodWithNameForClass(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Hash), StringFactory_FromUTF8(_stringFactory, "Hash", 4), _className);
+	Object _gid = NumberFactory_FromLong(_numberFactory, ObjectGID);
+	SuperClass_RegisterClassWithNameWithGIDWithParentClassName(_superClass, _className, _gid, _nil);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Retain), StringFactory_FromUTF8(_stringFactory, "Retain", 6), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Release), StringFactory_FromUTF8(_stringFactory, "Release", 7), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Autorelease), StringFactory_FromUTF8(_stringFactory, "Autorelease", 11), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Compare), StringFactory_FromUTF8(_stringFactory, "Compare", 7), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_CompareSameGID), StringFactory_FromUTF8(_stringFactory, "CompareSameGID", 14), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_DynamicallyInvoke), StringFactory_FromUTF8(_stringFactory, "DynamicallyInvoke", 17), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Is), StringFactory_FromUTF8(_stringFactory, "Is", 2), _className);
+	SuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &Object_Hash), StringFactory_FromUTF8(_stringFactory, "Hash", 4), _className);
 }

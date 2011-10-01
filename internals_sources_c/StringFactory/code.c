@@ -1,12 +1,12 @@
 #include "internals/basics.h"
 #include "internals/StringFactory/interface.h"
 #include "internals/StringFactory/encoding.h"
+#include "internals/Undestroyable/interface.h"
 #include "internals/Char/interface.h"
 #include "internals/List/interface.h"
 #include "internals/ListIterator/interface.h"
 #include "internals/Number/interface.h"
 #include "internals/Logic/interface.h"
-#include "internals/Undestroyable/interface.h"
 #include "internals/SuperClass/interface.h"
 
 Object StringFactory_Create()
@@ -126,8 +126,14 @@ Object StringFactory_FromNumber(Object _self, Object number)
 	return toReturn;
 }
 
+#if 0
 void StringFactory_InitializeClass()
 {
+	INITIALIZE_CLASS(StringFactory_InitializeClass);
+	Object _className = StringFactory_FromUTF8(_stringFactory, "StringFactory", 13);
+	Object _parentClassName = StringFactory_FromUTF8(_stringFactory, "Undestroyable", 13);
+	SuperClass_RegisterClassWithParentClass(_superClass, _className, _parentClassName);
 }
+#endif
 
 Object _stringFactory;

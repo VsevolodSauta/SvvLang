@@ -1,18 +1,6 @@
-<ExternalEntitiesFactory> placeHolder
+<ExternalEntitiesFactory@Object> placeHolder
 
 @entitiesFactory
-
-ExternalEntitiesFactory Clone
-	return self Retain
-
-ExternalEntitiesFactory DeepClone
-	return self Retain
-
-ExternalEntitiesFactory Destroy
-	return self Destroy
-
-ExternalEntitiesFactory Compare <ExternalEntitiesFactory> entitiesFactory
-	return equal
 
 ExternalEntitiesFactory <ListMap> CreateEmptyListMap
 	toReturn = <ListMap>

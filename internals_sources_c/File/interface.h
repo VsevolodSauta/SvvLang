@@ -31,7 +31,7 @@ Object File_ReadListMap(Object _self);
 
 Object File_ReadContentsOfFile(Object _self);
 
-Object File_Compare(Object _self, Object _file);
+Object File_CompareSameGID(Object _self, Object _file);
 Object File_Clone(Object _self);
 Object File_Destroy(Object _self);
 

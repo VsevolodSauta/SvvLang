@@ -1,4 +1,4 @@
-<Stack> <List> [Retain] list
+<Stack@Object> <List> [Retain] list
 
 Stack Init
 	self.list = <List>
@@ -27,12 +27,12 @@ Stack Clean (Clear RemoveAll)
 	self.list RemoveAll
 	return self
 
-Stack <Comparison> Compare <Stack> stack
+Stack <Comparison> CompareSameGID <Stack> stack
 	return (self.list) ? (stack.list)
 
 Stack <Object> Destroy
 	self.list Release
-	return self Destroy
+	return super Destroy
 
 Stack <List> GetList
 	return (self.list Clone) Autorelease
@@ -46,4 +46,3 @@ Stack DeepClone
 	toReturn = <Stack>
 	toReturn.list = self.list DeepClone
 	return toReturn
-

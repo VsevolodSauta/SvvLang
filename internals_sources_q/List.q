@@ -1,4 +1,4 @@
-<List> <ListIterator> iterator <ListNode> head <ListNode> tail
+<List@Object> <ListIterator> iterator <ListNode> head <ListNode> tail
 
 List Init
 	self.head = <ListNode>
@@ -16,7 +16,7 @@ List Destroy
 		nextNode = node.next
 		node Release
 		node = nextNode
-	return self Destroy
+	return super Destroy
 
 List Clone
 	list = <List>
@@ -32,7 +32,7 @@ List DeepClone
 	list.iterator Hide
 	return list
 
-List <Comparison> Compare <List> list
+List <Comparison> CompareSameGID <List> list
 	selfIterator = self First
 	listIterator = list First
 	loop
@@ -344,7 +344,7 @@ List SublistBetweenIterators <ListIterator> positionFrom <ListIterator> position
 	iterator Release
 	return list
 
-List <Number> Size
+List <Number> Size (Length)
 	iterator = self.iterator Clone
 	iterator ToBegin
 	toReturn = 0
@@ -408,3 +408,121 @@ List <Logic> LooksLikeUID
 		return no
 	return yes
 
+List <Number> String Murmur3 Hash // seed is zero
+	// --- init ---
+	length = self Length
+	halfOfLength = length >> 1
+	reminder = length % 2
+	C long h1 = 0x9368e53c2f6af274;
+	C long h2 = 0x586dcd208f7cd3fd;
+	C long c1 = 0x87c37b91114253d5;
+	C long c2 = 0x4cf5ad432745937f;
+	if reminder == 0
+		// --- body ---
+		iterator = self First
+		while iterator NotThisEnd
+			C long k1 = Number_GetLong(Char_GetCode(ListIterator_CharData(_iterator)));
+			iterator ++
+			C long k2 = Number_GetLong(Char_GetCode(ListIterator_CharData(_iterator)));
+			iterator ++
+
+			// --- mix ---
+			C k1 *= c1;
+			C k1  = (k1 << 23) ^ (k1 << 41);
+			C k1 *= c2;
+			C h1 ^= k1;
+			C h1 += h2;
+
+			C h2 = (h2 << 41) ^ (h2 << 23);
+
+			C k2 *= c2;
+			C k2  = (k2 << 23) ^ (k2 << 41);
+			C k2 *= c1;
+			C h2 ^= k2;
+			C h2 += h1;
+
+			C h1 = h1*3+0x52dce729;
+			C h2 = h2*3+0x38495ab5;
+
+			C c1 = c1*5+0x7b7d159c;
+			C c2 = c2*5+0x6bce6396;
+
+	else
+		// --- body ----
+		iterator = self First
+		while halfOfLength > 0
+			halfOfLength --
+			C long k1 = Number_GetLong(Char_GetCode(ListIterator_CharData(_iterator)));
+			iterator ++
+			C long k2 = Number_GetLong(Char_GetCode(ListIterator_CharData(_iterator)));
+			iterator ++
+
+			// --- mix ---
+			C k1 *= c1;
+			C k1  = (k1 << 23) ^ (k1 << 41);
+			C k1 *= c2;
+			C h1 ^= k1;
+			C h1 += h2;
+
+			C h2 = (h2 << 41) ^ (h2 << 23);
+
+			C k2 *= c2;
+			C k2  = (k2 << 23) ^ (k2 << 41);
+			C k2 *= c1;
+			C h2 ^= k2;
+			C h2 += h1;
+
+			C h1 = h1*3+0x52dce729;
+			C h2 = h2*3+0x38495ab5;
+
+			C c1 = c1*5+0x7b7d159c;
+			C c2 = c2*5+0x6bce6396;
+
+		C long k1 = Number_GetLong(Char_GetCode(ListIterator_CharData(_iterator)));
+		C long k2 = 0;
+
+		// --- mix ---
+		C k1 *= c1;
+		C k1  = (k1 << 23) ^ (k1 << 41);
+		C k1 *= c2;
+		C h1 ^= k1;
+		C h1 += h2;
+
+		C h2 = (h2 << 41) ^ (h2 << 23);
+
+		C k2 *= c2;
+		C k2  = (k2 << 23) ^ (k2 << 41);
+		C k2 *= c1;
+		C h2 ^= k2;
+		C h2 += h1;
+
+		C h1 = h1*3+0x52dce729;
+		C h2 = h2*3+0x38495ab5;
+
+		C c1 = c1*5+0x7b7d159c;
+		C c2 = c2*5+0x6bce6396;
+
+	// --- fin ---
+	C h2 ^= Number_GetLong(_length);
+	C h1 += h2;
+	C h2 += h1;
+
+	// --- mix h1 ----
+	C h1 ^= h1 >> 33;
+	C h1 *= 0xff51afd7ed558ccd;
+	C h1 ^= h1 >> 33;
+	C h1 *= 0xc4ceb9fe1a85ec53;
+	C h1 ^= h1 >> 33;
+
+	// --- mix h2 ----
+	C h2 ^= h2 >> 33;
+	C h2 *= 0xff51afd7ed558ccd;
+	C h2 ^= h2 >> 33;
+	C h2 *= 0xc4ceb9fe1a85ec53;
+	C h2 ^= h2 >> 33;
+
+	C h1 += h2;
+	C h2 += h1;
+	toReturn = <Number> Autorelease
+	C Number_SetLong(_toReturn, h1);
+	return toReturn

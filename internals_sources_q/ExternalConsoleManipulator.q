@@ -1,19 +1,4 @@
-<ExternalConsoleManipulator> <Machine> machine
-
-ExternalConsoleManipulator Init
-	return self
-
-ExternalConsoleManipulator Clone
-	return self
-
-ExternalConsoleManipulator DeepClone
-	return self
-
-ExternalConsoleManipulator Destroy
-	return self Destroy
-	
-ExternalConsoleManipulator <Comparison> Compare <ExternalConsoleManipulator> consoleManipulator
-	return equal
+<ExternalConsoleManipulator@Object> <Machine> machine
 
 ExternalConsoleManipulator SetMachine <Machine> machine
 	self.machine = machine
@@ -37,11 +22,9 @@ ExternalConsoleManipulator CreateUIDConsoleFromUIDActor <List> uid
 	return uid
 
 ExternalConsoleManipulator WriteUIDConsoleBasicMethod <Processor> processor
-	string = processor EntityFromNamedMessageField "Запрос на вывод" "Строка" 
+	string = processor EntityFromNamedMessageField "Запрос на вывод" "Строка"
 	console PrintLnString string
 	replyMessage = entitiesFactory CreateEmptyMessage
 	replyMessage MessageSetReplySuccess
 	processor SendReplyForMessage replyMessage "Запрос на вывод"
 	return self
-
-

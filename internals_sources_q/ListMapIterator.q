@@ -1,4 +1,4 @@
-<ListMapIterator> <ListMap> [Retain] listMap <List> [Retain] key <Stack> elementStack <Logic> thisEnd <Logic> thisBegin
+<ListMapIterator@Object> <ListMap> [Retain] listMap <List> [Retain] key <Stack> elementStack <Logic> thisEnd <Logic> thisBegin
 
 ListMapIterator Init
 	self.elementStack = <Stack>
@@ -7,7 +7,7 @@ ListMapIterator Init
 
 ListMapIterator SetListMap <ListMap> listMap
 	self.listMap = listMap
-	return self 
+	return self
 
 ListMapIterator ToBegin
 	self.key Clean
@@ -157,7 +157,7 @@ ListMapIterator ThisEnd
 ListMapIterator ThisBegin
 	return self.thisBegin
 
-ListMapIterator <Comparison> Compare <ListMapIterator> iterator
+ListMapIterator <Comparison> CompareSameGID <ListMapIterator> iterator
 	candidate = self.listMap ? iterator.listMap
 	if candidate == equal
 		candidate = self.elementStack ? iterator.elementStack
@@ -184,4 +184,4 @@ ListMapIterator DeepClone
 ListMapIterator Destroy
 	self.listMap Release
 	self.elementStack Release
-	return self Destroy
+	return super Destroy

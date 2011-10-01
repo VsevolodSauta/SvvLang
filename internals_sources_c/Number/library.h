@@ -1,9 +1,9 @@
-static long long_max(long a, long b)
+static long __attribute__((unused)) long_max(long a, long b)
 {
 	return (a > b ? a : b);
 }
 
-static long long_min(long a, long b)
+static long __attribute__((unused)) long_min(long a, long b)
 {
 	return (a < b ? a : b);
 }

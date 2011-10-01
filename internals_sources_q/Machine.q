@@ -1,4 +1,4 @@
-<Machine> <ListMap> actorsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> fakeProcessor <List> processors <MachineScheduler> scheduler <ExternalMachineManipulator> machineManipulator <Number> [Retain] totalProcessors <ExternalActorsFactory> actorsFactory
+<Machine@Object> <ListMap> actorsByUIDs <UIDGenerator> uidGenerator <ListMap> globalContext <Processor> fakeProcessor <List> processors <MachineScheduler> scheduler <ExternalMachineManipulator> machineManipulator <Number> [Retain] totalProcessors <ExternalActorsFactory> actorsFactory
 
 
 Machine Init
@@ -37,16 +37,8 @@ Machine Destroy
 	self.scheduler Release
 	self.processors Release
 	self.fakeProcessor Release
-	return self Destroy
+	return super Destroy
 
-Machine Clone
-	return self Retain
-
-Machine DeepClone
-	return self Retain
-
-Machine <Comparison> Compare <Machine> machine
-	return equal
 
 Machine <ExternalActorsFactory> ActorsFactory
 	return self.actorsFactory

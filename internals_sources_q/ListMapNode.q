@@ -1,4 +1,4 @@
-<ListMapNode> <Map> [Retain] nextMap <Logic> mapped [Retain] mapping
+<ListMapNode@Object> <Map> [Retain] nextMap <Logic> mapped [Retain] mapping
 
 ListMapNode Init
 	self.nextMap = <Map>
@@ -9,7 +9,7 @@ ListMapNode Init
 ListMapNode Destroy
 	self.nextMap Release
 	self.mapping Release
-	return self Destroy
+	return super Destroy
 
 ListMapNode Clone
 	toReturn = <ListMapNode>
@@ -25,7 +25,7 @@ ListMapNode DeepClone
 	toReturn.mapped = self.mapped
 	return toReturn
 
-ListMapNode Compare <ListMapNode> listMapNode
+ListMapNode CompareSameGID <ListMapNode> listMapNode
 	candidate = self.mapped ? listMapNode.mapped
 	if candidate != equal
 		return candidate

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "internals_sources_c_runtime/runtime.h"
 #include "os_dependent/linux.h"
 #include "hardware_dependent/proto.h"
 
@@ -14,10 +15,7 @@
 #include "internals/LogicFactory/interface.h"
 #include "internals/CharFactory/interface.h"
 #include "internals/File/interface.h"
-// #include "internals/Comparison/interface.h"
 #include "internals/Method/interface.h"
 #include "internals/MethodFactory/interface.h"
-
-// #include "internals/globals.h"
 
 typedef Object (*BasicMethod)(Object, Object, Object);

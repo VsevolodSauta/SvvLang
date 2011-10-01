@@ -1,4 +1,4 @@
-<JSONParser> error
+<JSONParser@Object> error
 
 @jsonParser
 
@@ -6,18 +6,9 @@ JSONParser Init
 	self.error = <Object>
 	return self
 
-JSONParser <Comparison> Compare <JSONParser> jsonParser
-	return equal
-
-JSONParser Clone
-	return self
-
-JSONParser DeepClone
-	return self
-
 JSONParser Destroy
 	self.error Release
-	return self Destroy
+	return super Destroy
 
 JSONParser <List> ParseString <ListIterator> iterator
 	iterator StringSkipWhiteSpace

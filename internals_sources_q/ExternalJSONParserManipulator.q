@@ -1,19 +1,4 @@
-<ExternalJSONParserManipulator> <Machine> machine
-
-ExternalJSONParserManipulator Init
-	return self
-
-ExternalJSONParserManipulator Clone
-	return self Retain
-
-ExternalJSONParserManipulator DeepClone
-	return self Retain
-
-ExternalJSONParserManipulator Destroy
-	return self Destroy
-
-ExternalJSONParserManipulator Compare <ExternalJSONParserManipulator> manipulator
-	return equal
+<ExternalJSONParserManipulator@Object> <Machine> machine
 
 ExternalJSONParserManipulator SetMachine <Machine> machine
 	self.machine = machine

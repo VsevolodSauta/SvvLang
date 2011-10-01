@@ -1,22 +1,10 @@
-<ExternalActorsFactory> <Machine> machine
+<ExternalActorsFactory@Object> <Machine> machine
 
 @actorsFactory
 
-ExternalActorsFactory Init
-	return self
-
 ExternalActorsFactory Destroy
 	self.machine Release
-	return self Destroy
-
-ExternalActorsFactory <Comparison> Compare eof
-	return equal
-
-ExternalActorsFactory Clone
-	return self Retain
-
-ExternalActorsFactory DeepClone
-	return self Retain
+	return super Destroy
 
 ExternalActorsFactory SetMachine <Machine> machine
 	self.machine = machine

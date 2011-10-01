@@ -4,9 +4,22 @@
 #include "os_dependent/linux.h"
 #include "internals/AutoreleasePool/interface.h"
 #include "internals/ThreadManager/interface.h"
-#include "internals/initializers.h"
 
 int DLEVEL = 0;
+
+typedef void (*Initializer)();
+
+extern Initializer *initClassesStart;
+
+static void initAllClasses(void)
+{
+	Initializer *pointer = &initClassesStart;
+	while(*pointer != 0)
+	{
+		(*pointer)();
+		pointer++;
+	}
+}
 
 void _start(void)
 {
@@ -14,7 +27,7 @@ void _start(void)
 	_allocatorForStack = AllocatorForStack_Create();
 	
 	Object _runtime = Runtime_Create();
-	__initAllClasses();
+	initAllClasses();
 	
 	Object _machine = Machine_Create();
 	Machine_RestorePreviousState(_machine);

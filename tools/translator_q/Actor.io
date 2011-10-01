@@ -11,7 +11,7 @@ Actor clone := method(
 	toReturn
 )
 
-Actor unnamedActor := method(unnamedActorType,
+Actor unnamedActor := method(unnamedActorType, 
 	toReturn := Actor clone
 	toReturn actorName copy("[unnamed]")
 	toReturn actorType copy(unnamedActorType)
@@ -84,8 +84,14 @@ Actor with := method(name,
 	listOfFieldNames foreach(index, fieldName,
 		fieldName = "_" .. fieldName
 		if(index == 0,
-			toReturn actorName copy(fieldName)
-			toReturn actorType = TableOfSymbols getActorType(fieldName)
+			if(fieldName == "_super",
+				toReturn actorName copy("_self")
+				toReturn actorType = TableOfSymbols mapOfClassParents at(TableOfSymbols getActorType("_self")),
+				
+				toReturn actorName copy(fieldName)
+				toReturn actorType = TableOfSymbols getActorType(fieldName)
+			)
+			
 			if(toReturn actorType isNil,
 				if(listOfFieldNames size != 1,
 					TranslatorError with(nil, "No fields in object #{fieldName} of Object type found." interpolate)
@@ -106,7 +112,11 @@ Actor with := method(name,
 )
 
 Actor getReturnedType := method(action,
-	TableOfSymbols getActorActionReturnedType(self, action)
+	candidate := TableOfSymbols classMethods at(action getActionType(self) actorType) at(action actionName)
+	if(candidate isNil,
+		candidate = Actor unnamedActor(self actorType)
+	)
+	candidate
 )
 
 Actor getCreatorSignature := method(
@@ -120,11 +130,9 @@ Actor getCreatorBody := method(
 		"\tDPUSHS (\"#{self actorType}: Create begined.\")\n" interpolate,
 		"\t_self->entity = Allocator_New(_allocator, sizeof(struct #{self actorType}));\n" interpolate,
 		"\t_self->gid = #{TableOfSymbols getClassId(self actorType)};\n" interpolate,
-		"\tObject_SetComparator(_self, &#{self actorType}_Compare);\n" interpolate,
-		"\tObject_SetDestructor(_self, &#{self actorType}_Destroy);\n" interpolate,
-		"\tObject_SetCloner(_self, &#{self actorType}_Clone);\n" interpolate,
-		"\tObject_SetDeepCloner(_self, &#{self actorType}_DeepClone);\n" interpolate
+		"\t_self->destroy = &#{Action with(Token with(\"Destroy\")) getActionType(self) actorType}_Destroy;\n" interpolate
 	)
+	
 	TableOfSymbols classFields at(actorType) foreach(field,
 		toReturn push("\t((#{actorType}) (_self->entity))->#{field actorName} = _nil;\n" interpolate)
 	)
@@ -136,6 +144,38 @@ Actor getCreatorBody := method(
 		"\treturn _self;\n",
 		"}\n"
 	)
+	
+	toReturn join
+)
+
+Actor getInitializeClassBody := method(
+	toReturn := list(
+		"\nvoid #{actorType}_InitializeClass()\n" interpolate,
+		"{\n",
+		"\tINITIALIZE_CLASS(#{actorType}_InitializeClass);" interpolate,
+		"\tObject _className = StringFactory_FromUTF8(_stringFactory, \"#{actorType}\", #{actorType size});\n" interpolate,
+		"\tObject _gid = NumberFactory_FromLong(_numberFactory, #{actorType}GID);\n" interpolate
+	)
+	
+	actorParentType := TableOfSymbols mapOfClassParents at(actorType)
+	if(actorParentType != nil,
+		toReturn push(
+			"\tObject _parentClassName = StringFactory_FromUTF8(_stringFactory, \"#{actorParentType}\", #{actorParentType size});\n" interpolate,
+			"\tSuperClass_RegisterClassWithNameWithGIDWithParentClassName(_superClass, _className, _gid, _parentClassName);\n"
+		),
+		
+		toReturn push(
+			"\tSuperClass_RegisterClassWithNameWithGIDWithParentClassName(_superClass, _className, _gid, _nil);\n"
+		)
+	)
+	
+	TableOfSymbols classMethods at(actorType) foreach(methodName, methodResultClass,
+		toReturn append("\tSuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &#{actorType}_#{methodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName}\", #{methodName size}), _className);\n" interpolate)
+	)
+	TableOfSymbols mapOfMethodAliases at(actorType) foreach(methodName, realMethodName,
+		toReturn append("\tSuperClass_RegisterMethodWithNameForClassWithName(_superClass, MethodFactory_FromPointer(_methodFactory, &#{actorType}_#{realMethodName}), StringFactory_FromUTF8(_stringFactory, \"#{methodName asMutable escape}\", #{methodName size}), _className);\n" interpolate)
+	)
+	toReturn append("}")
 	
 	toReturn join
 )

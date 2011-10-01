@@ -1,6 +1,5 @@
 TableOfSymbols := Object clone
 TableOfSymbols keywords := list("while", "if", "else", "return", "C", "break", "continue", "loop", "def", "elif", "DEBUG_MSG", "DEBUG_PUSH", "DEBUG_POP", "assert")
-TableOfSymbols objectsMethods := list("Compare", "Retain", "Release", "Autorelease", "Hash", "Destroy", "Is", "DynamicallyInvoke")
 TableOfSymbols basicClasses := list("Object", "Number", "Allocator", "File", "Method", "NumberFactory", "LogicFactory", "StringFactory", "CharFactory", "MethodFactory")
 TableOfSymbols globalObjects := Map with(
 	"_nil",				"Object",
@@ -21,6 +20,10 @@ TableOfSymbols actorTypesStack := list(TableOfSymbols globalObjects)
 TableOfSymbols classFields := Map clone
 TableOfSymbols classMethods := Map with(
 	"Object", Map with(
+		"Release", nil,
+		"Retain", nil,
+		"Autorelease", nil,
+		"Destroy", nil,
 		"Compare", Actor unnamedActor("Comparison"),
 		"Hash", Actor unnamedActor("Number"),
 		"Is", Actor unnamedActor("Logic"),
@@ -28,18 +31,26 @@ TableOfSymbols classMethods := Map with(
 	),
 	"Number", Map with(
 		"Clone", Actor unnamedActor("Number"),
+		"Inc", Actor unnamedActor("Number"),
+		"Dec", Actor unnamedActor("Number"),
 		"Add", Actor unnamedActor("Number"),
 		"Sub", Actor unnamedActor("Number"),
 		"Mul", Actor unnamedActor("Number"),
 		"Div", Actor unnamedActor("Number"),
 		"Mod", Actor unnamedActor("Number"),
-		"Inc", Actor unnamedActor("Number"),
-		"Dec", Actor unnamedActor("Number"),
+		"Shl", Actor unnamedActor("Number"),
+		"Shr", Actor unnamedActor("Number"),
+		"Rol", Actor unnamedActor("Number"),
+		"Ror", Actor unnamedActor("Number"),
 		"AddInPlace", Actor unnamedActor("Number"),
 		"SubInPlace", Actor unnamedActor("Number"),
 		"MulInPlace", Actor unnamedActor("Number"),
 		"DivInPlace", Actor unnamedActor("Number"),
 		"ModInPlace", Actor unnamedActor("Number"),
+		"ShlInPlace", Actor unnamedActor("Number"),
+		"ShrInPlace", Actor unnamedActor("Number"),
+		"RolInPlace", Actor unnamedActor("Number"),
+		"RorInPlace", Actor unnamedActor("Number"),
 		"Min", Actor unnamedActor("Number"),
 		"Max", Actor unnamedActor("Number"),
 		"Abs", Actor unnamedActor("Number"),
@@ -109,7 +120,6 @@ TableOfSymbols mapOfGids := Map with(
 
 TableOfSymbols mapOfMethodAliases := Map with(
 	"Object", Map with(
-		"Copy", "Clone",
 		"?", "Compare"
 	),
 	"Number", Map with(
@@ -118,11 +128,19 @@ TableOfSymbols mapOfMethodAliases := Map with(
 		"*", "Mul",
 		"/", "Div",
 		"%", "Mod",
+		">>", "Shr",
+		"<<", "Shl",
+		">>>", "Ror",
+		"<<<", "Rol",
 		"+=", "AddInPlace",
 		"-=", "SubInPlace",
 		"*=", "MulInPlace",
 		"/=", "DivInPlace",
 		"%=", "ModInPlace",
+		">>=", "ShrInPlace",
+		"<<=", "ShlInPlace",
+		">>>=", "RorInPlace",
+		"<<<=", "RolInPlace",
 		"**", "Power",
 		"++", "Inc",
 		"--", "Dec"
@@ -136,6 +154,19 @@ TableOfSymbols mapOfMethodAliases := Map with(
 	"Method", Map with(
 		"Call", "Invoke"
 	)
+)
+
+TableOfSymbols mapOfClassParents := Map with(
+	"CharFactory", "Undestroyable",
+	"LogicFactory", "Undestroyable",
+	"MethodFactory", "Undestroyable",
+	"NumberFactory", "Undestroyable",
+	"StringFactory", "Undestroyable",
+	"Number", "Object",
+	"File", "Object",
+	"Method", "Object",
+	"Allocator", "Object",
+	"AllocatorForStack", "Object"
 )
 
 TableOfSymbols updateActorType := method(actor,
@@ -180,30 +211,8 @@ TableOfSymbols isKeyword := method(token,
 	keywords contains(token)
 )
 
-TableOfSymbols isObjectsMethod := method(methodName,
-	objectsMethods contains(methodName)
-)
-
 TableOfSymbols actorHasAction := method(actor, action,
-	if(classMethods at(actor actorType) ?at(action actionName) isNil,
-		false,
-		true
-	)
-)
-
-TableOfSymbols getActorActionReturnedType := method(actor, action,
-	toReturn := nil
-	if(isObjectsMethod(action actionName),
-		candidate := classMethods at("Object") at(action actionName)
-		return if(candidate isNil not, candidate, Actor unnamedActor(actor actorType)),
-		
-		toReturn := classMethods at(actor actorType) ?at(action actionName)
-		if(toReturn isNil,
-			TranslatorError with(nil, "Unknown method #{action actionName} for class #{actor actorType}." interpolate)
-			toReturn = Actor unnamedActor("Object")
-		)
-		return toReturn
-	)
+	classMethods at(actor actorType) ?hasKey(action actionName)
 )
 
 TableOfSymbols setClassActionReturnedType := method(className, action, returnedActor,
@@ -257,7 +266,14 @@ TableOfSymbols ensureKnownClassForClass := method(importingType, contextType,
 		tableOfImports atPut(importingType, List clone)
 		Translator importObjectType(importingType)
 	)
-	if(basicClasses contains(contextType) not, 
+	parent := mapOfClassParents at(importingType)
+	if(parent isNil not,
+		ensureKnownClassForClass(parent, contextType)
+	)
+	if(basicClasses contains(contextType) not,
+		// if(tableOfImports at(contextType) contains(importingType) not,
+		// 	"Importing #{importingType} into #{contextType}." interpolate println
+		// )
 		tableOfImports at(contextType) appendIfAbsent(importingType)
 	)
 )

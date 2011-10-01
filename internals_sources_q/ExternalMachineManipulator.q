@@ -1,4 +1,4 @@
-<ExternalMachineManipulator> <Machine> machine <ExternalActorManipulator> actor <ExternalConsoleManipulator> console <ExternalFileManipulator> file <ExternalNumberManipulator> number <ExternalListManipulator> list <ExternalListMapManipulator> listMap <ExternalCharManipulator> char <ExternalJSONParserManipulator> jsonParser
+<ExternalMachineManipulator@Object> <Machine> machine <ExternalActorManipulator> actor <ExternalConsoleManipulator> console <ExternalFileManipulator> file <ExternalNumberManipulator> number <ExternalListManipulator> list <ExternalListMapManipulator> listMap <ExternalCharManipulator> char <ExternalJSONParserManipulator> jsonParser
 
 
 ExternalMachineManipulator Init
@@ -22,19 +22,8 @@ ExternalMachineManipulator Destroy
 	self.listMap Release
 	self.char Release
 	self.jsonParser Release
-	return self Destroy
+	return super Destroy
 
-
-ExternalMachineManipulator Clone
-	return self Retain
-
-
-ExternalMachineManipulator DeepClone
-	return self Retain
-
-
-ExternalMachineManipulator <Comparison> Compare <ExternalMachineManipulator> machineManipulator
-	return equal
 
 
 ExternalMachineManipulator SetMachine <Machine> machine

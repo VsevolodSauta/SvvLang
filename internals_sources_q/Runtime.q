@@ -1,4 +1,4 @@
-<Runtime> placeHolder
+<Runtime@Object> placeHolder
 
 Runtime Init
 	nothing = null = nil = <Undestroyable>
@@ -24,13 +24,4 @@ Runtime Destroy
 	threadManager Release
 	console Release
 	jsonParser Release
-	return self Destroy
-
-Runtime Clone
-	return self
-
-Runtime DeepClone
-	return self
-
-Runtime <Comparison> Compare <Runtime> runtime
-	return equal
+	return super Destroy

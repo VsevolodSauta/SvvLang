@@ -1,19 +1,4 @@
-<ExternalFileManipulator> <Machine> machine
-
-ExternalFileManipulator Init
-	return self
-
-ExternalFileManipulator Clone
-	return self
-
-ExternalFileManipulator DeepClone
-	return self
-
-ExternalFileManipulator Destroy
-	return self Destroy
-
-ExternalFileManipulator <Comparison> Compare <ExternalFileManipulator> consoleManipulator
-	return equal
+<ExternalFileManipulator@Object> <Machine> machine
 
 ExternalFileManipulator SetMachine <Machine> machine
 	self.machine = machine

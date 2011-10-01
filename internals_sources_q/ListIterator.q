@@ -1,13 +1,13 @@
-<ListIterator> <List> [Retain] list <ListNode> [Retain] node <Logic> system
+<ListIterator@Object> <List> [Retain] list <ListNode> [Retain] node <Logic> system
 
-ListIterator <Comparison> Compare <ListIterator> iterator
+ListIterator <Comparison> CompareSameGID <ListIterator> iterator
 	return self.node ? iterator.node
 
 ListIterator Destroy
 	self.node Release
 	if self.system Not
 		self.list Release
-	return (self AsObject) Destroy
+	return super Destroy
 
 ListIterator Clone
 	toReturn = <ListIterator>

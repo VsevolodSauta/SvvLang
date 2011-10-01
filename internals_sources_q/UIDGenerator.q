@@ -1,4 +1,4 @@
-<UIDGenerator> <Number> [Clone] currentUID
+<UIDGenerator@Undestroyable> <Number> [Clone] currentUID
 
 UIDGenerator Init
 	self.currentUID = 0
@@ -16,12 +16,11 @@ UIDGenerator DeepClone
 
 UIDGenerator Destroy
 	self.currentUID Release
-	return self Destroy
+	return super Destroy
 
-UIDGenerator <Comparison> Compare uidGenerator
+UIDGenerator <Comparison> CompareSameGID uidGenerator
 	return (self Hash) ? (uidGenerator Hash)
 
 UIDGenerator <List> GenerateUID (GetUID)
 	def (("<" + (stringFactory FromNumber self.currentUID)) + ">")
 	self.currentUID ++
-

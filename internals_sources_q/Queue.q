@@ -1,4 +1,4 @@
-<Queue> <List> [Retain] list
+<Queue@Object> <List> [Retain] list
 
 Queue Init
 	self.list = <List>
@@ -32,12 +32,12 @@ Queue <Object> Peek
 Queue <Logic> Empty (IsEmpty)
 	return self.list Empty
 
-Queue <Comparison> Compare <Queue> queue
+Queue <Comparison> CompareSameGID <Queue> queue
 	return (self.list) ? (queue.list)
 
 Queue <Object> Destroy
 	self.list Release
-	return self Destroy
+	return super Destroy
 
 Queue <List> GetList
 	return (self.list Clone) Autorelease
@@ -51,4 +51,3 @@ Queue DeepClone
 	toReturn = <Queue>
 	toReturn.list = self.list DeepClone
 	return toReturn
-

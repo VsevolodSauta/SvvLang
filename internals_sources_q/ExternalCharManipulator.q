@@ -1,19 +1,4 @@
-<ExternalCharManipulator> <Machine> machine
-
-ExternalCharManipulator Init
-	return self
-
-ExternalCharManipulator Clone
-	return self Retain
-
-ExternalCharManipulator DeepClone
-	return self Retain
-
-ExternalCharManipulator Destroy
-	return self Destroy
-
-ExternalCharManipulator Compare <ExternalCharManipulator> manipulator
-	return equal
+<ExternalCharManipulator@Object> <Machine> machine
 
 ExternalCharManipulator SetMachine <Machine> machine
 	self.machine = machine

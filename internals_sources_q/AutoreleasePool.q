@@ -1,4 +1,4 @@
-<AutoreleasePool> <Stack> [Retain] stack
+<AutoreleasePool@Object> <Stack> [Retain] stack
 
 AutoreleasePool Init
 	self.stack = <Stack>
@@ -29,13 +29,7 @@ AutoreleasePool Add object
 
 AutoreleasePool Destroy
 	self.stack Release
-	return self Destroy
+	return super Destroy
 
 AutoreleasePool <Comparison> Compare <AutoreleasePool> autoreleasePool
 	return self.stack ? autoreleasePool.stack					// Nobody really needs this method
-
-AutoreleasePool Clone
-	return self									// Nobody needs this method
-
-AutoreleasePool DeepClone
-	return self									// Nobody needs this method

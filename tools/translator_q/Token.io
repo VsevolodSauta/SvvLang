@@ -17,6 +17,10 @@ Token outOfBrackets := method(
 	self exclusiveSlice(1, self size - 1)
 )
 
+Token className := method(
+	self outOfBrackets split("@") first
+)
+
 Token isKeyword := method(
 	TableOfSymbols isKeyword(self)
 )

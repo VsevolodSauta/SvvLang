@@ -1,4 +1,4 @@
-<ListMapIteratorElement> <ListMapNode> [Retain] node <MapIterator> [Retain] iterator <Logic> nextExists <Logic> prevExists
+<ListMapIteratorElement@Object> <ListMapNode> [Retain] node <MapIterator> [Retain] iterator <Logic> nextExists <Logic> prevExists
 
 ListMapIteratorElement <ListMapNode> AdvancingValue (++) <ListMapIteratorElement> prevElement
 	self.iterator ++
@@ -32,7 +32,7 @@ ListMapIteratorElement DeepClone
 	toReturn.prevExists = self.prevExists
 	return toReturn
 
-ListMapIteratorElement <Comparison> Compare <ListMapIteratorElement> element
+ListMapIteratorElement <Comparison> CompareSameGID <ListMapIteratorElement> element
 	candidate = self.node ? element.node
 	if candidate == equal
 		candidate = self.iterator ? element.iterator
@@ -41,5 +41,4 @@ ListMapIteratorElement <Comparison> Compare <ListMapIteratorElement> element
 ListMapIteratorElement Destroy
 	self.node Release
 	self.iterator Release
-	return self Destroy
-
+	return super Destroy
